@@ -1,0 +1,4 @@
+{
+	"serviceIds": ["org_distributeme_test_junit_Service1", "org_distributeme_test_junit_Service2"],
+	"slowDownTimeInMillis": 10000,
+}

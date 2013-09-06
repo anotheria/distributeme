@@ -1,0 +1,21 @@
+{
+	registryParentLookup: false,
+	registryParentHost: "",
+	registryParentPort: 1234,
+	
+	clusterInstances: "",
+	//time between live pings in milliseconds.
+	clusterCheckPeriod: 5000,
+	dev: {
+		example: {
+			registryParentLookup: true,
+			registryParentHost: "anotherregistryhost.something.somethingelse",
+			registryParentPort: 9229,			
+		},
+		leon : {
+			//declares a cluster of three instances.
+			clusterInstances: "localhost:9229,localhost:9230,localhost:9231",
+			registryParentHost: "test",
+		},
+	},
+}

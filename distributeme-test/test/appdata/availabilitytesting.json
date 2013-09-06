@@ -1,0 +1,16 @@
+{
+	"serviceIds": ["org_distributeme_test_echo_EchoService", "foo"],
+	"slowDownTimeInMillis": 10000,
+	
+	"test": {
+		"flip":{
+			"slowDownTimeInMillis": 1000,
+			"flip70":{
+				"flipChanceInPercent": 70,
+			},
+			"flip10":{
+				"flipChanceInPercent": 10,
+			},
+		},
+	}
+}

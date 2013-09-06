@@ -1,0 +1,19 @@
+{
+	registryContainerPort: 9229,
+	//registryContainerHost: "biz1.blue.parship.office",
+	registryContainerHost: "localhost",
+	
+	//if true the server will log all exceptions including expected exception (defined by the interface), otherwise expected exceptions will be ignored
+	logServerSideExceptions: false,
+	//if true the client (stub) will log all caught exceptions (remote exception and runtime exceptions)
+	logClientSideExceptions: false,
+	
+	//registrationIpMapping: "192.168.200.5:10.0.0.0",
+	
+	dev: {
+		bolbat: {
+			registryContainerPort: 8080,
+			registryContainerHost: "localhost",				
+		}
+	}
+}  
