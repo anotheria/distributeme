@@ -1,5 +1,11 @@
 package org.distributeme.generator;
 
+import com.sun.mirror.apt.Filer;
+import com.sun.mirror.declaration.MethodDeclaration;
+import com.sun.mirror.declaration.TypeDeclaration;
+import com.sun.mirror.type.ReferenceType;
+import org.distributeme.core.lifecycle.ServiceAdapter;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.Remote;
@@ -7,13 +13,6 @@ import java.rmi.RemoteException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
-import org.distributeme.core.lifecycle.ServiceAdapter;
-
-import com.sun.mirror.apt.Filer;
-import com.sun.mirror.declaration.MethodDeclaration;
-import com.sun.mirror.declaration.TypeDeclaration;
-import com.sun.mirror.type.ReferenceType;
 
 /**
  * Generator for RMI based remote interface. 
@@ -42,7 +41,7 @@ public class RemoteInterfaceGenerator extends AbstractGenerator implements Gener
 		
 		Collection<? extends MethodDeclaration> methods = getAllDeclaredMethods(type);
 		for (MethodDeclaration method : methods){
-			String methodDecl = getInterfaceMethodDeclaration(method);
+			String methodDecl = getInterfaceMethodDeclaration(method, true);
 			
 			if (method.getThrownTypes().size()>0){
 				StringBuilder exceptions = new StringBuilder();

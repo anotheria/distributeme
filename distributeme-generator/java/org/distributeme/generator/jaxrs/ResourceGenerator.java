@@ -19,6 +19,7 @@ import net.anotheria.moskito.core.stats.DefaultIntervals;
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.core.Defaults;
 import org.distributeme.core.ServerSideCallContext;
+import org.distributeme.core.ServiceLocator;
 import org.distributeme.core.Verbosity;
 import org.distributeme.core.concurrencycontrol.ConcurrencyControlStrategy;
 import org.distributeme.core.interceptor.InterceptionContext;
@@ -34,6 +35,7 @@ import org.distributeme.generator.Generator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -42,6 +44,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -65,6 +68,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		writeImport(List.class);
 		writeImport(Map.class);
 		writeImport(ArrayList.class);
+		writeImport(Collections.class);
 		writeImport(Verbosity.class);
 		writeImport(Defaults.class);
 		writeImport(ServerSideCallContext.class);
@@ -74,6 +78,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		writeImport(InterceptorRegistry.class);
 		writeImport(InterceptionPhase.class);
 		writeImport(ConcurrencyControlStrategy.class);
+		writeImport(ServiceLocator.class);
 		if (ann.moskitoSupport()){
 			writeImport(MoskitoInvokationProxy.class);
 			writeImport(DefaultStatsLogger.class);
@@ -90,6 +95,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		writeImport(Path.class);
 		writeImport(POST.class);
 		writeImport(Produces.class);
+		writeImport(Consumes.class);
 
 		emptyline();
 		
@@ -111,6 +117,8 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 
 		writeString("@Path(\"/"+type.getSimpleName()+"\")");
 		writeString("@Produces(MediaType.APPLICATION_JSON)");
+		writeString("@Consumes(MediaType.APPLICATION_JSON)");
+
 		writeString("public class " + getResourceName(type) + (lifecycleAware ? " implements  LifecycleAware" : "") + " {");
 		increaseIdent();
 		emptyline();
@@ -129,7 +137,8 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		
 		writeString("public "+getResourceName(type)+"(){");
 		increaseIdent();
-		writeStatement("this(null)");
+		writeStatement("this(ServiceLocator.getLocal("+type.getQualifiedName()+".class))");
+
 		closeBlock();
 		emptyline();
 		writeString("public "+getResourceName(type)+"("+type.getQualifiedName()+" anImplementation){");
@@ -182,11 +191,12 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		//WRITING METHODS
 		Collection<? extends MethodDeclaration> methods = getAllDeclaredMethods(type);
 		for (MethodDeclaration method : methods){
-			String methodDecl = getSkeletonMethodDeclaration(method);
+			String methodDecl = getResourceSkeletonMethodDeclaration(method);
 			Collection<ReferenceType> exceptions = method.getThrownTypes();
 			writeString("@POST @Path(\""+method.getSimpleName()+"\")");
 			writeString("public "+methodDecl+"{");
 			increaseIdent();
+			writeString("Map <?,?> __transportableCallContext = Collections.emptyMap(); //not used NOW!");
 			writeStatement("lastAccess = System.currentTimeMillis()");
 			writeStatement("ServerSideCallContext diMeCallContext = new ServerSideCallContext("+quote(method.getSimpleName())+", __transportableCallContext)");
 			writeStatement("diMeCallContext.setServiceId("+getConstantsName(type)+".getServiceId())");

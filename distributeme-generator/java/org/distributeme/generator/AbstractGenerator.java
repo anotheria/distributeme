@@ -403,7 +403,7 @@ public class AbstractGenerator {
 		return methodDecl.toString();
 	}
 	
-	protected String getInterfaceMethodDeclaration(MethodDeclaration method){
+	protected String getInterfaceMethodDeclaration(MethodDeclaration method, boolean includeTransportableContext){
 		
 		
 		StringBuilder methodDecl = new StringBuilder();
@@ -420,8 +420,10 @@ public class AbstractGenerator {
 			methodDecl.append(p.getType().toString()+" "+p.getSimpleName());
 			first = false;
 		}
-		//adding transportable call context for piggybacking and interceptor communication.
-		methodDecl.append((first ? "":", ")+"Map<?,?> __transportableCallContext");
+		if (includeTransportableContext){
+			//adding transportable call context for piggybacking and interceptor communication.
+			methodDecl.append((first ? "":", ")+"Map<?,?> __transportableCallContext");
+		}
 		
 		methodDecl.append(")");
 		
@@ -449,9 +451,25 @@ public class AbstractGenerator {
 		return methodDecl.toString();
 	}
 
+	protected String getResourceSkeletonMethodDeclaration(MethodDeclaration method){
+		StringBuilder declaration = new StringBuilder();
+		declaration.append(getInterfaceMethodDeclaration(method, false));
+		if (method.getThrownTypes().size()>0){
+			StringBuilder exceptions = new StringBuilder();
+			for (ReferenceType type : method.getThrownTypes()){
+				if (exceptions.length()>0)
+					exceptions.append(", ");
+				exceptions.append(type.toString());
+			}
+			declaration.append(" throws ").append(exceptions);
+		}
+
+		return declaration.toString();
+	}
+
 	protected String getSkeletonMethodDeclaration(MethodDeclaration method){
 		StringBuilder declaration = new StringBuilder(); 
-		declaration.append(getInterfaceMethodDeclaration(method));
+		declaration.append(getInterfaceMethodDeclaration(method, true));
 		if (method.getThrownTypes().size()>0){
 			StringBuilder exceptions = new StringBuilder();
 			for (ReferenceType type : method.getThrownTypes()){

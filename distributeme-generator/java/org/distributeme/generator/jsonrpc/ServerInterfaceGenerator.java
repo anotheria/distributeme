@@ -46,7 +46,7 @@ public class ServerInterfaceGenerator extends AbstractJsonRpcGenerator implement
 
         Collection<? extends MethodDeclaration> methods = getAllDeclaredMethods(type);
         for (MethodDeclaration method : methods) {
-            String methodDecl = getInterfaceMethodDeclaration(method);
+            String methodDecl = getInterfaceMethodDeclaration(method, true);
 
             if (method.getThrownTypes().size() > 0) {
                 String exceptions = "";
