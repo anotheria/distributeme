@@ -81,7 +81,11 @@ public class AbstractGenerator {
 	protected static String getStubName(TypeDeclaration type){
 		return "Remote"+type.getSimpleName()+"Stub";
 	}
-	
+
+	protected static String getJaxRsStubName(TypeDeclaration type){
+		return type.getSimpleName()+"JaxRsStub";
+	}
+
 	protected static String getAsynchStubName(TypeDeclaration type){
 		return "Asynch"+type.getSimpleName()+"Stub";
 	}

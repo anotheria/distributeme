@@ -36,6 +36,7 @@ public class GeneratorUtil {
 
 	private static Generator[] JAXRS_GENERATORS = {
 			new ResourceGenerator(),
+			new org.distributeme.generator.jaxrs.StubGenerator(),
 			new ConstantsGenerator(),
 	};
 
