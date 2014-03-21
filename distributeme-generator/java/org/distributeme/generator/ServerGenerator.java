@@ -262,7 +262,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 					increaseIdent();
 					writeString("try{");
 					increaseIdent();
-					writeCommentLine("Even more convinient - try to instantiate the implementation directly");
+					writeCommentLine("Even more convenient - try to instantiate the implementation directly");
 					writeStatement("Class<? extends "+type.getQualifiedName()+"> implClazz = (Class<? extends "+type.getQualifiedName()+">)Class.forName("+quote(implClassName)+")");
 					writeStatement("MetaFactory.createOnTheFlyFactory("+type+".class, Extension."+annotation.extension()+", implClazz.newInstance())");
 					decreaseIdent();
