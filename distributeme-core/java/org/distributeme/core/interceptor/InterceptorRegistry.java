@@ -52,7 +52,7 @@ public final class InterceptorRegistry {
 		try{
 			ConfigurationManager.INSTANCE.configure(config);
 		}catch(IllegalArgumentException e){
-			LoggerFactory.getLogger(InterceptorRegistry.class).error("No distributeme config?!", e);
+			LoggerFactory.getLogger(InterceptorRegistry.class).warn("No DistributeMe config (distributeme.json), interceptors aren't configured either");
 		}
 	}
 	
