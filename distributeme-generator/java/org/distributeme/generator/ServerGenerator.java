@@ -331,8 +331,8 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			decreaseIdent();
 			writeStatement("}catch(Exception e){");
 			increaseIdent();
-			writeStatement("log.error(FATAL, "+quote("Coulnd't rebind myself at the local registry")+", e)");
-			writeStatement("System.err.println("+quote("Coulnd't rebind myself at the local registry")+")");
+			writeStatement("log.error(FATAL, "+quote("Couldn't rebind myself at the local registry")+", e)");
+			writeStatement("System.err.println("+quote("Couldn't rebind myself at the local registry")+")");
 			writeStatement("e.printStackTrace()");
 			writeStatement("System.exit(-2)"); 
 			closeBlock("local registry bind.");
@@ -377,8 +377,8 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			emptyline();
 			writeString("if (!RegistryUtil.bind(descriptor)){");
 			increaseIdent();
-			writeStatement("log.error(FATAL, "+quote("Coulnd't bind myself to the central registry at ")+"+RegistryUtil.describeRegistry())");
-			writeStatement("System.err.println("+quote("Coulnd't bind myself at the central registry at ")+"+RegistryUtil.describeRegistry())");
+			writeStatement("log.error(FATAL, "+quote("Couldn't bind myself to the central registry at ")+"+RegistryUtil.describeRegistry())");
+			writeStatement("System.err.println("+quote("Couldn't bind myself at the central registry at ")+"+RegistryUtil.describeRegistry())");
 			writeStatement("System.exit(-3)"); 
 			closeBlock("central registry bind");
 			writeStatement("Runtime.getRuntime().addShutdownHook(new ServerShutdownHook(descriptor))");
@@ -402,8 +402,8 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 				emptyline();
 				writeString("if (!RegistryUtil.bind("+descriptorVariableName+")){");
 				increaseIdent();
-				writeStatement("log.error(FATAL, "+quote("Coulnd't bind ")+"+"+descriptorVariableName+"+"+quote(" to the central registry at ")+"+RegistryUtil.describeRegistry())");
-				writeStatement("System.err.println("+quote("Coulnd't bind ")+"+"+descriptorVariableName+"+"+quote(" at the central registry at ")+"+RegistryUtil.describeRegistry())");
+				writeStatement("log.error(FATAL, "+quote("Couldn't bind ")+"+"+descriptorVariableName+"+"+quote(" to the central registry at ")+"+RegistryUtil.describeRegistry())");
+				writeStatement("System.err.println("+quote("Couldn't bind ")+"+"+descriptorVariableName+"+"+quote(" at the central registry at ")+"+RegistryUtil.describeRegistry())");
 				writeStatement("System.exit(-3)"); 
 				closeBlock("central registry bind");
 				writeStatement("Runtime.getRuntime().addShutdownHook(new ServerShutdownHook("+descriptorVariableName+"))");

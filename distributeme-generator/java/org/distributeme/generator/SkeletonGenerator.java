@@ -9,7 +9,7 @@ import com.sun.mirror.type.ReferenceType;
 import net.anotheria.moskito.core.dynamic.MoskitoInvokationProxy;
 import net.anotheria.moskito.core.logging.DefaultStatsLogger;
 import net.anotheria.moskito.core.logging.IntervalStatsLogger;
-import net.anotheria.moskito.core.logging.SL4JLogOutput;
+import net.anotheria.moskito.core.logging.SLF4JLogOutput;
 import net.anotheria.moskito.core.predefined.ServiceStatsCallHandler;
 import net.anotheria.moskito.core.predefined.ServiceStatsFactory;
 import net.anotheria.moskito.core.producers.IStatsProducer;
@@ -72,7 +72,7 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 			writeImport(MoskitoInvokationProxy.class);
 			writeImport(DefaultStatsLogger.class);
 			writeImport(IntervalStatsLogger.class);
-			writeImport(SL4JLogOutput.class);
+			writeImport(SLF4JLogOutput.class);
 			writeImport(DefaultIntervals.class);
 			writeImport(ServiceStatsCallHandler.class);
 			writeImport(ServiceStatsFactory.class);
@@ -142,11 +142,11 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 		
 			writeStatement("implementation = ("+type.getQualifiedName()+") proxy.createProxy()");
 			writeString("// add moskito logger");
-			writeStatement("new DefaultStatsLogger(proxy.getProducer(), new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.default\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.FIVE_MINUTES, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.5m\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.FIFTEEN_MINUTES, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.15m\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.ONE_HOUR, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.1h\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.ONE_DAY, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.1d\")))");
+			writeStatement("new DefaultStatsLogger(proxy.getProducer(), new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.default\")))");
+			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.FIVE_MINUTES, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.5m\")))");
+			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.FIFTEEN_MINUTES, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.15m\")))");
+			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.ONE_HOUR, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.1h\")))");
+			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.ONE_DAY, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.1d\")))");
 			writeString("//end moskito logger");
 			
 			//add moskito BI loggers.
@@ -156,11 +156,11 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 			
 			writeString("for (IStatsProducer producer : stats){");
 				increaseIdent(); 
-				writeStatement("new DefaultStatsLogger(producer, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.default\")))");
-				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.FIVE_MINUTES, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.5m\")))");
-				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.FIFTEEN_MINUTES, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.15m\")))");
-				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.ONE_HOUR, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.1h\")))");
-				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.ONE_DAY, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.1d\")))");
+				writeStatement("new DefaultStatsLogger(producer, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.default\")))");
+				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.FIVE_MINUTES, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.5m\")))");
+				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.FIFTEEN_MINUTES, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.15m\")))");
+				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.ONE_HOUR, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.1h\")))");
+				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.ONE_DAY, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.1d\")))");
 			closeBlock();
 			//END BUILTIN PRODUCERS LOGGING
 			
