@@ -1,3 +1,11 @@
 .idea
 target
 *.iml
+
+# Eclipse related dir's/files
+.project
+.metadata
+.classpath
+.settings/
+bin/
+tmp/
