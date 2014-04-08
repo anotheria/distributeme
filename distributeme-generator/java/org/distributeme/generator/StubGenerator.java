@@ -348,11 +348,13 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			writeString("}catch(NoConnectionToServerException e){");
 			writeIncreasedStatement("exceptionInMethod = e");
 			writeString("}finally{");
+			increaseIdent();
 			//concurrency control
 			writeCommentLine("Concurrency control, client side - end");
-			writeIncreasedStatement(getCCStrategyVariableName(method)+".notifyClientSideCallFinished(diMeCallContext)");
+			writeStatement(getCCStrategyVariableName(method) + ".notifyClientSideCallFinished(diMeCallContext)");
 			writeInterceptionBlock(InterceptionPhase.AFTER_SERVICE_CALL, method);
-			writeString("}");//catch
+			emptyline();
+			closeBlock("finally");
 			
 			
 			
@@ -408,15 +410,25 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		
 		writeString("private void notifyDelegateFailed(String serviceId){");
 		increaseIdent();
+		writeString("if (discoveryMode==DiscoveryMode.MANUAL){");
+		writeIncreasedStatement("manuallySetTarget = null");
+		writeIncreasedStatement("return");
+		writeString("}");
 		writeString("if (serviceId!=null)");
 		writeIncreasedStatement("delegates.remove(serviceId)");
-		closeBlock();
+		closeBlock("notifyDelegateFailed");
 		emptyline();
 	
 		writeString("private "+getRemoteInterfaceName(type)+" getDelegate() throws NoConnectionToServerException{");
 		increaseIdent();
-		writeString("if (discoveryMode==DiscoveryMode.MANUAL)");
+		writeString("if (discoveryMode==DiscoveryMode.MANUAL){");
+		increaseIdent();
+		writeString("if (manuallySetTarget!=null)");
 		writeIncreasedStatement("return manuallySetTarget");
+		//now we have to lookup in manual mode, meaning creating a new stub.
+		writeStatement("manuallySetTarget = lookup(manuallySetDescriptor)");
+		writeStatement("return manuallySetTarget");
+		closeBlock("if (mode==MANUAL)");
 		writeStatement("return getDelegate("+getConstantsName(type)+".getServiceId())");
 		closeBlock();
 		emptyline();
