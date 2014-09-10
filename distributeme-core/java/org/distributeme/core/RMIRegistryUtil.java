@@ -10,7 +10,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.ExportException;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -36,7 +35,6 @@ public class RMIRegistryUtil {
 	 */
 	private static int rmiRegistryPort;
 
-	private static AtomicInteger nextServicePort = new AtomicInteger(SystemProperties.STARTING_SERVICE_BINDING_PORT.getAsInt());
 	/**
 	 * Finds or creates a new registry.
 	 * @return
@@ -95,12 +93,6 @@ public class RMIRegistryUtil {
 
 	public static int getRmiRegistryPort() {
 		return rmiRegistryPort;
-	}
-
-	public static int getNextServicePort(){
-		if (nextServicePort.get() == 0)
-			return 0;
-		return nextServicePort.getAndIncrement();
 	}
 
 }

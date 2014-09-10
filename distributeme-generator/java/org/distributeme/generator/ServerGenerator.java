@@ -286,7 +286,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			
 			
 			writeStatement("skeleton = new "+getSkeletonName(type)+"(impl)");
-			writeStatement("rmiServant = ("+getRemoteInterfaceName(type)+") UnicastRemoteObject.exportObject(skeleton, getNextBindPortForService())");
+			writeStatement("rmiServant = ("+getRemoteInterfaceName(type)+") UnicastRemoteObject.exportObject(skeleton, SystemProperties.SERVICE_BINDING_PORT.getAsInt())");
 			writeStatement("serviceId = "+getConstantsName(type)+".getServiceId()");
 			emptyline();
 			
@@ -361,16 +361,6 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			closeBlock();
 		}
 
-
-		//method getNextBindPortForService
-		writeString("public static int getNextBindPortForService(){");
-		increaseIdent();
-		writeStatement("int port = RMIRegistryUtil.getNextServicePort()");
-		writeStatement("log.info("+quote("Registering new service at port ")+"+ (port == 0 ? \"random\" : \"\"+port) )");
-		writeStatement("return port");
-		closeBlock();
-		//end method getNextBindPortForService
-		
 		//METHOD startService
 		writeString("public static void startService() throws Exception{");
 		increaseIdent();
