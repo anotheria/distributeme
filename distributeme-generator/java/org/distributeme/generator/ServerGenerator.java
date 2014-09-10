@@ -38,6 +38,8 @@ import org.slf4j.MarkerFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.Permission;
@@ -79,8 +81,8 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		writeImport(MarkerFactory.class);
 		writeImport(UnicastRemoteObject.class);
 		writeImport(Permission.class);
-		writeImport("java.rmi.registry.LocateRegistry");
-		writeImport("java.rmi.registry.Registry");
+		writeImport(LocateRegistry.class);
+		writeImport(Registry.class);
 		writeImport(RegistryUtil.class);
 		writeImport(RegistryLocation.class);
 		writeImport(ExportException.class);
@@ -284,7 +286,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			
 			
 			writeStatement("skeleton = new "+getSkeletonName(type)+"(impl)");
-			writeStatement("rmiServant = ("+getRemoteInterfaceName(type)+") UnicastRemoteObject.exportObject(skeleton, 0)");
+			writeStatement("rmiServant = ("+getRemoteInterfaceName(type)+") UnicastRemoteObject.exportObject(skeleton, getNextBindPortForService())");
 			writeStatement("serviceId = "+getConstantsName(type)+".getServiceId()");
 			emptyline();
 			
@@ -358,7 +360,16 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeStatement("return "+descriptorCall);
 			closeBlock();
 		}
-		
+
+
+		//method getNextBindPortForService
+		writeString("public static int getNextBindPortForService(){");
+		increaseIdent();
+		writeStatement("int port = RMIRegistryUtil.getNextServicePort()");
+		writeStatement("log.info("+quote("Registering new service at port ")+"+ (port == 0 ? \"random\" : \"\"+port) )");
+		writeStatement("return port");
+		closeBlock();
+		//end method getNextBindPortForService
 		
 		//METHOD startService
 		writeString("public static void startService() throws Exception{");

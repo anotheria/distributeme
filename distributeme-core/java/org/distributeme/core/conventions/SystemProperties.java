@@ -27,7 +27,11 @@ public enum SystemProperties {
 	/**
 	 * Max port to use for the local rmi registry.
 	 */
-	LOCAL_RMI_REGISTRY_MAX_PORT("localRmiRegistryMaxPort", "9299");
+	LOCAL_RMI_REGISTRY_MAX_PORT("localRmiRegistryMaxPort", "9299"),
+	/**
+	 * Min port to user for service binding
+	 */
+	STARTING_SERVICE_BINDING_PORT("startingServiceBindingPort", "0");
 	
 	/**
 	 * Name of the property.
