@@ -1,5 +1,5 @@
 #!/bin/bash
-export VERSION=2.1.3-SNAPSHOT
+export VERSION=2.1.4-SNAPSHOT
 
 CLASSPATH=test/appdata:target/distributeme-test-$VERSION-jar-with-dependencies.jar
 echo CLASSPATH: $CLASSPATH
