@@ -2,7 +2,7 @@ package org.distributeme.generator;
 
 public class TranslatedAnnotation {
 	/**
-	 * Classname of the strategy class.
+	 * Class name of the strategy class.
 	 */
 	private String strategyClass;
 	/**
@@ -13,6 +13,11 @@ public class TranslatedAnnotation {
 	 * Order at which this annotation was found.
 	 */
 	private int order ;
+
+	/**
+	 * Name of the configuration if supported by source annotation.
+	 */
+	private String configurationName;
 	
 	public TranslatedAnnotation(String aStrategyClass, String aParameter, int anOrder){
 		strategyClass = aStrategyClass;
@@ -37,5 +42,11 @@ public class TranslatedAnnotation {
 		return order;
 	}
 
+	public String getConfigurationName() {
+		return configurationName;
+	}
 
+	public void setConfigurationName(String configurationName) {
+		this.configurationName = configurationName;
+	}
 }

@@ -11,10 +11,12 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Abstract implementation of {@link Router} which supports {@link FailingStrategy}.
+ * Abstract implementation of {@link org.distributeme.core.routing.Router} which supports {@link org.distributeme.core.failing.FailingStrategy}.
  * <p/>
  * By methods overriding/implementing router can be configured to support :
  * - Mod or RoundRobin strategy (override properly getStrategy() method  - <p>NOTE : should not return null</p>);
@@ -36,19 +38,22 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author h3llka
  */
-public abstract class AbstractRouterWithFailOverToNextNode implements ConfigurableRouter, FailingStrategy {
-	/**
-	 * AbstractRouterImplementation 'modRouteMethodRegistry'. Contains information about
-	 * methods which should be routed using MOD strategy.
-	 * Additionally maps method name to modable parameter position.
-	 */
-	private final Map<String, Integer> modRouteMethodRegistry;
+public abstract class AbstractRouterWithStickyFailOverToNextNode implements ConfigurableRouter, FailingStrategy {
+
+	public static final String PARAMETER_KEY_SERVICES = "services";
+	public static final String PARAMETER_KEY_TIMEOUT  = "timeout";
 
 	/**
 	 * Router configuration.
 	 */
 	private GenericRouterConfiguration configuration = new GenericRouterConfiguration();
 
+	/**
+	 * AbstractRouterImplementation 'modRouteMethodRegistry'. Contains information about
+	 * methods which should be routed using MOD strategy.
+	 * Additionally maps method name to modable parameter position.
+	 */
+	private final Map<String, Integer> modRouteMethodRegistry;
 	/**
 	 * Under line constant.
 	 */
@@ -64,11 +69,17 @@ public abstract class AbstractRouterWithFailOverToNextNode implements Configurab
 	 */
 	private AtomicInteger delegateCallCounter;
 
+//	private int configuredServiceAmount = 0;
+
+	private ConcurrentMap<String, Long> serverFailureTimestamps = new ConcurrentHashMap<String, Long>();
+
+//	private long configuredTimeout = 0L;
+
 	/**
 	 * Constructor.
 	 * Throws {@link AssertionError} in case when getStrategy() implementation is wrong ( result NULL ).
 	 */
-	protected AbstractRouterWithFailOverToNextNode() {
+	protected AbstractRouterWithStickyFailOverToNextNode() {
 		log = LoggerFactory.getLogger(this.getClass());
 		delegateCallCounter = new AtomicInteger(0);
 		if (getStrategy() == null)
@@ -79,6 +90,7 @@ public abstract class AbstractRouterWithFailOverToNextNode implements Configurab
 
 	@Override
 	public FailDecision callFailed(final ClientSideCallContext clientSideCallContext) {
+		serverFailureTimestamps.put(clientSideCallContext.getServiceId(), System.currentTimeMillis());
 		if (!failingSupported())
 			return FailDecision.fail();
 
@@ -97,18 +109,36 @@ public abstract class AbstractRouterWithFailOverToNextNode implements Configurab
 		if (getServiceAmount() == 0)
 			return clientSideCallContext.getServiceId();
 
-
 		if (failingSupported() && !clientSideCallContext.isFirstCall())
 			return getServiceIdForFailing(clientSideCallContext);
 
+
+		String selectedServiceId = null;
+
 		switch (getStrategy()) {
 			case MOD_ROUTER:
-				return getModBasedServiceId(clientSideCallContext);
+				selectedServiceId = getModBasedServiceId(clientSideCallContext);
+				break;
 			case RR_ROUTER:
-				return getRRBasedServiceId(clientSideCallContext);
+				selectedServiceId = getRRBasedServiceId(clientSideCallContext);
+				break;
 			default:
 				throw new AssertionError(" Routing Strategy " + getStrategy() + " not supported in current implementation.");
 		}
+
+		Long lastFailed = serverFailureTimestamps.get(selectedServiceId);
+		boolean blacklisted = lastFailed != null && (System.currentTimeMillis() - lastFailed) < configuration.getBlacklistTime();
+		/*if (lastFailed!=null)
+			System.out.println("blacklisted "+lastFailed+", "+System.currentTimeMillis()+" " + (lastFailed - System.currentTimeMillis()));
+			*/
+
+		//the service id we picked up is blacklisted due to previous failing.
+		if (blacklisted) {
+			clientSideCallContext.setServiceId(selectedServiceId);
+			return getServiceIdForFailing(clientSideCallContext);
+		}
+
+		return selectedServiceId;
 	}
 
 	/**
@@ -116,7 +146,7 @@ public abstract class AbstractRouterWithFailOverToNextNode implements Configurab
 	 * NOTE : it's native that not all methods supports such kind of routing strategy [MOD].
 	 * So, if some method does not supports MOD - strategy - then ROUND-ROBIN strategy  will be used for such call.
 	 *
-	 * @param context {@link ClientSideCallContext}
+	 * @param context {@link org.distributeme.core.ClientSideCallContext}
 	 * @return serviceId string
 	 */
 	private String getModBasedServiceId(ClientSideCallContext context) {
@@ -147,7 +177,7 @@ public abstract class AbstractRouterWithFailOverToNextNode implements Configurab
 	/**
 	 * Returns serviceId based on RoundRobin strategy.
 	 *
-	 * @param context {@link ClientSideCallContext}
+	 * @param context {@link org.distributeme.core.ClientSideCallContext}
 	 * @return serviceId string
 	 */
 	private String getRRBasedServiceId(ClientSideCallContext context) {
@@ -166,13 +196,17 @@ public abstract class AbstractRouterWithFailOverToNextNode implements Configurab
 	/**
 	 * Return serviceId for failing call.
 	 *
-	 * @param context {@link ClientSideCallContext}
+	 * @param context {@link org.distributeme.core.ClientSideCallContext}
 	 * @return serviceId string
 	 */
 	private String getServiceIdForFailing(final ClientSideCallContext context) {
 		if (log.isDebugEnabled())
 			log.debug("Calculating serviceIdForFailing call. ClientSideCallContext[" + context + "]");
+
 		String originalServiceId = context.getServiceId();
+
+		System.out.println("Calculating failing for orig service id "+originalServiceId);
+
 		int lastUnderscore = originalServiceId.lastIndexOf(UNDER_LINE);
 		String idSubstring = originalServiceId.substring(lastUnderscore + 1);
 		String result;
@@ -187,25 +221,11 @@ public abstract class AbstractRouterWithFailOverToNextNode implements Configurab
 		if (log.isDebugEnabled())
 			log.debug("serviceIdForFailing result[" + result + "]. ClientSideCallContext[" + context + "]");
 
-		System.out.println("For failing: "+originalServiceId+" -> "+result);
+		System.out.println(" ---> "+result);
 
 		return result;
 	}
 
-
-	@Override
-	public void customize(String s) {
-		int serviceAmount = 0;
-		try {
-			serviceAmount = Integer.parseInt(s);
-		} catch (NumberFormatException e) {
-			log.error("Can't set customization parameter " + s + ", send all traffic to default instance");
-		}
-		if (serviceAmount < 0)
-			throw new AssertionError("Customization Error! " + s + " Should be positive value, or at least 0");
-
-		configuration.setNumberOfInstances(serviceAmount);
-	}
 
 	@Override
 	public void setConfigurationName(String configurationName) {
@@ -216,6 +236,33 @@ public abstract class AbstractRouterWithFailOverToNextNode implements Configurab
 		}
 	}
 
+
+	@Override
+	public void customize(String s) {
+		String tokens[] = StringUtils.tokenize(s, ',');
+		for (String t : tokens) {
+			String key_value[] = StringUtils.tokenize(t, '=');
+			String key = key_value[0];
+			String value = key_value[1];
+			key = key.toLowerCase();
+			if (key.equals(PARAMETER_KEY_SERVICES)) {
+				try {
+					configuration.setNumberOfInstances(Integer.parseInt(value));
+				} catch (NumberFormatException e) {
+					log.error("Can't set customization parameter " +key+ " to " + value + ", send all traffic to default instance");
+				}
+			}
+			if (key.equals(PARAMETER_KEY_TIMEOUT)) {
+				try {
+					configuration.setBlacklistTime(Long.parseLong(value));
+				} catch (NumberFormatException e) {
+					log.error("Can't set customization parameter " +key+ " to " + value + ", send all traffic to default instance");
+				}
+			}
+		}
+		if (configuration.getNumberOfInstances() < 0)
+			throw new AssertionError("Customization Error! " + s + " Should be positive value, or at least 0");
+	}
 
 
 	/**
@@ -248,9 +295,9 @@ public abstract class AbstractRouterWithFailOverToNextNode implements Configurab
 
 
 	/**
-	 * Simply return configured {@link Logger} instance.
+	 * Simply return configured {@link org.slf4j.Logger} instance.
 	 *
-	 * @return {@link Logger}
+	 * @return {@link org.slf4j.Logger}
 	 */
 	protected Logger getLog() {
 		return log;

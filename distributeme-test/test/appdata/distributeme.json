@@ -10,17 +10,13 @@
 	//registrationIpMapping: "192.168.200.5:10.0.0.0",
 	
 	"listener.1": "org.distributeme.core.listener.ServerLifecycleSysOutPrinterListener",
-	"interceptor.1": "org.distributeme.core.interceptor.availabilitytesting.ServiceUnavailableByPropertyInterceptor", 
-	"interceptor.2": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByPropertyInterceptor",
-	"interceptor.3": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByConfigurationInterceptor", 
+//	"interceptor.1": "org.distributeme.core.interceptor.availabilitytesting.ServiceUnavailableByPropertyInterceptor", 
+//	"interceptor.2": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByPropertyInterceptor",
+//	"interceptor.3": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByConfigurationInterceptor",
+//    "interceptor.20": "org.distributeme.test.roundrobinwithfotonext.interceptor.ClientSideMarkLongRequestAsFailedInterceptor",
 	
-	test: {
-		bolbat: {
-			registryContainerPort: 8080,
-			registryContainerHost: "localhost",				
-		},
-
-		interceptors: {
+	"test": {
+		"interceptors": {
 //			"interceptor.1": "org.distributeme.test.interception.interceptor.LogOutBeforeCallInterceptor", 
 			"interceptor.2": "org.distributeme.test.interception.interceptor.InterceptSumInterceptor", 
 			"interceptor.3": "org.distributeme.test.interception.interceptor.ModifyReturnValueInterceptor",

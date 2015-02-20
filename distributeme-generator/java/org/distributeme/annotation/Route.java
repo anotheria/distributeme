@@ -1,12 +1,12 @@
 package org.distributeme.annotation;
 
+import org.distributeme.core.routing.Router;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.distributeme.core.routing.Router;
 
 @Retention (RetentionPolicy.SOURCE)
 @Target({ElementType.TYPE,ElementType.METHOD})
@@ -22,4 +22,12 @@ public @interface Route {
 	 * @return
 	 */
 	String routerParameter() default  "";
+
+	/**
+	 * Alternative to router parameter a configuration name can be provided. The configuration should be router specific.
+	 * If both, configurationName and routerParameter are provided, configurationName overrides.
+	 * @return
+	 */
+	String configurationName() default "";
+
 }

@@ -692,6 +692,10 @@ public class AbstractGenerator {
 		return findMethodValue(mirror, "routerParameter");
 	}
 
+	protected AnnotationValue findRouterConfigurationName(AnnotationMirror mirror){
+		return findMethodValue(mirror, "configurationName");
+	}
+
 	protected AnnotationValue findMethodValue(AnnotationMirror mirror, String methodName){
 		//System.out.println("-- Called findMethodValue on "+methodName+" and "+mirror);
 		AnnotationTypeElementDeclaration method = findMirrorMethod(mirror, methodName);
@@ -720,9 +724,10 @@ public class AbstractGenerator {
 	 *
 	 */
 	protected static class TranslatedRouterAnnotation extends TranslatedAnnotation{
-		
-		public TranslatedRouterAnnotation(String aStrategyClass, String aParameter){
+
+		public TranslatedRouterAnnotation(String aStrategyClass, String aParameter, String configurationName){
 			super(aStrategyClass, aParameter, routerOrders.incrementAndGet());
+			setConfigurationName(configurationName);
 		}
 	}
 
@@ -762,9 +767,12 @@ public class AbstractGenerator {
 		
 		AnnotationMirror clazzWideRoute = findMirror(type, Route.class);
 		if (clazzWideRoute!=null){
-			//System.out.println("Class wide router "+Router.class.getName());
 			writeCommentLine("Class wide router ");
-			TranslatedRouterAnnotation tra = new TranslatedRouterAnnotation(""+findRouterClassValue(clazzWideRoute).getValue(), ""+findRouterParameterValue(clazzWideRoute).getValue());
+			AnnotationValue configurationNameValue = findRouterConfigurationName(clazzWideRoute);
+			TranslatedRouterAnnotation tra = new TranslatedRouterAnnotation(""+findRouterClassValue(clazzWideRoute).getValue(),
+					""+findRouterParameterValue(clazzWideRoute).getValue(),
+					configurationNameValue == null ?  "":""+configurationNameValue.getValue()
+			);
 			writeStatement("private final "+Router.class.getName() + " clazzWideRouter = createRouterInstance"+tra.getOrder()+"()");
 			ret.add(tra);
 		}else{
@@ -779,9 +787,12 @@ public class AbstractGenerator {
 			if (methodRoute!=null){
 				//System.out.println("Will write "+Router.class.getName()+" "+getMethodRouterName(method));
 				
-				AnnotationValue routerParameterValue = findRouterParameterValue(methodRoute); 
-				TranslatedRouterAnnotation tra = new TranslatedRouterAnnotation(""+findRouterClassValue(methodRoute).getValue(), 
-						routerParameterValue == null ? "":""+routerParameterValue.getValue());
+				AnnotationValue routerParameterValue = findRouterParameterValue(methodRoute);
+				AnnotationValue configurationNameValue = findRouterConfigurationName(methodRoute);
+				TranslatedRouterAnnotation tra = new TranslatedRouterAnnotation(""+findRouterClassValue(methodRoute).getValue(),
+						routerParameterValue == null ? "":""+routerParameterValue.getValue(),
+						configurationNameValue == null ? "":""+configurationNameValue.getValue()
+				);
 				writeStatement("private final "+Router.class.getName()+" "+getMethodRouterName(method) +" = createRouterInstance"+tra.getOrder()+"()");
 				ret.add(tra);
 			}
@@ -901,7 +912,11 @@ public class AbstractGenerator {
 		writeString("private "+Router.class.getName()+" createRouterInstance"+tra.getOrder()+"(){");
 		increaseIdent();
 		writeStatement(Router.class.getName()+" router = new "+tra.getStrategyClass()+"()");
-		writeStatement("router.customize("+quote(tra.getParameter())+")");
+		if (tra.getConfigurationName()!=null && tra.getConfigurationName().length()>0){
+			writeStatement("((org.distributeme.core.routing.ConfigurableRouter)router).setConfigurationName("+quote(tra.getConfigurationName())+")");
+		}else {
+			writeStatement("router.customize(" + quote(tra.getParameter()) + ")");
+		}
 		writeStatement("return router");
 		closeBlock();
 	}
