@@ -15,8 +15,10 @@ import java.util.concurrent.ConcurrentMap;
  *
  */
 public class EventServiceRegistryImpl implements EventServiceRegistry{
-	
 
+	/**
+	 * Singleton instance.
+	 */
 	private static final EventServiceRegistry instance = new EventServiceRegistryImpl();
 	
 	public static final EventServiceRegistry getInstance(){
