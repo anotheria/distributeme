@@ -6,11 +6,12 @@
 		<li <ano:equal name="section" value="registry">class="active"</ano:equal>><a href="registry">Service Registry</a></li>
 		<li <ano:equal name="section" value="esregistry">class="active"</ano:equal>><a href="esregistry">Event Service Registry</a></li>
 		<li <ano:equal name="section" value="cluster">class="active"</ano:equal>><a href="showcluster">Cluster</a></li>
-		<li><a href="../mui/">MoSKito</a></li>
+		<li><a href="../moskito-inspect/">MoSKito</a></li>
 	</ul>
+    <%--
 	<div class="tar">
 		<div>Hello, Admin.<a href="#">Logout</a></div>
 		<input type="text" placeholder="Search"/>
 		<a href="#" class="button">Search</a>
-	</div>
+	</div> --%>
 </div>

@@ -45,6 +45,16 @@
 		<groupId>net.anotheria</groupId>
 		<artifactId>moskito-webui</artifactId>
 	</dependency>
+      <dependency>
+          <groupId>net.anotheria</groupId>
+          <artifactId>moskito-inspect-embedded</artifactId>
+      </dependency>
+      <!-- needed for mail-gun provider, if you want to change the recipient edit moskito.json -->
+      <dependency>
+          <groupId>net.anotheria</groupId>
+          <artifactId>moskito-notification-providers</artifactId>
+      </dependency>
+
 	<dependency>
 		<groupId>net.anotheria</groupId>
 		<artifactId>ano-util</artifactId>
@@ -64,23 +74,33 @@
   </dependencies>
 <build>
   <plugins>
-       <plugin>
-         <groupId>org.apache.maven.plugins</groupId>
-         <artifactId>maven-dependency-plugin</artifactId>
-             <configuration>
-                <artifactItems><artifactItem>
-                   <groupId>net.anotheria</groupId>
-                   <artifactId>moskito-webui</artifactId>
-                   <version>${moskito-version}</version>
-                   <type>jar</type>
-                   <overWrite>true</overWrite>
-                   <outputDirectory>${project.build.directory}/tmp</outputDirectory>
-                   <includes>img/*,js/*.js,**/*.jsp,css/*.css</includes>
-                  </artifactItem></artifactItems>
-             </configuration>
-             <executions><execution><phase>compile</phase><goals><goal>unpack</goal></goals></execution></executions>
-       </plugin>
-            
+
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <configuration>
+              <artifactItems>
+                  <artifactItem>
+                      <groupId>net.anotheria</groupId>
+                      <artifactId>moskito-webui</artifactId>
+                      <version>${moskito-version}</version>
+                      <type>jar</type>
+                      <overWrite>true</overWrite>
+                      <outputDirectory>${project.build.directory}/tmp</outputDirectory>
+                      <includes>moskito/**,**/*.jsp</includes>
+                  </artifactItem>
+              </artifactItems>
+          </configuration>
+          <executions>
+              <execution>
+                  <phase>generate-resources</phase>
+                  <goals>
+                      <goal>unpack</goal>
+                  </goals>
+              </execution>
+          </executions>
+      </plugin>
+
       <plugin>
         <artifactId>maven-war-plugin</artifactId>
         <version>2.1</version>
@@ -99,9 +119,9 @@
               <includes><include>**/*.jsp</include></includes>
               
             </resource>
-            <resource>
-              <directory>${project.build.directory}/tmp</directory>
-            </resource>
+              <resource>
+                  <directory>${project.build.directory}/tmp</directory>
+              </resource>
             <resource>
               <!-- this is relative to the pom.xml directory -->
               <directory>etc/</directory>
