@@ -20,7 +20,7 @@ import java.lang.annotation.Target;
 public @interface DistributeMe {
 	Extension extension() default Extension.LOCAL;
 	/**
-	 * Possibilitiy to insert some lines of code.
+	 * Possibility to insert some lines of code.
 	 * @return
 	 */
 	String[] initcode() default {};
