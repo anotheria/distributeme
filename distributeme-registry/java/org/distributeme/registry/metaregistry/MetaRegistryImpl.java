@@ -92,6 +92,9 @@ public final class MetaRegistryImpl implements MetaRegistry{
 	}
 
 	private static class MetaRegistryImplHolder {
+		/**
+		 * Singleton instance.
+		 */
 		private static MetaRegistry registry = new MetaRegistryImpl();
 	}
 
