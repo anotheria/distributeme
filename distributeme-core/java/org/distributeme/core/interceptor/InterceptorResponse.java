@@ -27,6 +27,14 @@ public class InterceptorResponse {
 		 * Overwrite the return value, but allow the call to be executed regularly. Only works in AFTER phases.
 		 */
 		OVERWRITE_RETURN_AND_CONTINUE,
+		/**
+		 * Force the method to fail. Only works if fail strategy is configured.
+		 */
+		ABORT_AND_FAIL,
+		/**
+		 * Return current call, but mark the service as failed.
+		 */
+		RETURN_AND_FAIL
 	};
 	
 	/**
@@ -45,7 +53,12 @@ public class InterceptorResponse {
 	 * Default reply variable. Helps save heap space ;-).
 	 */
 	public static final InterceptorResponse CONTINUE = new InterceptorResponse(InterceptorCommand.CONTINUE);
-	
+
+	/**
+	 * Default reply variable. Helps save heap space ;-).
+	 */
+	public static final InterceptorResponse RETURN_AND_FAIL = new InterceptorResponse(InterceptorCommand.RETURN_AND_FAIL);
+
 	public InterceptorResponse(InterceptorCommand aCommand){
 		command = aCommand;
 	}
