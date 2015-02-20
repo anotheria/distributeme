@@ -1,12 +1,12 @@
 package org.distributeme.test.concurrencycontrol;
 
+import org.distributeme.core.ServiceLocator;
+import org.distributeme.core.exception.DistributemeRuntimeException;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
-
-import org.distributeme.core.ServiceLocator;
-import org.distributeme.core.exception.DistributemeRuntimeException;
 
 public class TestRun {
 	public static final int THREADS = 10;
@@ -19,7 +19,7 @@ public class TestRun {
 	public static void test(final int limit, final Method method) throws Exception{
 		
 		tsuccesses = ttotals = 0;
-		System.out.println("STARTING ");
+		System.out.println("STARTING "+limit+" "+method);
 		final TestService service = ServiceLocator.getRemote(TestService.class);
 		
 		for (int i=0; i<THREADS; i++){
@@ -36,6 +36,7 @@ public class TestRun {
 							tries++;
 							try{
 								method.invoke(service, System.currentTimeMillis());
+								//service.serverSideLimited(System.currentTimeMillis());
 								//service.clientSideLimited(System.currentTimeMillis());
 								successes++;
 							}catch(DistributemeRuntimeException e){

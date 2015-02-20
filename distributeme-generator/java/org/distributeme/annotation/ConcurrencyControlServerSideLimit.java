@@ -14,5 +14,11 @@ public @interface ConcurrencyControlServerSideLimit {
 	 * Server side concurrent call limit.
 	 * @return
 	 */
-	int value();
+	int value() default 0;
+
+	/**
+	 * Alternative configuration name, if this is used, value is ignored.
+	 * @return
+	 */
+	String configurationName() default "";
 }

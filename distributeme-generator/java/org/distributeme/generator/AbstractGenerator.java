@@ -731,14 +731,24 @@ public class AbstractGenerator {
 		Annotation ann; 
 		ann = type.getAnnotation(ConcurrencyControlServerSideLimit.class);
 		if (ann!=null){
+			String configName = ((ConcurrencyControlServerSideLimit)ann).configurationName();
+			if (configName!=null && configName.length()>0)
+				return new TranslatedCCAnnotation("org.distributeme.core.concurrencycontrol.ConfigurationBasedConcurrencyControlStrategy", configName);
 			return new TranslatedCCAnnotation("org.distributeme.core.concurrencycontrol.ConstantBasedConcurrencyControlStrategy", "0,"+((ConcurrencyControlServerSideLimit)ann).value());
+
 		}
 		ann = type.getAnnotation(ConcurrencyControlClientSideLimit.class);
 		if (ann!=null){
+			String configName = ((ConcurrencyControlClientSideLimit)ann).configurationName();
+			if (configName!=null && configName.length()>0)
+				return new TranslatedCCAnnotation("org.distributeme.core.concurrencycontrol.ConfigurationBasedConcurrencyControlStrategy", configName);
 			return new TranslatedCCAnnotation("org.distributeme.core.concurrencycontrol.ConstantBasedConcurrencyControlStrategy", ""+((ConcurrencyControlClientSideLimit)ann).value()+",0");
 		}
 		ann = type.getAnnotation(ConcurrencyControlLimit.class);
 		if (ann!=null){
+			String configName = ((ConcurrencyControlLimit)ann).configurationName();
+			if (configName!=null && configName.length()>0)
+				return new TranslatedCCAnnotation("org.distributeme.core.concurrencycontrol.ConfigurationBasedConcurrencyControlStrategy", configName);
 			return new TranslatedCCAnnotation("org.distributeme.core.concurrencycontrol.ConstantBasedConcurrencyControlStrategy", ""+((ConcurrencyControlLimit)ann).client()+","+((ConcurrencyControlLimit)ann).server());
 		}
 		

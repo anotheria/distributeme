@@ -21,7 +21,7 @@ public interface TestService extends Service{
 	 * This method can handle max 5 concurrent requests on the server side.
 	 * @return
 	 */
-	@ConcurrencyControlServerSideLimit(5)
+	@ConcurrencyControlServerSideLimit(configurationName = "ccconfig")
 	long serverSideLimited(long parameter);
 	
 	@ConcurrencyControlLimit(client=4, server=5)
