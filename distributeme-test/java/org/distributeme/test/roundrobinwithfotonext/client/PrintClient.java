@@ -28,7 +28,8 @@ public class PrintClient extends Client{
 		service.printResults();
 		service.printResults();
 		service.printResults();
-	
+		service.printResults();
+
 	}
 
 }

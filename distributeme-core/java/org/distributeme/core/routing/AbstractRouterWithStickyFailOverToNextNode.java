@@ -3,14 +3,17 @@ package org.distributeme.core.routing;
 import net.anotheria.util.StringUtils;
 import org.configureme.ConfigurationManager;
 import org.distributeme.core.ClientSideCallContext;
+import org.distributeme.core.exception.DistributemeRuntimeException;
 import org.distributeme.core.failing.FailDecision;
 import org.distributeme.core.failing.FailingStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -36,7 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p/>
  * By implementing getModableValue(<?>) method - You can simply extract some long from incoming parameter, for further calculations.
  *
- * @author h3llka
+ * @author h3llka,dvayanu
  */
 public abstract class AbstractRouterWithStickyFailOverToNextNode implements ConfigurableRouter, FailingStrategy {
 
@@ -44,9 +47,19 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode implements Conf
 	public static final String PARAMETER_KEY_TIMEOUT  = "timeout";
 
 	/**
+	 * Attribute for call context where we store instances that we already tried.
+	 */
+	public static final String ATTR_TRIED_INSTANCES = AbstractRouterWithStickyFailOverToNextNode.class.getName()+".instance";
+
+	/**
 	 * Router configuration.
 	 */
 	private GenericRouterConfiguration configuration = new GenericRouterConfiguration();
+
+	/**
+	 * Random for selection of next instance.
+	 */
+	private Random random = new Random(System.nanoTime());
 
 	/**
 	 * AbstractRouterImplementation 'modRouteMethodRegistry'. Contains information about
@@ -205,23 +218,53 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode implements Conf
 
 		String originalServiceId = context.getServiceId();
 
-		System.out.println("Calculating failing for orig service id "+originalServiceId);
+		//System.out.println("Calculating failing for orig service id "+originalServiceId);
+		HashSet<String> instancesThatIAlreadyTried = (HashSet<String>)context.getTransportableCallContext().get(ATTR_TRIED_INSTANCES);
+		if (instancesThatIAlreadyTried==null){
+			instancesThatIAlreadyTried = new HashSet<String>();
+			context.getTransportableCallContext().put(ATTR_TRIED_INSTANCES, instancesThatIAlreadyTried);
+		}
 
 		int lastUnderscore = originalServiceId.lastIndexOf(UNDER_LINE);
 		String idSubstring = originalServiceId.substring(lastUnderscore + 1);
-		String result;
-		try {
-			int lastCalledServiceNumber = Integer.parseInt(idSubstring);
-			int newMod = lastCalledServiceNumber + 1 >= getServiceAmount() ? 0 : lastCalledServiceNumber + 1;
+		instancesThatIAlreadyTried.add(idSubstring);
 
-			result = originalServiceId.substring(0, lastUnderscore + 1) + newMod;
-		} catch (NumberFormatException e) {
-			result = originalServiceId;
+		//System.out.println("instancesThat I already Tried: " + instancesThatIAlreadyTried+", "+configuration.getNumberOfInstances());
+
+		//now pick next candidate.
+		if (instancesThatIAlreadyTried.size()==configuration.getNumberOfInstances()){
+			//we tried everything, it won't work
+			throw new DistributemeRuntimeException("No instance available, we tried all already.");
 		}
+
+		String result = null;
+
+		if (instancesThatIAlreadyTried.size() == configuration.getNumberOfInstances() -1){
+			//only one instance left, it's easier to find it.
+			for (int candidate = 0; candidate<configuration.getNumberOfInstances(); candidate++){
+				if (!instancesThatIAlreadyTried.contains(""+candidate)){
+					//found untried yet
+					result = originalServiceId.substring(0, lastUnderscore + 1) + candidate;
+				}
+			}
+		}
+
+		if (result==null){
+			//if we are here we have more than one possible candidate.
+			int[] candidates = new int[configuration.getNumberOfInstances()-instancesThatIAlreadyTried.size()];
+			int i=0;
+			for (int candidate = 0; candidate<configuration.getNumberOfInstances(); candidate++) {
+				if (!instancesThatIAlreadyTried.contains("" + candidate)) {
+			 		candidates[i++] = candidate;
+				}
+			}
+			//now pick a candidate
+			int candidate = candidates[random.nextInt(candidates.length)];
+			result = originalServiceId.substring(0, lastUnderscore + 1) + candidate;
+		}
+
 		if (log.isDebugEnabled())
 			log.debug("serviceIdForFailing result[" + result + "]. ClientSideCallContext[" + context + "]");
-
-		System.out.println(" ---> "+result);
 
 		return result;
 	}
