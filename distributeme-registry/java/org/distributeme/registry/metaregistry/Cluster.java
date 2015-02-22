@@ -63,7 +63,7 @@ public enum Cluster {
 		}
 		MetaRegistryImpl.getInstance().addListener(new ClusterRegistryListener());
 		
-		syncCommandProcessor = new QueuedProcessor<ClusterSyncCommand>("ClusterSynchCommandProcessor", new ClusterWorker(), 5000, 50, log);
+		syncCommandProcessor = new QueuedProcessor<ClusterSyncCommand>("ClusterSyncCommandProcessor", new ClusterWorker(), 5000, 50, log);
 		syncCommandProcessor.start();
 		
 	}

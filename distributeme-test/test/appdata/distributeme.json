@@ -10,10 +10,12 @@
 	//registrationIpMapping: "192.168.200.5:10.0.0.0",
 	
 	"listener.1": "org.distributeme.core.listener.ServerLifecycleSysOutPrinterListener",
+    "listener.2": "org.distributeme.core.listener.UDPReregistrationListener",
 //	"interceptor.1": "org.distributeme.core.interceptor.availabilitytesting.ServiceUnavailableByPropertyInterceptor", 
 //	"interceptor.2": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByPropertyInterceptor",
 //	"interceptor.3": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByConfigurationInterceptor",
 //    "interceptor.20": "org.distributeme.test.roundrobinwithfotonext.interceptor.ClientSideMarkLongRequestAsFailedInterceptor",
+    "interceptor.5": "org.distributeme.core.qos.QOSMonitoringInterceptor",
 	
 	"test": {
 		"interceptors": {

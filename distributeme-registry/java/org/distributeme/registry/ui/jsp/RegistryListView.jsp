@@ -58,6 +58,7 @@
 	<br>
 	<a href="shutdownall" class="shutdown_all" onclick="return confirm('Are you REALLY REALLY REALLY sure you want to shut down the whole system?!')"><span>Shutdown all</span></a>
 	<a href="pingall" class="ping_all"><span>Ping all</span></a>
+    <a href="forceRegister" class="ping_all"><span>Force re-register</span></a>
 	<br/><br/><br/>
 	<a href="http://anotheria.net"><img src="../images/powered.png" alt=""/></a>
 </div>

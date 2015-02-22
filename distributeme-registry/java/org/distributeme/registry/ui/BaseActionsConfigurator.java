@@ -5,6 +5,7 @@ import net.anotheria.maf.action.ActionMappingsConfigurator;
 import net.anotheria.maf.action.CommandForward;
 import net.anotheria.maf.action.CommandRedirect;
 import org.distributeme.registry.ui.action.ESRegistryListAction;
+import org.distributeme.registry.ui.action.RegistryForceRegisterAction;
 import org.distributeme.registry.ui.action.RegistryListAction;
 import org.distributeme.registry.ui.action.RegistryPingAction;
 import org.distributeme.registry.ui.action.RegistryPingAllAction;
@@ -39,7 +40,8 @@ public class BaseActionsConfigurator implements ActionMappingsConfigurator {
 		
 		mappings.addMapping("ping", RegistryPingAction.class, new CommandRedirect("redirect", "registry?"));
 		mappings.addMapping("pingall", RegistryPingAllAction.class, new CommandRedirect("redirect", "registry?"));
-		
+		mappings.addMapping("forceRegister", RegistryForceRegisterAction.class, new CommandRedirect("redirect", "registry?"));
+
 		mappings.addMapping("shutdown", RegistryShutdownAction.class, new CommandRedirect("redirect", "registry?"));
 		mappings.addMapping("shutdownall", RegistryShutdownAllAction.class, new CommandRedirect("redirect", "registry?"));
 		

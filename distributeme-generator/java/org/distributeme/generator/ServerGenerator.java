@@ -30,6 +30,7 @@ import org.distributeme.core.listener.ListenerRegistry;
 import org.distributeme.core.listener.ServerLifecycleListener;
 import org.distributeme.core.listener.ServerLifecycleListenerShutdownHook;
 import org.distributeme.core.routing.RegistrationNameProvider;
+import org.distributeme.core.util.LocalServiceDescriptorStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
@@ -87,6 +88,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		writeImport(RegistryLocation.class);
 		writeImport(ExportException.class);
 		writeImport(ServiceDescriptor.class);
+		writeImport(LocalServiceDescriptorStore.class);
 		writeImport("org.distributeme.core.ServiceDescriptor.Protocol");
 		writeImport(MetaFactory.class);
 		writeImport(FactoryNotFoundException.class);
@@ -374,6 +376,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeString("if (registerCentrally){");
 			increaseIdent();
 			writeStatement("ServiceDescriptor descriptor = createDescriptor(instanceId)");
+			writeStatement("LocalServiceDescriptorStore.getInstance().addServiceDescriptor(descriptor)");
 			
 			emptyline();
 			writeString("if (!RegistryUtil.bind(descriptor)){");
@@ -399,7 +402,8 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 				String descriptorVariableName = getServerName(service).toLowerCase()+"Descriptor";
 				String serviceServerClassName = getFullyQualifiedServerName(service);
 				writeStatement("ServiceDescriptor "+descriptorVariableName+" = "+serviceServerClassName+".createDescriptor(instanceId)");
-				
+				writeStatement("LocalServiceDescriptorStore.getInstance().addServiceDescriptor("+descriptorVariableName+")");
+
 				emptyline();
 				writeString("if (!RegistryUtil.bind("+descriptorVariableName+")){");
 				increaseIdent();
