@@ -197,6 +197,15 @@ public abstract class AbstractRouterWithFailOverToNextNode implements Configurab
 
 		int lastUnderscore = originalServiceId.lastIndexOf(UNDER_LINE);
 		String idSubstring = originalServiceId.substring(lastUnderscore + 1);
+
+		//check if idSubstring is numeric, if its not we have nowhere to fail.
+		try{
+			Integer.parseInt(idSubstring);
+		}catch(NumberFormatException e){
+			return originalServiceId;
+		}
+
+
 		instancesThatIAlreadyTried.add(idSubstring);
 
 		//System.out.println("instancesThat I already Tried: " + instancesThatIAlreadyTried+", "+configuration.getNumberOfInstances());
