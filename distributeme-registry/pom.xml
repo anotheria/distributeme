@@ -28,11 +28,11 @@
 		<artifactId>distributeme-support</artifactId>
 		<version>${project.version}</version>
 	</dependency>
-	<dependency>
-		<groupId>javax.servlet</groupId>
-		<artifactId>servlet-api</artifactId>
-		<scope>provided</scope>
-	</dependency>
+    <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+    	<scope>provided</scope>
+    </dependency>
 	<dependency>
 		<groupId>net.anotheria</groupId>
 		<artifactId>ano-maf</artifactId>
@@ -105,17 +105,17 @@
         <artifactId>maven-war-plugin</artifactId>
         <version>2.1</version>
         <configuration>
-           <webXml>etc/web.xml</webXml>
+           <webXml>src/main/webapp/WEB-INF/web.xml</webXml>
 		   <warName>distributeme</warName>
           <webResources>
             <resource>
               <!-- this is relative to the pom.xml directory -->
-              <directory>html</directory>
+              <directory>src/main/webapp</directory>
             </resource>
             <resource>
               
               <!-- this is relative to the pom.xml directory -->
-              <directory>java</directory>
+              <directory>src/main/java</directory>
               <includes><include>**/*.jsp</include></includes>
               
             </resource>
