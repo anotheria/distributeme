@@ -122,12 +122,6 @@
               <resource>
                   <directory>${project.build.directory}/tmp</directory>
               </resource>
-            <resource>
-              <!-- this is relative to the pom.xml directory -->
-              <directory>etc/</directory>
-              <includes><include>**/*.tld</include></includes>
-              <targetPath>WEB-INF/</targetPath>
-            </resource>
           </webResources>
         </configuration>
       </plugin>
