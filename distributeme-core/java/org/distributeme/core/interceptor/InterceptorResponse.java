@@ -59,6 +59,11 @@ public class InterceptorResponse {
 	 */
 	public static final InterceptorResponse RETURN_AND_FAIL = new InterceptorResponse(InterceptorCommand.RETURN_AND_FAIL);
 
+	/**
+	 * Default reply variable. Helps save heap space ;-).
+	 */
+	public static final InterceptorResponse ABORT_AND_FAIL = new InterceptorResponse(InterceptorCommand.ABORT_AND_FAIL);
+
 	public InterceptorResponse(InterceptorCommand aCommand){
 		command = aCommand;
 	}

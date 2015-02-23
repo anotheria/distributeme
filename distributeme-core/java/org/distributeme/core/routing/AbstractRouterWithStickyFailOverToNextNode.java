@@ -82,11 +82,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode implements Conf
 	 */
 	private AtomicInteger delegateCallCounter;
 
-//	private int configuredServiceAmount = 0;
-
 	private ConcurrentMap<String, Long> serverFailureTimestamps = new ConcurrentHashMap<String, Long>();
-
-//	private long configuredTimeout = 0L;
 
 	/**
 	 * Constructor.
@@ -116,6 +112,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode implements Conf
 
 	@Override
 	public String getServiceIdForCall(final ClientSideCallContext clientSideCallContext) {
+
 		if (log.isDebugEnabled())
 			log.debug("Incoming call " + clientSideCallContext);
 
@@ -217,7 +214,6 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode implements Conf
 			log.debug("Calculating serviceIdForFailing call. ClientSideCallContext[" + context + "]");
 
 		String originalServiceId = context.getServiceId();
-
 		//System.out.println("Calculating failing for orig service id "+originalServiceId);
 		HashSet<String> instancesThatIAlreadyTried = (HashSet<String>)context.getTransportableCallContext().get(ATTR_TRIED_INSTANCES);
 		if (instancesThatIAlreadyTried==null){

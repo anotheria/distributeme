@@ -1,0 +1,4 @@
+{
+  "timeoutBeforeBlackList": 1000,
+  "blacklistDuration": 30000
+}

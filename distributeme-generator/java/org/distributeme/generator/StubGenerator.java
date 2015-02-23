@@ -252,6 +252,8 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			writeStatement("Exception exceptionInMethod = null");
 			writeCommentLine("This flag is used by the interceptor logic to mark a request es failed, even it is not.");
 			writeStatement("boolean diMeForceFailing = false");
+			//if true the call will not be executed, instead we jump into failing.
+			writeStatement("boolean abortAndFail = false");
 			writeString("if (diMeCallContext == null)");
 			writeIncreasedStatement("diMeCallContext = new ClientSideCallContext("+quote(method.getSimpleName())+")");
 			writeString("if (discoveryMode==DiscoveryMode.AUTO && diMeCallContext.getServiceId()==null)");
@@ -334,6 +336,8 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 				paramCall += ", ";
 			paramCall +=" __transportableCallContext";
 			call += "("+paramCall+");";
+			writeString("if (!abortAndFail){");
+			increaseIdent();
 			writeString(call);
 			writeStatement("__transportableCallContext.putAll(((HashMap)__fromServerSide.get(1)))");
 			if (isVoidReturn(method)){
@@ -341,6 +345,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			}else{
 				writeStatement("return "+convertReturnValue(method.getReturnType(), "__fromServerSide.get(0)"));
 			}
+			closeBlock();
 			decreaseIdent();
 			writeString("}catch(RemoteException e){");
 			increaseIdent();
@@ -365,7 +370,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			//failing
 			writeCommentLine("Failing");
 			//writeStatement("System.out.println(\"Call failed? \"+diMeForceFailing)");
-			writeString("if (exceptionInMethod!=null || diMeForceFailing){");
+			writeString("if (exceptionInMethod!=null || diMeForceFailing || abortAndFail){");
 			increaseIdent();
 			writeStatement("FailDecision failDecision = "+getFailingStrategyVariableName(method)+".callFailed(diMeCallContext)");
 			//writeStatement("System.out.println(\"Call failed \"+diMeForceFailing+\" - \" + failDecision)");
@@ -583,6 +588,8 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeString("case CONTINUE:");
 		writeIncreasedStatement("break");
 		writeString("case ABORT_AND_FAIL:");
+		writeIncreasedStatement("abortAndFail = true");
+		writeIncreasedStatement("break");
 		writeString("case RETURN_AND_FAIL:");
 		writeCommentLine("Force failing logic to work.");
 		if (!afterCall) {
@@ -593,7 +600,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		if (afterCall){
 			writeStatement(getFailingStrategyVariableName(method)+".callFailed(diMeCallContext)");
 		}
-		writeIncreasedStatement("System.out.println(\"I will need to fail from now on\")");
+		//writeIncreasedStatement("System.out.println(\"I will need to fail from now on\")");
 		writeIncreasedStatement("break");
 		writeString("default:");
 		writeIncreasedStatement("throw new IllegalStateException("+quote("Unsupported or unexpected command from interceptor ")+" + interceptorResponse.getCommand()+ \" in phase:\"+diMeInterceptionContext.getCurrentPhase())");
