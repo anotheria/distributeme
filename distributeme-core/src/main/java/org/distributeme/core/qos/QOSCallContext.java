@@ -1,15 +1,24 @@
 package org.distributeme.core.qos;
 
 /**
- * TODO comment this class
+ * A thread local that stores information for current request.
  *
  * @author lrosenberg
  * @since 22.02.15 22:29
  */
 public class QOSCallContext {
 
+	/**
+	 * Unique id of the call.
+	 */
 	private String callId;
+	/**
+	 * Service id for the current call.
+	 */
 	private String serviceId;
+	/**
+	 * Start time of the call.
+	 */
 	private long startTime;
 
 	private static ThreadLocal<QOSCallContext> context = new ThreadLocal<QOSCallContext>(){

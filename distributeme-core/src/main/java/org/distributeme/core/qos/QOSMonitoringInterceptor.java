@@ -7,7 +7,7 @@ import org.distributeme.core.interceptor.InterceptionContext;
 import org.distributeme.core.interceptor.InterceptorResponse;
 
 /**
- * TODO comment this class
+ * Interceptor (client side) that enables QOS functionality in a client.
  *
  * @author lrosenberg
  * @since 20.02.15 17:29
