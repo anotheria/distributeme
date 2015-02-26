@@ -43,7 +43,13 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public abstract class AbstractRouterWithStickyFailOverToNextNode implements ConfigurableRouter, FailingStrategy {
 
+	/**
+	 * Services parameter.
+	 */
 	public static final String PARAMETER_KEY_SERVICES = "services";
+	/**
+	 * Timeout parameter.
+	 */
 	public static final String PARAMETER_KEY_TIMEOUT  = "timeout";
 
 	/**
@@ -82,6 +88,9 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode implements Conf
 	 */
 	private AtomicInteger delegateCallCounter;
 
+	/**
+	 * Map with timestamps for last server failures.
+	 */
 	private ConcurrentMap<String, Long> serverFailureTimestamps = new ConcurrentHashMap<String, Long>();
 
 	/**

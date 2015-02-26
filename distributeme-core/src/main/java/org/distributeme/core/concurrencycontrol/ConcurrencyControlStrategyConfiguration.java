@@ -4,7 +4,7 @@ import org.configureme.annotations.AfterConfiguration;
 import org.configureme.annotations.ConfigureMe;
 
 /**
- * TODO comment this class
+ * Configuration for concurrency control strategy.
  *
  * @author lrosenberg
  * @since 20.02.15 15:31
@@ -12,7 +12,13 @@ import org.configureme.annotations.ConfigureMe;
 
 @ConfigureMe(allfields = true)
 public class ConcurrencyControlStrategyConfiguration {
+	/**
+	 * Client side limit.
+	 */
 	private int clientSideLimit = Integer.MAX_VALUE;
+	/**
+	 * Server side limit.
+	 */
 	private int serverSideLimit = Integer.MAX_VALUE;
 
 	public int getClientSideLimit() {

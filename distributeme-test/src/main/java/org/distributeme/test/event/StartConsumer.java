@@ -12,7 +12,7 @@ public class StartConsumer {
 		DiMeRemoteEventChannelRMISupport.initEventService();
 		
 		EventService es = EventServiceFactory.createEventService();
-		EventChannel forConsumer = es.obtainEventChannel("backoffice_channel", ProxyType.PUSH_CONSUMER_PROXY);
+		EventChannel forConsumer = es.obtainEventChannel("TEST", ProxyType.PUSH_CONSUMER_PROXY);
 		PushConsumer consumer = new PushConsumer();
 		forConsumer.addConsumer(consumer);
 		System.out.println("Setup finished");

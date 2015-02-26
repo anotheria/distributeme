@@ -13,15 +13,22 @@ import java.net.DatagramSocket;
 import java.util.List;
 
 /**
- * TODO comment this class
+ * This listener activates a UDP socket and listens for the incoming packets. If the packet contains the register command,
+ * it triggers a reregistration.
  *
  * @author lrosenberg
  * @since 22.02.15 17:51
  */
 public class UDPReregistrationListener implements ServerLifecycleListener{
 
+	/**
+	 * Logger.
+	 */
 	private static Logger log = LoggerFactory.getLogger(UDPReregistrationListener.class);
 
+	/**
+	 * Cmd string for registration.
+	 */
 	public static final String CMD_REGISTER = "register";
 
 	@Override
@@ -36,6 +43,10 @@ public class UDPReregistrationListener implements ServerLifecycleListener{
 
 	}
 
+	/**
+	 * Starts a server on a given port.
+	 * @param port
+	 */
 	private void startUdpServer(int port){
 		try {
 			final DatagramSocket serverSocket = new DatagramSocket(port);
@@ -65,6 +76,9 @@ public class UDPReregistrationListener implements ServerLifecycleListener{
 		}
 	}
 
+	/**
+	 * Registration command.
+	 */
 	private void register(){
 		List<ServiceDescriptor> descriptors = LocalServiceDescriptorStore.getInstance().getServiceDescriptors();
 		System.out.println("Have to register following descriptors: "+descriptors);
@@ -75,6 +89,4 @@ public class UDPReregistrationListener implements ServerLifecycleListener{
 			}
 		}
 	}
-
-
 }

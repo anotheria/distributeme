@@ -21,6 +21,9 @@ public class QOSCallContext {
 	 */
 	private long startTime;
 
+	/**
+	 * Thread local context instance.
+	 */
 	private static ThreadLocal<QOSCallContext> context = new ThreadLocal<QOSCallContext>(){
 		@Override
 		protected QOSCallContext initialValue() {

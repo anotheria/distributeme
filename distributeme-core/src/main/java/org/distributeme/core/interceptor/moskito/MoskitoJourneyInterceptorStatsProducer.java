@@ -12,9 +12,15 @@ import java.util.List;
  *
  */
 public enum MoskitoJourneyInterceptorStatsProducer implements IStatsProducer{
-	NETWORK, SKELETON;
+	/**
+	 * Producer for network.
+	 */
+	NETWORK,
+	/**
+	 * Producer on the skeleton side.
+	 */
+	SKELETON;
 	
-
 	@Override
 	public List<IStats> getStats() {
 		return Collections.EMPTY_LIST;
