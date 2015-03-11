@@ -9,6 +9,7 @@ import org.distributeme.core.failing.FailingStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -234,7 +235,13 @@ public abstract class AbstractRouterWithFailOverToNextNode implements Configurab
 			int i=0;
 			for (int candidate = 0; candidate<configuration.getNumberOfInstances(); candidate++) {
 				if (!instancesThatIAlreadyTried.contains("" + candidate)) {
-					candidates[i++] = candidate;
+					try {
+						candidates[i++] = candidate;
+					}catch(ArrayIndexOutOfBoundsException e){
+						log.error("ERROR 20150306 Got ArrayIndexOutOfBoundsException in calculation of failover node index (increased by one) "+(i)+", candidate: "+candidate+", candidates: "+ Arrays.toString(candidates)+
+							"NumberOfInstances: "+configuration.getNumberOfInstances()+", AlreadyTried: "+instancesThatIAlreadyTried+", Size: "+instancesThatIAlreadyTried.size()+", ServiceId: "+originalServiceId
+						);
+					}
 				}
 			}
 			//now pick a candidate
