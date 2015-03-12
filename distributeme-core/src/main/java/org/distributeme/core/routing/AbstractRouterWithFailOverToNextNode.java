@@ -165,16 +165,15 @@ public abstract class AbstractRouterWithFailOverToNextNode implements Configurab
 	 * @return serviceId string
 	 */
 	private String getRRBasedServiceId(ClientSideCallContext context) {
-		final int callCounter = delegateCallCounter.get();
-		if (delegateCallCounter.incrementAndGet() >= getServiceAmount())
-			delegateCallCounter.set(0);
-
-		String result = context.getServiceId() + UNDER_LINE + callCounter;
-
-		if (log.isDebugEnabled())
-			log.debug("Returning roundRobin based result : " + result + " for " + context + " where : serversAmount[" + getServiceAmount() + "]");
-
-		return result;
+		if (configuration.getNumberOfInstances() == 0)
+			return context.getServiceId();
+		int fromCounter = delegateCallCounter.incrementAndGet();
+		if (fromCounter >= configuration.getNumberOfInstances()){
+			int oldCounter = fromCounter;
+			fromCounter = 0;
+			delegateCallCounter.compareAndSet(oldCounter, 0);
+		}
+		return context.getServiceId()+UNDER_LINE+fromCounter;
 	}
 
 	/**
