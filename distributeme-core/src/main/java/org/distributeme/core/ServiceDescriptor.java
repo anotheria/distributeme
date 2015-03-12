@@ -12,7 +12,7 @@ import net.anotheria.util.BasicComparable;
  * @author lrosenberg
  *
  */
-public class ServiceDescriptor implements Serializable,Cloneable{
+public class ServiceDescriptor implements Serializable, Cloneable{
 	
 	/**
 	 * serial version uid.

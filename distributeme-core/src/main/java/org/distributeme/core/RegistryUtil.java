@@ -27,7 +27,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 */
 	public static final String PARAM_ID = "id";
 	/**
-	 * Name of the registry's webapplication.
+	 * Name of the registry's web-application.
 	 */
 	public static final String APP = "registry";
 

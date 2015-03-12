@@ -188,7 +188,6 @@ public abstract class AbstractRouterWithFailOverToNextNode implements Configurab
 
 		String originalServiceId = context.getServiceId();
 
-		//System.out.println("Calculating failing for orig service id "+originalServiceId);
 		HashSet<String> instancesThatIAlreadyTried = (HashSet<String>)context.getTransportableCallContext().get(ATTR_TRIED_INSTANCES);
 		if (instancesThatIAlreadyTried==null){
 			instancesThatIAlreadyTried = new HashSet<String>();
@@ -207,8 +206,6 @@ public abstract class AbstractRouterWithFailOverToNextNode implements Configurab
 
 
 		instancesThatIAlreadyTried.add(idSubstring);
-
-		//System.out.println("instancesThat I already Tried: " + instancesThatIAlreadyTried+", "+configuration.getNumberOfInstances());
 
 		//now pick next candidate.
 		if (instancesThatIAlreadyTried.size()==configuration.getNumberOfInstances()){

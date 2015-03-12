@@ -147,9 +147,6 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode implements Conf
 
 		Long lastFailed = serverFailureTimestamps.get(selectedServiceId);
 		boolean blacklisted = lastFailed != null && (System.currentTimeMillis() - lastFailed) < configuration.getBlacklistTime();
-		/*if (lastFailed!=null)
-			System.out.println("blacklisted "+lastFailed+", "+System.currentTimeMillis()+" " + (lastFailed - System.currentTimeMillis()));
-			*/
 
 		//the service id we picked up is blacklisted due to previous failing.
 		if (blacklisted) {
@@ -222,7 +219,6 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode implements Conf
 			log.debug("Calculating serviceIdForFailing call. ClientSideCallContext[" + context + "]");
 
 		String originalServiceId = context.getServiceId();
-		//System.out.println("Calculating failing for orig service id "+originalServiceId);
 		HashSet<String> instancesThatIAlreadyTried = (HashSet<String>)context.getTransportableCallContext().get(ATTR_TRIED_INSTANCES);
 		if (instancesThatIAlreadyTried==null){
 			instancesThatIAlreadyTried = new HashSet<String>();
@@ -232,8 +228,6 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode implements Conf
 		int lastUnderscore = originalServiceId.lastIndexOf(UNDER_LINE);
 		String idSubstring = originalServiceId.substring(lastUnderscore + 1);
 		instancesThatIAlreadyTried.add(idSubstring);
-
-		//System.out.println("instancesThat I already Tried: " + instancesThatIAlreadyTried+", "+configuration.getNumberOfInstances());
 
 		//now pick next candidate.
 		if (instancesThatIAlreadyTried.size()==configuration.getNumberOfInstances()){

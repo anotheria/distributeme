@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A shutdown hook that unregisters a service upon jvm exit.
+ * A shutdown hook that un-registers a service upon jvm exit.
  * @author another
  *
  */
@@ -25,7 +25,7 @@ public class ServerShutdownHook extends Thread{
 	}
 	
 	@Override public void run(){
-		log.info("Unregistering "+targetDescriptor);
+		log.info("Unregister "+targetDescriptor);
 		try{
 			boolean result = RegistryUtil.unbind(targetDescriptor);
 			log.info(result?  "\tsuccess" : "\terror");
