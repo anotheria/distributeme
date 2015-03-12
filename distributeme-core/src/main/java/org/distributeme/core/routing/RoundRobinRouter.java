@@ -16,7 +16,7 @@ public class RoundRobinRouter implements Router{
 	 */
 	private int MAX = 0;
 	/**
-	 * Callcounter. 
+	 * Call counter.
 	 */
 	private AtomicInteger callCounter = new AtomicInteger(0);
 	/**

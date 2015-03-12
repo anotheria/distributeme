@@ -18,7 +18,7 @@ public class FairRoundRobinRouter implements Router{
 
 	private int MOD = 0;
 	/**
-	 * Callcounter. 
+	 * Call counter.
 	 */
 	private AtomicLong callCounter = new AtomicLong(0);
 	/**
