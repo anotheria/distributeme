@@ -12,10 +12,13 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class FairRoundRobinRouter implements Router{
 	/**
-	 * Max mod parameter.
+	 * Max mod parameter. It is used to scale up the range of instances, and to prevent the counter from too many overflows, thus allowing the distribution be more fair.
 	 */
 	private long MAX = 0;
 
+	/**
+	 * Number of instances.
+	 */
 	private int MOD = 0;
 	/**
 	 * Call counter.

@@ -14,6 +14,9 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class ConfigurationBasedConcurrencyControlStrategy implements ConcurrencyControlStrategy{
 
+	/**
+	 * Configuration instance.
+	 */
 	private ConcurrencyControlStrategyConfiguration configuration = new ConcurrencyControlStrategyConfiguration();
 
 	/**

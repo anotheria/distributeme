@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author lrosenberg
  * @since 20.02.15 17:29
  */
-public class QOSRegistry {
+public final class QOSRegistry {
 	/**
 	 * Log.
 	 */
