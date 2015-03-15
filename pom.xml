@@ -128,32 +128,14 @@
 		<artifactId>moskito-core</artifactId>
 	</dependency>
   </dependencies>
-	<profiles>
-		<profile>
-			<id>default</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<modules>
-				<module>distributeme-core</module>
-				<module>distributeme-generator</module>
-		        <module>distributeme-support</module>
-		        <module>distributeme-registry</module>
-		        <module>distributeme-agents</module>
-		        <module>distributeme-test</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>jenkins_ci</id>
-			<modules>
-				<module>distributeme-core</module>
-				<module>distributeme-generator</module>
-		        <module>distributeme-support</module>
-		        <module>distributeme-registry</module>
-		        <module>distributeme-agents</module>
-			</modules>
-		</profile>
-	</profiles>
+	<modules>
+		<module>distributeme-core</module>
+		<module>distributeme-generator</module>
+        <module>distributeme-support</module>
+        <module>distributeme-registry</module>
+        <module>distributeme-agents</module>
+        <module>distributeme-test</module>
+	</modules>
 	<scm>
 		<url>https://github.com/anotheria/distributeme.git</url>
 		<connection>scm:git:git@github.com:anotheria/distributeme.git</connection>
