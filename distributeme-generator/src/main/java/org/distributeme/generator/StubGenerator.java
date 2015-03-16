@@ -411,12 +411,15 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			closeBlock();
 			emptyline();
 		}
-		
+
+		writeCommentLine("according to findbugs this method is never used, so we remove it for now reduce warnings.");
 		emptyline();
-		writeString("private void notifyDelegateFailed(){");
+		writeString("//private void notifyDelegateFailed(){");
 		increaseIdent();
-		writeStatement("notifyDelegateFailed("+getConstantsName(type)+".getServiceId())");
-		closeBlock();
+		writeStatement("//notifyDelegateFailed("+getConstantsName(type)+".getServiceId())");
+		//closeBlock();
+		decreaseIdent();
+		writeString("//}");
 		emptyline();
 		
 		writeString("private void notifyDelegateFailed(String serviceId){");
