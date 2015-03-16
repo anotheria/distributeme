@@ -316,8 +316,8 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			increaseIdent();
 			writeInterceptionBlock(InterceptionPhase.BEFORE_SERVICE_CALL, method);
 			
-			//now reparse parameters
-			writeCommentLine("Reparse parameters in case an interceptor modified them");
+			//now re-parse parameters
+			writeCommentLine("parse parameters again in case an interceptor modified them");
 			Collection<? extends ParameterDeclaration> parameters = method.getParameters();
 			int parameterCounter = 0;
 			for (ParameterDeclaration p : parameters){
@@ -407,6 +407,8 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			
 			closeBlock();
 			writeCommentLine("fail through, if we are here, we must have had an exception before.");
+			writeString("if (exceptionInMethod == null)");
+			writeIncreasedStatement("throw new AssertionError("+quote("Exception must have been thrown before, but it wasn't, framework error!")+")");
 			writeStatement("throw mapException(exceptionInMethod)");
 			closeBlock();
 			emptyline();
@@ -583,6 +585,10 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		}
 		if (!isVoidReturn(method) && afterCall){
 			writeString("case OVERWRITE_RETURN_AND_CONTINUE:");
+			writeIncreasedString("if (__fromServerSide == null)");
+			increaseIdent();
+			writeIncreasedStatement("throw new AssertionError("+quote("Incorrect use of interceptor, there is no return value in this method or it is null")+")");
+			decreaseIdent();
 			writeIncreasedStatement("__fromServerSide.set(0, interceptorResponse.getReturnValue())");
 			writeIncreasedStatement("diMeInterceptionContext.setReturnValue(interceptorResponse.getReturnValue())");
 			writeIncreasedStatement("diMeReturnOverriden = true");
