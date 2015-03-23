@@ -97,6 +97,7 @@
     </dependencies>
    </dependencyManagement>
 
+    <!--
   <dependencies>
     <dependency>
         <groupId>org.slf4j</groupId>
@@ -111,23 +112,10 @@
   		<artifactId>ano-net</artifactId>
 	</dependency>
 	<dependency>
-  		<groupId>net.anotheria</groupId>
-  		<artifactId>ano-prise</artifactId>
-	</dependency>
-      <dependency>
-          <groupId>net.anotheria</groupId>
-          <artifactId>configureme</artifactId>
-      </dependency>
-      <dependency>
-  		<groupId>org.jdom</groupId>
-  		<artifactId>jdom</artifactId>
-  		<version>1.1</version>
-	</dependency>
-	<dependency>
 		<groupId>net.anotheria</groupId>
 		<artifactId>moskito-core</artifactId>
 	</dependency>
-  </dependencies>
+  </dependencies> -->
 	<modules>
 		<module>distributeme-core</module>
 		<module>distributeme-generator</module>
