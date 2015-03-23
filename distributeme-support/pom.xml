@@ -10,7 +10,8 @@
   <groupId>net.anotheria</groupId>
   <artifactId>distributeme-support</artifactId>
   <version>2.2.2-SNAPSHOT</version>
-  <name>distributeme support utilities needed by generated classes</name>
+  <name>DistributeMe runtime support services</name>
+  <description>distributeme support utilities needed by generated classes</description>
 
   <build>
 	<plugins>
@@ -34,7 +35,6 @@
 	        <artifactId>cobertura-maven-plugin</artifactId>
 	        <version>2.4</version>
 		</dependency>
-  	  	
   	  </dependencies>
       <executions>
         <execution>
@@ -97,11 +97,14 @@
 		<artifactId>distributeme-core</artifactId>
 		<version>${project.version}</version>
 	</dependency>
-	<dependency>
-		<groupId>net.anotheria</groupId>
-		<artifactId>distributeme-generator</artifactId>
-		<version>${project.version}</version>
-	</dependency>
+      <!-- Actually we don't need this at runtime, therefore this dependency should be moved into plugin dependencies section,
+      but the annotations that are used by the code are also in that package. We should probably move the annotations package into core, then
+      we could remove this dependency -->
+    <dependency>
+        <groupId>net.anotheria</groupId>
+        <artifactId>distributeme-generator</artifactId>
+        <version>${project.version}</version>
+    </dependency>
     <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
@@ -111,5 +114,10 @@
         <artifactId>logback-classic</artifactId>
         <scope>test</scope>
     </dependency>
+      <!-- needed for byte array serializer -->
+      <dependency>
+          <groupId>net.anotheria</groupId>
+          <artifactId>ano-net</artifactId>
+      </dependency>
   </dependencies>
 </project>

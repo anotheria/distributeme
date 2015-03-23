@@ -13,11 +13,12 @@
   <description>DistributeMe core functionality</description>
 
     <dependencies>
+        <!--
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <scope>test</scope>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -27,6 +28,56 @@
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.anotheria</groupId>
+            <artifactId>configureme</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.anotheria</groupId>
+            <artifactId>ano-util</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.sf.dozer</groupId>
+                    <artifactId>dozer</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>blowfish</groupId>
+                    <artifactId>blowfish</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.anotheria</groupId>
+            <artifactId>moskito-core</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.anotheria</groupId>
+                    <artifactId>ano-util</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.anotheria</groupId>
+            <artifactId>ano-prise</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.anotheria</groupId>
+                    <artifactId>ano-db</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>net.anotheria</groupId>
+                    <artifactId>ano-util</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.reflections</groupId>
+                    <artifactId>reflections</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 </project>

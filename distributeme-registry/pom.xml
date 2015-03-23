@@ -20,11 +20,6 @@
 	</dependency>
 	<dependency>
 		<groupId>net.anotheria</groupId>
-		<artifactId>distributeme-generator</artifactId>
-		<version>${project.version}</version>
-	</dependency>
-	<dependency>
-		<groupId>net.anotheria</groupId>
 		<artifactId>distributeme-support</artifactId>
 		<version>${project.version}</version>
 	</dependency>
