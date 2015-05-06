@@ -29,6 +29,11 @@ public final class MetaRegistryConfig implements Location {
 	 * If true the registry will lookup a service in a parent registry.
 	 */
 	private boolean registryParentLookup = false;
+
+	private int registryPortMin;
+
+	private int registryPortMax;
+
 	/**
 	 * Returns true if parent registry lookup is enabled.
 	 * @return
@@ -75,7 +80,23 @@ public final class MetaRegistryConfig implements Location {
 	public int getRegistryParentPort() {
 		return registryParentPort;
 	}
-	
+
+	public int getRegistryPortMin() {
+		return registryPortMin;
+	}
+
+	public void setRegistryPortMin(int registryPortMin) {
+		this.registryPortMin = registryPortMin;
+	}
+
+	public int getRegistryPortMax() {
+		return registryPortMax;
+	}
+
+	public void setRegistryPortMax(int registryPortMax) {
+		this.registryPortMax = registryPortMax;
+	}
+
 	@Override public String toString(){
 		return registryParentHost+":"+registryParentPort;
 	}

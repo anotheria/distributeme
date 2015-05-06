@@ -2,6 +2,9 @@
 	registryParentLookup: false,
 	registryParentHost: "",
 	registryParentPort: 1234,
+
+	registryPortMin: 9250,
+	registryPortMax: 9400,
 	
 	clusterInstances: "",
 	//time between live pings in milliseconds.
