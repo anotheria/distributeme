@@ -4,6 +4,7 @@ import net.anotheria.maf.action.Action;
 import net.anotheria.maf.action.ActionCommand;
 import net.anotheria.maf.action.ActionMapping;
 import net.anotheria.maf.bean.FormBean;
+import org.distributeme.registry.metaregistry.MetaRegistryConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,17 +23,20 @@ public class RegistryForceRegisterAction extends BaseRegistryAction implements A
 
 	private static Logger log = LoggerFactory.getLogger(RegistryForceRegisterAction.class);
 
+	private MetaRegistryConfig registryConfig = MetaRegistryConfig.create();
+
 	@Override
 	public ActionCommand execute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-
+		int minPort = registryConfig.getRegistryPortMin();
+		int maxPort = registryConfig.getRegistryPortMax();
 
 		try {
 			DatagramPacket outgoing = new DatagramPacket(new String("register").getBytes(), "register".length());
 			DatagramSocket socket = new DatagramSocket();
 			socket.setBroadcast(true);
 			outgoing.setAddress(InetAddress.getByAddress(new byte[]{(byte) 255, (byte) 255, (byte) 255, (byte) 255}));
-			for (int i = 9250; i < 9400; i++) {
+			for (int i = minPort; i < maxPort; i++) {
 				outgoing.setPort(i);
 				socket.send(outgoing);
 			}
