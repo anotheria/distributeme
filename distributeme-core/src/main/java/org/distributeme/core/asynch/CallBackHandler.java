@@ -17,4 +17,6 @@ public interface CallBackHandler {
 	 * @param e exception that occured in the method.
 	 */
 	void error(Exception e);
+
+
 }
