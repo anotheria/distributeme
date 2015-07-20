@@ -601,6 +601,9 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeIncreasedStatement("break");
 		writeString("case ABORT_AND_FAIL:");
 		writeIncreasedStatement("abortAndFail = true");
+		if (!afterCall) {
+			writeIncreasedStatement("exceptionInMethod = new FailedByInterceptorException()");
+		}
 		writeIncreasedStatement("break");
 		writeString("case RETURN_AND_FAIL:");
 		writeCommentLine("Force failing logic to work.");

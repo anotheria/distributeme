@@ -1,11 +1,11 @@
 package org.distributeme.core.asynch;
 
+import org.distributeme.core.Defaults;
+
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
-import org.distributeme.core.Defaults;
 
 /**
  * A helper class to synchronously execute multiple asynchronous calls and collect results.
@@ -72,11 +72,11 @@ public class MultiCallCollector {
 		/**
 		 * Return value.
 		 */
-		private Object returnValue;
+		private volatile Object returnValue;
 		/**
 		 * Exception if thrown.
 		 */
-		private Exception returnException;
+		private volatile Exception returnException;
 		/**
 		 * Creates a new subcallbackhandler.
 		 * @param aParent
