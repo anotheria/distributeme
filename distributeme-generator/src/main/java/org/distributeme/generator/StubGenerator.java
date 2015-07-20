@@ -256,6 +256,9 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			writeStatement("boolean abortAndFail = false");
 			writeString("if (diMeCallContext == null)");
 			writeIncreasedStatement("diMeCallContext = new ClientSideCallContext("+quote(method.getSimpleName())+")");
+			writeString("if (discoveryMode == DiscoveryMode.MANUAL) {");
+			writeIncreasedStatement("diMeCallContext.setServiceId(manuallySetDescriptor.getServiceId())");
+			writeString("}");
 			writeString("if (discoveryMode==DiscoveryMode.AUTO && diMeCallContext.getServiceId()==null)");
 			writeIncreasedStatement("diMeCallContext.setServiceId("+getConstantsName(type)+".getServiceId())");
 			emptyline();
