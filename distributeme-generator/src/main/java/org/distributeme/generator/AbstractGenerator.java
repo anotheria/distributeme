@@ -908,14 +908,14 @@ public class AbstractGenerator {
 		closeBlock();
 	}
 	
-	protected void writeRouterCreationMethod(TranslatedRouterAnnotation tra){
+	protected void writeRouterCreationMethod(String serviceIdCall, TranslatedRouterAnnotation tra){
 		writeString("private "+Router.class.getName()+" createRouterInstance"+tra.getOrder()+"(){");
 		increaseIdent();
 		writeStatement(Router.class.getName()+" router = new "+tra.getStrategyClass()+"()");
 		if (tra.getConfigurationName()!=null && tra.getConfigurationName().length()>0){
-			writeStatement("((org.distributeme.core.routing.ConfigurableRouter)router).setConfigurationName("+quote(tra.getConfigurationName())+")");
+			writeStatement("((org.distributeme.core.routing.ConfigurableRouter)router).setConfigurationName("+serviceIdCall+ ", " +quote(tra.getConfigurationName())+")");
 		}else {
-			writeStatement("router.customize(" + quote(tra.getParameter()) + ")");
+			writeStatement("router.customize("+serviceIdCall+ ", " + quote(tra.getParameter()) + ")");
 		}
 		writeStatement("return router");
 		closeBlock();
