@@ -117,7 +117,7 @@ public abstract class AbstractRouterWithFailOverToNextNode extends AbstractRoute
 			}
 		}
 
-		if (result==null){
+		if (result == null){
 			//if we are here we have more than one possible candidate.
 			int[] candidates = new int[getConfiguration().getNumberOfInstances()-instancesThatIAlreadyTried.size()];
 			int i=0;

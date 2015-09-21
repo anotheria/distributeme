@@ -9,7 +9,7 @@ package org.distributeme.core.routing;
  */
 public interface ConfigurableRouter extends Router{
 	/**
-	 * Sets the configuration name.
+	 * Sets the configuration name and the service id.
 	 */
-	void setConfigurationName(String configurationName);
+	void setConfigurationName(String serviceId, String configurationName);
 }

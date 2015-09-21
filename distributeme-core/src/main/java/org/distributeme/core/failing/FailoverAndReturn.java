@@ -1,6 +1,7 @@
 package org.distributeme.core.failing;
 
 import org.distributeme.core.ClientSideCallContext;
+import org.distributeme.core.routing.AbstractRouter;
 import org.distributeme.core.routing.RegistrationNameProvider;
 import org.distributeme.core.routing.Router;
 
@@ -9,7 +10,7 @@ import org.distributeme.core.routing.Router;
  * the failover instance forever, it tries to switch back after some timeout.
  * @author another
  */
-public abstract class FailoverAndReturn implements FailingStrategy, RegistrationNameProvider, Router{
+public abstract class FailoverAndReturn extends AbstractRouter implements FailingStrategy, RegistrationNameProvider, Router{
 
 	/**
 	 * Target service id after first failover.

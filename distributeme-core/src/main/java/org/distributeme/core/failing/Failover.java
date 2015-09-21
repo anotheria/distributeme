@@ -1,6 +1,7 @@
 package org.distributeme.core.failing;
 
 import org.distributeme.core.ClientSideCallContext;
+import org.distributeme.core.routing.AbstractRouter;
 import org.distributeme.core.routing.RegistrationNameProvider;
 import org.distributeme.core.routing.Router;
 
@@ -9,7 +10,7 @@ import org.distributeme.core.routing.Router;
  * @author another
  *
  */
-public class Failover implements FailingStrategy, RegistrationNameProvider, Router{
+public class Failover extends AbstractRouter implements FailingStrategy, RegistrationNameProvider, Router{
 
 	/**
 	 * Target service if to failover to.

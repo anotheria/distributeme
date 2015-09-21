@@ -62,6 +62,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 
 	@Override
 	public FailDecision callFailed(final ClientSideCallContext clientSideCallContext) {
+		getLog().info(clientSideCallContext.getServiceId()+ " marked as failed and will be blacklisted for "+getConfiguration().getBlacklistTime()+" ms");
 		serverFailureTimestamps.put(clientSideCallContext.getServiceId(), System.currentTimeMillis());
 		return super.callFailed(clientSideCallContext);
 	}
@@ -72,11 +73,16 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		if (getLog().isDebugEnabled())
 			getLog().debug("Incoming call " + clientSideCallContext);
 
-		if (getServiceAmount() == 0)
+		if (getServiceAmount() == 0) {
+			getRoutingStats(clientSideCallContext.getServiceId()).addRequestRoutedTo();
 			return clientSideCallContext.getServiceId();
+		}
 
-		if (failingSupported() && !clientSideCallContext.isFirstCall())
-			return getServiceIdForFailing(clientSideCallContext);
+		if (failingSupported() && !clientSideCallContext.isFirstCall()) {
+			String serviceId = getServiceIdForFailing(clientSideCallContext);
+			getRoutingStats(serviceId).addRequestRoutedTo();
+			return serviceId;
+		}
 
 
 		String selectedServiceId = null;
@@ -98,9 +104,13 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		//the service id we picked up is blacklisted due to previous failing.
 		if (blacklisted) {
 			clientSideCallContext.setServiceId(selectedServiceId);
-			return getServiceIdForFailing(clientSideCallContext);
+			getRoutingStats(selectedServiceId).addBlacklisted();
+			selectedServiceId = getServiceIdForFailing(clientSideCallContext);
+			getRoutingStats(selectedServiceId).addRequestRoutedTo();
+			return selectedServiceId;
 		}
 
+		getRoutingStats(selectedServiceId).addRequestRoutedTo();
 		return selectedServiceId;
 	}
 
@@ -127,7 +137,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		instancesThatIAlreadyTried.add(idSubstring);
 
 		//now pick next candidate.
-		if (instancesThatIAlreadyTried.size()==getConfiguration().getNumberOfInstances()){
+		if (instancesThatIAlreadyTried.size() == getConfiguration().getNumberOfInstances()){
 			//we tried everything, it won't work
 			throw new DistributemeRuntimeException("No instance available, we tried all already.");
 		}

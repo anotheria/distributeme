@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * This router sends each call to another instance. It is useful if you want to cluster a service
  * @author lrosenberg
  */
-public class RoundRobinRouter implements Router{
+public class RoundRobinRouter extends AbstractRouter implements Router{
 	/**
 	 * Max mod parameter.
 	 */

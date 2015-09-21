@@ -518,7 +518,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 	
 		//write concurrency control strategy created methods
 		for (TranslatedRouterAnnotation tra: routerAnnotations){
-			writeRouterCreationMethod(tra);
+			writeRouterCreationMethod("TODO", tra);
 		}
 
 		closeBlock();

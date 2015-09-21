@@ -9,7 +9,7 @@ import org.distributeme.core.ClientSideCallContext;
  * @author lrosenberg.
  *
  */
-public class SysOutRouter implements Router{
+public class SysOutRouter extends AbstractRouter implements Router{
 
 	@Override
 	public void customize(String parameter) {

@@ -15,7 +15,7 @@
   <description>parent for all distributeme projects</description>
 
   <properties>
-  	<moskito-version>2.5.5</moskito-version>
+  	<moskito-version>2.6.3-SNAPSHOT</moskito-version>
   </properties>
 
    <dependencyManagement>
@@ -68,6 +68,11 @@
         <dependency>
             <groupId>net.anotheria</groupId>
             <artifactId>moskito-inspect-embedded</artifactId>
+            <version>${moskito-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.anotheria</groupId>
+            <artifactId>moskito-inspect-remote</artifactId>
             <version>${moskito-version}</version>
         </dependency>
         <!-- needed for mail-gun provider, if you want to change the recipient edit moskito.json -->

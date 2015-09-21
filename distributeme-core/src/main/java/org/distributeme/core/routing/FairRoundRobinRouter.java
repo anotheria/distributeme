@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * This router sends each call to another instance. It is useful if you want to cluster a service
  * @author lrosenberg
  */
-public class FairRoundRobinRouter implements Router{
+public class FairRoundRobinRouter extends AbstractRouter implements Router{
 	/**
 	 * Max mod parameter. It is used to scale up the range of instances, and to prevent the counter from too many overflows, thus allowing the distribution be more fair.
 	 */

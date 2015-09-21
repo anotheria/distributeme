@@ -12,7 +12,7 @@ public class StartSupplier {
 		DiMeRemoteEventChannelRMISupport.initEventService();
 		EventService es = EventServiceFactory.createEventService();
 		
-		EventChannel forSupplier = es.obtainEventChannel("backoffice_channel", ProxyType.PUSH_SUPPLIER_PROXY);
+		EventChannel forSupplier = es.obtainEventChannel("TEST", ProxyType.PUSH_SUPPLIER_PROXY);
 		PushSupplier supplier = new PushSupplier(forSupplier);
 		System.out.println("Supplier initied.");
 		
@@ -24,9 +24,9 @@ public class StartSupplier {
 		supplier.start();
 		System.out.println("Setup finished");
 
-		test1();
-		test2();
-		test3();
+		//test1();
+		//test2();
+		//test3();
 		
 	}
 	

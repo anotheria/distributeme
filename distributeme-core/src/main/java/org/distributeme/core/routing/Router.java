@@ -18,7 +18,8 @@ public interface Router {
 	
 	/**
 	 * Called shortly after the initialization to customize this router according to the parameter in the annotation.
-	 * @param parameter
+	 * @param serviceId id of the service we are routing.
+	 * @param parameter value of the annotation parameter.
 	 */
-	void customize(String parameter);
+	void customize(String serviceId, String parameter);
 }

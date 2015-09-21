@@ -15,7 +15,7 @@
 	"interceptor.2": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByPropertyInterceptor",
 	"interceptor.3": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByConfigurationInterceptor",
 //    "interceptor.20": "org.distributeme.test.roundrobinwithfotonext.interceptor.ClientSideMarkLongRequestAsFailedInterceptor",
-    "interceptor.5": "org.distributeme.core.qos.QOSMonitoringInterceptor",
+//    "interceptor.5": "org.distributeme.core.qos.QOSMonitoringInterceptor",
 	
 	"test": {
 		"interceptors": {

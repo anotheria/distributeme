@@ -8,7 +8,7 @@ import org.distributeme.core.ClientSideCallContext;
  * @author lrosenberg.
  *
  */
-public class NoOpRouter implements Router{
+public class NoOpRouter extends AbstractRouter implements Router{
 
 	@Override
 	public String getServiceIdForCall(ClientSideCallContext context) {

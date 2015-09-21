@@ -11,7 +11,7 @@ import java.util.List;
  * @author lrosenberg.
  *
  */
-public class ParameterBasedModRouter implements Router{
+public class ParameterBasedModRouter extends AbstractRouter implements Router{
 
 	/**
 	 * Mod based for routing.
