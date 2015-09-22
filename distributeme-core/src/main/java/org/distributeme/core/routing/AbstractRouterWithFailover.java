@@ -116,6 +116,8 @@ abstract class AbstractRouterWithFailover extends AbstractRouter implements Conf
 				throw new AssertionError("Not properly configured router, parameter count is less than expected - actual: " + parameters.size() + ", expected: " + parameterPosition);
 			Object parameter = parameters.get(parameterPosition);
 			long parameterValue = getModableValue(parameter);
+			if (parameterValue<0)
+				parameterValue *= -1;
 
 			String result = context.getServiceId() + UNDER_LINE + (parameterValue % getServiceAmount());
 
