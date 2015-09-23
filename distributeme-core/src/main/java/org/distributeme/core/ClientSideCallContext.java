@@ -1,5 +1,7 @@
 package org.distributeme.core;
 
+import org.distributeme.core.routing.Constants;
+
 import java.util.List;
 
 /**
@@ -35,6 +37,7 @@ public class ClientSideCallContext extends AbstractCallContext{
 
 	public void setCallCount(int callCount) {
 		this.callCount = callCount;
+		getTransportableCallContext().put(Constants.ATT_CALL_COUNT, callCount);
 	}
 
 
@@ -44,6 +47,7 @@ public class ClientSideCallContext extends AbstractCallContext{
 	
 	public ClientSideCallContext increaseCallCount(){
 		callCount++;
+		getTransportableCallContext().put(Constants.ATT_CALL_COUNT, callCount);
 		return this;
 	}
 	

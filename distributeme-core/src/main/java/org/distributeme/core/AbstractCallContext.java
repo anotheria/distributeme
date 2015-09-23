@@ -33,14 +33,16 @@ public abstract class AbstractCallContext {
 
 	public AbstractCallContext(String aMethodName){
 		methodName = aMethodName;
+		currentCallContext.set(this);
 	}
 	
 	public AbstractCallContext(String aServiceId, String aMethodName, List<?> someParameters){
 		serviceId = aServiceId;
 		methodName = aMethodName;
 		parameters = someParameters;
+		currentCallContext.set(this);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public List getParameters() {
 		return parameters;
@@ -78,6 +80,16 @@ public abstract class AbstractCallContext {
 
 	@Override public String toString(){
 		return getMethodName()+"("+getParameters()+") --> "+getServiceId();
+	}
+
+	private static ThreadLocal<AbstractCallContext> currentCallContext = new ThreadLocal<AbstractCallContext>();
+
+	public static HashMap getCurrentTransportableCallContext(){
+		AbstractCallContext currentContext = currentCallContext.get();
+		if (currentContext == null)
+			return null;
+		return currentContext.getTransportableCallContext();
+
 	}
 
 

@@ -107,6 +107,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 			getRoutingStats(selectedServiceId).addBlacklisted();
 			selectedServiceId = getServiceIdForFailing(clientSideCallContext);
 			getRoutingStats(selectedServiceId).addRequestRoutedTo();
+			clientSideCallContext.getTransportableCallContext().put(Constants.ATT_BLACKLISTED, Boolean.TRUE);
 			return selectedServiceId;
 		}
 
