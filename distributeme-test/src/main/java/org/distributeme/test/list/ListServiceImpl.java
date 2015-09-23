@@ -1,5 +1,6 @@
 package org.distributeme.test.list;
 
+import org.distributeme.core.routing.RoutingAware;
 import org.distributeme.core.util.ServerSideUtils;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.HashMap;
  * @author lrosenberg
  * @since 22.09.15 23:44
  */
-public class ListServiceImpl implements ListService{
+public class ListServiceImpl implements ListService, RoutingAware{
 
 	private HashMap<ListObjectId, ListObject> objects;
 
@@ -49,6 +50,18 @@ public class ListServiceImpl implements ListService{
 		return ret;
 	}
 
+	@Override
+	public Collection<ListObject> getListObjectsSharded() {
+		System.out.println(failoverInfoString()+"%%% Called getListObjectsSharded()");
+		return null;
+	}
+
+	@Override
+	public Collection<ListObject> getSomeListObjectsSharded(Collection<ListObjectId> ids) {
+		System.out.println(failoverInfoString()+"%%% Called getSomeListObjectsSharded() with "+ids.size()+" params, "+ids);
+		return null;
+	}
+
 	private String failoverInfoString(){
 		return isFailoverCall() ? "FAILOVER " +
 				(ServerSideUtils.isBlacklisted() ? "-BLACKLIST-" : "")
@@ -58,5 +71,11 @@ public class ListServiceImpl implements ListService{
 
 	private boolean isFailoverCall(){
 		return ServerSideUtils.isFailoverCall();
+	}
+
+	@Override
+	public void notifyServiceId(String definedServiceId, String registeredAsServiceId, String routingParameter, String configurationName) {
+		System.out.println("I am "+definedServiceId+" registered as "+registeredAsServiceId);
+		System.out.println("My Routing Param is "+routingParameter+", myConfig name "+configurationName);
 	}
 }

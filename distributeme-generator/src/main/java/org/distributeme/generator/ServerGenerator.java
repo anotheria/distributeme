@@ -14,6 +14,7 @@ import net.anotheria.util.PidTools;
 import org.distributeme.annotation.CombinedService;
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.annotation.DummyFactory;
+import org.distributeme.annotation.Route;
 import org.distributeme.annotation.RouteMe;
 import org.distributeme.annotation.ServerListener;
 import org.distributeme.annotation.SupportService;
@@ -30,6 +31,7 @@ import org.distributeme.core.listener.ListenerRegistry;
 import org.distributeme.core.listener.ServerLifecycleListener;
 import org.distributeme.core.listener.ServerLifecycleListenerShutdownHook;
 import org.distributeme.core.routing.RegistrationNameProvider;
+import org.distributeme.core.routing.RoutingAware;
 import org.distributeme.core.util.LocalServiceDescriptorStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,6 +106,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		writeImport(ServerShutdownHook.class);
 		writeImport(SystemProperties.class);
 		writeImport(List.class);
+		writeImport(RoutingAware.class);
 		emptyline();
 		
 		DistributeMe annotation = type.getAnnotation(DistributeMe.class);
@@ -114,7 +117,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 				writeImport(sService);
 			}
 		}
-		
+
 		writeString("public class "+getServerName(type)+"{");
 		increaseIdent();
 		emptyline();
@@ -280,16 +283,18 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeStatement(type.getQualifiedName()+" impl = null");
 			writeString("try{");
 			increaseIdent();
-			writeStatement("impl = MetaFactory.get("+type.getQualifiedName()+".class, Extension."+annotation.extension()+")");
+			writeStatement("impl = MetaFactory.get(" + type.getQualifiedName() + ".class, Extension." + annotation.extension() + ")");
 			decreaseIdent();
 			writeString("}catch (FactoryNotFoundException factoryNotFound){");
-			writeIncreasedStatement("throw new AssertionError("+quote("Un- or mis-configured, can't instantiate service instance for "+type.getQualifiedName()+" tried initcode, submitted factory, autoguessed factory ("+factoryClassName+") and impl class ("+implClassName+")")+")");
+			writeIncreasedStatement("throw new AssertionError(" + quote("Un- or mis-configured, can't instantiate service instance for " + type.getQualifiedName() + " tried initcode, submitted factory, autoguessed factory (" + factoryClassName + ") and impl class (" + implClassName + ")") + ")");
 			writeString("}");
 			
 			
-			writeStatement("skeleton = new "+getSkeletonName(type)+"(impl)");
-			writeStatement("rmiServant = ("+getRemoteInterfaceName(type)+") UnicastRemoteObject.exportObject(skeleton, SystemProperties.SERVICE_BINDING_PORT.getAsInt())");
+			writeStatement("skeleton = new " + getSkeletonName(type) + "(impl)");
+			writeStatement("rmiServant = (" + getRemoteInterfaceName(type) + ") UnicastRemoteObject.exportObject(skeleton, SystemProperties.SERVICE_BINDING_PORT.getAsInt())");
 			writeStatement("serviceId = "+getConstantsName(type)+".getServiceId()");
+			writeCommentLine("Save original serviceId for later RoutingAware call");
+			writeStatement("String definedServiceId = serviceId");
 			emptyline();
 			
 			//determine whether we have a custom registration name.
@@ -327,7 +332,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			closeBlock();
 					
 			emptyline();
-			writeStatement("log.info("+quote("Registering ")+"+serviceId+"+quote(" locally.")+")");
+			writeStatement("log.info(" + quote("Registering ") + "+serviceId+" + quote(" locally.") + ")");
 		
 			emptyline();
 			openTry();
@@ -341,6 +346,29 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeStatement("System.exit(-2)"); 
 			closeBlock("local registry bind.");
 			emptyline();
+
+			//ROUTING AWARE-NESS.
+			AnnotationMirror annotationMirrorRoute = findMirror(type, Route.class);
+			if (annotationMirror!=null){
+				AnnotationValue routerParameter = findMethodValue(annotationMirror, "routerParameter");
+				AnnotationValue configurationName = findMethodValue(annotationMirror, "configurationName");
+
+
+				//after registration, if service is RoutingAware we should notify it about its name.
+				//of course it only makes sense if the service had Route annotation.
+				writeString("if (impl instanceof RoutingAware){");
+				System.out.println("RP: " + routerParameter);
+				System.out.println("CN: "+configurationName);
+				increaseIdent();
+				writeStatement("((RoutingAware)impl).notifyServiceId(definedServiceId, serviceId, "
+						+ (routerParameter == null ? "null" : quote(routerParameter.getValue()))
+						+ ", "
+						+ (configurationName == null ? "null" : quote(configurationName.getValue()))
+						+ ") ");
+				closeBlock("/if impl RoutingAware");
+			}
+
+
 			//finally locally register service
 			if (!supportService){
 				writeStatement("LifecycleComponentImpl.INSTANCE.registerPublicService(serviceId, skeleton)");

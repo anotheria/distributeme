@@ -26,4 +26,7 @@ public interface ListService extends Service {
 
 	Collection<ListObject> getSomeListObjects(Collection<ListObjectId> ids) ;
 
+	Collection<ListObject> getListObjectsSharded();
+
+	Collection<ListObject> getSomeListObjectsSharded(Collection<ListObjectId> ids) ;
 }
