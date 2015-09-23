@@ -48,5 +48,9 @@ public class InterceptionContext {
 	public Map getLocalStore(){
 		return localStore;
 	}
+
+	@Override public String toString(){
+		return "Phase: "+currentPhase+", returnValue: "+returnValue+", localStore: "+localStore;
+	}
 	
 }
