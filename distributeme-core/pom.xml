@@ -61,7 +61,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>net.anotheria</groupId>
             <artifactId>moskito-webui</artifactId>
             <exclusions>
@@ -70,7 +70,7 @@
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>net.anotheria</groupId>
             <artifactId>ano-prise</artifactId>
