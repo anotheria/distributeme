@@ -5,12 +5,13 @@ import net.anotheria.moskito.core.producers.AbstractStats;
 import net.anotheria.moskito.core.stats.StatValue;
 import net.anotheria.moskito.core.stats.TimeUnit;
 import net.anotheria.moskito.core.stats.impl.StatValueFactory;
-import net.anotheria.moskito.webui.decorators.DecoratorRegistryFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+
+import static net.anotheria.moskito.core.decorators.DecoratorRegistryFactory.getDecoratorRegistry;
 
 /**
  * TODO comment this class
@@ -59,7 +60,7 @@ public class RoutingStats extends AbstractStats implements RoutingStatsCollector
 	}
 
 	static{
-		DecoratorRegistryFactory.getDecoratorRegistry().addDecorator(RoutingStats.class, new RoutingStatsDecorator());
+		getDecoratorRegistry().addDecorator(RoutingStats.class, new RoutingStatsDecorator());
 	}
 
 	private StatValue requestRoutedTo;

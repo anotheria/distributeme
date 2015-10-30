@@ -1,10 +1,10 @@
 package org.distributeme.core.stats;
 
+import net.anotheria.moskito.core.decorators.AbstractDecorator;
+import net.anotheria.moskito.core.decorators.value.LongValueAO;
+import net.anotheria.moskito.core.decorators.value.StatValueAO;
 import net.anotheria.moskito.core.producers.IStats;
 import net.anotheria.moskito.core.stats.TimeUnit;
-import net.anotheria.moskito.webui.decorators.AbstractDecorator;
-import net.anotheria.moskito.webui.producers.api.LongValueAO;
-import net.anotheria.moskito.webui.producers.api.StatValueAO;
 
 import java.util.ArrayList;
 import java.util.List;
