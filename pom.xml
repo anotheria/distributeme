@@ -15,7 +15,7 @@
   <description>parent for all distributeme projects</description>
 
   <properties>
-  	<moskito-version>2.6.3</moskito-version>
+  	<moskito-version>2.7.0-SNAPSHOT</moskito-version>
   </properties>
 
    <dependencyManagement>
