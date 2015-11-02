@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 
 /**
@@ -68,7 +69,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 		byte data[] = getUrlContent(url, true);
 		if (data == null )
 			return null;
-		String reply = new String(data);
+		String reply = new String(data, Charset.defaultCharset());
 		return "ERROR".equals(reply) ? null : reply;		
 	}
 	
@@ -103,7 +104,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 		byte data[] = getUrlContent(url);
 		if (data == null )
 			return null;
-		String reply = new String(data);
+		String reply = new String(data, Charset.defaultCharset());
 		return "ERROR".equals(reply) ? null : ServiceDescriptor.fromRegistrationString(reply);		
 	}
 	
