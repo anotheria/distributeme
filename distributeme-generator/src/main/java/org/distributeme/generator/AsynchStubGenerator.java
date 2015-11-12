@@ -204,7 +204,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 			writeString("@Override");
 			writeString("public void run() {");
 			increaseIdent();
-			writeStatement("long diMeRequestNumber = diMeRequestCounter.incrementAndGet()");
+			//writeStatement("long diMeRequestNumber = diMeRequestCounter.incrementAndGet()"); removed due to findbug warning.
 			//writeStatement("System.out.println(this+\" started \"+diMeRequestNumber)");
 			openTry();
 			writeCommentLine("make the real call here");

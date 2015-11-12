@@ -66,8 +66,8 @@ public class GeneratorUtil {
 		System.out.println("DistributeMe RMI generation started for type: "+type);
 		Map<String,String> generatorOptions = getGeneratorOptions(environment);
 		System.out.println("Found " + generatorOptions.size() + " Options:");
-		for(String option: generatorOptions.keySet())
-			System.out.println(option + " : " + generatorOptions.get(option));
+		for(Map.Entry<String,String> optionEntry: generatorOptions.entrySet())
+			System.out.println(optionEntry.getKey() + " : " + optionEntry.getValue());
 		Filer filer = environment.getFiler();
 		
 		List<Generator> generators = getGeneratorsForType(type);
