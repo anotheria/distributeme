@@ -9,6 +9,7 @@ import net.anotheria.moskito.core.stats.impl.StatValueFactory;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static net.anotheria.moskito.core.decorators.DecoratorRegistryFactory.getDecoratorRegistry;
@@ -147,11 +148,11 @@ public class RoutingStats extends AbstractStats implements RoutingStatsCollector
 	@Override public String toString(){
 		StringBuilder ret = new StringBuilder();
 
-		Set<String> names = name2value.keySet();
-		for (String n : names){
+		Set<Map.Entry<String, StatValue>> entries = name2value.entrySet();
+		for (Map.Entry<String, StatValue> entry : entries){
 			if (ret.length()>0)
 				ret.append(" ");
-			ret.append(n).append(": ").append(name2value.get(n).getValueAsLong());
+			ret.append(entry.getKey()).append(": ").append(entry.getValue().getValueAsLong());
 		}
 
 		return ret.toString();

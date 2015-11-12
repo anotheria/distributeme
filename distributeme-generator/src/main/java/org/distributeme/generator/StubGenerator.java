@@ -310,8 +310,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 						writeStatement("diMeCallContext.setParameters(diMeParameters)");
 						
 					}
-					if (routerName!=null)
-						writeStatement("diMeCallContext.setServiceId("+routerName+".getServiceIdForCall(diMeCallContext))");
+					writeStatement("diMeCallContext.setServiceId("+routerName+".getServiceIdForCall(diMeCallContext))");
 				}
 			}
 			
@@ -329,16 +328,16 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			}
 			
 			String call = "__fromServerSide = getDelegate(diMeCallContext.getServiceId())."+method.getSimpleName();
-			String paramCall = "";
+			StringBuilder paramCall = new StringBuilder();
 			for (ParameterDeclaration p : parameters){
 				if (paramCall.length()!=0)
-					paramCall += ", ";
-				paramCall += p.getSimpleName();
+					paramCall.append(", ");
+				paramCall.append(p.getSimpleName());
 			}
 			if (paramCall.length()>0)
-				paramCall += ", ";
-			paramCall +=" __transportableCallContext";
-			call += "("+paramCall+");";
+				paramCall.append(", ");
+			paramCall.append(" __transportableCallContext");
+			call += "("+paramCall.toString()+");";
 			writeString("if (!abortAndFail){");
 			increaseIdent();
 			writeString(call);
@@ -462,7 +461,9 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		increaseIdent();
 		openTry();
 		writeStatement("delegate = lookup(serviceId)");
-		writeStatement("delegates.putIfAbsent(serviceId, delegate)");
+		writeStatement(getRemoteInterfaceName(type) + " existingDelegate = delegates.putIfAbsent(serviceId, delegate)");
+		writeStatement("if (existingDelegate!=null)");
+		writeIncreasedStatement("delegate = existingDelegate");
 		decreaseIdent();
 		writeString("}catch(Exception e){");
 		//TODO replace this with a typed exception!

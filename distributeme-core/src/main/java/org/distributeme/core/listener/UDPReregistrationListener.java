@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -57,7 +58,7 @@ public class UDPReregistrationListener implements ServerLifecycleListener{
 						DatagramPacket incomingPacket = new DatagramPacket(new byte[100], 100);
 						try {
 							serverSocket.receive(incomingPacket);
-							String command = new String(incomingPacket.getData());
+							String command = new String(incomingPacket.getData(), Charset.defaultCharset());
 							command = command.trim();
 							System.out.println("Incoming command: "+command+".");
 

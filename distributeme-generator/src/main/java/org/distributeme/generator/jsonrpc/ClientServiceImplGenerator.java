@@ -164,14 +164,14 @@ public class ClientServiceImplGenerator extends AbstractJsonRpcGenerator impleme
         Collection<? extends MethodDeclaration> methods = getAllDeclaredMethods(type);
         writeCommentLine("Method wide routers if applicable ");
         Map<MethodDeclaration, AnnotationValue> routedMethods = new HashMap<MethodDeclaration, AnnotationValue>();
-        Map<MethodDeclaration, AnnotationValue> routerParameters = new HashMap<MethodDeclaration, AnnotationValue>();
+        //Map<MethodDeclaration, AnnotationValue> routerParameters = new HashMap<MethodDeclaration, AnnotationValue>();
         for (MethodDeclaration method : methods) {
             AnnotationMirror methodRoute = findMirror(method, Route.class);
             if (methodRoute != null) {
                 //System.out.println("Will write "+Router.class.getName()+" "+getMethodRouterName(method));
                 writeStatement("private final " + Router.class.getName() + " " + getMethodRouterName(method));
                 routedMethods.put(method, findRouterClassValue(methodRoute));
-                routerParameters.put(method, findRouterParameterValue(methodRoute));
+                //routerParameters.put(method, findRouterParameterValue(methodRoute));
             }
         }
         writeCommentLine("Method wide routers END ");
@@ -374,8 +374,7 @@ public class ClientServiceImplGenerator extends AbstractJsonRpcGenerator impleme
                         writeStatement("diMeCallContext.setParameters(diMeParameters)");
 
                     }
-                    if (routerName != null)
-                        writeStatement("diMeCallContext.setServiceId(" + routerName + ".getServiceIdForCall(diMeCallContext))");
+					writeStatement("diMeCallContext.setServiceId(" + routerName + ".getServiceIdForCall(diMeCallContext))");
                 }
             }
 

@@ -307,8 +307,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 						writeStatement("diMeCallContext.setParameters(diMeParameters)");
 						
 					}
-					if (routerName!=null)
-						writeStatement("diMeCallContext.setServiceId("+routerName+".getServiceIdForCall(diMeCallContext))");
+					writeStatement("diMeCallContext.setServiceId("+routerName+".getServiceIdForCall(diMeCallContext))");
 				}
 			}
 			
