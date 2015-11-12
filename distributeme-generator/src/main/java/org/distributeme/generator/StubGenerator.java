@@ -248,7 +248,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			String methodDecl = getInternalStubMethodDeclaration(method);
 			writeString("private "+methodDecl+"{");
 			increaseIdent();
-			writeStatement("List __fromServerSide = null;");
+			writeStatement("List __fromServerSide = null");
 			writeStatement("Exception exceptionInMethod = null");
 			writeCommentLine("This flag is used by the interceptor logic to mark a request es failed, even it is not.");
 			writeStatement("boolean diMeForceFailing = false");
@@ -371,11 +371,9 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			
 			//failing
 			writeCommentLine("Failing");
-			//writeStatement("System.out.println(\"Call failed? \"+diMeForceFailing)");
 			writeString("if (exceptionInMethod!=null || diMeForceFailing || abortAndFail){");
 			increaseIdent();
 			writeStatement("FailDecision failDecision = "+getFailingStrategyVariableName(method)+".callFailed(diMeCallContext)");
-			//writeStatement("System.out.println(\"Call failed \"+diMeForceFailing+\" - \" + failDecision)");
 			writeString("if (failDecision.getTargetService()!=null)");
 			writeIncreasedStatement("diMeCallContext.setServiceId(failDecision.getTargetService())");
 			writeString("switch(failDecision.getReaction()){");
@@ -625,7 +623,8 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			
 		closeBlock("for");
 		if (!isVoidReturn(method) && afterCall){
-			writeString("if (diMeReturnOverriden)");
+			writeCommentLine("The next check for null of __fromServerSide is unneeded but for security reasons.");
+			writeString("if (diMeReturnOverriden && __fromServerSide!=null)");
 			writeIncreasedStatement("return "+convertReturnValue(method.getReturnType(), "__fromServerSide.get(0)"));
 		}
 
