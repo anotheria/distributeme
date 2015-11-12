@@ -56,10 +56,6 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 		 * CORBA.
 		 */
 		CORBA,
-        /**
-         * JSON-PRC.
-         */
-        JSONRPC,
 		/**
 		 * Jax Rest Service.
 		 */

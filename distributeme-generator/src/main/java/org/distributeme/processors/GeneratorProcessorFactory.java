@@ -10,17 +10,10 @@ import org.distributeme.annotation.DistributeMe;
 import org.distributeme.annotation.WebServiceMe;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.generator.GeneratorUtil;
-import org.distributeme.generator.jsonrpc.ClientFactoryGenerator;
-import org.distributeme.generator.jsonrpc.ClientServiceImplGenerator;
-import org.distributeme.generator.jsonrpc.HttpEndpointServerGenerator;
-import org.distributeme.generator.jsonrpc.JsonRpcGenerator;
-import org.distributeme.generator.jsonrpc.ServerImplGenerator;
-import org.distributeme.generator.jsonrpc.ServerInterfaceGenerator;
 import org.distributeme.generator.ws.ConfigurationGenerator;
 import org.distributeme.generator.ws.ServiceProxyGenerator;
 import org.distributeme.generator.ws.WebServiceMeGenerator;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -65,7 +58,6 @@ public class GeneratorProcessorFactory implements AnnotationProcessorFactory {
     private static class GeneratorProcessor implements AnnotationProcessor {
         private AnnotationProcessorEnvironment environment;
         private List<WebServiceMeGenerator> wsGenerators;
-        private List<JsonRpcGenerator> jsonRpcGenerators;
 
         public GeneratorProcessor(AnnotationProcessorEnvironment aEnvironment) {
             this.environment = aEnvironment;
@@ -75,13 +67,6 @@ public class GeneratorProcessorFactory implements AnnotationProcessorFactory {
             wsGenerators.add(new ServiceProxyGenerator(file));
             wsGenerators.add(new ConfigurationGenerator(file));
 
-            jsonRpcGenerators = new ArrayList<JsonRpcGenerator>();
-            jsonRpcGenerators.add(new ClientServiceImplGenerator(file));
-            jsonRpcGenerators.add(new ServerInterfaceGenerator(file));
-            jsonRpcGenerators.add(new ClientFactoryGenerator(file));
-            jsonRpcGenerators.add(new HttpEndpointServerGenerator(file));
-            jsonRpcGenerators.add(new ServerImplGenerator(file));
-            jsonRpcGenerators.add(new  org.distributeme.generator.jsonrpc.ConstantsGenerator(file));
 
         }
 
@@ -90,16 +75,6 @@ public class GeneratorProcessorFactory implements AnnotationProcessorFactory {
             for (TypeDeclaration type : environment.getTypeDeclarations()) {
                 DistributeMe annotation = type.getAnnotation(DistributeMe.class);
                 if (annotation != null) {
-                    if (Arrays.asList(annotation.protocols()).contains(ServiceDescriptor.Protocol.JSONRPC)) {
-                        for (JsonRpcGenerator generator : jsonRpcGenerators) {
-                            try {
-                                generator.generate(type);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-
                     if (Arrays.asList(annotation.protocols()).contains(ServiceDescriptor.Protocol.RMI)) {
                         try {
 							//System.err.println("Generation for RMI disabled! "+type.getSimpleName());
