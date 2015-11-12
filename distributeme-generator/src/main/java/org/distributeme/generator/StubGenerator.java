@@ -462,7 +462,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		openTry();
 		writeStatement("delegate = lookup(serviceId)");
 		writeStatement(getRemoteInterfaceName(type) + " existingDelegate = delegates.putIfAbsent(serviceId, delegate)");
-		writeStatement("if (existingDelegate!=null)");
+		writeString("if (existingDelegate!=null)");
 		writeIncreasedStatement("delegate = existingDelegate");
 		decreaseIdent();
 		writeString("}catch(Exception e){");
