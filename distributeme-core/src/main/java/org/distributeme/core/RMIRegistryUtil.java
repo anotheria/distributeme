@@ -29,7 +29,7 @@ public class RMIRegistryUtil {
 	/**
 	 * Reference to the rmi registry.
 	 */
-	private static AtomicReference<Registry> reference = new AtomicReference<Registry>();
+	private static final AtomicReference<Registry> reference = new AtomicReference<Registry>();
 	/**
 	 * Port on which the rmi registry exports its public api.
 	 */
@@ -37,10 +37,20 @@ public class RMIRegistryUtil {
 
 	/**
 	 * Finds or creates a new registry.
-	 * @return
+	 * @return Returns created registry instance.
 	 * @throws RemoteException
 	 */
-	public static final Registry findOrCreateRegistry() throws RemoteException{
+	public static Registry findOrCreateRegistry() throws RemoteException {
+		return findOrCreateRegistry(-1);
+	}
+
+	/**
+	 * Finds or creates a new registry.
+	 * @param port port to listen to. If port is below zero, it will be ignored.
+	 * @return Returns created registry instance.
+	 * @throws RemoteException
+	 */
+	public static Registry findOrCreateRegistry(int port) throws RemoteException{
 		
 		if (reference.get()!=null){
 			return reference.get();
@@ -48,12 +58,14 @@ public class RMIRegistryUtil {
 		
 		synchronized (reference) {
 			log.info("Creating local registry");
-			Registry registry = null;
-			
-			if (SystemProperties.LOCAL_RMI_REGISTRY_PORT.isSet()){
+			Registry registry;
+
+			if (port >0 || SystemProperties.LOCAL_RMI_REGISTRY_PORT.isSet()){
 				//we are hardcore bound to a local port
 				try{
-					int port = SystemProperties.LOCAL_RMI_REGISTRY_PORT.getAsInt();
+					if (port <= 0) {
+						port = SystemProperties.LOCAL_RMI_REGISTRY_PORT.getAsInt();
+					}
 					log.info("Tying to bind to "+port);
 					registry = LocateRegistry.createRegistry(port);
 					log.info("Started local registry at port "+port);
