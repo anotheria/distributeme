@@ -239,7 +239,15 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeStatement("private static "+getRemoteInterfaceName(type)+" rmiServant = null");
 			writeStatement("private static String serviceId = null");
 			emptyline();
+
 			writeString("public static void createServiceAndRegisterLocally() throws Exception{");
+			increaseIdent();
+			writeCommentLine("Use default port, which is -1");
+			writeStatement("createServiceAndRegisterLocally(-1)");
+			closeBlock();
+			emptyline();
+
+			writeString("public static void createServiceAndRegisterLocally(int customRegistryPort) throws Exception{");
 			increaseIdent();
 			writeCommentLine("creating impl");
 			//old , direct instantiation writeStatement(type.getQualifiedName()+" impl = new "+type.getAnnotation(DistributeMe.class).factoryClassName()+"().create()");
@@ -322,7 +330,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeStatement("log.info("+quote("Getting local registry")+")");
 			writeStatement("Registry registry = null");
 			openTry();
-			writeStatement("registry = RMIRegistryUtil.findOrCreateRegistry()");
+			writeStatement("registry = RMIRegistryUtil.findOrCreateRegistry(customRegistryPort)");
 			decreaseIdent();
 			writeString("}catch(RemoteException e){");
 			increaseIdent();
