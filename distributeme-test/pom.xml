@@ -3,13 +3,13 @@
     <parent>
         <groupId>net.anotheria</groupId>
         <artifactId>distributeme-parent</artifactId>
-		<version>2.2.4-SNAPSHOT</version>
+		<version>2.2.4</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.anotheria</groupId>
     <artifactId>distributeme-test</artifactId>
-    <version>2.2.4-SNAPSHOT</version>
+    <version>2.2.4</version>
     <name>distributeme-test - a package with regression test classes that should fail if the generator doesn't support
         all needed options
     </name>
