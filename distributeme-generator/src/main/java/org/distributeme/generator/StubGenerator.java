@@ -452,7 +452,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeString("private "+getRemoteInterfaceName(type)+" getDelegate(String serviceId) throws NoConnectionToServerException{");
 		increaseIdent();
 		writeCommentLine("if no serviceId is provided, fallback to default resolve with manual mode");
-		writeString("if (serviceId==null)");
+		writeString("if (serviceId==null || discoveryMode==DiscoveryMode.MANUAL)");
 		writeIncreasedStatement("return getDelegate()");
 		writeStatement(getRemoteInterfaceName(type)+" delegate = delegates.get(serviceId)");
 		writeString("if (delegate==null){");
@@ -514,7 +514,9 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeString("}");
 		
 		openTry();
-		writeStatement("return ("+getRemoteInterfaceName(type)+") registry.lookup(serviceDescriptor.getServiceId())");
+		writeStatement(getRemoteInterfaceName(type)+" ret = ("+getRemoteInterfaceName(type)+") registry.lookup(serviceDescriptor.getServiceId())");
+
+		writeStatement("return ret");
 		decreaseIdent();
 		writeString("}catch(RemoteException e){");
 		writeIncreasedStatement("throw new NoConnectionToServerException("+quote("Can't lookup service in the target rmi registry for an instance of ")+"+serviceDescriptor, e)");
