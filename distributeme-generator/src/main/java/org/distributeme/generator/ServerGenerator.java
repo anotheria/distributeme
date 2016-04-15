@@ -476,10 +476,16 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			emptyline();
 			writeString("public static void createCombinedServicesAndRegisterLocally() throws Exception{");
 			increaseIdent();
+			writeStatement("createCombinedServicesAndRegisterLocally(-1)");
+			closeBlock("createCombinedServicesAndRegisterLocally");
+			emptyline();
+
+			writeString("public static void createCombinedServicesAndRegisterLocally(int customRegistryPort) throws Exception{");
+			increaseIdent();
 			List<String> targetServicesNames = getCombinedServicesNames(type);
 			for (String service : targetServicesNames){
 				writeStatement(getFullyQualifiedServerName(service)+".init()");
-				writeStatement(getFullyQualifiedServerName(service)+".createServiceAndRegisterLocally()");
+				writeStatement(getFullyQualifiedServerName(service)+".createServiceAndRegisterLocally(customRegistryPort)");
 			}
 //			for (String s : SUPPORT_SERVICES){
 //				writeStatement(s+".init()");

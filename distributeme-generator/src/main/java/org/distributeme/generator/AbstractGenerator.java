@@ -626,13 +626,13 @@ public class AbstractGenerator {
 	
 	protected String getImplementedInterfacesAsString(TypeDeclaration type){
 		List<TypeDeclaration> implementedInterfaces = getAllDeclaredTypes(type);
-		String interfaceAsString = "";
+		StringBuilder interfaceAsString = new StringBuilder();
 		for (TypeDeclaration in : implementedInterfaces){
 			if (interfaceAsString.length()>0)
-				interfaceAsString += ", ";
-			interfaceAsString += in.getQualifiedName()+".class";
+				interfaceAsString.append(", ");
+			interfaceAsString.append(in.getQualifiedName()).append(".class");
 		}
-		return interfaceAsString;
+		return interfaceAsString.toString();
 	}
 	
 	/**
