@@ -2,7 +2,8 @@ package org.distributeme.core.failing;
 
 import org.distributeme.core.ClientSideCallContext;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 public class FailoverTest {
 	@Test public void testFailingToFailoverServer(){

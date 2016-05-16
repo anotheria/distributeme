@@ -1,8 +1,8 @@
 package org.distributeme.test.interception;
 
-import java.util.HashMap;
-
 import org.distributeme.core.ServiceLocator;
+
+import java.util.HashMap;
 
 public class TestClient {
 	/**

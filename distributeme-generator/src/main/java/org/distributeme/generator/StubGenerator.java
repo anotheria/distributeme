@@ -1,12 +1,5 @@
 package org.distributeme.generator;
 
-import com.sun.mirror.apt.Filer;
-import com.sun.mirror.declaration.AnnotationMirror;
-import com.sun.mirror.declaration.AnnotationValue;
-import com.sun.mirror.declaration.MethodDeclaration;
-import com.sun.mirror.declaration.ParameterDeclaration;
-import com.sun.mirror.declaration.TypeDeclaration;
-import com.sun.mirror.type.ReferenceType;
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.annotation.DontRoute;
 import org.distributeme.annotation.FailBy;
@@ -21,28 +14,22 @@ import org.distributeme.core.exception.NoConnectionToServerException;
 import org.distributeme.core.exception.ServiceUnavailableException;
 import org.distributeme.core.failing.FailDecision;
 import org.distributeme.core.failing.FailingStrategy;
-import org.distributeme.core.interceptor.ClientSideRequestInterceptor;
-import org.distributeme.core.interceptor.FailedByInterceptorException;
-import org.distributeme.core.interceptor.InterceptionContext;
-import org.distributeme.core.interceptor.InterceptionPhase;
-import org.distributeme.core.interceptor.InterceptorRegistry;
-import org.distributeme.core.interceptor.InterceptorResponse;
+import org.distributeme.core.interceptor.*;
 import org.distributeme.generator.logwriter.LogWriter;
 import org.distributeme.generator.logwriter.SysErrorLogWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.*;
+import javax.lang.model.type.TypeMirror;
+import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -53,13 +40,18 @@ import java.util.concurrent.ConcurrentMap;
 public class StubGenerator extends AbstractStubGenerator implements Generator{
 	
 	private static Logger log = LoggerFactory.getLogger(StubGenerator.class);
-	
+
+	public StubGenerator(ProcessingEnvironment environment) {
+		super(environment);
+	}
+
 	@Override
-	public void generate(TypeDeclaration type, Filer filer, Map<String,String> options) throws IOException{
+	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
 		
 		//System.out.println("%%%\nStarting generating "+type+"\n\n");
 		
-		PrintWriter writer = filer.createSourceFile(getPackageName(type)+"."+getStubName(type));
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getStubName(type));
+        PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
 		writePackage(type);
@@ -141,9 +133,9 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		List<TranslatedRouterAnnotation> routerAnnotations = writeRouterDeclarations(type);
 
 		//OLD ROUTER HANDLING
-		Collection<? extends MethodDeclaration> methods = getAllDeclaredMethods(type);
-		Set<MethodDeclaration> routedMethods = new HashSet<MethodDeclaration>();
-		for (MethodDeclaration method : methods){
+		Collection<? extends ExecutableElement> methods = getAllDeclaredMethods(type);
+		Set<ExecutableElement> routedMethods = new HashSet<ExecutableElement>();
+		for (ExecutableElement method : methods){
 			AnnotationMirror methodRoute = findMirror(method, Route.class);
 			if (methodRoute!=null){
 				//System.out.println("Will write "+Router.class.getName()+" "+getMethodRouterName(method));
@@ -180,7 +172,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		emptyline();
 		//end clazz wide failing
 
-		for (MethodDeclaration method : methods){
+		for (ExecutableElement method : methods){
 			AnnotationMirror methodFailingStrategyAnnotation = findMirror(method, FailBy.class);
 			if (methodFailingStrategyAnnotation != null){
 				FailBy ann = method.getAnnotation(FailBy.class);
@@ -232,11 +224,11 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		emptyline();
 		
 		////////// METHODS ///////////
-		for (MethodDeclaration method : methods){
+		for (ExecutableElement method : methods){
 			writeString("public "+getStubMethodDeclaration(method)+"{");
 			increaseIdent();
 			StringBuilder callToPrivate = new StringBuilder(method.getSimpleName()+"(");
-			for (ParameterDeclaration p : method.getParameters()){
+			for (VariableElement p : method.getParameters()){
 				callToPrivate.append(p.getSimpleName());
 				callToPrivate.append(", ");
 			}
@@ -280,8 +272,8 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			if (interceptionEnabled){
 				//create parameters
 				writeStatement("ArrayList<Object> diMeParameters = new ArrayList<Object>()");
-				Collection<? extends ParameterDeclaration> parameters = method.getParameters();
-				for (ParameterDeclaration p : parameters){
+				Collection<? extends VariableElement> parameters = method.getParameters();
+				for (VariableElement p : parameters){
 					writeStatement("diMeParameters.add("+p.getSimpleName()+")");
 				}
 				writeStatement("diMeCallContext.setParameters(diMeParameters)");
@@ -303,8 +295,8 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 					if (!interceptionEnabled){
 						//this means that we have to create parameters for context
 						writeStatement("ArrayList<Object> diMeParameters = new ArrayList<Object>()");
-						Collection<? extends ParameterDeclaration> parameters = method.getParameters();
-						for (ParameterDeclaration p : parameters){
+						Collection<? extends VariableElement> parameters = method.getParameters();
+						for (VariableElement p : parameters){
 							writeStatement("diMeParameters.add("+p.getSimpleName()+")");
 						}
 						writeStatement("diMeCallContext.setParameters(diMeParameters)");
@@ -320,16 +312,16 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			
 			//now re-parse parameters
 			writeCommentLine("parse parameters again in case an interceptor modified them");
-			Collection<? extends ParameterDeclaration> parameters = method.getParameters();
+			Collection<? extends VariableElement> parameters = method.getParameters();
 			int parameterCounter = 0;
-			for (ParameterDeclaration p : parameters){
-				writeStatement(p.getSimpleName()+" = " +convertReturnValue(p.getType(), "diMeParameters.get("+(parameterCounter++)+")"));
+			for (VariableElement p : parameters){
+				writeStatement(p.getSimpleName()+" = " +convertReturnValue(p.asType(), "diMeParameters.get("+(parameterCounter++)+")"));
 				//writeStatement("diMeParameters.add("+p.getSimpleName()+")");
 			}
 			
 			String call = "__fromServerSide = getDelegate(diMeCallContext.getServiceId())."+method.getSimpleName();
 			StringBuilder paramCall = new StringBuilder();
-			for (ParameterDeclaration p : parameters){
+			for (VariableElement p : parameters){
 				if (paramCall.length()!=0)
 					paramCall.append(", ");
 				paramCall.append(p.getSimpleName());
@@ -557,7 +549,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 	}
 	
 	
-	private void writeInterceptionBlock(InterceptionPhase phase, MethodDeclaration method){
+	private void writeInterceptionBlock(InterceptionPhase phase, ExecutableElement method){
 		boolean afterCall = phase == InterceptionPhase.AFTER_SERVICE_CALL;
 		writeStatement("diMeInterceptionContext.setCurrentPhase(InterceptionPhase."+phase.toString()+")");
 		if (afterCall){
@@ -575,7 +567,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		increaseIdent();
 		writeString("if (interceptorResponse.getException() instanceof RuntimeException)");
 		writeIncreasedStatement("throw (RuntimeException) interceptorResponse.getException()");
-		for (ReferenceType type : method.getThrownTypes()){
+		for (TypeMirror type : method.getThrownTypes()){
 			writeString("if (interceptorResponse.getException() instanceof "+type.toString()+")");
 			writeIncreasedStatement("throw ("+type.toString()+") interceptorResponse.getException()");
 		}

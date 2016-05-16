@@ -1,7 +1,6 @@
 package org.distributeme.registry.ui.action;
 
 import net.anotheria.maf.action.Action;
-
 import org.distributeme.registry.metaregistry.MetaRegistry;
 import org.distributeme.registry.metaregistry.MetaRegistryImpl;
 

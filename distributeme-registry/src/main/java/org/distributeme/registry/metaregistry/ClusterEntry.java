@@ -1,7 +1,6 @@
 package org.distributeme.registry.metaregistry;
 
 import net.anotheria.util.NumberUtils;
-
 import org.distributeme.core.Location;
 
 /**

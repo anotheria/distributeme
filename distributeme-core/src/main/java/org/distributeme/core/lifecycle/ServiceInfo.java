@@ -1,8 +1,8 @@
 package org.distributeme.core.lifecycle;
 
-import java.io.Serializable;
-
 import net.anotheria.util.NumberUtils;
+
+import java.io.Serializable;
 /**
  * This class contains information about a service.
  * @author lrosenberg

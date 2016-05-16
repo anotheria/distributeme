@@ -30,11 +30,17 @@
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
       </dependency>
-      <dependency>
-        <groupId>com.sun</groupId>
-        <artifactId>tools</artifactId>
-        <version>1.6</version>
-        <scope>provided</scope>
-     </dependency>
   </dependencies>
+    <repositories>
+        <repository>
+            <id>anotheria</id>
+            <url>http://nexus.anotheria.net/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>

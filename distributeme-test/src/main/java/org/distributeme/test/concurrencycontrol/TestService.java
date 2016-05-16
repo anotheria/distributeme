@@ -1,7 +1,6 @@
 package org.distributeme.test.concurrencycontrol;
 
 import net.anotheria.anoprise.metafactory.Service;
-
 import org.distributeme.annotation.ConcurrencyControlClientSideLimit;
 import org.distributeme.annotation.ConcurrencyControlLimit;
 import org.distributeme.annotation.ConcurrencyControlServerSideLimit;

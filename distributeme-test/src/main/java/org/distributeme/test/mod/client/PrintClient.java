@@ -1,7 +1,6 @@
 package org.distributeme.test.mod.client;
 
 import net.anotheria.util.IdCodeGenerator;
-
 import org.distributeme.core.ServiceLocator;
 import org.distributeme.test.mod.ModedService;
 

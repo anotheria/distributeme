@@ -1,16 +1,13 @@
 package org.distributeme.registry.esregistry;
 
-import static org.junit.Assert.assertEquals;
+import net.anotheria.util.IdCodeGenerator;
+import org.distributeme.core.ServiceDescriptor;
+import org.distributeme.core.ServiceDescriptor.Protocol;
+import org.junit.Test;
 
 import java.util.List;
 
-import net.anotheria.util.IdCodeGenerator;
-
-import org.distributeme.core.ServiceDescriptor;
-import org.distributeme.core.ServiceDescriptor.Protocol;
-import org.distributeme.registry.esregistry.EventServiceRegistry;
-import org.distributeme.registry.esregistry.EventServiceRegistryImpl;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 public class EventServiceRegistryTest {
 	@Test public void testFunctionality(){

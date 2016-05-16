@@ -1,12 +1,8 @@
 package org.distributeme.registry.ui.bean;
 
-import static org.distributeme.registry.ui.bean.ServiceDescriptorFormBeanSortType.SORT_BY_GLOBALSERVICEID;
-import static org.distributeme.registry.ui.bean.ServiceDescriptorFormBeanSortType.SORT_BY_HOST;
-import static org.distributeme.registry.ui.bean.ServiceDescriptorFormBeanSortType.SORT_BY_INSTANCEID;
-import static org.distributeme.registry.ui.bean.ServiceDescriptorFormBeanSortType.SORT_BY_PORT;
-import static org.distributeme.registry.ui.bean.ServiceDescriptorFormBeanSortType.SORT_BY_PROTOCOL;
-import static org.distributeme.registry.ui.bean.ServiceDescriptorFormBeanSortType.SORT_BY_SERVICEID;
 import net.anotheria.util.sorter.IComparable;
+
+import static org.distributeme.registry.ui.bean.ServiceDescriptorFormBeanSortType.*;
 /**
  * Bean for communication between controller and view.
  * 

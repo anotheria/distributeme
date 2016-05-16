@@ -1,9 +1,9 @@
 package org.distributeme.core;
 
+import net.anotheria.util.BasicComparable;
+
 import java.io.Serializable;
 import java.util.Calendar;
-
-import net.anotheria.util.BasicComparable;
 
 /**
  * This class represents a resolvable address of a service.

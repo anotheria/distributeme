@@ -1,12 +1,11 @@
 package org.distributeme.core.routing;
 
+import net.anotheria.util.IdCodeGenerator;
+import org.distributeme.core.ClientSideCallContext;
+import org.junit.Test;
+
 import java.util.ArrayList;
 
-import net.anotheria.util.IdCodeGenerator;
-
-import org.distributeme.core.ClientSideCallContext;
-import org.distributeme.core.routing.NoOpRouter;
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 

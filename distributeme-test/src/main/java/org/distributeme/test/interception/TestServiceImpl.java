@@ -1,8 +1,8 @@
 package org.distributeme.test.interception;
 
-import java.util.Map;
-
 import net.anotheria.util.NumberUtils;
+
+import java.util.Map;
 
 public class TestServiceImpl implements TestService{
 

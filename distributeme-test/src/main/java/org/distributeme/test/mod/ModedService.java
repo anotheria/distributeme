@@ -1,7 +1,6 @@
 package org.distributeme.test.mod;
 
 import net.anotheria.anoprise.metafactory.Service;
-
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.annotation.DontRoute;
 import org.distributeme.annotation.Route;

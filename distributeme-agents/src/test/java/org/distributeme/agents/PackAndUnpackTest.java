@@ -1,15 +1,11 @@
 package org.distributeme.agents;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import net.anotheria.util.IdCodeGenerator;
+import org.junit.Test;
 
 import java.util.List;
 
-import net.anotheria.util.IdCodeGenerator;
-
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 public class PackAndUnpackTest {
 	@Test public void testPlainAgent(){

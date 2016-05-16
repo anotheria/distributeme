@@ -1,14 +1,14 @@
 package org.distributeme.test.lifecycle;
 
-import java.util.List;
-import java.util.Map;
-
 import org.distributeme.core.RegistryUtil;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.core.lifecycle.HealthStatus;
 import org.distributeme.support.lifecycle.LifecycleSupportService;
 import org.distributeme.support.lifecycle.generated.LifecycleSupportServiceConstants;
 import org.distributeme.support.lifecycle.generated.RemoteLifecycleSupportServiceStub;
+
+import java.util.List;
+import java.util.Map;
 
 public class CheckHealthStatus extends AbstractLifecycleTest{
 	public static void main(String[] args) throws Exception{

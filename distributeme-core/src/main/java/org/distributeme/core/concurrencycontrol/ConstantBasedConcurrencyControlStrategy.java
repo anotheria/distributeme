@@ -1,11 +1,10 @@
 package org.distributeme.core.concurrencycontrol;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import net.anotheria.util.StringUtils;
-
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.ServerSideCallContext;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * This implementation of a concurrencycontrolstrategy is based on constants which are annotated to the target interface.

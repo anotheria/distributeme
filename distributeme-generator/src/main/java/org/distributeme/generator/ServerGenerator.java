@@ -1,30 +1,13 @@
 package org.distributeme.generator;
 
-import com.sun.mirror.apt.Filer;
-import com.sun.mirror.declaration.AnnotationMirror;
-import com.sun.mirror.declaration.AnnotationValue;
-import com.sun.mirror.declaration.TypeDeclaration;
-import com.sun.tools.apt.mirror.declaration.AnnotationValueImpl;
 import net.anotheria.anoprise.metafactory.Extension;
 import net.anotheria.anoprise.metafactory.FactoryNotFoundException;
 import net.anotheria.anoprise.metafactory.MetaFactory;
 import net.anotheria.anoprise.metafactory.ServiceFactory;
 import net.anotheria.util.IdCodeGenerator;
 import net.anotheria.util.PidTools;
-import org.distributeme.annotation.CombinedService;
-import org.distributeme.annotation.DistributeMe;
-import org.distributeme.annotation.DummyFactory;
-import org.distributeme.annotation.Route;
-import org.distributeme.annotation.RouteMe;
-import org.distributeme.annotation.ServerListener;
-import org.distributeme.annotation.SupportService;
-import org.distributeme.core.RMIRegistryUtil;
-import org.distributeme.core.RegistryLocation;
-import org.distributeme.core.RegistryUtil;
-import org.distributeme.core.ServerShutdownHook;
-import org.distributeme.core.ServiceDescriptor;
-import org.distributeme.core.SystemPropertyNames;
-import org.distributeme.core.Verbosity;
+import org.distributeme.annotation.*;
+import org.distributeme.core.*;
 import org.distributeme.core.conventions.SystemProperties;
 import org.distributeme.core.lifecycle.LifecycleComponentImpl;
 import org.distributeme.core.listener.ListenerRegistry;
@@ -38,6 +21,12 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.element.TypeElement;
+import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
@@ -67,9 +56,14 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		"org.distributeme.agents.transporter.generated.TransporterServer",
 	};
 
+	public ServerGenerator(ProcessingEnvironment environment) {
+		super(environment);
+	}
+
 	@Override
-	public void generate(TypeDeclaration type, Filer filer, Map<String,String> options) throws IOException{
-		PrintWriter writer = filer.createSourceFile(getPackageName(type)+"."+getServerName(type));
+	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getServerName(type));
+        PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
 		//meta servers rely on other skeletons and just starts them.
@@ -265,7 +259,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			}else{
 				writeCommentLine("No factory specified");
 				if (initCode.length>0){
-					writeCommentLine("init code not empty, assuming it contains factory declaration");
+					writeCommentLine("init code not empty, assuming it contains factory Element");
 				}else{
 					//try autoresolve
 					writeString("try{");
@@ -502,14 +496,11 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		writer.close();
 	}
 	
-	private List<String> getCombinedServicesNames(TypeDeclaration type){
+	private List<String> getCombinedServicesNames(TypeElement type){
 		AnnotationMirror ann = findMirror(type, CombinedService.class);
 		AnnotationValue val = findMethodValue(ann, "services");
-		@SuppressWarnings("unchecked")ArrayList<AnnotationValueImpl> values = (ArrayList<AnnotationValueImpl>)val.getValue();
-		ArrayList<String> ret = new ArrayList<String>();
-		for (AnnotationValueImpl o : values){
-			ret.add(o.getValue().toString());
-		}
+        List<String> ret = new ArrayList<String>();
+        ret.add(val.getValue().toString());
 		return ret;
 	}
 }

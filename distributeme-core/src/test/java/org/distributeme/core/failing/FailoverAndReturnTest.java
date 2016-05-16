@@ -1,9 +1,9 @@
 package org.distributeme.core.failing;
 
-import static org.junit.Assert.assertEquals;
-
 import org.distributeme.core.ClientSideCallContext;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class FailoverAndReturnTest {
 	@Test public void testFailingToFailoverServer(){

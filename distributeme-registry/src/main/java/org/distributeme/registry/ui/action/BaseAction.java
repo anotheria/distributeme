@@ -1,12 +1,11 @@
 package org.distributeme.registry.ui.action;
 
-import java.util.ArrayList;
+import net.anotheria.maf.action.Action;
+import net.anotheria.maf.action.ActionMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import net.anotheria.maf.action.Action;
-import net.anotheria.maf.action.ActionMapping;
+import java.util.ArrayList;
 
 /**
  * Base class for all registry actions.

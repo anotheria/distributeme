@@ -1,8 +1,8 @@
 package org.distributeme.registry.metaregistry;
 
-import java.util.List;
-
 import org.distributeme.core.ServiceDescriptor;
+
+import java.util.List;
 
 /**
  * This interface describes the meta registry which is used to connect multiple hosts in a common system.

@@ -1,12 +1,11 @@
 package org.distributeme.test.regression;
 
+import net.anotheria.anoprise.metafactory.Service;
+import org.distributeme.annotation.DistributeMe;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import net.anotheria.anoprise.metafactory.Service;
-
-import org.distributeme.annotation.DistributeMe;
 
 /**
  * This service contains method declarations that have previously led to problems.

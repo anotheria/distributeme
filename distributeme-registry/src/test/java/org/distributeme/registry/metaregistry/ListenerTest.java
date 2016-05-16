@@ -1,14 +1,15 @@
 package org.distributeme.registry.metaregistry;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.core.ServiceDescriptor.Protocol;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 public class ListenerTest {
 	

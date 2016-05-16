@@ -1,9 +1,10 @@
 package org.distributeme.generator.ws;
 
-import com.sun.mirror.declaration.TypeDeclaration;
+
+import javax.lang.model.element.TypeElement;
 
 public interface WebServiceMeGenerator {
 
-	void generate(TypeDeclaration type);
+	void generate(TypeElement type);
 
 }

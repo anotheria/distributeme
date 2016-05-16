@@ -1,16 +1,11 @@
 package org.distributeme.test.fail;
 
 import net.anotheria.anoprise.metafactory.Service;
-
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.annotation.FailBy;
 import org.distributeme.annotation.Route;
-import org.distributeme.core.failing.FailCall;
-import org.distributeme.core.failing.Failover;
+import org.distributeme.core.failing.*;
 import org.distributeme.core.failing.FailoverAndReturnInTenSeconds;
-import org.distributeme.core.failing.RetryCall;
-import org.distributeme.core.failing.RetryCallOnce;
-import org.distributeme.core.failing.WaitOneSecondAndRetry;
 
 @DistributeMe
 @FailBy(strategyClass=FailCall.class)

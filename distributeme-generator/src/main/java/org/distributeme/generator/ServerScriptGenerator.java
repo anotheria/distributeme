@@ -1,13 +1,14 @@
 package org.distributeme.generator;
 
-import java.io.File;
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.TypeElement;
+import javax.tools.FileObject;
+import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
-import com.sun.mirror.apt.Filer;
-import com.sun.mirror.apt.Filer.Location;
-import com.sun.mirror.declaration.TypeDeclaration;
 
 /**
  * Generator for server start script. 
@@ -15,10 +16,15 @@ import com.sun.mirror.declaration.TypeDeclaration;
  */
 public class ServerScriptGenerator extends AbstractGenerator implements Generator{
 
+	public ServerScriptGenerator(ProcessingEnvironment environment) {
+		super(environment);
+	}
+
 	@Override
-	public void generate(TypeDeclaration type, Filer filer, Map<String,String> options) throws IOException{
-		//System.out.println("#####  ServerScriptGenerator: "+getServerName(type)+"  #####");
-		PrintWriter writer = filer.createTextFile(Location.SOURCE_TREE, "", new File("../service/"+ type.getSimpleName() +"/" + type.getSimpleName() + "-server.sh"), "UTF-8");
+	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
+		String relativeName = "service/" + type.getSimpleName().toString() + "/" + type.getSimpleName().toString() + "-server.sh";
+		FileObject fileObject = filer.createResource(StandardLocation.SOURCE_OUTPUT, "", relativeName);
+		PrintWriter writer = new PrintWriter(fileObject.openWriter());
 		setWriter(writer);
 		
 		writeString("#!/bin/bash");

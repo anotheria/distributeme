@@ -1,106 +1,107 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <parent>
-	<groupId>net.anotheria</groupId>
-	<artifactId>parent</artifactId>
-	<version>2.5</version>
-  </parent>
+    <parent>
+        <groupId>net.anotheria</groupId>
+        <artifactId>parent</artifactId>
+        <version>2.5</version>
+    </parent>
 
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>net.anotheria</groupId>
-  <artifactId>distributeme-parent</artifactId>
-  <version>2.2.6-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>distributeme-parent</name>
-  <description>parent for all distributeme projects</description>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.anotheria</groupId>
+    <artifactId>distributeme-parent</artifactId>
+    <version>2.2.6-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>distributeme-parent</name>
+    <description>parent for all distributeme projects</description>
 
-  <properties>
-  	<moskito-version>2.7.0</moskito-version>
-  </properties>
+    <properties>
+        <moskito-version>2.7.0</moskito-version>
+    </properties>
 
-   <dependencyManagement>
-    <dependencies>
-        <dependency>
-            <groupId>net.anotheria</groupId>
-            <artifactId>ano-util</artifactId>
-            <version>2.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>net.anotheria</groupId>
-            <artifactId>ano-net</artifactId>
-            <version>2.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.anotheria</groupId>
-            <artifactId>ano-prise</artifactId>
-            <version>2.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.anotheria</groupId>
-            <artifactId>ano-tags</artifactId>
-            <version>2.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.anotheria</groupId>
-            <artifactId>ano-maf</artifactId>
-            <version>2.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>net.anotheria</groupId>
-            <artifactId>configureme</artifactId>
-            <version>2.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.anotheria</groupId>
-            <artifactId>moskito-core</artifactId>
-            <version>${moskito-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.anotheria</groupId>
-            <artifactId>moskito-web</artifactId>
-            <version>${moskito-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.anotheria</groupId>
-            <artifactId>moskito-webui</artifactId>
-            <version>${moskito-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.anotheria</groupId>
-            <artifactId>moskito-inspect-embedded</artifactId>
-            <version>${moskito-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.anotheria</groupId>
-            <artifactId>moskito-inspect-remote</artifactId>
-            <version>${moskito-version}</version>
-        </dependency>
-        <!-- needed for mail-gun provider, if you want to change the recipient edit moskito.json -->
-        <dependency>
-            <groupId>net.anotheria</groupId>
-            <artifactId>moskito-notification-providers</artifactId>
-            <version>${moskito-version}</version>
-        </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>net.anotheria</groupId>
+                <artifactId>ano-util</artifactId>
+                <version>2.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>net.anotheria</groupId>
+                <artifactId>ano-net</artifactId>
+                <version>2.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>net.anotheria</groupId>
+                <artifactId>ano-prise</artifactId>
+                <version>2.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>net.anotheria</groupId>
+                <artifactId>ano-tags</artifactId>
+                <version>2.1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>net.anotheria</groupId>
+                <artifactId>ano-maf</artifactId>
+                <version>2.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>net.anotheria</groupId>
+                <artifactId>configureme</artifactId>
+                <version>2.3.0</version>
+            </dependency>
+            <dependency>
+                <groupId>net.anotheria</groupId>
+                <artifactId>moskito-core</artifactId>
+                <version>${moskito-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.anotheria</groupId>
+                <artifactId>moskito-web</artifactId>
+                <version>${moskito-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.anotheria</groupId>
+                <artifactId>moskito-webui</artifactId>
+                <version>${moskito-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.anotheria</groupId>
+                <artifactId>moskito-inspect-embedded</artifactId>
+                <version>${moskito-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.anotheria</groupId>
+                <artifactId>moskito-inspect-remote</artifactId>
+                <version>${moskito-version}</version>
+            </dependency>
+            <!-- needed for mail-gun provider, if you want to change the recipient edit moskito.json -->
+            <dependency>
+                <groupId>net.anotheria</groupId>
+                <artifactId>moskito-notification-providers</artifactId>
+                <version>${moskito-version}</version>
+            </dependency>
 
-        <!-- REST API -->
-        <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>jsr311-api</artifactId>
-            <version>1.1.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.2</version>
-        </dependency>
+            <!-- REST API -->
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>jsr311-api</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-core-asl</artifactId>
+                <version>1.9.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-mapper-asl</artifactId>
+                <version>1.9.2</version>
+            </dependency>
 
-    </dependencies>
-   </dependencyManagement>
+        </dependencies>
+    </dependencyManagement>
 
     <!--
   <dependencies>
@@ -121,18 +122,32 @@
 		<artifactId>moskito-core</artifactId>
 	</dependency>
   </dependencies> -->
-	<modules>
-		<module>distributeme-core</module>
-		<module>distributeme-generator</module>
+    <modules>
+        <module>distributeme-core</module>
+        <module>distributeme-generator</module>
         <module>distributeme-support</module>
         <module>distributeme-registry</module>
         <module>distributeme-agents</module>
         <module>distributeme-test</module>
-	</modules>
-	<scm>
-		<url>https://github.com/anotheria/distributeme.git</url>
-		<connection>scm:git:git@github.com:anotheria/distributeme.git</connection>
-		<developerConnection>scm:git:git@github.com:anotheria/distributeme.git</developerConnection>
-	</scm>
+    </modules>
+    <scm>
+        <url>https://github.com/anotheria/distributeme.git</url>
+        <connection>scm:git:git@github.com:anotheria/distributeme.git</connection>
+        <developerConnection>scm:git:git@github.com:anotheria/distributeme.git</developerConnection>
+    </scm>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

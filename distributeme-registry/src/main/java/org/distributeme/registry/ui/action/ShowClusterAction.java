@@ -1,16 +1,14 @@
 package org.distributeme.registry.ui.action;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.distributeme.registry.metaregistry.Cluster;
-import org.distributeme.registry.metaregistry.ClusterEntry;
-
 import net.anotheria.maf.action.ActionCommand;
 import net.anotheria.maf.action.ActionMapping;
 import net.anotheria.maf.bean.FormBean;
+import org.distributeme.registry.metaregistry.Cluster;
+import org.distributeme.registry.metaregistry.ClusterEntry;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Displays the current cluster status.

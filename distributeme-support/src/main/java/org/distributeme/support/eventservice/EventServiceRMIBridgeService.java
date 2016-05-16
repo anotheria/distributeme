@@ -2,7 +2,6 @@ package org.distributeme.support.eventservice;
 
 import net.anotheria.anoprise.eventservice.EventTransportShell;
 import net.anotheria.anoprise.metafactory.Service;
-
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.annotation.SupportService;
 import org.distributeme.core.ServiceDescriptor;

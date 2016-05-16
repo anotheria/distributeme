@@ -1,7 +1,5 @@
 package org.distributeme.registry.metaregistry;
 
-import org.distributeme.registry.metaregistry.MetaRegistry;
-import org.distributeme.registry.metaregistry.MetaRegistryImpl;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;

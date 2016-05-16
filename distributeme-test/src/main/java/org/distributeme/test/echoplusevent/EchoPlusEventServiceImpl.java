@@ -1,10 +1,6 @@
 package org.distributeme.test.echoplusevent;
 
-import net.anotheria.anoprise.eventservice.Event;
-import net.anotheria.anoprise.eventservice.EventChannel;
-import net.anotheria.anoprise.eventservice.EventService;
-import net.anotheria.anoprise.eventservice.EventServiceFactory;
-import net.anotheria.anoprise.eventservice.ProxyType;
+import net.anotheria.anoprise.eventservice.*;
 import org.distributeme.test.echo.EchoServiceImpl;
 
 public class EchoPlusEventServiceImpl extends EchoServiceImpl implements EchoPlusEventService{
