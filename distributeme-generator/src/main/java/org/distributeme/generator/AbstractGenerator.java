@@ -1,17 +1,14 @@
 package org.distributeme.generator;
 
-import net.anotheria.util.StringUtils;
-import org.distributeme.annotation.ConcurrencyControlClientSideLimit;
-import org.distributeme.annotation.ConcurrencyControlLimit;
-import org.distributeme.annotation.ConcurrencyControlServerSideLimit;
-import org.distributeme.annotation.Route;
-import org.distributeme.core.ClientSideCallContext;
-import org.distributeme.core.Defaults;
-import org.distributeme.core.interceptor.InterceptionPhase;
-import org.distributeme.core.routing.Router;
-
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.*;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.PackageElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.TypeParameterElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
@@ -24,6 +21,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import net.anotheria.util.StringUtils;
+import org.distributeme.annotation.ConcurrencyControlClientSideLimit;
+import org.distributeme.annotation.ConcurrencyControlLimit;
+import org.distributeme.annotation.ConcurrencyControlServerSideLimit;
+import org.distributeme.annotation.Route;
+import org.distributeme.core.ClientSideCallContext;
+import org.distributeme.core.Defaults;
+import org.distributeme.core.interceptor.InterceptionPhase;
+import org.distributeme.core.routing.Router;
 
 /**
  * Base generator class.
@@ -684,7 +691,7 @@ public class AbstractGenerator {
 		Element executableElement = mirror.getAnnotationType().asElement();
 		Collection<ExecutableElement> methods = ElementFilter.methodsIn(executableElement.getEnclosedElements());
 		for (ExecutableElement element : methods){
-			if (element.getSimpleName().equals(methodName))
+			if (element.getSimpleName().toString().equals(methodName))
 				return element;
 		}
 		return null;

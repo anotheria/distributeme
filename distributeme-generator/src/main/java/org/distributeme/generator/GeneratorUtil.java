@@ -1,15 +1,16 @@
 package org.distributeme.generator;
 
-import net.anotheria.util.StringUtils;
-import org.distributeme.annotation.CombinedService;
-import org.distributeme.generator.jaxrs.ResourceGenerator;
-
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import java.io.Closeable;
 import java.util.HashMap;
 import java.util.Map;
+
+import net.anotheria.util.StringUtils;
+import org.distributeme.annotation.CombinedService;
+import org.distributeme.generator.jaxrs.ResourceGenerator;
 
 /**
  * Utilities for generators.
@@ -49,16 +50,20 @@ public class GeneratorUtil {
             System.out.println(option + " : " + generatorOptions.get(option));
         Filer filer = environment.getFiler();
 
-        generate(type, environment, generatorOptions, filer, JAXRS_GENERATORS);
+        generate(type, environment, generatorOptions, JAXRS_GENERATORS);
 
         System.out.println("DistributeMe generation finished.");
     }
 
-    private static void generate(TypeElement type, ProcessingEnvironment environment, Map<String, String> generatorOptions, Filer filer, Class<? extends Generator>[] generatorClasses) {
+    private static void generate(TypeElement type, ProcessingEnvironment environment, Map<String, String> generatorOptions, Class<? extends Generator>[] generatorClasses) {
         for (Class<? extends Generator> generatorClass : generatorClasses) {
             try {
                 Generator g  = generatorClass.getDeclaredConstructor(ProcessingEnvironment.class).newInstance(environment);
+                Filer filer = environment.getFiler();
                 g.generate(type, filer, generatorOptions);
+                if (filer instanceof Closeable) {
+                    ((Closeable) filer).close();
+                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -72,9 +77,8 @@ public class GeneratorUtil {
         System.out.println("Found " + generatorOptions.size() + " Options:");
         for (Map.Entry<String, String> optionEntry : generatorOptions.entrySet())
             System.out.println(optionEntry.getKey() + " : " + optionEntry.getValue());
-        Filer filer = environment.getFiler();
 
-        generate(type, environment, generatorOptions, filer, getGeneratorsForType(type));
+        generate(type, environment, generatorOptions, getGeneratorsForType(type));
 
         System.out.println("DistributeMe generation finished.");
 
