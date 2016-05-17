@@ -9,3 +9,5 @@ target
 .settings/
 bin/
 tmp/
+skip
+distributeme-registry/logs/
