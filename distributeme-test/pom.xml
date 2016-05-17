@@ -28,6 +28,7 @@
                             org.distributeme.processors.GeneratorProcessorFactory
                         </annotationProcessor>
                     </annotationProcessors>
+                    <generatedSourcesDirectory>${project.basedir}/generated/java</generatedSourcesDirectory>
                 </configuration>
             </plugin>
             <plugin>
