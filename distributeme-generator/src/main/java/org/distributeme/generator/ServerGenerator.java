@@ -1,26 +1,5 @@
 package org.distributeme.generator;
 
-import net.anotheria.anoprise.metafactory.Extension;
-import net.anotheria.anoprise.metafactory.FactoryNotFoundException;
-import net.anotheria.anoprise.metafactory.MetaFactory;
-import net.anotheria.anoprise.metafactory.ServiceFactory;
-import net.anotheria.util.IdCodeGenerator;
-import net.anotheria.util.PidTools;
-import org.distributeme.annotation.*;
-import org.distributeme.core.*;
-import org.distributeme.core.conventions.SystemProperties;
-import org.distributeme.core.lifecycle.LifecycleComponentImpl;
-import org.distributeme.core.listener.ListenerRegistry;
-import org.distributeme.core.listener.ServerLifecycleListener;
-import org.distributeme.core.listener.ServerLifecycleListenerShutdownHook;
-import org.distributeme.core.routing.RegistrationNameProvider;
-import org.distributeme.core.routing.RoutingAware;
-import org.distributeme.core.util.LocalServiceDescriptorStore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
-import org.slf4j.MarkerFactory;
-
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.AnnotationMirror;
@@ -38,6 +17,39 @@ import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import net.anotheria.anoprise.metafactory.Extension;
+import net.anotheria.anoprise.metafactory.FactoryNotFoundException;
+import net.anotheria.anoprise.metafactory.MetaFactory;
+import net.anotheria.anoprise.metafactory.ServiceFactory;
+import net.anotheria.util.IdCodeGenerator;
+import net.anotheria.util.PidTools;
+import org.distributeme.annotation.CombinedService;
+import org.distributeme.annotation.DistributeMe;
+import org.distributeme.annotation.DummyFactory;
+import org.distributeme.annotation.Route;
+import org.distributeme.annotation.RouteMe;
+import org.distributeme.annotation.ServerListener;
+import org.distributeme.annotation.SupportService;
+import org.distributeme.core.RMIRegistryUtil;
+import org.distributeme.core.RegistryLocation;
+import org.distributeme.core.RegistryUtil;
+import org.distributeme.core.ServerShutdownHook;
+import org.distributeme.core.ServiceDescriptor;
+import org.distributeme.core.SystemPropertyNames;
+import org.distributeme.core.Verbosity;
+import org.distributeme.core.conventions.SystemProperties;
+import org.distributeme.core.lifecycle.LifecycleComponentImpl;
+import org.distributeme.core.listener.ListenerRegistry;
+import org.distributeme.core.listener.ServerLifecycleListener;
+import org.distributeme.core.listener.ServerLifecycleListenerShutdownHook;
+import org.distributeme.core.routing.RegistrationNameProvider;
+import org.distributeme.core.routing.RoutingAware;
+import org.distributeme.core.util.LocalServiceDescriptorStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 
 /**
  * Generator for RMI based server programm. 
@@ -499,8 +511,11 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 	private List<String> getCombinedServicesNames(TypeElement type){
 		AnnotationMirror ann = findMirror(type, CombinedService.class);
 		AnnotationValue val = findMethodValue(ann, "services");
-        List<String> ret = new ArrayList<String>();
-        ret.add(val.getValue().toString());
+		List<? extends AnnotationValue> values = (List<? extends AnnotationValue>)val.getValue();
+		ArrayList<String> ret = new ArrayList<String>();
+		for (AnnotationValue o : values){
+			ret.add(o.getValue().toString());
+		}
 		return ret;
 	}
 }
