@@ -1,27 +1,5 @@
 package org.distributeme.generator;
 
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.AnnotationValue;
-import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.PackageElement;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.TypeParameterElement;
-import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.ElementFilter;
-import javax.lang.model.util.Elements;
-import javax.lang.model.util.Types;
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import net.anotheria.util.StringUtils;
 import org.distributeme.annotation.ConcurrencyControlClientSideLimit;
 import org.distributeme.annotation.ConcurrencyControlLimit;
@@ -31,6 +9,18 @@ import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.Defaults;
 import org.distributeme.core.interceptor.InterceptionPhase;
 import org.distributeme.core.routing.Router;
+
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.*;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.ElementFilter;
+import javax.lang.model.util.Elements;
+import javax.lang.model.util.Types;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.lang.annotation.Annotation;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Base generator class.
@@ -390,6 +380,17 @@ public class AbstractGenerator {
 			if (formalTypeDeclaration.length()>0)
 				formalTypeDeclaration.append(", ");
 			formalTypeDeclaration.append(d.toString());
+
+			List<? extends TypeMirror> bounds = d.getBounds();
+
+			if (!bounds.isEmpty())
+				formalTypeDeclaration.append(" extends ");
+
+			for (Iterator<? extends TypeMirror> it = bounds.iterator(); it.hasNext(); ) {
+				formalTypeDeclaration.append(it.next().toString());
+				if (it.hasNext())
+					formalTypeDeclaration.append(" & ");
+			}
 		}
 		
 		String ret = formalTypeDeclaration.length()>0 ? 
