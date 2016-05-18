@@ -1,9 +1,9 @@
 package org.distributeme.registry.esregistry;
 
+import org.distributeme.core.ServiceDescriptor;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.distributeme.core.ServiceDescriptor;
 
 /**
  * Describes a channel for internal usage.

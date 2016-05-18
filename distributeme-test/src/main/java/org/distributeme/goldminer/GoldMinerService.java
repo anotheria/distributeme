@@ -1,7 +1,6 @@
 package org.distributeme.goldminer;
 
 import net.anotheria.anoprise.metafactory.Service;
-
 import org.distributeme.annotation.DistributeMe;
 
 @DistributeMe(asynchSupport=true, asynchCallTimeout=2500)

@@ -5,6 +5,7 @@ import org.distributeme.agents.AgentPackage;
 import org.distributeme.agents.AgentPackageUtility;
 import org.junit.Ignore;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class SingletonAgentTest {

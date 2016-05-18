@@ -1,10 +1,9 @@
 package org.distributeme.test.interception;
 
-import java.util.Map;
-
+import net.anotheria.anoprise.metafactory.Service;
 import org.distributeme.annotation.DistributeMe;
 
-import net.anotheria.anoprise.metafactory.Service;
+import java.util.Map;
 
 @DistributeMe
 public interface TestService extends Service{

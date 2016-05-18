@@ -1,9 +1,9 @@
 package org.distributeme.core.asynch;
 
+import org.distributeme.core.Defaults;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
-import org.distributeme.core.Defaults;
 /**
  * This is a callhandler implementation which is used in generated asynchronous stubs.
  * @author lrosenberg

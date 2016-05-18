@@ -1,12 +1,8 @@
 package org.distributeme.annotation;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
 import org.distributeme.core.routing.RegistrationNameProvider;
+
+import java.lang.annotation.*;
 
 /**
  * This annotation is needed by the Routing mechanism. The purpose of this annotation is to indicate to the server at runtime that is has to register himself under other name as default.

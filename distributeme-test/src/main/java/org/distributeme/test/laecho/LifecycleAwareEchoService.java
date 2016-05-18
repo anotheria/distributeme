@@ -1,7 +1,6 @@
 package org.distributeme.test.laecho;
 
 import net.anotheria.anoprise.metafactory.Service;
-
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.core.lifecycle.LifecycleAware;
 

@@ -1,15 +1,11 @@
 package org.distributeme.registry.esregistry;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import net.anotheria.util.IdCodeGenerator;
-
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.core.ServiceDescriptor.Protocol;
-import org.distributeme.registry.esregistry.ChannelDescriptor;
 import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class ChannelDescriptorTest {
 	@Test public void testEqualsAndHashCode(){

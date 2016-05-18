@@ -1,9 +1,5 @@
 package org.distributeme.test.echoplusevent;
 
-import org.distributeme.support.eventservice.DiMeRemoteEventChannelRMISupport;
-import org.distributeme.test.echo.Echo;
-import org.distributeme.test.echo.EchoServiceException;
-
 import net.anotheria.anoprise.eventservice.Event;
 import net.anotheria.anoprise.eventservice.EventChannel;
 import net.anotheria.anoprise.eventservice.EventServiceFactory;
@@ -11,6 +7,8 @@ import net.anotheria.anoprise.eventservice.EventServicePushConsumer;
 import net.anotheria.anoprise.metafactory.Extension;
 import net.anotheria.anoprise.metafactory.MetaFactory;
 import net.anotheria.anoprise.metafactory.ServiceFactory;
+import org.distributeme.support.eventservice.DiMeRemoteEventChannelRMISupport;
+import org.distributeme.test.echo.Echo;
 
 
 public class TestRemoteClient implements EventServicePushConsumer{

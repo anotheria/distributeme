@@ -1,11 +1,10 @@
 package org.distributeme.core;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.core.ServiceDescriptor.Protocol;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class ServiceDescriptorTest {
 	@Test public void testForNullValues(){

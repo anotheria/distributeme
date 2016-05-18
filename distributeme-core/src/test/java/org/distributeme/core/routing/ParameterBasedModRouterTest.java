@@ -1,16 +1,14 @@
 package org.distributeme.core.routing;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import net.anotheria.util.IdCodeGenerator;
+import org.distributeme.core.ClientSideCallContext;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import net.anotheria.util.IdCodeGenerator;
-
-import org.distributeme.core.ClientSideCallContext;
-import org.distributeme.core.routing.ParameterBasedModRouter;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 @SuppressWarnings({"unchecked","rawtypes"})
 public class ParameterBasedModRouterTest {

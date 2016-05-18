@@ -1,16 +1,18 @@
 package org.distributeme.generator;
 
+import org.distributeme.annotation.DistributeMe;
+import org.distributeme.core.asynch.CallBackHandler;
+
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
+import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.Map;
 
-import org.distributeme.annotation.DistributeMe;
-import org.distributeme.core.asynch.CallBackHandler;
-
-import com.sun.mirror.apt.Filer;
-import com.sun.mirror.declaration.MethodDeclaration;
-import com.sun.mirror.declaration.TypeDeclaration;
 
 
 /**
@@ -19,13 +21,18 @@ import com.sun.mirror.declaration.TypeDeclaration;
  */
 public class AsynchInterfaceGenerator extends AbstractGenerator implements Generator{
 
+	public AsynchInterfaceGenerator(ProcessingEnvironment environment) {
+		super(environment);
+	}
+
 	@Override
-	public void generate(TypeDeclaration type, Filer filer, Map<String,String> options) throws IOException{
+	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
 		DistributeMe typeAnnotation = type.getAnnotation(DistributeMe.class);
 		if (!typeAnnotation.asynchSupport())
 			return;
 
-		PrintWriter writer = filer.createSourceFile(getPackageName(type)+"."+getAsynchInterfaceName(type));
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type) + "." + getAsynchInterfaceName(type));
+		PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
 		
@@ -37,8 +44,8 @@ public class AsynchInterfaceGenerator extends AbstractGenerator implements Gener
 		writeString("public interface "+getAsynchInterfaceName(type)+" extends "+type.getQualifiedName()+", org.distributeme.core.asynch.AsynchStub{");
 		increaseIdent();
 		
-		Collection<? extends MethodDeclaration> methods = getAllDeclaredMethods(type);
-		for (MethodDeclaration method : methods){
+		Collection<? extends ExecutableElement> methods = getAllDeclaredMethods(type);
+		for (ExecutableElement method : methods){
 			String methodDecl = getAsynchInterfaceMethodDeclaration(method);
 			writeStatement(methodDecl);
 			emptyline(); 

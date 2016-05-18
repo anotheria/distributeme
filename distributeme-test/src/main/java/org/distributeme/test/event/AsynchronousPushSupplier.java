@@ -1,11 +1,11 @@
 package org.distributeme.test.event;
 
-import java.util.Random;
-
 import net.anotheria.anoprise.eventservice.Event;
 import net.anotheria.anoprise.eventservice.EventChannel;
 import net.anotheria.anoprise.eventservice.util.QueueFullException;
 import net.anotheria.anoprise.eventservice.util.QueuedEventSender;
+
+import java.util.Random;
 
 public class AsynchronousPushSupplier extends AbstractECTester  implements Runnable {
 	

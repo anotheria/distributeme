@@ -1,13 +1,14 @@
 package org.distributeme.core.interceptor.availabilitytesting;
 
-import java.util.ArrayList;
-
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.exception.ServiceUnavailableException;
 import org.distributeme.core.interceptor.ClientSideRequestInterceptor;
 import org.distributeme.core.interceptor.InterceptionContext;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+
+import static org.junit.Assert.fail;
 
 public class ServiceUnavailableByConfigurationInterceptorTest {
 	@Test public void testPositive(){

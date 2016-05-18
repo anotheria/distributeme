@@ -1,11 +1,13 @@
 package org.distributeme.generator;
 
-import com.sun.mirror.apt.Filer;
-import com.sun.mirror.declaration.MethodDeclaration;
-import com.sun.mirror.declaration.TypeDeclaration;
-import com.sun.mirror.type.ReferenceType;
 import org.distributeme.core.lifecycle.ServiceAdapter;
 
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
+import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.Remote;
@@ -20,9 +22,14 @@ import java.util.Map;
  */
 public class RemoteInterfaceGenerator extends AbstractGenerator implements Generator{
 
+	public RemoteInterfaceGenerator(ProcessingEnvironment environment) {
+		super(environment);
+	}
+
 	@Override
-	public void generate(TypeDeclaration type, Filer filer, Map<String,String> options) throws IOException{
-		PrintWriter writer = filer.createSourceFile(getPackageName(type)+"."+getRemoteInterfaceName(type));
+	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getRemoteInterfaceName(type));
+		PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
 		
@@ -39,13 +46,13 @@ public class RemoteInterfaceGenerator extends AbstractGenerator implements Gener
 		writeString("public interface "+getRemoteInterfaceName(type)+" extends Remote, ServiceAdapter{");
 		increaseIdent();
 		
-		Collection<? extends MethodDeclaration> methods = getAllDeclaredMethods(type);
-		for (MethodDeclaration method : methods){
+		Collection<? extends ExecutableElement> methods = getAllDeclaredMethods(type);
+		for (ExecutableElement method : methods){
 			String methodDecl = getInterfaceMethodDeclaration(method, true);
 			
 			if (method.getThrownTypes().size()>0){
 				StringBuilder exceptions = new StringBuilder();
-				for (ReferenceType rt : method.getThrownTypes()){
+				for (TypeMirror rt : method.getThrownTypes()){
 					if (exceptions.length()>0)
 						exceptions.append(", ");
 					exceptions.append(rt.toString());

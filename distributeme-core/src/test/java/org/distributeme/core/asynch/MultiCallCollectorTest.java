@@ -2,6 +2,7 @@ package org.distributeme.core.asynch;
 
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class MultiCallCollectorTest {

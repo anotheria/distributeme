@@ -1,13 +1,12 @@
 package org.distributeme.core.util;
 
+import net.anotheria.util.StringUtils;
+import org.distributeme.core.ServiceDescriptor;
+import org.distributeme.core.conventions.WebOperations;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import net.anotheria.util.StringUtils;
-
-import org.distributeme.core.ServiceDescriptor;
-import org.distributeme.core.conventions.WebOperations;
 
 /**
  * Utility classes for requests to the registry via http.

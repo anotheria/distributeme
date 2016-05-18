@@ -1,7 +1,6 @@
 package org.distributeme.test.roundrobin;
 
 import net.anotheria.anoprise.metafactory.Service;
-
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.annotation.Route;
 import org.distributeme.annotation.RouteMe;

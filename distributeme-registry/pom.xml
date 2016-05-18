@@ -155,4 +155,16 @@
   	</plugins>
   </pluginManagement>
 </build>
+<repositories>
+    <repository>
+        <id>anotheria</id>
+        <url>http://nexus.anotheria.net/nexus/content/groups/public</url>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+</repositories>
 </project>

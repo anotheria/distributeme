@@ -1,8 +1,8 @@
 package org.distributeme.core;
 
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 public class RegistryUtilTest {
 
 	@Test public void testRegistryParentUtil() {

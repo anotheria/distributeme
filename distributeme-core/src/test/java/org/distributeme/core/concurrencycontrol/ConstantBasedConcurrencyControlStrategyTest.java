@@ -1,6 +1,5 @@
 package org.distributeme.core.concurrencycontrol;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class ConstantBasedConcurrencyControlStrategyTest {

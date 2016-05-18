@@ -3,7 +3,6 @@ package org.distributeme.test.roundrobin.client;
 import net.anotheria.anoprise.metafactory.Extension;
 import net.anotheria.anoprise.metafactory.MetaFactory;
 import net.anotheria.util.NumberUtils;
-
 import org.distributeme.test.roundrobin.RoundRobinService;
 
 public class PrintClient extends Client{

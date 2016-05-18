@@ -1,10 +1,10 @@
 package org.distributeme.core.interceptor;
 
-import java.util.HashSet;
-
 import org.distributeme.core.AbstractCallContext;
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.ServerSideCallContext;
+
+import java.util.HashSet;
 
 /**
  * This interceptor can be configured to use one or multiple phases, but doesn't need to support all phases.

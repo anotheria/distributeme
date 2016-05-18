@@ -1,8 +1,7 @@
 package org.distributeme.test.inheritance;
 
-import org.distributeme.annotation.DistributeMe;
-
 import net.anotheria.anoprise.metafactory.Service;
+import org.distributeme.annotation.DistributeMe;
 
 @DistributeMe
 public interface BaseService extends Service{

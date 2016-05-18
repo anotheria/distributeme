@@ -1,13 +1,11 @@
 package org.distributeme.test.roundrobin.client;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import net.anotheria.anoprise.metafactory.Extension;
 import net.anotheria.anoprise.metafactory.MetaFactory;
-
-import org.distributeme.test.mod.ModedService;
 import org.distributeme.test.roundrobin.RoundRobinService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RandomIdClient extends Client{
 	public static void main(String a[]) throws Exception{
