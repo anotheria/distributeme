@@ -1,5 +1,6 @@
 package org.distributeme.core;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.anotheria.util.StringUtils;
 import org.configureme.ConfigurationManager;
 import org.configureme.annotations.ConfigureMe;
@@ -141,6 +142,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * Returns the list of services from a specified location.
 	 * @return
 	 */
+	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	public static String getXMLServiceList(Location loc){
 		String url = getRegistryBaseUrl(loc.getHost(), loc.getPort())+"list";
 		byte data[] = getUrlContent(url);
@@ -198,6 +200,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * @param url
 	 * @return
 	 */
+	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	private static boolean getSuccessOrError(String url){
 		byte[] data = getUrlContent(url);
 		return data != null && new String(data).equals("SUCCESS");

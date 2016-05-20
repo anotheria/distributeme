@@ -1,5 +1,6 @@
 package org.distributeme.core.util;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.anotheria.util.StringUtils;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.core.conventions.WebOperations;
@@ -100,6 +101,7 @@ public class EventServiceRegistryUtil extends BaseRegistryUtil{
 		}
 	}
 
+	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	protected static final List<ServiceDescriptor> registerAtRegistryAs(String channelName, Target as, ServiceDescriptor descriptor){
 		String url = getRegistryBaseUrl();
 		url += as.getOperation().toWeb();
@@ -144,6 +146,7 @@ public class EventServiceRegistryUtil extends BaseRegistryUtil{
 	 * @param as the type of descriptor, supplier or consumer.
 	 * @param descriptor
 	 */
+	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	public static final void notifyNotAvailable(Target as, ServiceDescriptor descriptor){
 		String url = getRegistryBaseUrl();
 		url += as.getNotifyOperation().toWeb();
