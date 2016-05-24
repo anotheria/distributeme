@@ -1,23 +1,5 @@
 package org.distributeme.generator;
 
-import javax.annotation.processing.Filer;
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.AnnotationValue;
-import javax.lang.model.element.TypeElement;
-import javax.tools.JavaFileObject;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
-import java.rmi.server.ExportException;
-import java.rmi.server.UnicastRemoteObject;
-import java.security.Permission;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import net.anotheria.anoprise.metafactory.Extension;
 import net.anotheria.anoprise.metafactory.FactoryNotFoundException;
 import net.anotheria.anoprise.metafactory.MetaFactory;
@@ -50,6 +32,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
+
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.element.TypeElement;
+import javax.tools.JavaFileObject;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.ExportException;
+import java.rmi.server.UnicastRemoteObject;
+import java.security.Permission;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Generator for RMI based server programm. 
@@ -371,8 +371,6 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 				//after registration, if service is RoutingAware we should notify it about its name.
 				//of course it only makes sense if the service had Route annotation.
 				writeString("if (impl instanceof RoutingAware){");
-				System.out.println("RP: " + routerParameter);
-				System.out.println("CN: "+configurationName);
 				increaseIdent();
 				writeStatement("((RoutingAware)impl).notifyServiceId(definedServiceId, serviceId, "
 						+ (routerParameter == null ? "null" : quote(routerParameter.getValue()))
