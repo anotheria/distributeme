@@ -67,16 +67,8 @@ public class GeneratorUtil {
     }
 
     public static void generateRMI(TypeElement type, ProcessingEnvironment environment) {
-        System.out.println("DistributeMe RMI generation started for type: " + type);
         Map<String, String> generatorOptions = getGeneratorOptions(environment);
-        System.out.println("Found " + generatorOptions.size() + " Options:");
-        for (Map.Entry<String, String> optionEntry : generatorOptions.entrySet())
-            System.out.println(optionEntry.getKey() + " : " + optionEntry.getValue());
-
         generate(type, environment, generatorOptions, getGeneratorsForType(type));
-
-        System.out.println("DistributeMe generation finished.");
-
     }
 
     private static Class<? extends Generator>[] getGeneratorsForType(Element type) {

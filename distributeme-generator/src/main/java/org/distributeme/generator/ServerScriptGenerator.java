@@ -22,7 +22,7 @@ public class ServerScriptGenerator extends AbstractGenerator implements Generato
 
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
-		String relativeName = "service/" + getPackageOf(type).toString() + "/" + type.getSimpleName().toString() + "-server.sh";
+		String relativeName = "scripts/" + type.getSimpleName().toString().toLowerCase() + "-server.sh";
 		FileObject fileObject = filer.createResource(StandardLocation.SOURCE_OUTPUT, "", relativeName);
 		PrintWriter writer = new PrintWriter(fileObject.openWriter());
 		setWriter(writer);
