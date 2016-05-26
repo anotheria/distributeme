@@ -17,17 +17,14 @@ class TestRunner implements Runnable{
 	
 	@Override
 	public void run() {
-		System.out.println("START "+this);
 		try{
 			Thread.sleep(10+sleepTime);
 		}catch(InterruptedException e){}
-		System.out.println("PRE-END "+this);
 		if (type==CallType.SUC)
 			handler.success(resultObject);
 		else
 			handler.error((Exception)resultObject);
-		System.out.println("END "+this);
-			
+
 	}
 	
 }

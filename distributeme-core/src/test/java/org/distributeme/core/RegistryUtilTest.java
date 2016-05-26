@@ -9,7 +9,6 @@ public class RegistryUtilTest {
 		String host = "test.host.uk";
 		int port = 815;
 		String baseUrl = RegistryUtil.getRegistryBaseUrl(host, port);
-		System.out.println("Base Url: "+baseUrl);
 		assertEquals(baseUrl, "http://"+host+":"+port+"/distributeme/registry/");
 	}
 	

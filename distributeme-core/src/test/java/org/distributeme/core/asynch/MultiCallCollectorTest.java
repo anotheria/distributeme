@@ -3,7 +3,9 @@ package org.distributeme.core.asynch;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class MultiCallCollectorTest {
 	@Test public void testForDuplicateIds(){
@@ -29,7 +31,7 @@ public class MultiCallCollectorTest {
 	}
 
 	@Test public void testImmediateSuccess() throws InterruptedException{
-		System.out.println("testImmediateSuccess");
+		//System.out.println("testImmediateSuccess");
 		long startTime = System.currentTimeMillis();
 		MultiCallCollector executor = new MultiCallCollector(3);
 		for (int i=0; i<3; i++){
@@ -41,12 +43,11 @@ public class MultiCallCollectorTest {
 		executor.waitForResults(1000);
 		long duration = System.currentTimeMillis() - startTime;
 		assertTrue(duration<100);
-		System.out.println("duration "+duration);
+		//System.out.println("duration "+duration);
 		assertTrue(executor.isFinished());
 	}
 
 	@Test public void testTimeoutSuccess() throws InterruptedException{
-		System.out.println("testTimeoutSuccess");
 		long startTime = System.currentTimeMillis();
 		MultiCallCollector executor = new MultiCallCollector(3);
 		for (int i=0; i<3; i++){
@@ -59,7 +60,6 @@ public class MultiCallCollectorTest {
 		long duration = System.currentTimeMillis() - startTime;
 		assertTrue(duration>100);
 		assertTrue(duration<1100);
-		System.out.println("duration "+duration);
 		assertFalse(executor.isFinished());
 	}
 

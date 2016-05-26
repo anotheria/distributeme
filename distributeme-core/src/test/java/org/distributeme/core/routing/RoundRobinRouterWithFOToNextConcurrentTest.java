@@ -87,7 +87,7 @@ public class RoundRobinRouterWithFOToNextConcurrentTest {
 		log.debug("second % "+(requestCounter1.get()*100/total));
 		log.debug("third % "+(requestCounter2.get()*100/total));
 
-
+		/*
 		System.out.println("Finished: ");
 		System.out.println("1: " + requestCounter0.get());
 		System.out.println("2: " + requestCounter1.get());
@@ -98,7 +98,7 @@ public class RoundRobinRouterWithFOToNextConcurrentTest {
 		System.out.println("second % " + (requestCounter1.get() * 100 / total));
 		System.out.println("third % " + (requestCounter2.get() * 100 / total));
 		System.out.println("wtf % " + (wtf.get() * 100 / trueTotal));
-
+          */
 		assertEquals(0, wtf.get());
 
 
