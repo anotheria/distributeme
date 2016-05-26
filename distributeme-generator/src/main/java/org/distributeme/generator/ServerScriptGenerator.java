@@ -1,5 +1,7 @@
 package org.distributeme.generator;
 
+import net.anotheria.util.StringUtils;
+
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.TypeElement;
@@ -20,9 +22,38 @@ public class ServerScriptGenerator extends AbstractGenerator implements Generato
 		super(environment);
 	}
 
+	/**
+	 * Creates a script name. Takes first parts of the package, one letter each, adds last part of the package, adds class name.
+	 * For example this class will produce od-generator-serverscriptgenerator.
+	 * @param type
+	 * @return
+	 */
+	private String makeTypeName(TypeElement type){
+		String fullName = type.getQualifiedName().toString().toLowerCase();
+		int lastDot = fullName.lastIndexOf('.');
+		if (lastDot == -1)
+			return fullName;
+
+		String packageName = fullName.substring(0, lastDot);
+		String[] packageParts = StringUtils.tokenize(packageName, '.');
+		StringBuilder firstPartOfName = new StringBuilder();
+		for (int i=0; i<packageParts.length; i++){
+			String token = packageParts[i];
+			if (token != null && token.length()>0) {
+				if (i==packageParts.length-1){
+					firstPartOfName.append('-').append(token);
+				}else {
+					firstPartOfName.append(token.charAt(0));
+				}
+			}
+		}
+
+		return firstPartOfName.append('-').append(fullName.substring(lastDot+1)).toString();
+	}
+
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
-		String relativeName = "scripts/" + type.getSimpleName().toString().toLowerCase() + "-server.sh";
+		String relativeName = "scripts/" + makeTypeName(type) + "-server.sh";
 		FileObject fileObject = filer.createResource(StandardLocation.SOURCE_OUTPUT, "", relativeName);
 		PrintWriter writer = new PrintWriter(fileObject.openWriter());
 		setWriter(writer);
