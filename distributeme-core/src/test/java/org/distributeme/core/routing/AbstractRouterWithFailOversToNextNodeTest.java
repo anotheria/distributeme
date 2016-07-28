@@ -1,6 +1,6 @@
 package org.distributeme.core.routing;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.failing.FailDecision;
 import org.junit.Ignore;
