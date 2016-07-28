@@ -8,8 +8,7 @@ package org.distributeme.registry.ui.action;
 public abstract class BaseClusterAction extends BaseAction{
 	
 	public BaseClusterAction(){
-		super();
-	}
+    }
 	
 	@Override
 	protected String getMenuSection() {

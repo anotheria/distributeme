@@ -60,7 +60,7 @@ public class AgentPackageUtility {
 	static class AgentPackageUtilClassLoader extends ClassLoader{
 		private Map<String, byte[]> classDefs;
 		
-		private Map<String, Class> cache = new HashMap<String, Class>();;
+		private Map<String, Class> cache = new HashMap<>();;
 		
 		public AgentPackageUtilClassLoader(AgentPackage pack) {
 			classDefs = pack.getClazzDefinitions();
@@ -132,14 +132,13 @@ public class AgentPackageUtility {
 	
 	static List<Class<?>> scanForCustomClasses(Agent agent){
 		
-		ArrayList<Class<?>> ret = new ArrayList<Class<?>>();
+		List<Class<?>> ret = new ArrayList<>();
 		
 		scanForCustomClassesInternally(agent.getClass(), ret);
 		
 		return ret;
 	}
 	
-	@SuppressWarnings("unchecked")
 	private static void scanForCustomClassesInternally(Class<?> toScan, List<Class<?>> foundClasses){
 		
 		if (toScan.isPrimitive())

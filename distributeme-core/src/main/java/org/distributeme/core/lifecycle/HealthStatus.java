@@ -43,7 +43,7 @@ public class HealthStatus implements Serializable {
 	}
 	
 	@Override public String toString(){
-		return getHealth()+" "+getMessage();
+        return health +" "+ message;
 	}
 	
 	/**

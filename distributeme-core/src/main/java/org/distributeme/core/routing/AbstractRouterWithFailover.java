@@ -55,7 +55,7 @@ abstract class AbstractRouterWithFailover extends AbstractRouter implements Conf
 		delegateCallCounter = new AtomicInteger(0);
 		if (getStrategy() == null)
 			throw new AssertionError("getStrategy() method should not return NULL. Please check " + this.getClass() + " implementation");
-		modRouteMethodRegistry = new HashMap<String, Integer>();
+		modRouteMethodRegistry = new HashMap<>();
 	}
 
 	@Override
@@ -82,7 +82,7 @@ abstract class AbstractRouterWithFailover extends AbstractRouter implements Conf
 	/**
 	 * Returns serviceId based on RoundRobin strategy.
 	 *
-	 * @param context {@link org.distributeme.core.ClientSideCallContext}
+	 * @param context {@link ClientSideCallContext}
 	 * @return serviceId string
 	 */
 	protected String getRRBasedServiceId(ClientSideCallContext context) {
@@ -102,7 +102,7 @@ abstract class AbstractRouterWithFailover extends AbstractRouter implements Conf
 	 * NOTE : it's native that not all methods supports such kind of routing strategy [MOD].
 	 * So, if some method does not supports MOD - strategy - then ROUND-ROBIN strategy  will be used for such call.
 	 *
-	 * @param context {@link org.distributeme.core.ClientSideCallContext}
+	 * @param context {@link ClientSideCallContext}
 	 * @return serviceId string
 	 */
 	protected String getModBasedServiceId(ClientSideCallContext context) {
@@ -121,12 +121,14 @@ abstract class AbstractRouterWithFailover extends AbstractRouter implements Conf
 
 			String result = context.getServiceId() + UNDER_LINE + (parameterValue % getServiceAmount());
 
-			if (getLog().isDebugEnabled())
-				getLog().debug("Returning mod based result : " + result + " for " + context + " where : serversAmount[" + getServiceAmount() + "], modableValue[" + parameterValue + "]");
+			if (log.isDebugEnabled()) {
+				log.debug("Returning mod based result : " + result + " for " + context + " where : serversAmount[" + getServiceAmount() + "], modableValue[" + parameterValue + "]");
+			}
 			return result;
 		}
-		if (getLog().isDebugEnabled())
-			getLog().debug("Call to method " + context.getMethodName() + " can't be routed using MOD strategy. Building RR strategy based serviceId.");
+		if (log.isDebugEnabled()) {
+			log.debug("Call to method " + context.getMethodName() + " can't be routed using MOD strategy. Building RR strategy based serviceId.");
+		}
 
 		return getRRBasedServiceId(context);
 	}
@@ -135,9 +137,9 @@ abstract class AbstractRouterWithFailover extends AbstractRouter implements Conf
 
 
 	/**
-	 * Simply return configured {@link org.slf4j.Logger} instance.
+	 * Simply return configured {@link Logger} instance.
 	 *
-	 * @return {@link org.slf4j.Logger}
+	 * @return {@link Logger}
 	 */
 	protected Logger getLog() {
 		return log;
@@ -165,7 +167,7 @@ abstract class AbstractRouterWithFailover extends AbstractRouter implements Conf
 	 * @return int value
 	 */
 	protected int getServiceAmount() {
-		return getConfiguration().getNumberOfInstances();
+		return configuration.getNumberOfInstances();
 	}
 
 	/**

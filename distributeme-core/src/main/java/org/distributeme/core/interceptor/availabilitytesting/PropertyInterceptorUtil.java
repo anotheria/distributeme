@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,12 +24,11 @@ public class PropertyInterceptorUtil {
 	private static List<String> serviceIds = extractServiceIds();
 
 	public static List<String> extractServiceIds() {
-		List<String> propertyValues = new ArrayList<String>();
+		List<String> propertyValues = new ArrayList<>();
 		String pValue = System.getProperty(Constants.PROPERTY_SERVICE_ID);
-		if (pValue!=null && pValue.length()>0){
+		if (pValue!=null && !pValue.isEmpty()){
 			String tokens[] = StringUtils.tokenize(pValue, ',');
-			for (String s : tokens)
-				propertyValues.add(s);
+            Collections.addAll(propertyValues, tokens);
 		}
 		return propertyValues;
 	}
@@ -36,7 +36,7 @@ public class PropertyInterceptorUtil {
 	public static final long getSlowDownTime(){
 		try{
 			String slowDownTimeAsString = System.getProperty(Constants.PROPERTY_SLOWDOWN_TIME_IN_MILLIS);
-			if (slowDownTimeAsString!=null && slowDownTimeAsString.length()>0){
+			if (slowDownTimeAsString!=null && !slowDownTimeAsString.isEmpty()){
 				return Long.parseLong(slowDownTimeAsString);
 			}
 		}catch(Exception e){

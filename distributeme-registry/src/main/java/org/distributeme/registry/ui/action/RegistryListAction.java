@@ -3,6 +3,7 @@ package org.distributeme.registry.ui.action;
 import net.anotheria.maf.action.ActionCommand;
 import net.anotheria.maf.action.ActionMapping;
 import net.anotheria.maf.bean.FormBean;
+import net.anotheria.util.sorter.StaticQuickSorter;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.registry.ui.bean.ServiceDescriptorFormBean;
 import org.distributeme.registry.ui.bean.ServiceDescriptorFormBeanSortType;
@@ -27,7 +28,7 @@ public class RegistryListAction extends BaseRegistryAction {
 	public ActionCommand execute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception {
 
 		List<ServiceDescriptor> descriptors = getRegistry().list();
-		List<ServiceDescriptorFormBean> bindings = new ArrayList<ServiceDescriptorFormBean>(descriptors.size());
+		List<ServiceDescriptorFormBean> bindings = new ArrayList<>(descriptors.size());
 
 		for (ServiceDescriptor descriptor : descriptors){
 			ServiceDescriptorFormBean bean = map(descriptor);
@@ -42,11 +43,11 @@ public class RegistryListAction extends BaseRegistryAction {
 		boolean pSortOrder = true;
 		try{
 			String sSortOrder =req.getParameter("pSortOrder"); 
-			if (sSortOrder!=null && sSortOrder.equalsIgnoreCase("false"))
+			if ("false".equalsIgnoreCase(sSortOrder))
 				pSortOrder = false;
 		}catch(Exception ignored){}
 		ServiceDescriptorFormBeanSortType st = new ServiceDescriptorFormBeanSortType(pSortBy, pSortOrder);
-		bindings = net.anotheria.util.sorter.StaticQuickSorter.sort(bindings, st);
+		bindings = StaticQuickSorter.sort(bindings, st);
 
 		req.setAttribute(BINDINGS_ATTRIBUTE_NAME, bindings);
 		req.setAttribute("numberOfBindings", bindings.size());

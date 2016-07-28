@@ -56,7 +56,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * @return true if sucessful, false otherwise.
 	 */
 	public static boolean bind(ServiceDescriptor service){
-		String url = createRegistryOperationUrl("bind", PARAM_ID+"="+encode(service.getRegistrationString()));
+		String url = createRegistryOperationUrl("bind", PARAM_ID+ '=' +encode(service.getRegistrationString()));
 		return getSuccessOrError(url);
 	}
 	
@@ -75,12 +75,12 @@ public class RegistryUtil extends BaseRegistryUtil{
 	}
 	
 	public static boolean notifyBind(Location location, ServiceDescriptor descriptor){
-		String url = createRegistryOperationUrl(location, "nbind", PARAM_ID+"="+encode(descriptor.getRegistrationString()));
+		String url = createRegistryOperationUrl(location, "nbind", PARAM_ID+ '=' +encode(descriptor.getRegistrationString()));
 		return getSuccessOrError(url);
 	}
 	
 	public static boolean notifyUnbind(Location location, ServiceDescriptor descriptor){
-		String url = createRegistryOperationUrl(location, "nunbind", PARAM_ID+"="+encode(descriptor.getRegistrationString()));
+		String url = createRegistryOperationUrl(location, "nunbind", PARAM_ID+ '=' +encode(descriptor.getRegistrationString()));
 		return getSuccessOrError(url);
 	}
 	
@@ -90,7 +90,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * @return
 	 */
 	public static boolean unbind(ServiceDescriptor service){
-		String url = createRegistryOperationUrl("unbind", PARAM_ID+"="+encode(service.getRegistrationString()));
+		String url = createRegistryOperationUrl("unbind", PARAM_ID+ '=' +encode(service.getRegistrationString()));
 		return getSuccessOrError(url);
 	}
 
@@ -101,7 +101,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * @return
 	 */
 	public static ServiceDescriptor resolve(ServiceDescriptor toResolve, Location loc){
-		String url = createRegistryOperationUrl(loc, "resolve", PARAM_ID+"="+encode(toResolve.getLookupString()));
+		String url = createRegistryOperationUrl(loc, "resolve", PARAM_ID+ '=' +encode(toResolve.getLookupString()));
 		byte data[] = getUrlContent(url);
 		if (data == null )
 			return null;
@@ -116,7 +116,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * @return
 	 */
 	public static String createRegistryOperationUrl(String operation, String parameters){
-		return getRegistryBaseUrl()+operation+"?"+parameters;
+		return getRegistryBaseUrl()+operation+ '?' +parameters;
 	}
 
 	/**
@@ -127,7 +127,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * @return
 	 */
 	public static String createRegistryOperationUrl(Location loc, String operation, String parameters){
-		return getRegistryBaseUrl(loc.getHost(), loc.getPort())+operation+"?"+parameters;
+		return getRegistryBaseUrl(loc.getHost(), loc.getPort())+operation+ '?' +parameters;
 	}
 	
 	/**
@@ -225,13 +225,13 @@ public class RegistryUtil extends BaseRegistryUtil{
 		/**
 		 * IP Mappings.
 		 */
-		private volatile HashMap<String, String> mappings = new HashMap<String, String>();
+		private volatile HashMap<String, String> mappings = new HashMap<>();
 		
 		@Set("registrationIpMapping")
 		public void setRegistrationIpMapping(String registrationIpMapping) {
 			log.info("registrationIpMappingSet: "+registrationIpMapping);
 			try{
-				HashMap<String, String> newMappings = new HashMap<String, String>();
+				HashMap<String, String> newMappings = new HashMap<>();
 				String[] pairs = StringUtils.tokenize(registrationIpMapping, ',');
 				for (String p : pairs){
 					String ips[] = StringUtils.tokenize(p, ':');
@@ -245,7 +245,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 		
 		@SetAll
 		public void debug(String key, String value){
-			log.debug("Config "+key+"="+value);
+			log.debug("Config "+key+ '=' +value);
 		}
 		
 		public HashMap<String, String> getMappings(){

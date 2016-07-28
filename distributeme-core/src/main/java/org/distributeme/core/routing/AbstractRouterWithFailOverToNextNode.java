@@ -76,13 +76,13 @@ public abstract class AbstractRouterWithFailOverToNextNode extends AbstractRoute
 	 */
 	private String getServiceIdForFailing(final ClientSideCallContext context) {
 		if (getLog().isDebugEnabled())
-			getLog().debug("Calculating serviceIdForFailing call. ClientSideCallContext[" + context + "]");
+			getLog().debug("Calculating serviceIdForFailing call. ClientSideCallContext[" + context + ']');
 
 		String originalServiceId = context.getServiceId();
 
 		HashSet<String> instancesThatIAlreadyTried = (HashSet<String>)context.getTransportableCallContext().get(ATTR_TRIED_INSTANCES);
 		if (instancesThatIAlreadyTried==null){
-			instancesThatIAlreadyTried = new HashSet<String>();
+			instancesThatIAlreadyTried = new HashSet<>();
 			context.getTransportableCallContext().put(ATTR_TRIED_INSTANCES, instancesThatIAlreadyTried);
 		}
 
@@ -110,7 +110,7 @@ public abstract class AbstractRouterWithFailOverToNextNode extends AbstractRoute
 		if (instancesThatIAlreadyTried.size() == getConfiguration().getNumberOfInstances() -1){
 			//only one instance left, it's easier to find it.
 			for (int candidate = 0; candidate<getConfiguration().getNumberOfInstances(); candidate++){
-				if (!instancesThatIAlreadyTried.contains(""+candidate)){
+				if (!instancesThatIAlreadyTried.contains(String.valueOf(candidate))){
 					//found untried yet
 					result = originalServiceId.substring(0, lastUnderscore + 1) + candidate;
 				}
@@ -122,7 +122,7 @@ public abstract class AbstractRouterWithFailOverToNextNode extends AbstractRoute
 			int[] candidates = new int[getConfiguration().getNumberOfInstances()-instancesThatIAlreadyTried.size()];
 			int i=0;
 			for (int candidate = 0; candidate<getConfiguration().getNumberOfInstances(); candidate++) {
-				if (!instancesThatIAlreadyTried.contains("" + candidate)) {
+				if (!instancesThatIAlreadyTried.contains(String.valueOf(candidate))) {
 					try {
 						candidates[i++] = candidate;
 					}catch(ArrayIndexOutOfBoundsException e){
@@ -138,7 +138,7 @@ public abstract class AbstractRouterWithFailOverToNextNode extends AbstractRoute
 		}
 
 		if (getLog().isDebugEnabled())
-			getLog().debug("serviceIdForFailing result[" + result + "]. ClientSideCallContext[" + context + "]");
+			getLog().debug("serviceIdForFailing result[" + result + "]. ClientSideCallContext[" + context + ']');
 
 		return result;
 	}

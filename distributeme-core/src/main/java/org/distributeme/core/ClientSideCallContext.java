@@ -52,7 +52,7 @@ public class ClientSideCallContext extends AbstractCallContext{
 	}
 	
 	@Override public String toString(){
-		return getMethodName()+"("+getParameters()+") "+getCallCount()+" --> "+getServiceId();
+        return getMethodName()+ '(' +getParameters()+") "+ callCount +" --> "+getServiceId();
 	}
 
 }

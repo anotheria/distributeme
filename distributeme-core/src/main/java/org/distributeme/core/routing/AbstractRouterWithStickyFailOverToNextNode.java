@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * Abstract implementation of {@link org.distributeme.core.routing.Router} which supports {@link org.distributeme.core.failing.FailingStrategy}.
+ * Abstract implementation of {@link Router} which supports {@link FailingStrategy}.
  * <p/>
  * By methods overriding/implementing router can be configured to support :
  * - Mod or RoundRobin strategy (override properly getStrategy() method  - <p>NOTE : should not return null</p>);
@@ -58,7 +58,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 	/**
 	 * Map with timestamps for last server failures.
 	 */
-	private ConcurrentMap<String, Long> serverFailureTimestamps = new ConcurrentHashMap<String, Long>();
+	private ConcurrentMap<String, Long> serverFailureTimestamps = new ConcurrentHashMap<>();
 
 	@Override
 	public FailDecision callFailed(final ClientSideCallContext clientSideCallContext) {
@@ -119,17 +119,17 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 	/**
 	 * Return serviceId for failing call.
 	 *
-	 * @param context {@link org.distributeme.core.ClientSideCallContext}
+	 * @param context {@link ClientSideCallContext}
 	 * @return serviceId string
 	 */
 	private String getServiceIdForFailing(final ClientSideCallContext context) {
 		if (getLog().isDebugEnabled())
-			getLog().debug("Calculating serviceIdForFailing call. ClientSideCallContext[" + context + "]");
+			getLog().debug("Calculating serviceIdForFailing call. ClientSideCallContext[" + context + ']');
 
 		String originalServiceId = context.getServiceId();
 		HashSet<String> instancesThatIAlreadyTried = (HashSet<String>)context.getTransportableCallContext().get(ATTR_TRIED_INSTANCES);
 		if (instancesThatIAlreadyTried==null){
-			instancesThatIAlreadyTried = new HashSet<String>();
+			instancesThatIAlreadyTried = new HashSet<>();
 			context.getTransportableCallContext().put(ATTR_TRIED_INSTANCES, instancesThatIAlreadyTried);
 		}
 
@@ -148,7 +148,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		if (instancesThatIAlreadyTried.size() == getConfiguration().getNumberOfInstances() -1){
 			//only one instance left, it's easier to find it.
 			for (int candidate = 0; candidate<getConfiguration().getNumberOfInstances(); candidate++){
-				if (!instancesThatIAlreadyTried.contains(""+candidate)){
+				if (!instancesThatIAlreadyTried.contains(String.valueOf(candidate))){
 					//found untried yet
 					result = originalServiceId.substring(0, lastUnderscore + 1) + candidate;
 				}
@@ -160,7 +160,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 			int[] candidates = new int[getConfiguration().getNumberOfInstances()-instancesThatIAlreadyTried.size()];
 			int i=0;
 			for (int candidate = 0; candidate<getConfiguration().getNumberOfInstances(); candidate++) {
-				if (!instancesThatIAlreadyTried.contains("" + candidate)) {
+				if (!instancesThatIAlreadyTried.contains(String.valueOf(candidate))) {
 			 		candidates[i++] = candidate;
 				}
 			}
@@ -170,7 +170,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		}
 
 		if (getLog().isDebugEnabled())
-			getLog().debug("serviceIdForFailing result[" + result + "]. ClientSideCallContext[" + context + "]");
+			getLog().debug("serviceIdForFailing result[" + result + "]. ClientSideCallContext[" + context + ']');
 
 		return result;
 	}

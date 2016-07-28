@@ -16,7 +16,7 @@ public class ModifyReturnValueInterceptor extends AbstractRequestInterceptor{
 		if (!context.getMethodName().equals("returnString"))
 			return InterceptorResponse.CONTINUE;
 		
-		return InterceptorResponse.returnLater("Servant said: \""+iContext.getReturnValue()+"\"");
+		return InterceptorResponse.returnLater("Servant said: \""+iContext.getReturnValue()+ '"');
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class ModifyReturnValueInterceptor extends AbstractRequestInterceptor{
 			return InterceptorResponse.CONTINUE;
 		if (!context.getMethodName().equals("returnString"))
 			return InterceptorResponse.CONTINUE;
-		return InterceptorResponse.returnLater("Service said: \""+iContext.getReturnValue()+"\"");
+		return InterceptorResponse.returnLater("Service said: \""+iContext.getReturnValue()+ '"');
 	}
 	
 }

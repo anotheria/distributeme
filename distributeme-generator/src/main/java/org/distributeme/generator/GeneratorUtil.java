@@ -45,8 +45,8 @@ public class GeneratorUtil {
         System.out.println("DistributeMe JAXRS generation started for type: " + type);
         Map<String, String> generatorOptions = getGeneratorOptions(environment);
         System.out.println("Found " + generatorOptions.size() + " Options:");
-        for (String option : generatorOptions.keySet())
-            System.out.println(option + " : " + generatorOptions.get(option));
+        for (Map.Entry<String, String> stringStringEntry : generatorOptions.entrySet())
+            System.out.println(stringStringEntry.getKey() + " : " + stringStringEntry.getValue());
 
         generate(type, environment, generatorOptions, JAXRS_GENERATORS);
 
@@ -82,7 +82,7 @@ public class GeneratorUtil {
     }
 
     private static Map<String, String> getGeneratorOptions(ProcessingEnvironment environment) {
-        Map<String, String> ret = new HashMap<String, String>();
+        Map<String, String> ret = new HashMap<>();
         for (String option : environment.getOptions().keySet()) {
             if (!option.startsWith("-A"))
                 continue;

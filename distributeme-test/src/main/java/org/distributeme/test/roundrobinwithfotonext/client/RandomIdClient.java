@@ -14,7 +14,7 @@ public class RandomIdClient extends Client{
 		long start = System.currentTimeMillis();
 		int errors = 0 ; int replies = 0;
 		int LIMIT = 100;
-		Map<String, Integer> replyMap = new HashMap<String, Integer>();
+		Map<String, Integer> replyMap = new HashMap<>();
 		for (int i = 0; i<LIMIT; i++){
 			try{
 				String randomId = service.getRandomId();

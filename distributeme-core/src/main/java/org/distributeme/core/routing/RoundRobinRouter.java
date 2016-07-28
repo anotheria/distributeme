@@ -43,7 +43,7 @@ public class RoundRobinRouter extends AbstractRouter implements Router{
 			fromCounter = 0;
 			callCounter.compareAndSet(oldCounter, 0);
 		}
-		return callContext.getServiceId()+"_"+fromCounter;
+		return callContext.getServiceId()+ '_' +fromCounter;
 	}
 
 }

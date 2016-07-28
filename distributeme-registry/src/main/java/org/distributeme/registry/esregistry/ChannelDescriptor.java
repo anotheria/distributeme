@@ -29,8 +29,8 @@ public class ChannelDescriptor {
 	 */
 	public ChannelDescriptor(String aName){
 		name = aName;
-		suppliers = new CopyOnWriteArrayList<ServiceDescriptor>();
-		consumers = new CopyOnWriteArrayList<ServiceDescriptor>();
+		suppliers = new CopyOnWriteArrayList<>();
+		consumers = new CopyOnWriteArrayList<>();
 	}
 	/**
 	 * Adds a supplier to the channel.
@@ -99,6 +99,6 @@ public class ChannelDescriptor {
 	}
 	
 	@Override public String toString(){
-		return getName()+", Suppliers: "+getSuppliers()+", Consumers: "+getConsumers();
+        return name +", Suppliers: "+ suppliers +", Consumers: "+ consumers;
 	}
 }

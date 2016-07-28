@@ -29,7 +29,7 @@ public enum LifecycleComponentImpl implements LifecycleComponent{
 	 * Singleton constructor.
 	 */
 	private LifecycleComponentImpl(){
-		publicServices = new ConcurrentHashMap<String, ServiceAdapter>();
+		publicServices = new ConcurrentHashMap<>();
 	}
 	
 	@Override
@@ -49,9 +49,8 @@ public enum LifecycleComponentImpl implements LifecycleComponent{
 
 	@Override
 	public List<String> getPublicServices() {
-		ArrayList<String> ret = new ArrayList<String>();
-		ret.addAll(publicServices.keySet());
-		return ret;
+		List<String> ret = new ArrayList<>(publicServices.keySet());
+        return ret;
 	}
 
 	@Override
@@ -101,7 +100,7 @@ public enum LifecycleComponentImpl implements LifecycleComponent{
 
 	@Override
 	public Map<String, HealthStatus> getHealthStatuses() {
-		HashMap<String, HealthStatus> ret = new HashMap<String, HealthStatus>();
+		Map<String, HealthStatus> ret = new HashMap<>();
 		for (String id : publicServices.keySet())
 			ret.put(id, getHealthStatus(id));
 		return ret;

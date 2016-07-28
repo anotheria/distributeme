@@ -51,7 +51,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 		DistributeMe typeAnnotation = type.getAnnotation(DistributeMe.class);
 		if (!typeAnnotation.asynchSupport())
 			return;
-		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getAsynchStubName(type));
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+ '.' +getAsynchStubName(type));
 		PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
@@ -82,7 +82,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 		writeImport(AtomicLong.class);
 		emptyline();
 		
-		writeString("public class "+getAsynchStubName(type)+" implements "+getAsynchInterfaceName(type)+"{");
+		writeString("public class "+getAsynchStubName(type)+" implements "+getAsynchInterfaceName(type)+ '{');
 		increaseIdent();
 		emptyline();
 		
@@ -98,7 +98,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 			if (logWriterClazzValue==null){
 				logWriterClazzName = SysErrorLogWriter.class.getName();
 			}else{
-				logWriterClazzName = ""+logWriterClazzValue.getValue();
+				logWriterClazzName = String.valueOf(logWriterClazzValue.getValue());
 			}
 			
 			logWriter = (LogWriter)(Class.forName(logWriterClazzName).newInstance());
@@ -110,7 +110,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 		//System.out.println("====================");
 
 		String loggerInitialization = logWriter.createLoggerInitialization(getStubName(type));
-		if (loggerInitialization!=null && loggerInitialization.length()>0)
+		if (loggerInitialization!=null && !loggerInitialization.isEmpty())
 			writeStatement(loggerInitialization);
 		emptyline();
 	
@@ -125,34 +125,34 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 		//create AUTO constructor
 		writeString("public "+getAsynchStubName(type)+"(){");
 		increaseIdent();
-		writeStatement("this(ServiceLocator.getRemote("+type.getSimpleName().toString()+".class))");
-		closeBlock();
+		writeStatement("this(ServiceLocator.getRemote("+ type.getSimpleName() +".class))");
+		closeBlockNEW();
 		emptyline();
 	
 		emptyline();
-		writeString("public "+getAsynchStubName(type)+"("+getInterfaceName(type)+" aTarget){");
+		writeString("public "+getAsynchStubName(type)+ '(' +getInterfaceName(type)+" aTarget){");
 		increaseIdent();
 		writeStatement("diMeTarget = aTarget");
 		if (typeAnnotation.asynchExecutorPoolSize()==-1){
 			//use defaults
 			writeStatement("diMeExecutor = Executors.newFixedThreadPool(Defaults.getAsynchExecutorPoolSize())");
 		}else{
-			writeStatement("diMeExecutor = Executors.newFixedThreadPool("+typeAnnotation.asynchExecutorPoolSize()+")");
+			writeStatement("diMeExecutor = Executors.newFixedThreadPool("+typeAnnotation.asynchExecutorPoolSize()+ ')');
 		}
 		
-		closeBlock();
+		closeBlockNEW();
 		emptyline();
 	
 		////////// METHODS ///////////
 		for (ExecutableElement method : methods){
-			writeString("public "+getStubMethodDeclaration(method)+"{");
+			writeString("public "+getStubMethodDeclaration(method)+ '{');
 			increaseIdent();
 			writeStatement("SingleCallHandler diMeCallHandler = new SingleCallHandler()");
 			String callParams = getStubParametersCall(method);
-			if (callParams.length()>0)
+			if (!callParams.isEmpty())
 				callParams += ", ";
 			callParams += "diMeCallHandler";
-			writeStatement(getAsynchMethodName(method)+"("+callParams+")");
+			writeStatement(getAsynchMethodName(method)+ '(' +callParams+ ')');
 			writeString("try{");
 			increaseIdent();
 			
@@ -160,13 +160,13 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 				//use defaults
 				writeStatement("diMeCallHandler.waitForResults()");
 			}else{
-				writeStatement("diMeCallHandler.waitForResults("+typeAnnotation.asynchCallTimeout()+")");
+				writeStatement("diMeCallHandler.waitForResults("+typeAnnotation.asynchCallTimeout()+ ')');
 			}
 			
 			decreaseIdent();
 			writeString("}catch(InterruptedException e){");
 			increaseIdent();
-			closeBlock();
+			closeBlockNEW();
 			
 			writeString("if (!diMeCallHandler.isFinished())");
 			writeIncreasedStatement("throw new CallTimeoutedException()");
@@ -184,10 +184,10 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 			writeStatement("Exception exceptionInMethod = diMeCallHandler.getReturnException()");
 			writeString("if (exceptionInMethod instanceof RuntimeException)");
 			writeIncreasedStatement("throw (RuntimeException)exceptionInMethod");
-			if (method.getThrownTypes().size()>0){
+			if (!method.getThrownTypes().isEmpty()){
 				for (TypeMirror refType : method.getThrownTypes()){
-					writeString("if (exceptionInMethod instanceof "+refType.toString()+")");
-					writeIncreasedStatement("throw ("+refType.toString()+")exceptionInMethod");
+					writeString("if (exceptionInMethod instanceof "+ refType + ')');
+					writeIncreasedStatement("throw ("+ refType +")exceptionInMethod");
 				}
 			}
 			
@@ -195,12 +195,12 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 			writeStatement("throw new RuntimeException("+quote("Shouldn't happen, unexpected exception of class ")+"+exceptionInMethod.getClass().getName()+"+quote(" thrown by method")+", exceptionInMethod)");
 			closeBlock("if isError");
 
-			writeStatement("throw new IllegalStateException("+quote("You can't be here ;-)")+")");
+			writeStatement("throw new IllegalStateException("+quote("You can't be here ;-)")+ ')');
 			closeBlock(getStubMethodDeclaration(method));
 			emptyline();
 
 			
-			writeString("public "+getStubAsynchMethodDeclaration(method)+"{");
+			writeString("public "+getStubAsynchMethodDeclaration(method)+ '{');
 			increaseIdent();
 			writeString("diMeExecutor.execute(new Runnable() {");
 			increaseIdent();
@@ -211,7 +211,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 			//writeStatement("System.out.println(this+\" started \"+diMeRequestNumber)");
 			openTry();
 			writeCommentLine("make the real call here");
-			String call = "diMeTarget."+method.getSimpleName()+"("+getStubParametersCall(method)+")";
+			String call = "diMeTarget."+method.getSimpleName()+ '(' +getStubParametersCall(method)+ ')';
 			if (!isVoidReturn(method)){
 				call = method.getReturnType()+" diMeReturnValue = "+call;
 			}
@@ -222,7 +222,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 			increaseIdent();
 			openTry();
 			//writeStatement("System.out.println(\"Calling \"+diMeHandler+\".success(\"+"+(isVoidReturn(method)?"null":"diMeReturnValue")+"+\")\");" );
-			writeStatement("diMeHandler.success("+((!isVoidReturn(method)) ? "diMeReturnValue":"null")+")");
+			writeStatement("diMeHandler.success("+((!isVoidReturn(method)) ? "diMeReturnValue":"null")+ ')');
 			decreaseIdent();
 			writeString("}catch(Exception ignored){");
 			writeCommentLine("add exception warn here");
@@ -249,7 +249,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 			closeBlock("for");
 			closeBlock("if");
 			closeBlock("catch");
-			closeBlock();
+			closeBlockNEW();
 			decreaseIdent();
 			writeString("});");
 
@@ -261,10 +261,10 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 		writeString("public void shutdown(){");
 		increaseIdent();
 		writeStatement("diMeExecutor.shutdown()");
-		closeBlock();
+		closeBlockNEW();
 		
 		
-		closeBlock();
+		closeBlockNEW();
 		
 		
 		writer.flush();

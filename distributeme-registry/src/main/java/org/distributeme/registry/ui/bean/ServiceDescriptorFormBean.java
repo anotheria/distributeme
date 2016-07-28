@@ -1,5 +1,6 @@
 package org.distributeme.registry.ui.bean;
 
+import net.anotheria.util.BasicComparable;
 import net.anotheria.util.sorter.IComparable;
 
 import static org.distributeme.registry.ui.bean.ServiceDescriptorFormBeanSortType.*;
@@ -8,7 +9,7 @@ import static org.distributeme.registry.ui.bean.ServiceDescriptorFormBeanSortTyp
  * 
  * @author dsilenko
  */
-public class ServiceDescriptorFormBean implements net.anotheria.util.sorter.IComparable{
+public class ServiceDescriptorFormBean implements IComparable{
 	/**
 	 * The id of the service - usually a string delivered from the interface and package name.
 	 */
@@ -131,17 +132,17 @@ public class ServiceDescriptorFormBean implements net.anotheria.util.sorter.ICom
 		ServiceDescriptorFormBean bean = (ServiceDescriptorFormBean)anotherComprable;
 		switch(method){
 		case SORT_BY_SERVICEID:
-			return net.anotheria.util.BasicComparable.compareString(serviceId, bean.serviceId);
+			return BasicComparable.compareString(serviceId, bean.serviceId);
 		case SORT_BY_HOST:
-			return net.anotheria.util.BasicComparable.compareString(host, bean.host);
+			return BasicComparable.compareString(host, bean.host);
 		case SORT_BY_PORT:
-			return net.anotheria.util.BasicComparable.compareInt(port, bean.port);
+			return BasicComparable.compareInt(port, bean.port);
 		case SORT_BY_PROTOCOL:
-			return net.anotheria.util.BasicComparable.compareString(protocol, bean.protocol);
+			return BasicComparable.compareString(protocol, bean.protocol);
 		case SORT_BY_INSTANCEID:
-			return net.anotheria.util.BasicComparable.compareString(instanceId, bean.instanceId);
+			return BasicComparable.compareString(instanceId, bean.instanceId);
 		case SORT_BY_GLOBALSERVICEID:
-			return net.anotheria.util.BasicComparable.compareString(globalServiceId, bean.globalServiceId);
+			return BasicComparable.compareString(globalServiceId, bean.globalServiceId);
 		default:
 				throw new IllegalArgumentException("Unsupported method for sorting "+method);
 		

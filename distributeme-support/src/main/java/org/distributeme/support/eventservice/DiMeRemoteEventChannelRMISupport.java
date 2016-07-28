@@ -1,6 +1,15 @@
 package org.distributeme.support.eventservice;
 
-import net.anotheria.anoprise.eventservice.*;
+import net.anotheria.anoprise.eventservice.EventChannel;
+import net.anotheria.anoprise.eventservice.EventService;
+import net.anotheria.anoprise.eventservice.EventServiceFactory;
+import net.anotheria.anoprise.eventservice.EventServiceListener;
+import net.anotheria.anoprise.eventservice.EventTransportShell;
+import net.anotheria.anoprise.eventservice.ProxyType;
+import net.anotheria.anoprise.eventservice.RemoteEventChannelConsumerProxy;
+import net.anotheria.anoprise.eventservice.RemoteEventChannelSupplierProxy;
+import net.anotheria.anoprise.eventservice.RemoteEventChannelSupportFactory;
+import net.anotheria.anoprise.eventservice.RemoteEventServiceConsumer;
 import net.anotheria.util.IdCodeGenerator;
 import org.distributeme.core.RMIRegistryUtil;
 import org.distributeme.core.RegistryUtil;
@@ -14,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -23,7 +33,7 @@ public class DiMeRemoteEventChannelRMISupport implements RemoteEventChannelSuppo
 	
 	private static final String INSTANCE_ID = IdCodeGenerator.generateCode(10);
 	
-	private static final ConcurrentHashMap<ServiceDescriptor, EventServiceRMIBridgeService> bridges = new ConcurrentHashMap<ServiceDescriptor, EventServiceRMIBridgeService>();
+	private static final ConcurrentMap<ServiceDescriptor, EventServiceRMIBridgeService> bridges = new ConcurrentHashMap<>();
 
 	private static EventService es ;
 	
@@ -72,7 +82,7 @@ public class DiMeRemoteEventChannelRMISupport implements RemoteEventChannelSuppo
 		if (ret!=null)
 			return ret;
 		try{
-			@SuppressWarnings("unchecked")Class<EventServiceRMIBridgeService> clazz = (Class<EventServiceRMIBridgeService>)Class.forName("org.distributeme.support.eventservice.generated.RemoteEventServiceRMIBridgeServiceStub");
+			Class<EventServiceRMIBridgeService> clazz = (Class<EventServiceRMIBridgeService>)Class.forName("org.distributeme.support.eventservice.generated.RemoteEventServiceRMIBridgeServiceStub");
 			Constructor<EventServiceRMIBridgeService> c = clazz.getConstructor(ServiceDescriptor.class);
 			EventServiceRMIBridgeService newBridge = c.newInstance(descriptor);
 			EventServiceRMIBridgeService old = bridges.putIfAbsent(descriptor, newBridge);
@@ -82,13 +92,13 @@ public class DiMeRemoteEventChannelRMISupport implements RemoteEventChannelSuppo
 		}catch(NoSuchMethodException e){
 			throw new AssertionError("Misconfigured? can't find org.distributeme.support.eventservice.generated.RemoteEventServiceRMIBridgeServiceStub constructor");
 		}catch(Exception e){
-			LOG.error("getBridge("+descriptor+")", e);
+			LOG.error("getBridge("+descriptor+ ')', e);
 		}
 		return null;
 	}
 	
 	private void localConsumerProxyCreated(String channelName){
-		ServiceDescriptor me = getHomeReference();
+        ServiceDescriptor me = descriptor;
 		
 		List<ServiceDescriptor> suppliers = EventServiceRegistryUtil.registerConsumerAtRegistryAndGetSuppliers(channelName, descriptor);
 		
@@ -117,14 +127,11 @@ public class DiMeRemoteEventChannelRMISupport implements RemoteEventChannelSuppo
 			}
 			LOG.debug("Registering @ "+supplier);
 			bridge.registerRemoteConsumer(channelName, descriptor);
-		}catch(EventServiceRMIBridgeServiceException e){
-			LOG.error("can't connect to : registerAsConsumerAtRemoteSupplier("+channelName+", "+supplier+")", e);
-			notifyBrokenSupplier(supplier);
-		}catch(RuntimeException e){
-			LOG.error("can't connect to : registerAsConsumerAtRemoteSupplier("+channelName+", "+supplier+")", e);
+		}catch(EventServiceRMIBridgeServiceException | RuntimeException e){
+			LOG.error("can't connect to : registerAsConsumerAtRemoteSupplier("+channelName+", "+supplier+ ')', e);
 			notifyBrokenSupplier(supplier);
 		}
-	}
+    }
 	
 	private void notifyBrokenSupplier(ServiceDescriptor supplier){
 		try{
@@ -153,7 +160,7 @@ public class DiMeRemoteEventChannelRMISupport implements RemoteEventChannelSuppo
 	}
 
 	private void localSupplierProxyCreated(String channelName){
-		final ServiceDescriptor me = getHomeReference();
+        final ServiceDescriptor me = descriptor;
 		
 		List<ServiceDescriptor> consumers = EventServiceRegistryUtil.registerSupplierAtRegistryAndGetConsumers(channelName, me);
 		
@@ -211,7 +218,7 @@ public class DiMeRemoteEventChannelRMISupport implements RemoteEventChannelSuppo
 	void registerRemoteConsumer(String channelName, ServiceDescriptor myReference){
 		EventChannel channel = es.obtainEventChannel(channelName, ProxyType.REMOTE_CONSUMER_PROXY);
 		LOG.debug("REGISTER REMOTE CONSUMER @ channel "+channel+", consumer: "+myReference);
-		RemoteConsumerWrapper wrapper = new RemoteConsumerWrapper(this, channelName, myReference, getBridge(myReference));
+		RemoteEventServiceConsumer wrapper = new RemoteConsumerWrapper(this, channelName, myReference, getBridge(myReference));
 		((DiMeRemoteEventChannelConsumerProxy)channel).addRemoteConsumer(wrapper);
 		LOG.debug("REGISTER REMOTE CONSUMER @ channel "+channel+", consumer: "+myReference+" DONE!");
 	}

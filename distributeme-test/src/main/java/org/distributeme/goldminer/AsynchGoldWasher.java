@@ -14,12 +14,12 @@ public class AsynchGoldWasher {
 		long start = System.currentTimeMillis();
 		MultiCallCollector collector = new MultiCallCollector(calls);
 		for (int i=0; i<calls; i++){
-			asynchService.asynchWashGold(washTime*1000L, collector.createSubCallHandler(""+i));
+			asynchService.asynchWashGold(washTime*1000L, collector.createSubCallHandler(String.valueOf(i)));
 		}
 		collector.waitForResults(11000);
 		int washed = 0;
 		for (int i=0; i<calls; i++){
-			washed += (Integer)collector.getReturnValue(""+i);
+			washed += (Integer)collector.getReturnValue(String.valueOf(i));
 		}
 		
 		long duration = System.currentTimeMillis() - start;

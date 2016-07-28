@@ -73,7 +73,7 @@ public class InterceptorResponse {
 	}
 	
 	public String toString(){
-		return "InterceptionResponse "+getCommand();
+        return "InterceptionResponse "+ command;
 	}
 
 	

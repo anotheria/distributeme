@@ -37,6 +37,6 @@ public class GenericRouterConfiguration {
 
 	@Override
 	public String toString(){
-		return "NumberOfInstances: "+getNumberOfInstances()+", blacklistTime: "+getBlacklistTime();
+        return "NumberOfInstances: "+ numberOfInstances +", blacklistTime: "+ blacklistTime;
 	}
 }

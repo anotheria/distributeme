@@ -1,9 +1,9 @@
 package org.distributeme.test.lifecycle;
 
 import org.distributeme.core.ServiceDescriptor;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.input.SAXBuilder;
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -15,10 +15,10 @@ public class AbstractLifecycleTest {
 		reader.setValidation(false);
 
 		Document doc = reader.build(new StringReader(content));
-		ArrayList<ServiceDescriptor> ret = new ArrayList<ServiceDescriptor>();
+		List<ServiceDescriptor> ret = new ArrayList<>();
 		Element root = doc.getRootElement();
 	
-		@SuppressWarnings("unchecked")List<Element> services = root.getChildren();
+		List<Element> services = root.getChildren();
 		for (Element service : services){
 			String regString = service.getAttributeValue("registrationString");
 			ServiceDescriptor sd = ServiceDescriptor.fromRegistrationString(regString);

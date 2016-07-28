@@ -4,6 +4,7 @@ import net.anotheria.moskito.webui.embedded.StartMoSKitoInspectBackendForRemote;
 import org.distributeme.core.ServiceLocator;
 
 import java.util.Collection;
+import java.util.Deque;
 import java.util.LinkedList;
 
 /**
@@ -40,7 +41,7 @@ public class RemoteClient {
 			ret = service.getListObject(new ListObjectId(i));
 			if (ret == null)
 				throw new IllegalArgumentException("Didn't get object with id "+i);
-			if (!ret.toString().endsWith(""+i))
+			if (!ret.toString().endsWith(String.valueOf(i)))
 				throw new IllegalArgumentException(ret+" doesn't end with "+i);
 
 		}
@@ -53,7 +54,7 @@ public class RemoteClient {
 
 		System.out.println("===============");
 		System.out.println("Getting 10 objects at once");
-		LinkedList<ListObjectId> listObjectIds = new LinkedList<ListObjectId>();
+		Deque<ListObjectId> listObjectIds = new LinkedList<>();
 		for (int i=0; i<10; i++) {
 			listObjectIds.add(new ListObjectId(i));
 		}

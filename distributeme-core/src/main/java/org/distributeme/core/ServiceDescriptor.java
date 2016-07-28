@@ -99,11 +99,11 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 	public ServiceDescriptor(Protocol aProtocol, String aServiceId, String anInstanceId, String aHost, int aPort, long aTimestamp){
 		if (aProtocol==null)
 			throw new IllegalArgumentException("Null protocol is not allowed");
-		if (aServiceId==null || aServiceId.equals(""))
+		if (aServiceId==null || aServiceId.isEmpty())
 			throw new IllegalArgumentException("Null or empty serviceId is not allowed");
-		if (anInstanceId==null || anInstanceId.equals(""))
+		if (anInstanceId==null || anInstanceId.isEmpty())
 			throw new IllegalArgumentException("Null or empty instanceId is not allowed");
-		if (aHost==null || aHost.equals(""))
+		if (aHost==null || aHost.isEmpty())
 			throw new IllegalArgumentException("Null or empty host is not allowed");
 		
 		protocol = aProtocol;
@@ -122,7 +122,7 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 	public ServiceDescriptor(Protocol aProtocol, String aServiceId){
 		if (aProtocol==null)
 			throw new IllegalArgumentException("Null protocol is not allowed");
-		if (aServiceId==null || aServiceId.equals(""))
+		if (aServiceId==null || aServiceId.isEmpty())
 			throw new IllegalArgumentException("Null or empty serviceId is not allowed");
 		protocol = aProtocol;
 		serviceId = aServiceId;

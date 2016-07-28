@@ -2,7 +2,7 @@ package org.distributeme.test.lifecycle;
 
 import org.distributeme.core.RegistryUtil;
 import org.distributeme.core.ServiceDescriptor;
-import org.distributeme.support.lifecycle.LifecycleSupportService;
+import org.distributeme.core.lifecycle.LifecycleComponent;
 import org.distributeme.support.lifecycle.generated.LifecycleSupportServiceConstants;
 import org.distributeme.support.lifecycle.generated.RemoteLifecycleSupportServiceStub;
 
@@ -23,7 +23,7 @@ public class ShutdownAll extends AbstractLifecycleTest{
 			
 			ServiceDescriptor lifeCycleDescriptor = descriptor.changeServiceId(LifecycleSupportServiceConstants.getServiceId());
 			try{
-				LifecycleSupportService service = new RemoteLifecycleSupportServiceStub(lifeCycleDescriptor);
+				LifecycleComponent service = new RemoteLifecycleSupportServiceStub(lifeCycleDescriptor);
 				service.shutdown("Killed by "+ShutdownAll.class);
 				
 			}catch(Exception e){

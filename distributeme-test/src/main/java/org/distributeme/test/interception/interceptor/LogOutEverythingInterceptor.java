@@ -20,22 +20,22 @@ abstract class LogOutEverythingInterceptor extends SinglePhaseInterceptor{
 	protected InterceptorResponse processPhase(AbstractCallContext callContext,
 			InterceptionContext iContext) {
 		
-		StringBuilder output = new StringBuilder("-"+getMessage()+"- ").append(getCallNumber(iContext)).append(" ");
-		output.append(iContext.getCurrentPhase()).append(" ").append(callContext.getMethodName()).append("(");
+		StringBuilder output = new StringBuilder('-' +getMessage()+"- ").append(getCallNumber(iContext)).append(' ');
+		output.append(iContext.getCurrentPhase()).append(' ').append(callContext.getMethodName()).append('(');
 		StringBuilder params = new StringBuilder();
 		for (Object p : callContext.getParameters()){
 			if (params.length()!=0)
 				params.append(", ");
 			params.append(p);
 		}
-		output.append(params).append(")");
+		output.append(params).append(')');
 		if (iContext.getReturnValue()!=null){
-			output.append(" RETURN: "+iContext.getReturnValue());
+			output.append(" RETURN: ").append(iContext.getReturnValue());
 		}
 		if (iContext.getException()!=null){
-			output.append(" EXCEPTION: "+iContext.getException());
+			output.append(" EXCEPTION: ").append(iContext.getException());
 		}
-		System.out.println(output.toString());
+		System.out.println(output);
 		return InterceptorResponse.CONTINUE;
 	}
 	
@@ -44,7 +44,7 @@ abstract class LogOutEverythingInterceptor extends SinglePhaseInterceptor{
 	private String getCallNumber(InterceptionContext iContext){
 		String currentNumber = (String) iContext.getLocalStore().get(LogOutEverythingInterceptor.class);
 		if (currentNumber==null){
-			currentNumber = ""+callCounter.incrementAndGet();
+			currentNumber = String.valueOf(callCounter.incrementAndGet());
 			iContext.getLocalStore().put(LogOutEverythingInterceptor.class, currentNumber);
 		}
 		return currentNumber;

@@ -39,16 +39,16 @@ public class RoutingStats extends AbstractStats implements RoutingStatsCollector
 		}
 
 		public static List<String> getStatNames() {
-			List<String> ret = new ArrayList<String>(StatDef.values().length);
+			List<String> ret = new ArrayList<>(StatDef.values().length);
 			for (StatDef value : StatDef.values()) {
-				ret.add(value.getStatName());
+                ret.add(value.statName);
 			}
 			return ret;
 		}
 
 		public static StatDef getValueByName(String statName) {
 			for (StatDef value : StatDef.values()) {
-				if (value.getStatName().equals(statName)) {
+                if (value.statName.equals(statName)) {
 					return value;
 				}
 			}
@@ -66,16 +66,16 @@ public class RoutingStats extends AbstractStats implements RoutingStatsCollector
 	private StatValue retryDecision;
 	private StatValue blackListed;
 
-	private HashMap<String, StatValue> name2value = new HashMap<String, StatValue>();
+	private Map<String, StatValue> name2value = new HashMap<>();
 
 	public RoutingStats(String name) {
 		super(name);
 
-		requestRoutedTo = StatValueFactory.createStatValue(Long.valueOf(0), StatDef.RequestRoutedTo.getStatName(), Constants.getDefaultIntervals());
-		failedCall = StatValueFactory.createStatValue(Long.valueOf(0), StatDef.FailedCall.getStatName(), Constants.getDefaultIntervals());
-		failDecision = StatValueFactory.createStatValue(Long.valueOf(0), StatDef.FailDecision.getStatName(), Constants.getDefaultIntervals());
-		retryDecision = StatValueFactory.createStatValue(Long.valueOf(0), StatDef.RetryDecision.getStatName(), Constants.getDefaultIntervals());
-		blackListed = StatValueFactory.createStatValue(Long.valueOf(0), StatDef.Blacklisted.getStatName(), Constants.getDefaultIntervals());
+		requestRoutedTo = StatValueFactory.createStatValue(0L, StatDef.RequestRoutedTo.getStatName(), Constants.getDefaultIntervals());
+		failedCall = StatValueFactory.createStatValue(0L, StatDef.FailedCall.getStatName(), Constants.getDefaultIntervals());
+		failDecision = StatValueFactory.createStatValue(0L, StatDef.FailDecision.getStatName(), Constants.getDefaultIntervals());
+		retryDecision = StatValueFactory.createStatValue(0L, StatDef.RetryDecision.getStatName(), Constants.getDefaultIntervals());
+		blackListed = StatValueFactory.createStatValue(0L, StatDef.Blacklisted.getStatName(), Constants.getDefaultIntervals());
 
 		name2value.put(StatDef.RequestRoutedTo.getStatName(), requestRoutedTo);
 		name2value.put(StatDef.FailedCall.getStatName(), failedCall);
@@ -147,7 +147,7 @@ public class RoutingStats extends AbstractStats implements RoutingStatsCollector
 		Set<Map.Entry<String, StatValue>> entries = name2value.entrySet();
 		for (Map.Entry<String, StatValue> entry : entries){
 			if (ret.length()>0)
-				ret.append(" ");
+				ret.append(' ');
 			ret.append(entry.getKey()).append(": ").append(entry.getValue().getValueAsLong());
 		}
 

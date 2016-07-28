@@ -18,7 +18,7 @@ public class SysErrorLogWriter implements LogWriter{
 
 	@Override
 	public String createErrorOutput(String message) {
-		return "System.err.println("+message+")"; 
+		return "System.err.println("+message+ ')';
 	}
 
 	@Override

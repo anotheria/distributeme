@@ -29,7 +29,7 @@ public class MultiCallCollector {
 	public MultiCallCollector(int aNumberOfCalls){
 		numberOfCalls = aNumberOfCalls;
 		latch = new CountDownLatch(numberOfCalls);
-		handlers = new ConcurrentHashMap<String, MultiCallCollector.SubCallBackHandler>();
+		handlers = new ConcurrentHashMap<>();
 	}
 	
 	public void waitForResults(long timeout) throws InterruptedException{

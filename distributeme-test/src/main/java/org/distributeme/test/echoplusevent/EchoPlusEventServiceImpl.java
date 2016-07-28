@@ -7,8 +7,7 @@ public class EchoPlusEventServiceImpl extends EchoServiceImpl implements EchoPlu
 	
 	
 	public EchoPlusEventServiceImpl() {
-		super();
-		new Thread(){
+        new Thread(){
 			public void run(){
 				System.out.println("Starting PUSH Thread");
 

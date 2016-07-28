@@ -33,14 +33,14 @@ public class GeneratorProcessorFactory implements Processor {
     /**
      * Constant list for supported annotations.
      */
-    private static final Set<String> supportedAnnotations = new HashSet<String>(Arrays.asList(
+    private static final Set<String> supportedAnnotations = new HashSet<>(Arrays.asList(
             "org.distributeme.annotation.DistributeMe",
             "org.distributeme.annotation.WebServiceMe"
     ));
     /**
      * Constant list for supported options.
      */
-    private static final Set<String> supportedOptions = new HashSet<String>();
+    private static final Set<String> supportedOptions = new HashSet<>();
 
     private ProcessingEnvironment environment;
 
@@ -49,7 +49,7 @@ public class GeneratorProcessorFactory implements Processor {
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         this.environment = processingEnv;
-        wsGenerators = new ArrayList<WebServiceMeGenerator>();
+        wsGenerators = new ArrayList<>();
         wsGenerators.add(new ServiceProxyGenerator(environment));
         wsGenerators.add(new ConfigurationGenerator(environment));
     }

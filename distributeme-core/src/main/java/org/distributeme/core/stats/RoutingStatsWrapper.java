@@ -34,7 +34,7 @@ public class RoutingStatsWrapper implements RoutingStatsCollector{
 	@Override
 	public void addFailDecision() {
 		if (log.isDebugEnabled()){
-			log.debug(""+serviceId+" - added decision to fail");
+			log.debug(serviceId + " - added decision to fail");
 		}
 		if (caseStats != null)
 			caseStats.addFailDecision();
@@ -45,7 +45,7 @@ public class RoutingStatsWrapper implements RoutingStatsCollector{
 	@Override
 	public void addFailedCall() {
 		if (log.isDebugEnabled()){
-			log.debug(""+serviceId+" - call failed");
+			log.debug(serviceId + " - call failed");
 		}
 		if (caseStats != null)
 			caseStats.addFailedCall();
@@ -56,7 +56,7 @@ public class RoutingStatsWrapper implements RoutingStatsCollector{
 	@Override
 	public void addRetryDecision() {
 		if (log.isDebugEnabled()){
-			log.debug(""+serviceId+" - added decision to retry call");
+			log.debug(serviceId + " - added decision to retry call");
 		}
 
 		if (caseStats != null)
@@ -68,7 +68,7 @@ public class RoutingStatsWrapper implements RoutingStatsCollector{
 	@Override
 	public void addBlacklisted() {
 		if (log.isDebugEnabled()){
-			log.debug(""+serviceId+" - call canceled due to blacklisting");
+			log.debug(serviceId + " - call canceled due to blacklisting");
 		}
 
 		if (caseStats != null)
@@ -80,7 +80,7 @@ public class RoutingStatsWrapper implements RoutingStatsCollector{
 	@Override
 	public void addRequestRoutedTo() {
 		if (log.isDebugEnabled()){
-			log.debug(""+serviceId+" - new request will be sent to");
+			log.debug(serviceId + " - new request will be sent to");
 		}
 
 		if (caseStats != null)

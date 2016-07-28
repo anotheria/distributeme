@@ -86,9 +86,8 @@ public final class MetaRegistryImpl implements MetaRegistry{
 	}
 
 	@Override public List<ServiceDescriptor> list(){
-		ArrayList<ServiceDescriptor> ret = new ArrayList<ServiceDescriptor>();
-		ret.addAll(bindings.values());
-		return ret;
+		List<ServiceDescriptor> ret = new ArrayList<>(bindings.values());
+        return ret;
 	}
 
 	private static class MetaRegistryImplHolder {
@@ -109,8 +108,8 @@ public final class MetaRegistryImpl implements MetaRegistry{
 	}
 	
 	void reset(){
-		bindings = new ConcurrentHashMap<String, ServiceDescriptor>();
-		listeners = new CopyOnWriteArrayList<MetaRegistryListener>();		
+		bindings = new ConcurrentHashMap<>();
+		listeners = new CopyOnWriteArrayList<>();
 	}
 	 
 

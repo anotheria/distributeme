@@ -30,13 +30,13 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 
 	@Override
 	public void generate(TypeElement type) {
-		PrintWriter writer = createSourceFile(type.getSimpleName().toString().toString(), getWSProxyPackage(type), getWSProxySimpleName(type));
+		PrintWriter writer = createSourceFile(type.getSimpleName().toString(), getWSProxyPackage(type), getWSProxySimpleName(type));
 		setWriter(writer);
 
 		WebServiceMe ann = type.getAnnotation(WebServiceMe.class);
 
 		// package
-		writeString("package " + getWSProxyPackage(type) + ";");
+		writeString("package " + getWSProxyPackage(type) + ';');
 		emptyline();
 		// imports
 		writeImport(getPackageOf(type).getQualifiedName().toString(), type.getSimpleName().toString());
@@ -57,7 +57,7 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 		emptyline();
 		// class
 		writeString("@WebService");
-		writeString("public class " + getWSProxySimpleName(type) + " implements " + type.getSimpleName().toString() + " {");
+		writeString("public class " + getWSProxySimpleName(type) + " implements " + type.getSimpleName() + " {");
 		increaseIdent();
 		emptyline();
 		// variables
@@ -75,8 +75,8 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 			writeIncreasedString("new ServiceStatsCallHandler(),");
 			writeIncreasedString("new ServiceStatsFactory(),");
 			writeIncreasedString(quote(type.getSimpleName().toString()) + ", ");
-			writeIncreasedString(quote("service") + ",");
-			writeIncreasedString(quote("default") + ",");
+			writeIncreasedString(quote("service") + ',');
+			writeIncreasedString(quote("default") + ',');
 			writeIncreasedString(getImplementedInterfacesAsString(type));
 			writeString(");");
 			emptyline();
@@ -88,7 +88,7 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.ONE_HOUR, new Log4JOutput(Logger.getLogger(\"Moskito1h\")))");
 			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.ONE_DAY, new Log4JOutput(Logger.getLogger(\"Moskito1d\")))");
 		}
-		closeBlock();
+		closeBlockNEW();
 		emptyline();
 		// custom methods
 		writeString("private void init() {");
@@ -105,7 +105,7 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 		writeIncreasedStatement("LOGGER.error(\"init()\", e)");
 		writeIncreasedStatement("throw new RuntimeException(e)");
 		writeString("}");
-		closeBlock();
+		closeBlockNEW();
 		// methods
 		Collection<? extends ExecutableElement> methods = getAllDeclaredMethods(type);
 		for (ExecutableElement method : methods) {
@@ -114,7 +114,7 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 			writeString("@Override");
 			writeString("public " + methodDecl + " {");
 			increaseIdent();
-			if (exceptions.size() > 0) {
+			if (!exceptions.isEmpty()) {
 				writeString("try{");
 				increaseIdent();
 			}
@@ -125,28 +125,28 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 			Collection<? extends VariableElement> parameters = method.getParameters();
 			String paramCall = "";
 			for (VariableElement p : parameters) {
-				if (paramCall.length() != 0)
+				if (!paramCall.isEmpty())
 					paramCall += ", ";
 				paramCall += p.getSimpleName();
 			}
-			call += "(" + paramCall + ");";
+			call += '(' + paramCall + ");";
 			writeString(call);
-			if (exceptions.size() > 0) {
+			if (!exceptions.isEmpty()) {
 				decreaseIdent();
 
 				for (TypeMirror exc : exceptions) {
-					writeString("} catch (" + exc.toString() + " e) {");
+					writeString("} catch (" + exc + " e) {");
 					writeIncreasedStatement("LOGGER.error(" + quote(method.getSimpleName() + "()") + ", e)");
 					writeIncreasedStatement("throw(e)");
 				}
 				writeString("}");
 			}
 
-			closeBlock();
+			closeBlockNEW();
 			emptyline();
 		}
 		// end
-		closeBlock();
+		closeBlockNEW();
 		closeWriter(writer);
 	}
 

@@ -47,7 +47,7 @@ public class ServiceInfo implements Serializable{
 	}
 	
 	@Override public String toString(){
-		return getServiceId()+" LastAccess: "+getLastAccessTimestamp()+", "+NumberUtils.makeISO8601TimestampString(getLastAccessTimestamp())+
-			" Creation: "+getCreationTimestamp()+", "+NumberUtils.makeISO8601TimestampString(getCreationTimestamp());
+        return serviceId +" LastAccess: "+ lastAccessTimestamp +", "+NumberUtils.makeISO8601TimestampString(lastAccessTimestamp)+
+			" Creation: "+ creationTimestamp +", "+NumberUtils.makeISO8601TimestampString(creationTimestamp);
 	}
 }

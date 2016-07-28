@@ -2,6 +2,7 @@ package org.distributeme.test.echoplusevent;
 
 import net.anotheria.anoprise.eventservice.Event;
 import net.anotheria.anoprise.eventservice.EventChannel;
+import net.anotheria.anoprise.eventservice.EventServiceConsumer;
 import net.anotheria.anoprise.eventservice.EventServiceFactory;
 import net.anotheria.anoprise.eventservice.EventServicePushConsumer;
 import net.anotheria.anoprise.metafactory.Extension;
@@ -12,12 +13,11 @@ import org.distributeme.test.echo.Echo;
 
 
 public class TestRemoteClient implements EventServicePushConsumer{
-	@SuppressWarnings("unchecked")
 	public static void main(String a[]) throws Exception{
 		MetaFactory.addFactoryClass(EchoPlusEventService.class, Extension.REMOTE, (Class<ServiceFactory<EchoPlusEventService>>)Class.forName("org.distributeme.test.echoplusevent.generated.RemoteEchoPlusEventServiceFactory"));
 		EchoPlusEventService service = MetaFactory.get(EchoPlusEventService.class, Extension.REMOTE);
 		DiMeRemoteEventChannelRMISupport.initEventService();
-		TestRemoteClient consumer = new TestRemoteClient();
+		EventServiceConsumer consumer = new TestRemoteClient();
 		EventChannel channel = EventServiceFactory.createEventService().obtainEventChannel("echoplusevent", consumer);
 		channel.addConsumer(consumer);
 		

@@ -29,7 +29,7 @@ public class RMIRegistryUtil {
 	/**
 	 * Reference to the rmi registry.
 	 */
-	private static final AtomicReference<Registry> reference = new AtomicReference<Registry>();
+	private static final AtomicReference<Registry> reference = new AtomicReference<>();
 	/**
 	 * Port on which the rmi registry exports its public api.
 	 */

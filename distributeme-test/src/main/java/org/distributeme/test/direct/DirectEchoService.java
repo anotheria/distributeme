@@ -11,5 +11,5 @@ import org.distributeme.annotation.DistributeMe;
  */
 @DistributeMe
 public interface DirectEchoService extends Service {
-	public int echo(int value) throws DirectServiceException;
+	int echo(int value) throws DirectServiceException;
 }

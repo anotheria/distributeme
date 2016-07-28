@@ -6,6 +6,9 @@ import net.anotheria.maf.action.ActionMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.List;
+
+import static com.sun.org.apache.xml.internal.serializer.utils.Utils.messages;
 
 /**
  * Base class for all registry actions.
@@ -36,7 +39,7 @@ public abstract class BaseAction implements Action{
 		req.setAttribute("section", getMenuSection());
 		req.setAttribute("title", getTitle());
 
-		@SuppressWarnings("unchecked")ArrayList<String> messages = (ArrayList<String>)req.getSession().getAttribute(SA_MESSAGES);
+		List<String> messages = (ArrayList<String>)req.getSession().getAttribute(SA_MESSAGES);
 		if (messages!=null){
 			req.setAttribute(SA_MESSAGES, messages);
 			req.getSession().removeAttribute(SA_MESSAGES);
@@ -55,9 +58,9 @@ public abstract class BaseAction implements Action{
 	protected abstract String getTitle();
 
 	protected void addFlashMessage(HttpServletRequest req, String msg){
-		@SuppressWarnings("unchecked")ArrayList<String> messages = (ArrayList<String>)req.getSession().getAttribute(SA_MESSAGES);
+		List<String> messages = (ArrayList<String>)req.getSession().getAttribute(SA_MESSAGES);
 		if (messages==null){
-			messages = new ArrayList<String>();
+			messages = new ArrayList<>();
 			req.getSession().setAttribute(SA_MESSAGES, messages);
 		}
 		messages.add(msg);

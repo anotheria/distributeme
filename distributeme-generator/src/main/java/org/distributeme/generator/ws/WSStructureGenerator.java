@@ -42,7 +42,7 @@ public class WSStructureGenerator extends AbstractGenerator {
 		try {
 			String url = ".." + File.separator + "ws" + File.separator + serviceName + File.separator;
 			url += relativePath + File.separator;
-			url += fileName + "." + extension;
+			url += fileName + '.' + extension;
 			FileObject fileObject = filer.createResource(StandardLocation.SOURCE_OUTPUT, "", url);
 			return new PrintWriter(fileObject.openWriter());
 		} catch (IOException e) {
@@ -91,11 +91,11 @@ public class WSStructureGenerator extends AbstractGenerator {
 	}
 
     protected static final String getWSProxySimpleName(Element type) {
-		return type.getSimpleName().toString() + "WebSkeleton";
+		return type.getSimpleName() + "WebSkeleton";
 	}
 
 	protected final String getWSProxyName(Element type) {
-		return getWSProxyPackage(type) + "." + getWSProxySimpleName(type);
+		return getWSProxyPackage(type) + '.' + getWSProxySimpleName(type);
 	}
 
 	protected static final String packageToFolderPath(String pkg) {

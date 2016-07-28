@@ -19,7 +19,7 @@ public enum AgencyImpl implements Agency{
 			log.debug("Incoming agent "+agentpackage);
 		final Agent agent = AgentPackageUtility.unpack(agentpackage);
 		//System.out.println("unpacked agent "+agent);
-		Thread agentThread = new Thread(new AgentRunnable(agent), "Agent "+agent.toString());
+		Thread agentThread = new Thread(new AgentRunnable(agent), "Agent "+ agent);
 		agentThread.start();
 	}
 	
@@ -50,7 +50,7 @@ public enum AgencyImpl implements Agency{
 			TransporterService transporter = new RemoteTransporterServiceStub(target);
 			transporter.receiveAndAwakeAgent(AgentPackageUtility.pack(agent));
 		}catch(TransporterServiceException e){
-			throw new AgencyException("sendAgent("+agent+", "+destination+")", e);
+			throw new AgencyException("sendAgent("+agent+", "+destination+ ')', e);
 		}
 	}
 	

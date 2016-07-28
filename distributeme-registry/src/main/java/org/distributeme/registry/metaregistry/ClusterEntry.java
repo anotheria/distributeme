@@ -45,7 +45,7 @@ public class ClusterEntry implements Location{
 	}
 	
 	@Override public String toString(){
-		return host+":"+port;
+		return host+ ':' +port;
 	}
 	
 	public boolean isMe(){

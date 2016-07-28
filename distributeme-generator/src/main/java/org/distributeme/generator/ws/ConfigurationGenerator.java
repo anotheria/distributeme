@@ -39,18 +39,18 @@ public class ConfigurationGenerator extends WSStructureGenerator implements WebS
 		writer.print("<web-app id=\"WebApp_ID\" version=\"2.4\" xmlns=\"http://java.sun.com/xml/ns/j2ee\"\n");
 		writer.print("\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
 		writer.print("\txsi:schemaLocation=\"http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd\">\n");
-		writer.print("\t<display-name>" + type.getSimpleName().toString() + "</display-name>\n");
+		writer.print("\t<display-name>" + type.getSimpleName() + "</display-name>\n");
 		writer.print("\t<listener>\n");
 		writer.print("\t\t<listener-class>com.sun.xml.ws.transport.http.servlet.WSServletContextListener</listener-class>\n");
 		writer.print("\t</listener>\n");
 		writer.print("\t<servlet>\n");
-		writer.print("\t\t<servlet-name>" + type.getSimpleName().toString() + "</servlet-name>\n");
+		writer.print("\t\t<servlet-name>" + type.getSimpleName() + "</servlet-name>\n");
 		writer.print("\t\t<servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>\n");
 		writer.print("\t\t<load-on-startup>1</load-on-startup>\n");
 		writer.print("\t</servlet>\n");
 		writer.print("\t<servlet-mapping>\n");
-		writer.print("\t\t<servlet-name>" + type.getSimpleName().toString() + "</servlet-name>\n");
-		writer.print("\t\t<url-pattern>/" + type.getSimpleName().toString() + "</url-pattern>\n");
+		writer.print("\t\t<servlet-name>" + type.getSimpleName() + "</servlet-name>\n");
+		writer.print("\t\t<url-pattern>/" + type.getSimpleName() + "</url-pattern>\n");
 		writer.print("\t</servlet-mapping>\n");
 		writer.print("</web-app>\n");
 
@@ -63,9 +63,9 @@ public class ConfigurationGenerator extends WSStructureGenerator implements WebS
 		writer.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 		writer.print("<endpoints xmlns='http://java.sun.com/xml/ns/jax-ws/ri/runtime' version='2.0'>\n");
 		writer.print("\t<endpoint\n");
-		writer.print("\t\tname='" + type.getSimpleName().toString() + "'\n");
+		writer.print("\t\tname='" + type.getSimpleName() + "'\n");
 		writer.print("\t\timplementation='" + getWSProxyName(type) + "'\n");
-		writer.print("\t\turl-pattern='/" + type.getSimpleName().toString() + "'/>\n");
+		writer.print("\t\turl-pattern='/" + type.getSimpleName() + "'/>\n");
 		writer.print("</endpoints>");
 
 		closeWriter(writer);

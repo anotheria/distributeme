@@ -29,7 +29,7 @@ public class ParameterBasedModRouter extends AbstractRouter implements Router{
 		
 		Object parameter = parameters.get(parameterPosition);
 		long parameterValue = getModableValue(parameter);
-		return callContext.getServiceId() + "_"+(parameterValue % mod);
+		return callContext.getServiceId() + '_' +(parameterValue % mod);
 	}
 
 	/**
@@ -58,14 +58,12 @@ public class ParameterBasedModRouter extends AbstractRouter implements Router{
 			String[] t = StringUtils.tokenize(parameter, ',');
 			mod = Integer.parseInt(t[0]);
 			parameterPosition = Integer.parseInt(t[1]);
-		}catch(NumberFormatException e){
+		}catch(NumberFormatException | ArrayIndexOutOfBoundsException e){
 			throw new AssertionError("Customization parameter does not consist of two comma-separated numbers "+parameter);
 		}catch(NullPointerException e){
 			throw new AssertionError("Customization parameter is obviously null "+parameter);
-		}catch(ArrayIndexOutOfBoundsException e){
-			throw new AssertionError("Customization parameter does not consist of two comma-separated numbers "+parameter);
 		}
-	}
+    }
 
 	public int getMod() {
 		return mod;

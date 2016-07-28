@@ -98,7 +98,7 @@ public final class MetaRegistryConfig implements Location {
 	}
 
 	@Override public String toString(){
-		return registryParentHost+":"+registryParentPort;
+		return registryParentHost+ ':' +registryParentPort;
 	}
 
 	@Override public String getHost() {

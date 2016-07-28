@@ -14,7 +14,7 @@ import java.util.TimerTask;
 public class TestAbortCallInterceptor extends AbstractClientSideRequestInterceptor{
 
 	//warning this is not threadsafe, but its only a test class, use concurrent hashmap or synchronize for prod.
-	private Map<Thread, Entry> activeCalls = new HashMap<Thread, TestAbortCallInterceptor.Entry>();
+	private Map<Thread, Entry> activeCalls = new HashMap<>();
 	
 	Timer timer;
 	

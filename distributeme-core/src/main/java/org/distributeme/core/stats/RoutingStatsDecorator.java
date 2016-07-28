@@ -59,7 +59,7 @@ public class RoutingStatsDecorator extends AbstractDecorator {
 	@Override
 	public List<StatValueAO> getValues(IStats statsObject, String interval, TimeUnit unit) {
 		RoutingStats stats = (RoutingStats)statsObject;
-		List<StatValueAO> ret = new ArrayList<StatValueAO>(CAPTIONS.length);
+		List<StatValueAO> ret = new ArrayList<>(CAPTIONS.length);
 		int i = 0;
 		ret.add(new LongValueAO(CAPTIONS[i++], stats.getRequestRoutedToCount(interval)));
 		ret.add(new LongValueAO(CAPTIONS[i++], stats.getFailedCallCount(interval)));

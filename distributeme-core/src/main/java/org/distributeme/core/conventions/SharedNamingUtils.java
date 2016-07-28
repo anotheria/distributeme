@@ -23,10 +23,10 @@ public class SharedNamingUtils {
 	 * @return
 	 */
 	public static final String getStubFactoryFullClassName(Class<? extends Service> serviceClazz){
-		return getPackageName(serviceClazz)+"."+"Remote"+serviceClazz.getSimpleName()+"Factory";
+		return getPackageName(serviceClazz)+ '.' +"Remote"+serviceClazz.getSimpleName()+"Factory";
 	}
 
 	public static final String getAsynchFactoryFullClassName(Class<? extends Service> serviceClazz){
-		return getPackageName(serviceClazz)+"."+"Asynch"+serviceClazz.getSimpleName()+"Factory";
+		return getPackageName(serviceClazz)+ '.' +"Asynch"+serviceClazz.getSimpleName()+"Factory";
 	}
 }

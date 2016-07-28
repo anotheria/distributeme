@@ -4,6 +4,7 @@ import net.anotheria.util.StringUtils;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.QualifiedNameable;
 import javax.lang.model.element.TypeElement;
 import javax.tools.FileObject;
 import javax.tools.StandardLocation;
@@ -28,7 +29,7 @@ public class ServerScriptGenerator extends AbstractGenerator implements Generato
 	 * @param type
 	 * @return
 	 */
-	private String makeTypeName(TypeElement type){
+	private String makeTypeName(QualifiedNameable type){
 		String fullName = type.getQualifiedName().toString().toLowerCase();
 		int lastDot = fullName.lastIndexOf('.');
 		if (lastDot == -1)
@@ -39,7 +40,7 @@ public class ServerScriptGenerator extends AbstractGenerator implements Generato
 		StringBuilder firstPartOfName = new StringBuilder();
 		for (int i=0; i<packageParts.length; i++){
 			String token = packageParts[i];
-			if (token != null && token.length()>0) {
+			if (token != null && !token.isEmpty()) {
 				if (i==packageParts.length-1){
 					firstPartOfName.append('-').append(token);
 				}else {
@@ -109,7 +110,7 @@ public class ServerScriptGenerator extends AbstractGenerator implements Generato
 		writeString("pidfile=${pidfile:=$tmpdir/"+getServerName(type)+".pid}");
 		
 		emptyline();
-		writeString("server='"+getPackageName(type) + "." + getServerName(type) +"'");
+		writeString("server='"+getPackageName(type) + '.' + getServerName(type) + '\'');
 		emptyline();
 		
 		writeString("isServerUp() {");

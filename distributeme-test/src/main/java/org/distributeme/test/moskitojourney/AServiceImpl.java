@@ -9,7 +9,7 @@ public class AServiceImpl implements AService{
 	@Override
 	public String aMethod(String param) throws AServiceException {
 		try{
-			return "a of ("+bService.bMethod(param)+")";
+			return "a of ("+bService.bMethod(param)+ ')';
 		}catch(BServiceException e){
 			throw new AServiceException("BService failed:", e);
 		}

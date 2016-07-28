@@ -12,6 +12,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This listener activates a UDP socket and listens for the incoming packets. If the packet contains the register command,
@@ -60,9 +61,9 @@ public class UDPReregistrationListener implements ServerLifecycleListener{
 							serverSocket.receive(incomingPacket);
 							String command = new String(incomingPacket.getData(), Charset.defaultCharset());
 							command = command.trim();
-							System.out.println("Incoming command: "+command+".");
+							System.out.println("Incoming command: "+command+ '.');
 
-							if (command != null && command.equals(CMD_REGISTER))
+							if (Objects.equals(command, CMD_REGISTER))
 								register();
 						} catch (IOException e) {
 							log.warn("Can't parse incoming packet", e);

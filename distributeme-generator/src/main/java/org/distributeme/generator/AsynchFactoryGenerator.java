@@ -29,7 +29,7 @@ public class AsynchFactoryGenerator extends AbstractGenerator implements Generat
 		if (!typeAnnotation.asynchSupport())
 			return;
 
-		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getAsynchFactoryName(type));
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+ '.' +getAsynchFactoryName(type));
 PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
@@ -54,11 +54,11 @@ PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		if (!ann.moskitoSupport()){
 			writeStatement("return instance");
 		}else{
-			String name = type.getSimpleName().toString()+"AsDiMe";
+			String name = type.getSimpleName() +"AsDiMe";
 			writeStatement("return ProxyUtils.createServiceInstance(instance, "+quote(name)+", \"remote-service\", \"default\", "+getImplementedInterfacesAsString(type)+", "+AsynchStub.class.getName()+".class, "+getAsynchInterfaceName(type)+".class)");
 		}
 		closeBlock("create");
-		closeBlock();
+		closeBlockNEW();
 		
 		
 		writer.flush();

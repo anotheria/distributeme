@@ -9,12 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DiMeRemoteEventChannelSupplierProxy implements RemoteEventChannelSupplierProxy{
 	
 	private String channelName;
-	private CopyOnWriteArrayList<EventChannelConsumerProxy> consumerProxies = new CopyOnWriteArrayList<EventChannelConsumerProxy>();
+	private List<EventChannelConsumerProxy> consumerProxies = new CopyOnWriteArrayList<>();
 	
 	private static Logger log = LoggerFactory.getLogger(DiMeRemoteEventChannelSupplierProxy.class);
 	

@@ -15,7 +15,7 @@ public class EventServiceRMIBridgeServiceFactory implements ServiceFactory<Event
 		((EventServiceImpl)es).setRemoteSupportFactory(supportObject);
 		es.addListener(supportObject);
 		
-		EventServiceRMIBridgeServiceImpl instance = new EventServiceRMIBridgeServiceImpl(supportObject);
+		EventServiceRMIBridgeService instance = new EventServiceRMIBridgeServiceImpl(supportObject);
 		return instance;
 		
 	}

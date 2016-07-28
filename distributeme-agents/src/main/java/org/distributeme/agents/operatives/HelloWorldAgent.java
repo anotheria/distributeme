@@ -37,7 +37,7 @@ public class HelloWorldAgent implements Agent{
 		}
 		
 		System.out.println("Trying to send agent to "+target);
-		HelloWorldAgent agent = new HelloWorldAgent();
+		Agent agent = new HelloWorldAgent();
 		AgencyImpl.INSTANCE.sendAgent(agent, ServiceDescriptor.fromSystemWideUniqueId(target));
 		System.out.println("done");
 	}
