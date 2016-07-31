@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sun.org.apache.xml.internal.serializer.utils.Utils.messages;
-
 /**
  * Base class for all registry actions.
  * @author lrosenberg
