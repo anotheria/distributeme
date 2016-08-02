@@ -33,7 +33,7 @@ public class KillInstance implements Agent{
 		}
 		
 		System.out.println("Trying to send agent to "+target);
-		KillInstance agent = new KillInstance();
+		Agent agent = new KillInstance();
 		AgencyImpl.INSTANCE.sendAgent(agent, ServiceDescriptor.fromSystemWideUniqueId(target));
 		System.out.println("done");
 	}

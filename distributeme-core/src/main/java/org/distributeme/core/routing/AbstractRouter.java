@@ -41,7 +41,7 @@ public abstract class AbstractRouter implements Router{
 
 	protected void setServiceId(String serviceId) {
 		this.serviceId = serviceId;
-		producer = new OnDemandStatsProducer<RoutingStats>(serviceId2ProducerId(serviceId), "router", "distributeme", RoutingStatsFactory.DEFAULT_INSTANCE);
+		producer = new OnDemandStatsProducer<>(serviceId2ProducerId(serviceId), "router", "distributeme", RoutingStatsFactory.DEFAULT_INSTANCE);
 		ProducerRegistryFactory.getProducerRegistryInstance().registerProducer(producer);
 	}
 
@@ -77,7 +77,7 @@ public abstract class AbstractRouter implements Router{
 		String tokens[] = StringUtils.tokenize(serviceId, '_');
 		StringBuilder ret = new StringBuilder();
 		for (int i =0; i<tokens.length-1; i++){
-			if (tokens[i].length()==0)
+			if (tokens[i].isEmpty())
 				continue;
 			if (ret.length()>0)
 				ret.append('_');

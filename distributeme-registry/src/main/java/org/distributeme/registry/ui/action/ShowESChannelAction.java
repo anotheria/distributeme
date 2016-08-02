@@ -26,9 +26,9 @@ public class ShowESChannelAction extends ESRegistryListAction{
 		ChannelDescriptor channel = getRegistry().getChannel(channelname);
 		
 		if (channel!=null){
-			if (channel.getSuppliers()!=null && channel.getSuppliers().size()>0)
+			if (channel.getSuppliers()!=null && !channel.getSuppliers().isEmpty())
 			req.setAttribute("suppliers", channel.getSuppliers());
-			if (channel.getConsumers()!=null && channel.getConsumers().size()>0)
+			if (channel.getConsumers()!=null && !channel.getConsumers().isEmpty())
 			req.setAttribute("consumers", channel.getConsumers());
 		}
 		

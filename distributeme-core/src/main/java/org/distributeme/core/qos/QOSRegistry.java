@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -28,12 +29,12 @@ public final class QOSRegistry {
 	/**
 	 * Currently running requests. They are inspected in regular intervals.
 	 */
-	private ConcurrentHashMap<String, QOSEntry> entries = new ConcurrentHashMap<String, QOSEntry>();
+	private Map<String, QOSEntry> entries = new ConcurrentHashMap<>();
 
 	/**
 	 * Currently blacklisted entries. Key is the service id.
 	 */
-	private ConcurrentHashMap<String,QOSEntry> blacklist = new ConcurrentHashMap<String, QOSEntry>();
+	private ConcurrentHashMap<String,QOSEntry> blacklist = new ConcurrentHashMap<>();
 
 	/**
 	 * Configuration.
@@ -98,10 +99,9 @@ public final class QOSRegistry {
 			while (true) {
 
 				//at the beginning we copy all old blacklist entries. If after the run something remains in this list, it means that the service went back to good and should be removed from blacklist.
-				HashMap<String, QOSEntry> oldBlackList = new HashMap<String, QOSEntry>();
-				oldBlackList.putAll(blacklist);
+				Map<String, QOSEntry> oldBlackList = new HashMap<>(blacklist);
 
-				Collection<QOSEntry> allEntries = entries.values();
+                Collection<QOSEntry> allEntries = entries.values();
 				//System.out.println("QOS has to check " + allEntries.size() + " --- timeout: " + configuration.getTimeoutBeforeBlackList());
 				for (QOSEntry entry : allEntries) {
 					//System.out.println("Currently running " + entry);

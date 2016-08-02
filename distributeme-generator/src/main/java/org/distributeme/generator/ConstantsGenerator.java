@@ -24,7 +24,7 @@ public class ConstantsGenerator extends AbstractGenerator implements Generator{
 
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
-		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getConstantsName(type));
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+ '.' +getConstantsName(type));
         PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
@@ -33,7 +33,7 @@ public class ConstantsGenerator extends AbstractGenerator implements Generator{
 		writeAnalyzerComments(type);
 		emptyline();
 		
-		writeString("public class "+getConstantsName(type)+"{");
+		writeString("public class "+getConstantsName(type)+ '{');
 		increaseIdent();
 		emptyline();
 
@@ -44,7 +44,7 @@ public class ConstantsGenerator extends AbstractGenerator implements Generator{
 		//writeStatement("this(new "+type.getAnnotation(DistributeMe.class).implName()+"())");
 		closeBlock("getServiceId");
 		
-		closeBlock();
+		closeBlockNEW();
 		
 		
 		writer.flush();

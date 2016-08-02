@@ -38,7 +38,7 @@ public class ConcurrencyControlStrategyConfiguration {
 	}
 
 	@Override public String toString(){
-		return "Client: "+getClientSideLimit()+", Server: "+getServerSideLimit();
+        return "Client: "+ clientSideLimit +", Server: "+ serverSideLimit;
 	}
 
 	@AfterConfiguration public void checkForNullValues(){

@@ -6,7 +6,7 @@ import net.anotheria.maf.action.ActionMapping;
 import net.anotheria.maf.bean.FormBean;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.core.lifecycle.HealthStatus;
-import org.distributeme.support.lifecycle.LifecycleSupportService;
+import org.distributeme.core.lifecycle.LifecycleComponent;
 import org.distributeme.support.lifecycle.generated.LifecycleSupportServiceConstants;
 import org.distributeme.support.lifecycle.generated.RemoteLifecycleSupportServiceStub;
 
@@ -28,7 +28,7 @@ public class RegistryPingAllAction extends BaseRegistryAction implements Action 
 			try{
 				ServiceDescriptor target = toPing.changeServiceId(LifecycleSupportServiceConstants.getServiceId());
 				addFlashMessage(req, "Pinging "+toPing.getSystemWideUniqueId());
-				LifecycleSupportService service = new RemoteLifecycleSupportServiceStub(target);
+				LifecycleComponent service = new RemoteLifecycleSupportServiceStub(target);
 
 				long start = System.currentTimeMillis();
 				boolean isOnline = service.isOnline();

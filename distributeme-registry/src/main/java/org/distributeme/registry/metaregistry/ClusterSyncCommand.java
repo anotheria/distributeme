@@ -42,7 +42,7 @@ public class ClusterSyncCommand {
 	}
 	
 	@Override public String toString(){
-		return operation.name()+" "+serviceDescriptor;
+		return operation.name()+ ' ' +serviceDescriptor;
 	}
 	
 	public Operation getOperation(){

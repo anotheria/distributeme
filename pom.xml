@@ -3,7 +3,7 @@
     <parent>
         <groupId>net.anotheria</groupId>
         <artifactId>parent</artifactId>
-        <version>2.7</version>
+        <version>2.8-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -15,9 +15,7 @@
     <description>parent for all distributeme projects</description>
 
     <properties>
-        <moskito-version>2.7.4</moskito-version>
-        <source-version>1.7</source-version>
-        <target-version>1.7</target-version>
+        <moskito-version>2.7.6-SNAPSHOT</moskito-version>
     </properties>
 
     <dependencyManagement>
@@ -25,7 +23,7 @@
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-util</artifactId>
-                <version>2.1.1</version>
+                <version>2.1.6-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
@@ -35,7 +33,7 @@
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-prise</artifactId>
-                <version>2.1.0</version>
+                <version>2.1.2</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
@@ -45,12 +43,12 @@
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-maf</artifactId>
-                <version>2.1.1</version>
+                <version>2.1.2-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>configureme</artifactId>
-                <version>2.3.0</version>
+                <version>2.3.3-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
@@ -104,25 +102,6 @@
         </dependencies>
     </dependencyManagement>
 
-    <!--
-  <dependencies>
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-     </dependency>
-	<dependency>
-  		<groupId>net.anotheria</groupId>
-  		<artifactId>ano-util</artifactId>
-	</dependency>
-	<dependency>
-  		<groupId>net.anotheria</groupId>
-  		<artifactId>ano-net</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>net.anotheria</groupId>
-		<artifactId>moskito-core</artifactId>
-	</dependency>
-  </dependencies> -->
     <modules>
         <module>distributeme-core</module>
         <module>distributeme-generator</module>
@@ -136,19 +115,5 @@
         <connection>scm:git:git@github.com:anotheria/distributeme.git</connection>
         <developerConnection>scm:git:git@github.com:anotheria/distributeme.git</developerConnection>
     </scm>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
-                <configuration>
-                    <source>${source-version}</source>
-                    <target>${target-version}</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

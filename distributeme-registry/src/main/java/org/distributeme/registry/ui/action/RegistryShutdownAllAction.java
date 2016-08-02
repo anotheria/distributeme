@@ -5,7 +5,7 @@ import net.anotheria.maf.action.ActionCommand;
 import net.anotheria.maf.action.ActionMapping;
 import net.anotheria.maf.bean.FormBean;
 import org.distributeme.core.ServiceDescriptor;
-import org.distributeme.support.lifecycle.LifecycleSupportService;
+import org.distributeme.core.lifecycle.LifecycleComponent;
 import org.distributeme.support.lifecycle.generated.LifecycleSupportServiceConstants;
 import org.distributeme.support.lifecycle.generated.RemoteLifecycleSupportServiceStub;
 
@@ -26,7 +26,7 @@ public class RegistryShutdownAllAction extends BaseRegistryAction implements Act
 		for (ServiceDescriptor toShutDown : descriptors){
 			try{
 				ServiceDescriptor target = toShutDown.changeServiceId(LifecycleSupportServiceConstants.getServiceId());
-				LifecycleSupportService service = new RemoteLifecycleSupportServiceStub(target);
+				LifecycleComponent service = new RemoteLifecycleSupportServiceStub(target);
 				service.shutdown("Shut down by registry on behalf of user from "+req.getRemoteAddr());
 				addFlashMessage(req, "Shutdown request sent to "+toShutDown);
 			}catch(Exception e){

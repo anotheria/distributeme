@@ -48,7 +48,7 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
-		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getSkeletonName(type));
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+ '.' +getSkeletonName(type));
         PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
@@ -125,9 +125,9 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 		writeString("public "+getSkeletonName(type)+"(){");
 		increaseIdent();
 		writeStatement("this(null)");
-		closeBlock();
+		closeBlockNEW();
 		emptyline();
-		writeString("public "+getSkeletonName(type)+"("+type.getQualifiedName()+" anImplementation){");
+		writeString("public "+getSkeletonName(type)+ '(' +type.getQualifiedName()+" anImplementation){");
 		increaseIdent();
 		writeStatement("created = System.currentTimeMillis()");
 		if (ann.moskitoSupport()){
@@ -137,8 +137,8 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 			writeIncreasedString("new ServiceStatsCallHandler(),");
 			writeIncreasedString("new ServiceStatsFactory(),");
 			writeIncreasedString(quote(type.getSimpleName().toString())+", ");
-			writeIncreasedString(quote("service")+",");
-			writeIncreasedString(quote("default")+",");
+			writeIncreasedString(quote("service")+ ',');
+			writeIncreasedString(quote("default")+ ',');
 			writeIncreasedString(getImplementedInterfacesAsString(type));
 			writeString(");");
 		
@@ -163,14 +163,14 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.FIFTEEN_MINUTES, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.15m\")))");
 				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.ONE_HOUR, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.1h\")))");
 				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.ONE_DAY, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.1d\")))");
-			closeBlock();
+			closeBlockNEW();
 			//END BUILTIN PRODUCERS LOGGING
 			
 			
 		}else{
 			writeStatement("implementation = anImplementation");
 		}
-		closeBlock();
+		closeBlockNEW();
 		emptyline();
 		
 		
@@ -179,7 +179,7 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 		for (ExecutableElement method : methods){
 			String methodDecl = getSkeletonMethodDeclaration(method);
 			List<? extends TypeMirror> exceptions = method.getThrownTypes();
-			writeString("public "+methodDecl+"{");
+			writeString("public "+methodDecl+ '{');
 			increaseIdent();
 			writeStatement("lastAccess = System.currentTimeMillis()");
 			writeStatement("ServerSideCallContext diMeCallContext = new ServerSideCallContext("+quote(method.getSimpleName())+", __transportableCallContext)");
@@ -187,7 +187,7 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 			writeStatement("ArrayList<Object> diMeParameters = new ArrayList<Object>()");
 			Collection<? extends VariableElement> parameters = method.getParameters();
 			for (VariableElement p : parameters){
-				writeStatement("diMeParameters.add("+p.getSimpleName()+")");
+				writeStatement("diMeParameters.add("+p.getSimpleName()+ ')');
 			}
 			writeStatement("diMeCallContext.setParameters(diMeParameters)");
 			writeStatement("InterceptionContext diMeInterceptionContext = new InterceptionContext()");
@@ -219,11 +219,11 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 			call += "implementation."+method.getSimpleName();
 			String paramCall = "";
 			for (VariableElement p : parameters){
-				if (paramCall.length()!=0)
+				if (!paramCall.isEmpty())
 					paramCall += ", ";
 				paramCall += p.getSimpleName();
 			}
-			call += "("+paramCall+");";
+			call += '(' +paramCall+");";
 			writeString(call);
 
 			if (method.getReturnType().toString().equals("void")){
@@ -239,7 +239,7 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 			decreaseIdent();
 
 			for (TypeMirror exc : exceptions) {
-				writeString("}catch(" + exc.toString() + " e){");
+				writeString("}catch(" + exc + " e){");
 				increaseIdent();
 				writeString("if (Verbosity.logServerSideExceptions())");
 				writeIncreasedStatement("log.error(" + quote(method.getSimpleName() + "()") + ", e)");
@@ -252,7 +252,7 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 			}
 			writeString("}");
 			
-			closeBlock();//method end
+			closeBlockNEW();//method end
 			emptyline();
 		}
 		
@@ -277,7 +277,7 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 		}
 
 		
-		closeBlock();
+		closeBlockNEW();
 		
 		
 		writer.flush();
@@ -286,7 +286,7 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 	
 	private void writeInterceptionBlock(InterceptionPhase phase, ExecutableElement method){
 		//boolean afterCall = phase == InterceptionPhase.AFTER_SERVANT_CALL; 
-		writeStatement("diMeInterceptionContext.setCurrentPhase(InterceptionPhase."+phase.toString()+")");
+		writeStatement("diMeInterceptionContext.setCurrentPhase(InterceptionPhase."+ phase + ')');
 		writeString("for (ServerSideRequestInterceptor interceptor : diMeInterceptors){");
 		increaseIdent();
 		writeStatement("InterceptorResponse interceptorResponse = interceptor."+interceptionPhaseToMethod(phase)+"(diMeCallContext, diMeInterceptionContext)");
@@ -296,8 +296,8 @@ public class SkeletonGenerator extends AbstractGenerator implements Generator{
 		writeString("if (interceptorResponse.getException() instanceof RuntimeException)");
 		writeIncreasedStatement("throw (RuntimeException) interceptorResponse.getException()");
 		for (TypeMirror type : method.getThrownTypes()){
-			writeString("if (interceptorResponse.getException() instanceof "+type.toString()+")");
-			writeIncreasedStatement("throw ("+type.toString()+") interceptorResponse.getException()");
+			writeString("if (interceptorResponse.getException() instanceof "+ type + ')');
+			writeIncreasedStatement("throw ("+ type +") interceptorResponse.getException()");
 		}
 		writeStatement("throw new RuntimeException("+quote("Interceptor exception")+",interceptorResponse.getException())");
 		decreaseIdent();

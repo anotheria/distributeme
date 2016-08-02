@@ -23,7 +23,7 @@ public enum MoskitoJourneyInterceptorStatsProducer implements IStatsProducer{
 	
 	@Override
 	public List<IStats> getStats() {
-		return Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 
 	@Override

@@ -13,7 +13,7 @@ public class ListObjectId implements Serializable {
 	private String primary;
 
 	public ListObjectId(int i) {
-		primary = ""+i;
+		primary = String.valueOf(i);
 	}
 
 	@Override

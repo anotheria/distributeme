@@ -71,7 +71,7 @@ public abstract class FailoverAndReturn extends AbstractRouter implements Failin
 	@Override
 	public FailDecision callFailed(ClientSideCallContext context) {
 		FailDecision ret = FailDecision.retryOnce();
-		ret.setTargetService(context.getServiceId()+getSuffix());
+        ret.setTargetService(context.getServiceId()+ SUFFIX);
 		return ret;
 	}
 

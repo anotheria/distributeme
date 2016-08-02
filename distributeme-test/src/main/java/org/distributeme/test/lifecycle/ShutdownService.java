@@ -1,7 +1,7 @@
 package org.distributeme.test.lifecycle;
 
 import org.distributeme.core.ServiceDescriptor;
-import org.distributeme.support.lifecycle.LifecycleSupportService;
+import org.distributeme.core.lifecycle.LifecycleComponent;
 import org.distributeme.support.lifecycle.generated.LifecycleSupportServiceConstants;
 import org.distributeme.support.lifecycle.generated.RemoteLifecycleSupportServiceStub;
 
@@ -16,7 +16,7 @@ public class ShutdownService {
 		ServiceDescriptor sd = ServiceDescriptor.fromSystemWideUniqueId(args[0]);
 		System.out.println("Parsed ServiceDescriptor: "+sd);
 		ServiceDescriptor target = sd.changeServiceId(LifecycleSupportServiceConstants.getServiceId());
-		LifecycleSupportService service = new RemoteLifecycleSupportServiceStub(target);
+		LifecycleComponent service = new RemoteLifecycleSupportServiceStub(target);
 		service.shutdown("Killed by "+ShutdownService.class);
 		
 	}

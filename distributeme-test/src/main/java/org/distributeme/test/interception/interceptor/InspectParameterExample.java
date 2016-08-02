@@ -16,7 +16,7 @@ public class InspectParameterExample extends SinglePhaseInterceptor{
 	
 	private boolean checkParameter(Object toCheck){
 		if (toCheck instanceof Integer){
-			if ( ((Integer)toCheck).intValue()==TOSEARCH)
+			if ((Integer) toCheck ==TOSEARCH)
 				return true;
 		}
 		return false;

@@ -4,6 +4,8 @@ import org.distributeme.core.AbstractCallContext;
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.ServerSideCallContext;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 
 /**
@@ -16,13 +18,12 @@ public abstract class SinglePhaseInterceptor extends AbstractRequestInterceptor{
 	/**
 	 * Set of supported phases that are configured in the constructor of the overriding class. 
 	 */
-	private HashSet<InterceptionPhase> supportedPhases = new HashSet<InterceptionPhase>();
+	private Collection<InterceptionPhase> supportedPhases = new HashSet<>();
 	
 	protected SinglePhaseInterceptor(InterceptionPhase atLeastOne, InterceptionPhase ... phases){
 		supportedPhases.add(atLeastOne);
 		if (phases!=null){
-			for (InterceptionPhase p : phases)
-				supportedPhases.add(p);
+            Collections.addAll(supportedPhases, phases);
 		}
 	}
 

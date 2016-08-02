@@ -1,6 +1,6 @@
 package org.distributeme.core.routing;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.failing.FailDecision;
 import org.junit.Ignore;
@@ -290,8 +290,7 @@ public class AbstractRouterWithFailOversToNextNodeTest {
 		 * Constructor - which add to registry some  methods which should be modable routed.
 		 */
 		public ModRouterWithEnabledFailing() {
-			super();
-			addModRoutedMethod("method1");
+            addModRoutedMethod("method1");
 		}
 
 		@Override
@@ -319,8 +318,7 @@ public class AbstractRouterWithFailOversToNextNodeTest {
 		 * Constructor - which add to registry some  methods which should be modable routed.
 		 */
 		public ModRouterWithDisabledFailing() {
-			super();
-			addModRoutedMethod("method1");
+            addModRoutedMethod("method1");
 		}
 
 

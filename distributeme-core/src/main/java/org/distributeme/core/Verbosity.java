@@ -50,6 +50,6 @@ public class Verbosity {
 	@Override public String toString(){
 		return "( logServerSideExceptions: "+logServerSideExceptions+
 			" logClientSideExceptions: "+logClientSideExceptions+
-			")";
+                ')';
 	}
 }

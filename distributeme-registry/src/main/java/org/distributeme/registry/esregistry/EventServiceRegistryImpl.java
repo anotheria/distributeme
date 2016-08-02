@@ -54,7 +54,7 @@ public class EventServiceRegistryImpl implements EventServiceRegistry{
 	 * Creates a new registry.
 	 */
 	EventServiceRegistryImpl() {
-		channels = new ConcurrentHashMap<String, ChannelDescriptor>();
+		channels = new ConcurrentHashMap<>();
 	}
 	
 	
@@ -81,14 +81,14 @@ public class EventServiceRegistryImpl implements EventServiceRegistry{
 
 	@Override
 	public List<String> getChannelNames() {
-		ArrayList<String> ret = new ArrayList<String>(channels.size());
+		List<String> ret = new ArrayList<>(channels.size());
 		ret.addAll(channels.keySet());
 		return ret;
 	}
 
 	@Override
 	public List<ChannelDescriptor> getChannels() {
-		ArrayList<ChannelDescriptor> ret = new ArrayList<ChannelDescriptor>(channels.size());
+		List<ChannelDescriptor> ret = new ArrayList<>(channels.size());
 		ret.addAll(channels.values());
 		return ret;
 	}

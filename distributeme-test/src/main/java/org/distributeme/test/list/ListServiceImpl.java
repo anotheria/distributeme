@@ -6,6 +6,7 @@ import org.distributeme.core.util.ServerSideUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * TODO comment this class
@@ -18,7 +19,7 @@ public class ListServiceImpl implements ListService, RoutingAware{
 	private HashMap<ListObjectId, ListObject> objects;
 
 	public ListServiceImpl(){
-		objects = new HashMap<ListObjectId, ListObject>();
+		objects = new HashMap<>();
 		for (int i=0; i<100;i++){
 			objects.put(new ListObjectId(i), new ListObject(i));
 		}
@@ -26,14 +27,14 @@ public class ListServiceImpl implements ListService, RoutingAware{
 
 	@Override
 	public ListObject getListObject(ListObjectId id) {
-		System.out.println(failoverInfoString()+"%%% Called getListObject("+id+")");
+		System.out.println(failoverInfoString()+"%%% Called getListObject("+id+ ')');
 		return objects.get(id);
 	}
 
 	@Override
 	public Collection<ListObject> getListObjects() {
 		System.out.println(failoverInfoString()+"%%% Called getListObjects()");
-		ArrayList<ListObject> ret = new ArrayList<ListObject>();
+		List<ListObject> ret = new ArrayList<>();
 		Collection<ListObject> all = objects.values();
 		ret.addAll(all);
 		return ret;
@@ -42,7 +43,7 @@ public class ListServiceImpl implements ListService, RoutingAware{
 	@Override
 	public Collection<ListObject> getSomeListObjects(Collection<ListObjectId> ids)  {
 		System.out.println(failoverInfoString()+"%%% Called getListObjects() with "+ids.size()+" params, "+ids);
-		ArrayList<ListObject> ret = new ArrayList<ListObject>();
+		List<ListObject> ret = new ArrayList<>();
 		for (ListObjectId id : ids){
 			ret.add(objects.get(id));
 		}

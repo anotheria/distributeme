@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,7 +21,6 @@ import java.util.List;
  * Servlet for the http interface of the meta registry.
  * @author lrosenberg.
  */
-@SuppressWarnings("serial")
 public class MetaRegistryServlet extends BaseRegistryServlet{
 	/**
 	 * Supported operations.
@@ -175,19 +175,19 @@ public class MetaRegistryServlet extends BaseRegistryServlet{
 	 * @param req the http servlet request object.
 	 * @param res the http servlet response object.
 	 */
-	private void list(HttpServletRequest req, HttpServletResponse res){//NOPMD
+	private void list(HttpServletRequest req, ServletResponse res){//NOPMD
 		
 		StringBuilder m = new StringBuilder();
 		m.append("<?xml version=\"1.0\"?>");
 		m.append("<services>");
 		List<ServiceDescriptor> bindinds = registry.list();
 		for (ServiceDescriptor service : bindinds){
-			m.append("<service serviceId=\"").append(service.getServiceId()).append("\" host=\"").append(service.getHost()).append("\"");
-			m.append(" port =\"").append(service.getPort()).append("\"");
-			m.append(" protocol =\"").append(service.getProtocol()).append("\"");
-			m.append(" instanceId =\"").append(service.getInstanceId()).append("\"");
-			m.append(" globalId =\"").append(service.getGlobalServiceId()).append("\"");
-			m.append(" registrationString =\"").append(service.getRegistrationString()).append("\"");
+			m.append("<service serviceId=\"").append(service.getServiceId()).append("\" host=\"").append(service.getHost()).append('"');
+			m.append(" port =\"").append(service.getPort()).append('"');
+			m.append(" protocol =\"").append(service.getProtocol()).append('"');
+			m.append(" instanceId =\"").append(service.getInstanceId()).append('"');
+			m.append(" globalId =\"").append(service.getGlobalServiceId()).append('"');
+			m.append(" registrationString =\"").append(service.getRegistrationString()).append('"');
 			m.append("/>");
 		}
 		m.append("</services>");
@@ -202,7 +202,7 @@ public class MetaRegistryServlet extends BaseRegistryServlet{
 			 out.write(message.getBytes());
 			 out.flush();
 		}catch(IOException e){
-			log.warn("sendResponse(res, "+message+")", e);
+			log.warn("sendResponse(res, "+message+ ')', e);
 		}finally{
 			if (out!=null){
 				try{

@@ -37,6 +37,7 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
@@ -74,7 +75,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
-		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getServerName(type));
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+ '.' +getServerName(type));
         PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
@@ -124,7 +125,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			}
 		}
 
-		writeString("public class "+getServerName(type)+"{");
+		writeString("public class "+getServerName(type)+ '{');
 		increaseIdent();
 		emptyline();
 		writeStatement("private static Logger log");
@@ -181,10 +182,10 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		}
 		
 		List<AnnotationMirror> mirrors = findMirrors(type, ServerListener.class);
-		writeStatement("private static final List<"+ServerLifecycleListener.class.getName()+"> serverListeners = new "+ArrayList.class.getName()+"<"+ServerLifecycleListener.class.getName()+">("+(mirrors==null ? 0:mirrors.size())+")");
+		writeStatement("private static final List<"+ServerLifecycleListener.class.getName()+"> serverListeners = new "+ArrayList.class.getName()+ '<' +ServerLifecycleListener.class.getName()+">("+(mirrors==null ? 0:mirrors.size())+ ')');
 		writeString("private static void notifyListenersAboutStart(){");
 		increaseIdent();
-		if (mirrors!=null && mirrors.size()>0){
+		if (mirrors!=null && !mirrors.isEmpty()){
 			writeCommentLine("compiled listeners");
 			for (AnnotationMirror mirror : mirrors){
 				writeString("try{");
@@ -250,7 +251,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			increaseIdent();
 			writeCommentLine("Use default port, which is -1");
 			writeStatement("createServiceAndRegisterLocally(-1)");
-			closeBlock();
+			closeBlockNEW();
 			emptyline();
 
 			writeString("public static void createServiceAndRegisterLocally(int customRegistryPort) throws Exception{");
@@ -276,7 +277,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 					//try autoresolve
 					writeString("try{");
 					increaseIdent();
-					writeStatement("Class<ServiceFactory<"+type.getQualifiedName()+">> factoryClazz = (Class<ServiceFactory<"+type.getQualifiedName()+">>)Class.forName("+quote(factoryClassName)+")");
+					writeStatement("Class<ServiceFactory<"+type.getQualifiedName()+">> factoryClazz = (Class<ServiceFactory<"+type.getQualifiedName()+">>)Class.forName("+quote(factoryClassName)+ ')');
 					writeStatement("MetaFactory.addFactoryClass("+type+".class, Extension."+annotation.extension()+", factoryClazz)");
 					decreaseIdent();
 					writeString("}catch(ClassNotFoundException factoryNotFound){");
@@ -284,12 +285,12 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 					writeString("try{");
 					increaseIdent();
 					writeCommentLine("Even more convenient - try to instantiate the implementation directly");
-					writeStatement("Class<? extends "+type.getQualifiedName()+"> implClazz = (Class<? extends "+type.getQualifiedName()+">)Class.forName("+quote(implClassName)+")");
+					writeStatement("Class<? extends "+type.getQualifiedName()+"> implClazz = (Class<? extends "+type.getQualifiedName()+">)Class.forName("+quote(implClassName)+ ')');
 					writeStatement("MetaFactory.createOnTheFlyFactory("+type+".class, Extension."+annotation.extension()+", implClazz.newInstance())");
 					decreaseIdent();
 					writeString("}catch(ClassNotFoundException implNotFound){");
 					increaseIdent();
-					writeStatement("log.info("+quote("Giving up trying to find an impl instance, tried "+factoryClassName+" and "+implClassName+", expect start to fail since init code were empty too and no factory has been supplied explicitely")+")");
+					writeStatement("log.info("+quote("Giving up trying to find an impl instance, tried "+factoryClassName+" and "+implClassName+", expect start to fail since init code were empty too and no factory has been supplied explicitely")+ ')');
 					closeBlock("inner catch");
 					closeBlock("outer catch");
 				}
@@ -297,10 +298,10 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeStatement(type.getQualifiedName()+" impl = null");
 			writeString("try{");
 			increaseIdent();
-			writeStatement("impl = MetaFactory.get(" + type.getQualifiedName() + ".class, Extension." + annotation.extension() + ")");
+			writeStatement("impl = MetaFactory.get(" + type.getQualifiedName() + ".class, Extension." + annotation.extension() + ')');
 			decreaseIdent();
 			writeString("}catch (FactoryNotFoundException factoryNotFound){");
-			writeIncreasedStatement("throw new AssertionError(" + quote("Un- or mis-configured, can't instantiate service instance for " + type.getQualifiedName() + " tried initcode, submitted factory, autoguessed factory (" + factoryClassName + ") and impl class (" + implClassName + ")") + ")");
+			writeIncreasedStatement("throw new AssertionError(" + quote("Un- or mis-configured, can't instantiate service instance for " + type.getQualifiedName() + " tried initcode, submitted factory, autoguessed factory (" + factoryClassName + ") and impl class (" + implClassName + ')') + ')');
 			writeString("}");
 			
 			
@@ -319,7 +320,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 				AnnotationValue registrationNameProviderClazzValue = findMethodValue(routeMe, "providerClass");
 				AnnotationValue registrationNameProviderParameterValue = findMethodValue(routeMe, "providerParameter");
 				writeStatement(RegistrationNameProvider.class.getName()+" nameProvider = new "+registrationNameProviderClazzValue.getValue()+"()");
-				writeStatement("nameProvider.customize("+quote(registrationNameProviderParameterValue.getValue())+")");
+				writeStatement("nameProvider.customize("+quote(registrationNameProviderParameterValue.getValue())+ ')');
 				writeStatement("serviceId = nameProvider.getRegistrationName(serviceId)");
 				emptyline();
 			}
@@ -333,7 +334,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			closeBlock("if (regNameProviderClass!=null)");
 			
 			emptyline();
-			writeStatement("log.info("+quote("Getting local registry")+")");
+			writeStatement("log.info("+quote("Getting local registry")+ ')');
 			writeStatement("Registry registry = null");
 			openTry();
 			writeStatement("registry = RMIRegistryUtil.findOrCreateRegistry(customRegistryPort)");
@@ -341,12 +342,12 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeString("}catch(RemoteException e){");
 			increaseIdent();
 			writeStatement("log.error(FATAL, "+quote("Couldn't obtain free port for a local rmi registry")+", e)");
-			writeStatement("System.err.println("+quote("Couldn't obtain a free port for local rmi registry")+")");
+			writeStatement("System.err.println("+quote("Couldn't obtain a free port for local rmi registry")+ ')');
 			writeStatement("System.exit(-1)"); 
-			closeBlock();
+			closeBlockNEW();
 					
 			emptyline();
-			writeStatement("log.info(" + quote("Registering ") + "+serviceId+" + quote(" locally.") + ")");
+			writeStatement("log.info(" + quote("Registering ") + "+serviceId+" + quote(" locally.") + ')');
 		
 			emptyline();
 			openTry();
@@ -355,7 +356,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeStatement("}catch(Exception e){");
 			increaseIdent();
 			writeStatement("log.error(FATAL, "+quote("Couldn't rebind myself at the local registry")+", e)");
-			writeStatement("System.err.println("+quote("Couldn't rebind myself at the local registry")+")");
+			writeStatement("System.err.println("+quote("Couldn't rebind myself at the local registry")+ ')');
 			writeStatement("e.printStackTrace()");
 			writeStatement("System.exit(-2)"); 
 			closeBlock("local registry bind.");
@@ -385,7 +386,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			if (!supportService){
 				writeStatement("LifecycleComponentImpl.INSTANCE.registerPublicService(serviceId, skeleton)");
 			}
-			closeBlock();
+			closeBlockNEW();
 			emptyline();
 		}
 		
@@ -400,7 +401,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			" RMIRegistryUtil.getRmiRegistryPort())";
 			increaseIdent();
 			writeStatement("return "+descriptorCall);
-			closeBlock();
+			closeBlockNEW();
 		}
 
 		//METHOD startService
@@ -430,10 +431,10 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			
 			decreaseIdent();
 			writeString("}else{");
-			writeIncreasedStatement("System.out.println("+quote("skipping registration for ")+"+serviceId"+")");
+			writeIncreasedStatement("System.out.println("+quote("skipping registration for ")+"+serviceId"+ ')');
 			writeString("}");
 			
-			writeStatement("System.out.println("+quote("Server ")+"+serviceId+"+quote(" is up and ready.")+")");
+			writeStatement("System.out.println("+quote("Server ")+"+serviceId+"+quote(" is up and ready.")+ ')');
 		}
 
 		if(combinedServer){
@@ -442,18 +443,18 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 				String descriptorVariableName = getServerName(service).toLowerCase()+"Descriptor";
 				String serviceServerClassName = getFullyQualifiedServerName(service);
 				writeStatement("ServiceDescriptor "+descriptorVariableName+" = "+serviceServerClassName+".createDescriptor(instanceId)");
-				writeStatement("LocalServiceDescriptorStore.getInstance().addServiceDescriptor("+descriptorVariableName+")");
+				writeStatement("LocalServiceDescriptorStore.getInstance().addServiceDescriptor("+descriptorVariableName+ ')');
 
 				emptyline();
 				writeString("if (!RegistryUtil.bind("+descriptorVariableName+")){");
 				increaseIdent();
-				writeStatement("log.error(FATAL, "+quote("Couldn't bind ")+"+"+descriptorVariableName+"+"+quote(" to the central registry at ")+"+RegistryUtil.describeRegistry())");
-				writeStatement("System.err.println("+quote("Couldn't bind ")+"+"+descriptorVariableName+"+"+quote(" at the central registry at ")+"+RegistryUtil.describeRegistry())");
+				writeStatement("log.error(FATAL, "+quote("Couldn't bind ")+ '+' +descriptorVariableName+ '+' +quote(" to the central registry at ")+"+RegistryUtil.describeRegistry())");
+				writeStatement("System.err.println("+quote("Couldn't bind ")+ '+' +descriptorVariableName+ '+' +quote(" at the central registry at ")+"+RegistryUtil.describeRegistry())");
 				writeStatement("System.exit(-3)"); 
 				closeBlock("central registry bind");
 				writeStatement("Runtime.getRuntime().addShutdownHook(new ServerShutdownHook("+descriptorVariableName+"))");
 				emptyline();
-				writeStatement("System.out.println("+quote("Server ")+"+"+descriptorVariableName+".getServiceId()+"+quote(" is up and ready.")+")");
+				writeStatement("System.out.println("+quote("Server ")+ '+' +descriptorVariableName+".getServiceId()+"+quote(" is up and ready.")+ ')');
 			}
 		}
 
@@ -499,18 +500,18 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			emptyline();
 		}
 			
-		closeBlock();
+		closeBlockNEW();
 		
 		
 		writer.flush();
 		writer.close();
 	}
 	
-	private List<String> getCombinedServicesNames(TypeElement type){
+	private List<String> getCombinedServicesNames(Element type){
 		AnnotationMirror ann = findMirror(type, CombinedService.class);
 		AnnotationValue val = findMethodValue(ann, "services");
-		List<? extends AnnotationValue> values = (List<? extends AnnotationValue>)val.getValue();
-		ArrayList<String> ret = new ArrayList<String>();
+		Iterable<? extends AnnotationValue> values = (List<? extends AnnotationValue>)val.getValue();
+		List<String> ret = new ArrayList<>();
 		for (AnnotationValue o : values){
 			ret.add(o.getValue().toString());
 		}

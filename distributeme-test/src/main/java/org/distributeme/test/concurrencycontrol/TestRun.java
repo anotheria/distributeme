@@ -19,7 +19,7 @@ public class TestRun {
 	public static void test(final int limit, final Method method) throws Exception{
 		
 		tsuccesses = ttotals = 0;
-		System.out.println("STARTING "+limit+" "+method);
+		System.out.println("STARTING "+limit+ ' ' +method);
 		final TestService service = ServiceLocator.getRemote(TestService.class);
 		
 		for (int i=0; i<THREADS; i++){
@@ -39,10 +39,10 @@ public class TestRun {
 								//service.serverSideLimited(System.currentTimeMillis());
 								//service.clientSideLimited(System.currentTimeMillis());
 								successes++;
-							}catch(DistributemeRuntimeException e){
+							}catch(DistributemeRuntimeException | InvocationTargetException e){
 								
-							}catch(InvocationTargetException e){}
-							try{
+							}
+                            try{
 								Thread.sleep(rnd.nextInt(20));
 							}catch(Exception ignored){}
 						}
@@ -62,7 +62,7 @@ public class TestRun {
 		System.out.println("STARTING");
 		start.countDown();
 		finish.await();
-		System.out.println("FINISHED "+tsuccesses+"/"+ttotals+ " - "+(tsuccesses*100/ttotals)+" %.");
+		System.out.println("FINISHED "+tsuccesses+ '/' +ttotals+ " - "+(tsuccesses*100/ttotals)+" %.");
 		service.printAndResetStats();
 		
 	}

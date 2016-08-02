@@ -1,7 +1,7 @@
 package org.distributeme.tools;
 
 import org.distributeme.core.ServiceDescriptor;
-import org.distributeme.support.lifecycle.LifecycleSupportService;
+import org.distributeme.core.lifecycle.LifecycleComponent;
 import org.distributeme.support.lifecycle.generated.LifecycleSupportServiceConstants;
 import org.distributeme.support.lifecycle.generated.RemoteLifecycleSupportServiceStub;
 
@@ -21,7 +21,7 @@ public class Ping {
 		int port = Integer.parseInt(a[1]);
 		ServiceDescriptor lifeCycleDescriptor = new ServiceDescriptor(ServiceDescriptor.Protocol.RMI, LifecycleSupportServiceConstants.getServiceId(), "any", host, port);
 		System.out.println("Trying to connect to "+lifeCycleDescriptor);
-		LifecycleSupportService service = new RemoteLifecycleSupportServiceStub(lifeCycleDescriptor);
+		LifecycleComponent service = new RemoteLifecycleSupportServiceStub(lifeCycleDescriptor);
 
 		System.out.println(" Service online: "+service.isOnline());
 		System.out.println(" Services: "+service.getPublicServices());

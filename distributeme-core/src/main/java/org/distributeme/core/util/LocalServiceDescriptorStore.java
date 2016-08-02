@@ -12,7 +12,7 @@ import java.util.List;
  * @since 22.02.15 18:25
  */
 public class LocalServiceDescriptorStore {
-	private List<ServiceDescriptor> descriptors = new LinkedList<ServiceDescriptor>();
+	private List<ServiceDescriptor> descriptors = new LinkedList<>();
 
 	private static LocalServiceDescriptorStore instance = new LocalServiceDescriptorStore();
 

@@ -3,7 +3,7 @@ package org.distributeme.generator.jaxrs;
 import net.anotheria.moskito.core.dynamic.MoskitoInvokationProxy;
 import net.anotheria.moskito.core.logging.DefaultStatsLogger;
 import net.anotheria.moskito.core.logging.IntervalStatsLogger;
-import net.anotheria.moskito.core.logging.SL4JLogOutput;
+import net.anotheria.moskito.core.logging.SLF4JLogOutput;
 import net.anotheria.moskito.core.predefined.ServiceStatsCallHandler;
 import net.anotheria.moskito.core.predefined.ServiceStatsFactory;
 import net.anotheria.moskito.core.producers.IStatsProducer;
@@ -53,7 +53,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
-		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type) + "." + getResourceName(type));
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type) + '.' + getResourceName(type));
 		Writer writer = sourceFile.openWriter();
 		setWriter(writer);
 		
@@ -81,7 +81,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 			writeImport(MoskitoInvokationProxy.class);
 			writeImport(DefaultStatsLogger.class);
 			writeImport(IntervalStatsLogger.class);
-			writeImport(SL4JLogOutput.class);
+			writeImport(SLF4JLogOutput.class);
 			writeImport(DefaultIntervals.class);
 			writeImport(ServiceStatsCallHandler.class);
 			writeImport(ServiceStatsFactory.class);
@@ -114,7 +114,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		}
 		
 
-		writeString("@Path(\"/"+type.getSimpleName().toString()+"\")");
+		writeString("@Path(\"/"+ type.getSimpleName() +"\")");
 		writeString("@Produces(MediaType.APPLICATION_JSON)");
 		writeString("@Consumes(MediaType.APPLICATION_JSON)");
 
@@ -138,9 +138,9 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		increaseIdent();
 		writeStatement("this(ServiceLocator.getLocal("+type.getQualifiedName()+".class))");
 
-		closeBlock();
+		closeBlockNEW();
 		emptyline();
-		writeString("public "+getResourceName(type)+"("+type.getQualifiedName()+" anImplementation){");
+		writeString("public "+getResourceName(type)+ '(' +type.getQualifiedName()+" anImplementation){");
 		increaseIdent();
 		writeStatement("created = System.currentTimeMillis()");
 		if (ann.moskitoSupport()){
@@ -150,18 +150,18 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 			writeIncreasedString("new ServiceStatsCallHandler(),");
 			writeIncreasedString("new ServiceStatsFactory(),");
 			writeIncreasedString(quote(type.getSimpleName().toString())+", ");
-			writeIncreasedString(quote("service")+",");
-			writeIncreasedString(quote("default")+",");
+			writeIncreasedString(quote("service")+ ',');
+			writeIncreasedString(quote("default")+ ',');
 			writeIncreasedString(getImplementedInterfacesAsString(type));
 			writeString(");");
 		
 			writeStatement("implementation = ("+type.getQualifiedName()+") proxy.createProxy()");
 			writeString("// add moskito logger");
-			writeStatement("new DefaultStatsLogger(proxy.getProducer(), new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.default\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.FIVE_MINUTES, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.5m\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.FIFTEEN_MINUTES, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.15m\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.ONE_HOUR, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.1h\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.ONE_DAY, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.1d\")))");
+			writeStatement("new DefaultStatsLogger(proxy.getProducer(), new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.default\")))");
+			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.FIVE_MINUTES, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.5m\")))");
+			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.FIFTEEN_MINUTES, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.15m\")))");
+			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.ONE_HOUR, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.1h\")))");
+			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.ONE_DAY, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.1d\")))");
 			writeString("//end moskito logger");
 			
 			//add moskito BI loggers.
@@ -171,19 +171,19 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 			
 			writeString("for (IStatsProducer producer : stats){");
 				increaseIdent(); 
-				writeStatement("new DefaultStatsLogger(producer, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.default\")))");
-				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.FIVE_MINUTES, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.5m\")))");
-				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.FIFTEEN_MINUTES, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.15m\")))");
-				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.ONE_HOUR, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.1h\")))");
-				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.ONE_DAY, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.1d\")))");
-			closeBlock();
+				writeStatement("new DefaultStatsLogger(producer, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.default\")))");
+				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.FIVE_MINUTES, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.5m\")))");
+				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.FIFTEEN_MINUTES, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.15m\")))");
+				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.ONE_HOUR, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.1h\")))");
+				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.ONE_DAY, new SLF4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.1d\")))");
+			closeBlockNEW();
 			//END BUILTIN PRODUCERS LOGGING
 			
 			
 		}else{
 			writeStatement("implementation = anImplementation");
 		}
-		closeBlock();
+		closeBlockNEW();
 		emptyline();
 		
 		
@@ -193,7 +193,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 			String methodDecl = getResourceSkeletonMethodDeclaration(method);
 			List<? extends TypeMirror> exceptions = method.getThrownTypes();
 			writeString("@POST @Path(\""+method.getSimpleName()+"\")");
-			writeString("public "+methodDecl+"{");
+			writeString("public "+methodDecl+ '{');
 			increaseIdent();
 			writeString("Map <?,?> __transportableCallContext = Collections.emptyMap(); //not used NOW!");
 			writeStatement("lastAccess = System.currentTimeMillis()");
@@ -202,7 +202,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 			writeStatement("ArrayList<Object> diMeParameters = new ArrayList<Object>()");
 			Collection<? extends VariableElement> parameters = method.getParameters();
 			for (VariableElement p : parameters){
-				writeStatement("diMeParameters.add("+p.getSimpleName()+")");
+				writeStatement("diMeParameters.add("+p.getSimpleName()+ ')');
 			}
 			writeStatement("diMeCallContext.setParameters(diMeParameters)");
 			writeStatement("InterceptionContext diMeInterceptionContext = new InterceptionContext()");
@@ -232,11 +232,11 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 			call += "implementation."+method.getSimpleName();
 			String paramCall = "";
 			for (VariableElement p : parameters){
-				if (paramCall.length()!=0)
+				if (!paramCall.isEmpty())
 					paramCall += ", ";
 				paramCall += p.getSimpleName();
 			}
-			call += "("+paramCall+");";
+			call += '(' +paramCall+");";
 			writeString(call);
 
 			if (method.getReturnType().toString().equals("void")){
@@ -252,7 +252,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 			decreaseIdent();
 
 			for (TypeMirror exc : exceptions) {
-				writeString("}catch(" + exc.toString() + " e){");
+				writeString("}catch(" + exc + " e){");
 				increaseIdent();
 				writeString("if (Verbosity.logServerSideExceptions())");
 				writeIncreasedStatement("log.error(" + quote(method.getSimpleName() + "()") + ", e)");
@@ -263,7 +263,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 			writeIncreasedStatement(getCCStrategyVariableName(method)+".notifyServerSideCallFinished(diMeCallContext)");
 			writeString("}");
 			
-			closeBlock();//method end
+			closeBlockNEW();//method end
 			emptyline();
 		}
 		
@@ -285,7 +285,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		}
 
 		
-		closeBlock();
+		closeBlockNEW();
 		
 		
 		writer.flush();
@@ -294,7 +294,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 	
 	private void writeInterceptionBlock(InterceptionPhase phase, ExecutableElement method){
 		//boolean afterCall = phase == InterceptionPhase.AFTER_SERVANT_CALL; 
-		writeStatement("diMeInterceptionContext.setCurrentPhase(InterceptionPhase."+phase.toString()+")");
+		writeStatement("diMeInterceptionContext.setCurrentPhase(InterceptionPhase."+ phase + ')');
 		writeString("for (ServerSideRequestInterceptor interceptor : diMeInterceptors){");
 		increaseIdent();
 		writeStatement("InterceptorResponse interceptorResponse = interceptor."+interceptionPhaseToMethod(phase)+"(diMeCallContext, diMeInterceptionContext)");
@@ -304,8 +304,8 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		writeString("if (interceptorResponse.getException() instanceof RuntimeException)");
 		writeIncreasedStatement("throw (RuntimeException) interceptorResponse.getException()");
 		for (TypeMirror type : method.getThrownTypes()){
-			writeString("if (interceptorResponse.getException() instanceof "+type.toString()+")");
-			writeIncreasedStatement("throw ("+type.toString()+") interceptorResponse.getException()");
+			writeString("if (interceptorResponse.getException() instanceof "+ type + ')');
+			writeIncreasedStatement("throw ("+ type +") interceptorResponse.getException()");
 		}
 		writeStatement("throw new RuntimeException("+quote("Interceptor exception")+",interceptorResponse.getException())");
 		decreaseIdent();

@@ -102,7 +102,7 @@ public class ConfigurationInterceptorUtil {
 		}
 		
 		@Override public String toString(){
-			return "service ids: "+getServiceIdsList()+", slowDownTime: "+slowDownTimeInMillis+", flipChance: "+flipChanceInPercent+"/100";
+			return "service ids: "+ serviceIdsList +", slowDownTime: "+slowDownTimeInMillis+", flipChance: "+flipChanceInPercent+"/100";
 		}
 		
 		@AfterConfiguration public void setHelper(){

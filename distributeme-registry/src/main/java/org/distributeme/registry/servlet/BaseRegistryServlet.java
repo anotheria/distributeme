@@ -4,6 +4,8 @@ import net.anotheria.moskito.web.MoskitoHttpServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -49,9 +51,9 @@ public abstract class BaseRegistryServlet extends MoskitoHttpServlet{
 	 * @param parameterName name of the parameter.
 	 * @return value of the parameter.
 	 */
-	protected String getRequiredParameter(HttpServletRequest req, String parameterName){
+	protected String getRequiredParameter(ServletRequest req, String parameterName){
 		String parameter = req.getParameter(parameterName);
-		if (parameter==null || parameter.length()==0)
+		if (parameter==null || parameter.isEmpty())
 			throw new IllegalArgumentException("Parameter \""+parameterName+"\" is required but empty.");
 		return parameter;
 		
@@ -66,7 +68,7 @@ public abstract class BaseRegistryServlet extends MoskitoHttpServlet{
 		String op = req.getPathInfo();
 		if (op==null)
 			op = "";
-		while (op.length()>0 && op.charAt(0)=='/')
+		while (!op.isEmpty() && op.charAt(0)=='/')
 			op = op.substring(1);
 		return op;
 	}
@@ -85,7 +87,7 @@ public abstract class BaseRegistryServlet extends MoskitoHttpServlet{
 	 * @param res http servlet response object.
 	 * @param message message to send.
 	 */
-	protected void sendResponse(HttpServletResponse res, String message){
+	protected void sendResponse(ServletResponse res, String message){
 		res.setContentLength(message.getBytes().length);
 		res.setContentType("text/plain");
 		OutputStream out = null;
@@ -94,7 +96,7 @@ public abstract class BaseRegistryServlet extends MoskitoHttpServlet{
 			 out.write(message.getBytes());
 			 out.flush();
 		}catch(IOException e){
-			log.warn("sendResponse(res, "+message+")", e);
+			log.warn("sendResponse(res, "+message+ ')', e);
 		}finally{
 			if (out!=null){
 				try{

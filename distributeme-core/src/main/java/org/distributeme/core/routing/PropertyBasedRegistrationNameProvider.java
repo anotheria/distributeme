@@ -16,8 +16,8 @@ public class PropertyBasedRegistrationNameProvider implements RegistrationNamePr
 	private String propertyValue;
 	
 	@Override public String getRegistrationName(String serviceId) {
-		return propertyValue!=null && propertyValue.length()>0 ? 
-				serviceId + "_"+propertyValue : serviceId;
+		return propertyValue!=null && !propertyValue.isEmpty() ?
+				serviceId + '_' +propertyValue : serviceId;
 	}
 
 	@Override public void customize(String parameter){
@@ -26,7 +26,7 @@ public class PropertyBasedRegistrationNameProvider implements RegistrationNamePr
 	}
 	
 	@Override public String toString(){
-		return "PropertyBasedRegistrationNameProvider "+ propertyName+"="+propertyValue;
+		return "PropertyBasedRegistrationNameProvider "+ propertyName+ '=' +propertyValue;
 	}
 	
 }

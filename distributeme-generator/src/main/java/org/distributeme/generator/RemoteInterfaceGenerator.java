@@ -28,7 +28,7 @@ public class RemoteInterfaceGenerator extends AbstractGenerator implements Gener
 
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
-		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getRemoteInterfaceName(type));
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+ '.' +getRemoteInterfaceName(type));
 		PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
@@ -50,12 +50,12 @@ public class RemoteInterfaceGenerator extends AbstractGenerator implements Gener
 		for (ExecutableElement method : methods){
 			String methodDecl = getInterfaceMethodDeclaration(method, true);
 			
-			if (method.getThrownTypes().size()>0){
+			if (!method.getThrownTypes().isEmpty()){
 				StringBuilder exceptions = new StringBuilder();
 				for (TypeMirror rt : method.getThrownTypes()){
 					if (exceptions.length()>0)
 						exceptions.append(", ");
-					exceptions.append(rt.toString());
+					exceptions.append(rt);
 				}
 				methodDecl += " throws "+exceptions +", RemoteException";
 			}else{
@@ -66,7 +66,7 @@ public class RemoteInterfaceGenerator extends AbstractGenerator implements Gener
 			emptyline(); 
 		}
 		
-		closeBlock();
+		closeBlockNEW();
 		
 		writer.flush();
 		writer.close();

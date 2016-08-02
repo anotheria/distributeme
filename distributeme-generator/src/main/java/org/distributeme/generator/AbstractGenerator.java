@@ -64,12 +64,12 @@ public class AbstractGenerator {
 	 * @param type
 	 * @return
 	 */
-	protected static String getRemoteInterfaceName(TypeElement type){
-		return "Remote"+type.getSimpleName().toString();
+	protected static String getRemoteInterfaceName(Element type){
+		return "Remote"+ type.getSimpleName();
 	}
 
-	protected static String getAsynchInterfaceName(TypeElement type){
-		return "Asynch"+type.getSimpleName().toString();
+	protected static String getAsynchInterfaceName(Element type){
+		return "Asynch"+ type.getSimpleName();
 	}
 
 	/**
@@ -77,19 +77,19 @@ public class AbstractGenerator {
 	 * @param type
 	 * @return
 	 */
-	protected static String getStubName(TypeElement type){
-		return "Remote"+type.getSimpleName().toString()+"Stub";
+	protected static String getStubName(Element type){
+		return "Remote"+ type.getSimpleName() +"Stub";
 	}
 
-	protected static String getJaxRsStubName(TypeElement type){
-		return type.getSimpleName().toString()+"JaxRsStub";
+	protected static String getJaxRsStubName(Element type){
+		return type.getSimpleName() +"JaxRsStub";
 	}
 
-	protected static String getAsynchStubName(TypeElement type){
-		return "Asynch"+type.getSimpleName().toString()+"Stub";
+	protected static String getAsynchStubName(Element type){
+		return "Asynch"+ type.getSimpleName() +"Stub";
 	}
 
-	public static final String getDefaultImplFactoryName(TypeElement type){
+	public static final String getDefaultImplFactoryName(QualifiedNameable type){
 		return type.getQualifiedName()+"Factory";
 	}
 
@@ -99,28 +99,28 @@ public class AbstractGenerator {
 	 * @param type
 	 * @return
 	 */
-	protected static String getSkeletonName(TypeElement type){
-		return "Remote"+type.getSimpleName().toString()+"Skeleton";
+	protected static String getSkeletonName(Element type){
+		return "Remote"+ type.getSimpleName() +"Skeleton";
 	}
 
-	protected static String getResourceName(TypeElement type){
-		return type.getSimpleName().toString()+"Resource";
+	protected static String getResourceName(Element type){
+		return type.getSimpleName() +"Resource";
 	}
 
-	protected static String getConstantsName(TypeElement type){
-		return type.getSimpleName().toString()+"Constants";
+	protected static String getConstantsName(Element type){
+		return type.getSimpleName() +"Constants";
 	}
 
-	protected static String getFactoryName(TypeElement type){
-		return "Remote"+type.getSimpleName().toString()+"Factory";
+	protected static String getFactoryName(Element type){
+		return "Remote"+ type.getSimpleName() +"Factory";
 	}
 
-	protected static String getAsynchFactoryName(TypeElement type){
-		return "Asynch"+type.getSimpleName().toString()+"Factory";
+	protected static String getAsynchFactoryName(Element type){
+		return "Asynch"+ type.getSimpleName() +"Factory";
 	}
 
-	protected static String getServerName(TypeElement type){
-		String name = type.getSimpleName().toString().toString();
+	protected static String getServerName(Element type){
+		String name = type.getSimpleName().toString();
 		return getServerName(name);
 	}
 
@@ -152,8 +152,8 @@ public class AbstractGenerator {
 		return interfaceName+"Server";
 	}
 	
-	protected static String getInterfaceName(TypeElement type){
-		return type.getSimpleName().toString().toString();
+	protected static String getInterfaceName(Element type){
+		return type.getSimpleName().toString();
 	}
 
 	protected PackageElement getPackageOf(Element type) {
@@ -161,12 +161,12 @@ public class AbstractGenerator {
 		return elements.getPackageOf(type);
 	}
 	
-	protected String getPackageName(TypeElement element){
+	protected String getPackageName(Element element){
         return getPackageOf(element).getQualifiedName()+".generated";
 	}
 	
 	protected void writePackage(TypeElement type){
-		writeString("package "+getPackageName(type)+";");
+		writeString("package "+getPackageName(type)+ ';');
 	}
 
 	/**
@@ -178,19 +178,19 @@ public class AbstractGenerator {
 	}
 
 	protected String quote(String s){
-		return "\""+s+"\"";
+		return '"' +s+ '"';
 	}
 	
 	protected String quote(Object o){
-		return "\""+o+"\"";
+		return "\""+o+ '"';
 	}
 
 	protected String quote(StringBuilder s){
-		return "\""+s.toString()+"\"";
+		return s.insert(0, '"').append('"').toString();
 	}
 
 	protected String quote(int a){
-		return quote(""+a);
+		return quote(String.valueOf(a));
 	}
 
 	protected void writeIncreasedString(String s){
@@ -201,7 +201,7 @@ public class AbstractGenerator {
 	}
 
 	protected void writeIncreasedStatement(String s){
-		writeIncreasedString(s+";");
+		writeIncreasedString(s+ ';');
 	}
 	
 	/**
@@ -247,7 +247,7 @@ public class AbstractGenerator {
 	 */
 	protected void writeStatement(String s){
 		StringBuilder ret = getIdent();
-		ret.append(s).append(";").append(CRLF);
+		ret.append(s).append(';').append(CRLF);
 		writer.write(ret.toString()); 
 	}
 
@@ -258,7 +258,7 @@ public class AbstractGenerator {
 	private StringBuilder getIdent(){
 		StringBuilder ret = new StringBuilder();
 		for (int i=0; i<ident; i++)
-			ret.append("\t");
+			ret.append('\t');
 		return ret;
 	}
 	
@@ -292,7 +292,7 @@ public class AbstractGenerator {
 	
 
 	protected void writeImport(String imp){
-		writeString("import "+imp+";");
+		writeString("import "+imp+ ';');
 	}
 	
 	protected void writeImport(Class<?> clazz){
@@ -301,14 +301,14 @@ public class AbstractGenerator {
 
 
 	protected void writeImport(String packagename, String classname){
-		writeString("import "+packagename+"."+classname+";");
+		writeString("import "+packagename+ '.' +classname+ ';');
 	}
 
 
 	/**
 	 * Closes a previously opened code block by decreasing the ident and writing a closing '}'.
 	 */
-	protected void closeBlock(){
+	protected void closeBlockNEW(){
 		decreaseIdent();
 		writeString("}");
 	}
@@ -362,9 +362,9 @@ public class AbstractGenerator {
 	    String tokens[] = StringUtils.tokenize(commentline, '\n');
 	    
 	    writeString("/**");
-	    for (int i=0; i<tokens.length; i++){
-	       writeString(" * "+tokens[i]); 
-	    }
+		for (String token : tokens) {
+			writeString(" * " + token);
+		}
 	    writeString(" */");
 	}
 
@@ -373,13 +373,13 @@ public class AbstractGenerator {
 		ident = 1;
 	}
 	
-	private String getFormalTypeDeclaration(ExecutableElement method){
+	private String getFormalTypeDeclaration(Parameterizable method){
 		StringBuilder formalTypeDeclaration = new StringBuilder("");
 		List<? extends TypeParameterElement> formalTypeParameters = method.getTypeParameters();
 		for (TypeParameterElement d : formalTypeParameters){
 			if (formalTypeDeclaration.length()>0)
 				formalTypeDeclaration.append(", ");
-			formalTypeDeclaration.append(d.toString());
+			formalTypeDeclaration.append(d);
 
 			List<? extends TypeMirror> bounds = d.getBounds();
 
@@ -387,14 +387,14 @@ public class AbstractGenerator {
 				formalTypeDeclaration.append(" extends ");
 
 			for (Iterator<? extends TypeMirror> it = bounds.iterator(); it.hasNext(); ) {
-				formalTypeDeclaration.append(it.next().toString());
+				formalTypeDeclaration.append(it.next());
 				if (it.hasNext())
 					formalTypeDeclaration.append(" & ");
 			}
 		}
 		
-		String ret = formalTypeDeclaration.length()>0 ? 
-			"<"+formalTypeDeclaration.toString()+">" : formalTypeDeclaration.toString();
+		String ret = formalTypeDeclaration.length()>0 ?
+				formalTypeDeclaration.insert(0, '<').append('>').toString() : formalTypeDeclaration.toString();
 		return ret;
 	}
 
@@ -404,19 +404,19 @@ public class AbstractGenerator {
 		StringBuilder methodDecl = new StringBuilder();
 		//CHANGE 1.0.8 method names now return lists instead of concrete method
 		//methodDecl.append(getFormalTypeDeclaration(method)).append(method.getReturnType().toString()).append(" ");
-		methodDecl.append(getFormalTypeDeclaration(method)).append("List<?>").append(" ");
-		methodDecl.append(method.getSimpleName()).append("(");
+		methodDecl.append(getFormalTypeDeclaration(method)).append("List<?>").append(' ');
+		methodDecl.append(method.getSimpleName()).append('(');
 		Collection<? extends VariableElement> parameters = method.getParameters();
 		boolean first = true;
 		for (VariableElement p : parameters){
 			if (!first){
 				methodDecl.append(", ");
 			}
-			methodDecl.append(p.asType().toString()+" "+p.getSimpleName());
+			methodDecl.append(p.asType()).append(' ').append(p.getSimpleName());
 			first = false;
 		}
 
-		methodDecl.append(")");
+		methodDecl.append(')');
 
 		return methodDecl.toString();
 	}
@@ -427,44 +427,44 @@ public class AbstractGenerator {
 		StringBuilder methodDecl = new StringBuilder();
 		//CHANGE 1.0.8 - return value is always a list.
 		//methodDecl.append(getFormalTypeDeclaration(method)).append(method.getReturnType().toString()).append(" ");
-		methodDecl.append(getFormalTypeDeclaration(method)).append("List").append(" ");
-		methodDecl.append(method.getSimpleName()).append("(");
+		methodDecl.append(getFormalTypeDeclaration(method)).append("List").append(' ');
+		methodDecl.append(method.getSimpleName()).append('(');
 		Collection<? extends VariableElement> parameters = method.getParameters();
 		boolean first = true;
 		for (VariableElement p : parameters){
 			if (!first){
 				methodDecl.append(", ");
 			}
-			methodDecl.append(p.asType().toString()+" "+p.getSimpleName());
+			methodDecl.append(p.asType()).append(' ').append(p.getSimpleName());
 			first = false;
 		}
 		if (includeTransportableContext){
 			//adding transportable call context for piggybacking and interceptor communication.
-			methodDecl.append((first ? "":", ")+"Map<?,?> __transportableCallContext");
+			methodDecl.append(first ? "" : ", ").append("Map<?,?> __transportableCallContext");
 		}
 		
-		methodDecl.append(")");
+		methodDecl.append(')');
 		
 		return methodDecl.toString();
 	}
 
 	protected String getAsynchInterfaceMethodDeclaration(ExecutableElement method){
 		StringBuilder methodDecl = new StringBuilder();
-		methodDecl.append(getFormalTypeDeclaration(method)).append("void").append(" ");
-		methodDecl.append(getAsynchMethodName(method)).append("(");
+		methodDecl.append(getFormalTypeDeclaration(method)).append("void").append(' ');
+		methodDecl.append(getAsynchMethodName(method)).append('(');
 		Collection<? extends VariableElement> parameters = method.getParameters();
 		boolean first = true;
 		for (VariableElement p : parameters){
 			if (!first){
 				methodDecl.append(", ");
 			}
-			methodDecl.append(p.asType().toString()+" "+p.getSimpleName());
+			methodDecl.append(p.asType()).append(' ').append(p.getSimpleName());
 			first = false;
 		}
 		//adding call back handlers.
-		methodDecl.append((first ? "":", ")+"CallBackHandler ... diMeCallBackHandlers");
+		methodDecl.append(first ? "" : ", ").append("CallBackHandler ... diMeCallBackHandlers");
 
-		methodDecl.append(")");
+		methodDecl.append(')');
 		
 		return methodDecl.toString();
 	}
@@ -472,12 +472,12 @@ public class AbstractGenerator {
 	protected String getResourceSkeletonMethodDeclaration(ExecutableElement method){
 		StringBuilder Element = new StringBuilder();
 		Element.append(getInterfaceMethodDeclaration(method, false));
-		if (method.getThrownTypes().size()>0){
+		if (!method.getThrownTypes().isEmpty()){
 			StringBuilder exceptions = new StringBuilder();
 			for (TypeMirror type : method.getThrownTypes()){
 				if (exceptions.length()>0)
 					exceptions.append(", ");
-				exceptions.append(type.toString());
+				exceptions.append(type);
 			}
 			Element.append(" throws ").append(exceptions);
 		}
@@ -488,12 +488,12 @@ public class AbstractGenerator {
 	protected String getSkeletonMethodDeclaration(ExecutableElement method){
 		StringBuilder Element = new StringBuilder();
 		Element.append(getInterfaceMethodDeclaration(method, true));
-		if (method.getThrownTypes().size()>0){
+		if (!method.getThrownTypes().isEmpty()){
 			StringBuilder exceptions = new StringBuilder();
 			for (TypeMirror type : method.getThrownTypes()){
 				if (exceptions.length()>0)
 					exceptions.append(", ");
-				exceptions.append(type.toString());
+				exceptions.append(type);
 			}
 			Element.append(" throws ").append(exceptions);
 		}
@@ -513,7 +513,7 @@ public class AbstractGenerator {
 			if (!first){
 				ret.append(", ");
 			}
-			ret.append((declareFinal?"final ":"")+p.asType().toString()+" "+p.getSimpleName());
+			ret.append(declareFinal ? "final " : "").append(p.asType()).append(' ').append(p.getSimpleName());
 			first = false;
 		}
 		return ret.toString();
@@ -535,19 +535,19 @@ public class AbstractGenerator {
 
 	protected String getStubMethodDeclaration(ExecutableElement method){
 		StringBuilder methodDecl = new StringBuilder();
-		methodDecl.append(getFormalTypeDeclaration(method)).append(method.getReturnType()).append(" ");
-		methodDecl.append(method.getSimpleName()).append("(");
+		methodDecl.append(getFormalTypeDeclaration(method)).append(method.getReturnType()).append(' ');
+		methodDecl.append(method.getSimpleName()).append('(');
 		methodDecl.append(getStubParametersDeclaration(method));
-		methodDecl.append(")");
+		methodDecl.append(')');
 		
-		if (method.getThrownTypes().size()>0){
+		if (!method.getThrownTypes().isEmpty()){
 			StringBuilder exceptions = new StringBuilder();
 			for (TypeMirror type : method.getThrownTypes()){
 				if (exceptions.length()>0)
 					exceptions.append(", ");
-				exceptions.append(type.toString());
+				exceptions.append(type);
 			}
-			methodDecl.append(" throws "+exceptions.toString());
+			methodDecl.append(" throws ").append(exceptions);
 		}
 		
 		
@@ -557,13 +557,13 @@ public class AbstractGenerator {
 	protected String getStubAsynchMethodDeclaration(ExecutableElement method){
 		StringBuilder methodDecl = new StringBuilder();
 		methodDecl.append(getFormalTypeDeclaration(method)).append(" void ");
-		methodDecl.append(getAsynchMethodName(method)).append("(");
+		methodDecl.append(getAsynchMethodName(method)).append('(');
 		String parameters = getStubParametersDeclaration(method, true);
 		methodDecl.append(parameters);
-		if (parameters.length()>0)
+		if (!parameters.isEmpty())
 			methodDecl.append(", ");
 		methodDecl.append("final CallBackHandler... diMeHandlers");
-		methodDecl.append(")");
+		methodDecl.append(')');
 		
 //		if (method.getThrownTypes().size()>0){
 //			StringBuilder exceptions = new StringBuilder();
@@ -579,29 +579,29 @@ public class AbstractGenerator {
 		return methodDecl.toString();
 	}
 
-	protected String getAsynchMethodName(ExecutableElement method){
+	protected String getAsynchMethodName(Element method){
 		return "asynch"+StringUtils.capitalize(method.getSimpleName().toString());
 	}
 	
 	protected String getInternalStubMethodDeclaration(ExecutableElement method){
 		StringBuilder methodDecl = new StringBuilder();
-		methodDecl.append(getFormalTypeDeclaration(method)).append(method.getReturnType()).append(" ");
-		methodDecl.append(method.getSimpleName()).append("(");
+		methodDecl.append(getFormalTypeDeclaration(method)).append(method.getReturnType()).append(' ');
+		methodDecl.append(method.getSimpleName()).append('(');
 		String parameters = getStubParametersDeclaration(method);
 		methodDecl.append(parameters);
-		if (parameters.length()>0)
+		if (!parameters.isEmpty())
 			methodDecl.append(", ");
-		methodDecl.append(ClientSideCallContext.class.getName()+" diMeCallContext");
-		methodDecl.append(")");
+		methodDecl.append(ClientSideCallContext.class.getName()).append(" diMeCallContext");
+		methodDecl.append(')');
 		
-		if (method.getThrownTypes().size()>0){
+		if (!method.getThrownTypes().isEmpty()){
 			StringBuilder exceptions = new StringBuilder();
 			for (TypeMirror type : method.getThrownTypes()){
 				if (exceptions.length()>0)
 					exceptions.append(", ");
-				exceptions.append(type.toString());
+				exceptions.append(type);
 			}
-			methodDecl.append(" throws "+exceptions.toString());
+			methodDecl.append(" throws ").append(exceptions);
 		}
 		
 		
@@ -628,7 +628,7 @@ public class AbstractGenerator {
 	}
 	
 	protected List<TypeElement> getAllDeclaredTypes(TypeElement type){
-		ArrayList<TypeElement> typesList = new ArrayList<TypeElement>();
+		List<TypeElement> typesList = new ArrayList<>();
         Types types = environment.getTypeUtils();
 
 		typesList.add(type);
@@ -676,7 +676,7 @@ public class AbstractGenerator {
 	
 	protected List<AnnotationMirror> findMirrors(Element type, Class<? extends Annotation> ann){
 		//System.out.println("-%- findMirror "+type+" ann "+ann);
-		ArrayList<AnnotationMirror> ret = new ArrayList<AnnotationMirror>();
+		List<AnnotationMirror> ret = new ArrayList<>();
 		List<? extends AnnotationMirror> mirrors = type.getAnnotationMirrors();
 		for (AnnotationMirror m : mirrors){
 			Element Element = m.getAnnotationType().asElement();
@@ -755,7 +755,7 @@ public class AbstractGenerator {
 		ann = type.getAnnotation(ConcurrencyControlServerSideLimit.class);
 		if (ann!=null){
 			String configName = ((ConcurrencyControlServerSideLimit)ann).configurationName();
-			if (configName!=null && configName.length()>0)
+			if (configName!=null && !configName.isEmpty())
 				return new TranslatedCCAnnotation("org.distributeme.core.concurrencycontrol.ConfigurationBasedConcurrencyControlStrategy", configName);
 			return new TranslatedCCAnnotation("org.distributeme.core.concurrencycontrol.ConstantBasedConcurrencyControlStrategy", "0,"+((ConcurrencyControlServerSideLimit)ann).value());
 
@@ -763,23 +763,23 @@ public class AbstractGenerator {
 		ann = type.getAnnotation(ConcurrencyControlClientSideLimit.class);
 		if (ann!=null){
 			String configName = ((ConcurrencyControlClientSideLimit)ann).configurationName();
-			if (configName!=null && configName.length()>0)
+			if (configName!=null && !configName.isEmpty())
 				return new TranslatedCCAnnotation("org.distributeme.core.concurrencycontrol.ConfigurationBasedConcurrencyControlStrategy", configName);
-			return new TranslatedCCAnnotation("org.distributeme.core.concurrencycontrol.ConstantBasedConcurrencyControlStrategy", ""+((ConcurrencyControlClientSideLimit)ann).value()+",0");
+			return new TranslatedCCAnnotation("org.distributeme.core.concurrencycontrol.ConstantBasedConcurrencyControlStrategy", ((ConcurrencyControlClientSideLimit) ann).value() + ",0");
 		}
 		ann = type.getAnnotation(ConcurrencyControlLimit.class);
 		if (ann!=null){
 			String configName = ((ConcurrencyControlLimit)ann).configurationName();
-			if (configName!=null && configName.length()>0)
+			if (configName!=null && !configName.isEmpty())
 				return new TranslatedCCAnnotation("org.distributeme.core.concurrencycontrol.ConfigurationBasedConcurrencyControlStrategy", configName);
-			return new TranslatedCCAnnotation("org.distributeme.core.concurrencycontrol.ConstantBasedConcurrencyControlStrategy", ""+((ConcurrencyControlLimit)ann).client()+","+((ConcurrencyControlLimit)ann).server());
+			return new TranslatedCCAnnotation("org.distributeme.core.concurrencycontrol.ConstantBasedConcurrencyControlStrategy", ((ConcurrencyControlLimit) ann).client() + "," + ((ConcurrencyControlLimit) ann).server());
 		}
 		
 		return null;
 	}
 
 	protected List<TranslatedRouterAnnotation> writeRouterDeclarations(TypeElement type){
-		List<TranslatedRouterAnnotation> ret = new ArrayList<AbstractGenerator.TranslatedRouterAnnotation>();
+		List<TranslatedRouterAnnotation> ret = new ArrayList<>();
 		Collection<? extends ExecutableElement> methods = getAllDeclaredMethods(type);
 		writeCommentLine("ROUTER DECL V2");
 		
@@ -787,9 +787,9 @@ public class AbstractGenerator {
 		if (clazzWideRoute!=null){
 			writeCommentLine("Class wide router ");
 			AnnotationValue configurationNameValue = findRouterConfigurationName(clazzWideRoute);
-			TranslatedRouterAnnotation tra = new TranslatedRouterAnnotation(""+findRouterClassValue(clazzWideRoute).getValue(),
-					""+findRouterParameterValue(clazzWideRoute).getValue(),
-					configurationNameValue == null ?  "":""+configurationNameValue.getValue()
+			TranslatedRouterAnnotation tra = new TranslatedRouterAnnotation(String.valueOf(findRouterClassValue(clazzWideRoute).getValue()),
+                    String.valueOf(findRouterParameterValue(clazzWideRoute).getValue()),
+					configurationNameValue == null ?  "": String.valueOf(configurationNameValue.getValue())
 			);
 			writeStatement("private final "+Router.class.getName() + " clazzWideRouter = createRouterInstance"+tra.getOrder()+"()");
 			ret.add(tra);
@@ -807,11 +807,11 @@ public class AbstractGenerator {
 				
 				AnnotationValue routerParameterValue = findRouterParameterValue(methodRoute);
 				AnnotationValue configurationNameValue = findRouterConfigurationName(methodRoute);
-				TranslatedRouterAnnotation tra = new TranslatedRouterAnnotation(""+findRouterClassValue(methodRoute).getValue(),
-						routerParameterValue == null ? "":""+routerParameterValue.getValue(),
-						configurationNameValue == null ? "":""+configurationNameValue.getValue()
+				TranslatedRouterAnnotation tra = new TranslatedRouterAnnotation(String.valueOf(findRouterClassValue(methodRoute).getValue()),
+						routerParameterValue == null ? "": String.valueOf(routerParameterValue.getValue()),
+						configurationNameValue == null ? "": String.valueOf(configurationNameValue.getValue())
 				);
-				writeStatement("private final "+Router.class.getName()+" "+getMethodRouterName(method) +" = createRouterInstance"+tra.getOrder()+"()");
+				writeStatement("private final "+Router.class.getName()+ ' ' +getMethodRouterName(method) +" = createRouterInstance"+tra.getOrder()+"()");
 				ret.add(tra);
 			}
 		}
@@ -845,7 +845,7 @@ public class AbstractGenerator {
 	}
 	
 	protected List<TranslatedCCAnnotation> writeConcurrencyControlDeclarations(TypeElement type){
-		List<TranslatedCCAnnotation> ret = new ArrayList<AbstractGenerator.TranslatedCCAnnotation>();
+		List<TranslatedCCAnnotation> ret = new ArrayList<>();
 		Collection<? extends ExecutableElement> methods = getAllDeclaredMethods(type);
 		writeCommentLine("CONCURRENCY CONTROL");
 		writeCommentLine("Class wide concurrency control strategy ");
@@ -890,9 +890,9 @@ public class AbstractGenerator {
 	 * @return
 	 */
 	protected String getFailingStrategyVariableName(ExecutableElement Element){
-		StringBuilder ret = new StringBuilder(Element.getSimpleName()).append("FailingStrategy");
-		ret.append(getParameterizedVariableName(Element));
-		return ret.toString();
+		String ret = Element.getSimpleName() + "FailingStrategy" +
+				getParameterizedVariableName(Element);
+		return ret;
 	}
 	/**
 	 * Returns the name for concurrency control strategy variable
@@ -900,9 +900,9 @@ public class AbstractGenerator {
 	 * @return
 	 */
 	protected String getCCStrategyVariableName(ExecutableElement Element){
-		StringBuilder ret = new StringBuilder(Element.getSimpleName()).append("CCStrategy");
-		ret.append(getParameterizedVariableName(Element));
-		return ret.toString();
+		String ret = Element.getSimpleName() + "CCStrategy" +
+				getParameterizedVariableName(Element);
+		return ret;
 	}
 	
 	//included <> as backup in case we have generic types in types (List<Set<String>>).
@@ -921,22 +921,22 @@ public class AbstractGenerator {
 		writeString("private ConcurrencyControlStrategy createConcurrencyControlStrategy"+cca.getOrder()+"(){");
 		increaseIdent();
 		writeStatement("ConcurrencyControlStrategy strat = new "+cca.getStrategyClass()+"()");
-		writeStatement("strat.customize("+quote(cca.getParameter())+")");
+		writeStatement("strat.customize("+quote(cca.getParameter())+ ')');
 		writeStatement("return strat");
-		closeBlock();
+		closeBlockNEW();
 	}
 	
 	protected void writeRouterCreationMethod(String serviceIdCall, TranslatedRouterAnnotation tra){
 		writeString("private "+Router.class.getName()+" createRouterInstance"+tra.getOrder()+"(){");
 		increaseIdent();
 		writeStatement(Router.class.getName()+" router = new "+tra.getStrategyClass()+"()");
-		if (tra.getConfigurationName()!=null && tra.getConfigurationName().length()>0){
-			writeStatement("((org.distributeme.core.routing.ConfigurableRouter)router).setConfigurationName("+serviceIdCall+ ", " +quote(tra.getConfigurationName())+")");
+		if (tra.getConfigurationName()!=null && !tra.getConfigurationName().isEmpty()){
+			writeStatement("((org.distributeme.core.routing.ConfigurableRouter)router).setConfigurationName("+serviceIdCall+ ", " +quote(tra.getConfigurationName())+ ')');
 		}else {
-			writeStatement("router.customize("+serviceIdCall+ ", " + quote(tra.getParameter()) + ")");
+			writeStatement("router.customize("+serviceIdCall+ ", " + quote(tra.getParameter()) + ')');
 		}
 		writeStatement("return router");
-		closeBlock();
+		closeBlockNEW();
 	}
 
 	protected String interceptionPhaseToMethod(InterceptionPhase phase){
@@ -963,7 +963,7 @@ public class AbstractGenerator {
 		return decl.getReturnType().toString().equals("void");
 	}
 
-	protected String getMethodRouterName(ExecutableElement Element){
+	protected String getMethodRouterName(Element Element){
 		return Element.getSimpleName()+"Router";
 	}
 

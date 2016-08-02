@@ -63,7 +63,7 @@ public final class RegistryLocation implements Location {
 	}
 	
 	@Override public String toString(){
-		return "MetaRegistry " + getRegistryContainerHost() + ":" +getRegistryContainerPort()+", local range: ["+rmiRegistryMinPort+" .. "+rmiRegistryMaxPort+"]";
+        return "MetaRegistry " + registryContainerHost + ':' + registryContainerPort +", local range: ["+rmiRegistryMinPort+" .. "+rmiRegistryMaxPort+ ']';
 	}
 
 	/**
@@ -88,7 +88,7 @@ public final class RegistryLocation implements Location {
 		registryContainerPort = SystemProperties.CENTRAL_REGISTRY_PORT.getAsInt();
 		rmiRegistryMinPort = SystemProperties.LOCAL_RMI_REGISTRY_MIN_PORT.getAsInt();
 		rmiRegistryMaxPort = SystemProperties.LOCAL_RMI_REGISTRY_MAX_PORT.getAsInt();
-		return registryContainerHost!=null && registryContainerHost.length()>0;
+		return registryContainerHost!=null && !registryContainerHost.isEmpty();
 	}
 	
 	/**

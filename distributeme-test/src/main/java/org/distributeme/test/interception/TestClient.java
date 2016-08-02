@@ -3,6 +3,7 @@ package org.distributeme.test.interception;
 import org.distributeme.core.ServiceLocator;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class TestClient {
 	/**
@@ -33,11 +34,11 @@ public class TestClient {
 	
 	private static void testPiggybacking(){
 		System.out.println("Passing some parameter map");
-		HashMap<String, String> parameters = new HashMap<String, String>();
+		HashMap<String, String> parameters = new HashMap<>();
 		parameters.put("Client says" , "Hi");
 		System.out.println("--------------");
 		
-		HashMap<String, String> p2 = (HashMap<String, String>)parameters.clone();
+		Map<String, String> p2 = (HashMap<String, String>)parameters.clone();
 		System.out.println("Parameter map is "+p2);
 		localInstance.callByValue(p2);
 		System.out.println("After executing locally map is: "+p2);
@@ -74,12 +75,12 @@ public class TestClient {
 	}
 	
 	private static void testReturnValueOverride(){
-		System.out.println("Calling server, expecting answer: \""+localInstance.returnString()+"\"");
+		System.out.println("Calling server, expecting answer: \""+localInstance.returnString()+ '"');
 		System.out.println("Server returned: "+testService.returnString());
 	}
 
 	private static void testReturnInterceptedInClient(){
-		System.out.println("Calling server, expecting answer: \""+localInstance.returnStringCaughtInClient()+"\"");
+		System.out.println("Calling server, expecting answer: \""+localInstance.returnStringCaughtInClient()+ '"');
 		System.out.println("Server returned: "+testService.returnStringCaughtInClient());
 	}
 }

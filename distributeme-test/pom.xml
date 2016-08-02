@@ -19,10 +19,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
                 <configuration>
-                    <source>${source-version}</source>
-                    <target>${target-version}</target>
                     <annotationProcessors>
                         <annotationProcessor>
                             org.distributeme.processors.GeneratorProcessorFactory
@@ -84,20 +81,20 @@
             <artifactId>jackson-mapper-asl</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>jetty</artifactId>
-            <version>6.1.26</version>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>9.3.11.v20160721</version>
         </dependency>
         <dependency>
-            <groupId>org.mortbay.jetty</groupId>
+            <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-util</artifactId>
-            <version>6.1.26</version>
+            <version>9.3.11.v20160721</version>
         </dependency>
 
         <dependency>
-            <groupId>org.mortbay.jetty</groupId>
+            <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-client</artifactId>
-            <version>6.1.26</version>
+            <version>9.3.11.v20160721</version>
         </dependency>
         <dependency>
             <groupId>jsonrpc</groupId>
@@ -123,8 +120,8 @@
       </dependency>
         <dependency>
             <groupId>org.jdom</groupId>
-            <artifactId>jdom</artifactId>
-            <version>1.1</version>
+            <artifactId>jdom2</artifactId>
+            <version>2.0.6</version>
         </dependency>
         <dependency>
             <groupId>net.anotheria</groupId>

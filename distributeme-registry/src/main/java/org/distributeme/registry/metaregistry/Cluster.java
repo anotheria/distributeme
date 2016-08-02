@@ -31,7 +31,7 @@ public enum Cluster {
 	/**
 	 * Entires of this cluster.
 	 */
-	private List<ClusterEntry> entries = new ArrayList<ClusterEntry>();
+	private List<ClusterEntry> entries = new ArrayList<>();
 	
 	/**
 	 * QueuedProcessor for asynchronous process of commands.
@@ -63,14 +63,14 @@ public enum Cluster {
 		}
 		MetaRegistryImpl.getInstance().addListener(new ClusterRegistryListener());
 		
-		syncCommandProcessor = new QueuedProcessor<ClusterSyncCommand>("ClusterSyncCommandProcessor", new ClusterWorker(), 5000, 50, log);
+		syncCommandProcessor = new QueuedProcessor<>("ClusterSyncCommandProcessor", new ClusterWorker(), 5000, 50, log);
 		syncCommandProcessor.start();
 		
 	}
 
 	void reconfigure(String registryCluster){
 		log.info("Configuring registry cluster as "+registryCluster);
-		if (registryCluster==null || registryCluster.length()==0)
+		if (registryCluster==null || registryCluster.isEmpty())
 			return;
 		String tokens[] = StringUtils.tokenize(registryCluster, ',');
 		for (String t : tokens){
@@ -87,7 +87,7 @@ public enum Cluster {
 	}
 	
 	public boolean isClusterActive(){
-		return entries!=null && entries.size()>0;
+		return entries!=null && !entries.isEmpty();
 	}
 	
 	public void addSyncCommand(ClusterSyncCommand command){

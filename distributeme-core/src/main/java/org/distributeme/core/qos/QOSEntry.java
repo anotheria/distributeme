@@ -60,11 +60,11 @@ public class QOSEntry {
 	}
 
 	public String getKey(){
-		return getKey(getServiceId(), getCallId());
+        return getKey(serviceId, callId);
 	}
 
 	public static String getKey(String serviceId, String callId){
-		return serviceId+"-"+callId;
+		return serviceId+ '-' +callId;
 	}
 
 	@Override
@@ -93,6 +93,6 @@ public class QOSEntry {
 	 * @return
 	 */
 	public boolean isBlacklistExpired(){
-		return System.currentTimeMillis() > getBlacklistedUntil();
+        return System.currentTimeMillis() > blacklistedUntil;
 	}
 }

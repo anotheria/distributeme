@@ -21,7 +21,7 @@ public class List {
 		Registry registry = null;
 		registry = LocateRegistry.getRegistry(host, port);
 		String[] services = registry.list();
-		System.out.println("Services @ "+host+":"+port+" are: "+ Arrays.toString(services));
+		System.out.println("Services @ "+host+ ':' +port+" are: "+ Arrays.toString(services));
 	}
 
 }

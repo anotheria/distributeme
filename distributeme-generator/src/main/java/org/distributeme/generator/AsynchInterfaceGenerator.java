@@ -31,7 +31,7 @@ public class AsynchInterfaceGenerator extends AbstractGenerator implements Gener
 		if (!typeAnnotation.asynchSupport())
 			return;
 
-		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type) + "." + getAsynchInterfaceName(type));
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type) + '.' + getAsynchInterfaceName(type));
 		PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
@@ -51,7 +51,7 @@ public class AsynchInterfaceGenerator extends AbstractGenerator implements Gener
 			emptyline(); 
 		}
 		
-		closeBlock();
+		closeBlockNEW();
 		
 		writer.flush();
 		writer.close();

@@ -49,7 +49,7 @@ public class FairRoundRobinRouter extends AbstractRouter implements Router{
 			fromCounter = 0;
 			callCounter.compareAndSet(oldCounter, 0);
 		}
-		return callContext.getServiceId()+"_"+(fromCounter%MOD);
+		return callContext.getServiceId()+ '_' +(fromCounter%MOD);
 	}
 
 }

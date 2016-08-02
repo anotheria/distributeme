@@ -13,7 +13,7 @@ import org.distributeme.core.interceptor.InterceptorResponse;
  */
 public class ClientSideMarkLongRequestAsFailedInterceptor implements ClientSideRequestInterceptor{
 
-	public static final String START_ATTRIBUTE = ClientSideMarkLongRequestAsFailedInterceptor.class.getName()+"-"+"start";
+	public static final String START_ATTRIBUTE = ClientSideMarkLongRequestAsFailedInterceptor.class.getName()+ '-' +"start";
 	public static final String TIMEOUT_PROPERTY = "availabilityTestingFailureTimeout";
 
 	//default 1 minute
@@ -21,7 +21,7 @@ public class ClientSideMarkLongRequestAsFailedInterceptor implements ClientSideR
 
 	public ClientSideMarkLongRequestAsFailedInterceptor(){
 		String timeoutProperty = System.getProperty(TIMEOUT_PROPERTY);
-		if (timeoutProperty!= null && timeoutProperty.length()>0)
+		if (timeoutProperty!= null && !timeoutProperty.isEmpty())
 			TIMEOUT = Long.parseLong(timeoutProperty);
 	}
 

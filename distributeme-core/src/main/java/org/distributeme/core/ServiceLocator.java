@@ -34,7 +34,7 @@ public class ServiceLocator {
 		//try to lookup an instance by name
 		String className = SharedNamingUtils.getAsynchFactoryFullClassName(pattern);
 		try{
-			@SuppressWarnings("unchecked")Class<ServiceFactory<T>> factoryClazz = (Class<ServiceFactory<T>>)Class.forName(className);
+			Class<ServiceFactory<T>> factoryClazz = (Class<ServiceFactory<T>>)Class.forName(className);
 			MetaFactory.addFactoryClass(pattern, Extension.ASYNCH, factoryClazz);
 		}catch(ClassNotFoundException ignored){
 			ignored.printStackTrace();
@@ -42,8 +42,8 @@ public class ServiceLocator {
 		try{
 			return MetaFactory.get(pattern, Extension.ASYNCH);
 		}catch(MetaFactoryException e){
-			log.error("getAsynchRemote("+pattern+")", e);
-			throw new RuntimeException("No asynch impl for "+pattern.getName()+" known (tried MetaFactory.get("+pattern.getName()+" and "+className+")");
+			log.error("getAsynchRemote("+pattern+ ')', e);
+			throw new RuntimeException("No asynch impl for "+pattern.getName()+" known (tried MetaFactory.get("+pattern.getName()+" and "+className+ ')');
 		}
 	}
 
@@ -62,7 +62,7 @@ public class ServiceLocator {
 		//try to lookup an instance by name
 		String className = SharedNamingUtils.getStubFactoryFullClassName(pattern);
 		try{
-			@SuppressWarnings("unchecked")Class<ServiceFactory<T>> factoryClazz = (Class<ServiceFactory<T>>)Class.forName(className);
+			Class<ServiceFactory<T>> factoryClazz = (Class<ServiceFactory<T>>)Class.forName(className);
 			MetaFactory.addFactoryClass(pattern, Extension.REMOTE, factoryClazz);
 		}catch(ClassNotFoundException ignored){
 			ignored.printStackTrace();
@@ -70,8 +70,8 @@ public class ServiceLocator {
 		try{
 			return MetaFactory.get(pattern, Extension.REMOTE);
 		}catch(MetaFactoryException e){
-			log.error("getRemote("+pattern+")", e);
-			throw new RuntimeException("No remote impl for "+pattern.getName()+" known (tried MetaFactory.get("+pattern.getName()+" and "+className+")");
+			log.error("getRemote("+pattern+ ')', e);
+			throw new RuntimeException("No remote impl for "+pattern.getName()+" known (tried MetaFactory.get("+pattern.getName()+" and "+className+ ')');
 		}
 	}
 	

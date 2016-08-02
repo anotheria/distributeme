@@ -33,7 +33,7 @@ public final class ListenerRegistry {
 	/**
 	 * Configured listeners.
 	 */
-	private volatile List<ServerLifecycleListener> serverLifecycleListeners = new ArrayList<ServerLifecycleListener>();
+	private volatile List<ServerLifecycleListener> serverLifecycleListeners = new ArrayList<>();
 	
 	/**
 	 * Returns the singleton instances.
@@ -58,8 +58,8 @@ public final class ListenerRegistry {
 		return serverLifecycleListeners;
 	}
 	
-	static void buildListeners(List<ListenerEntry> entries){
-		List<ServerLifecycleListener> newServerLifecycleListeners = new ArrayList<ServerLifecycleListener>();
+	static void buildListeners(Iterable<ListenerEntry> entries){
+		List<ServerLifecycleListener> newServerLifecycleListeners = new ArrayList<>();
 		for (ListenerEntry entry : entries){
 			try {
 				Object listenerInstance = Class.forName(entry.clazzName).newInstance();
@@ -68,14 +68,10 @@ public final class ListenerRegistry {
 				}
 				
 				//ADD FUTURE listeners here
-			} catch (InstantiationException e) {
-				log.error("buildInterceptors(... "+entry.clazzName+")", e);
-			} catch (IllegalAccessException e) {
-				log.error("buildInterceptors(... "+entry.clazzName+")", e);
-			} catch (ClassNotFoundException e) {
-				log.error("buildInterceptors(... "+entry.clazzName+")", e);
+			} catch (InstantiationException | ClassNotFoundException | IllegalAccessException e) {
+				log.error("buildInterceptors(... "+entry.clazzName+ ')', e);
 			}
-		}
+        }
 		instance.serverLifecycleListeners = newServerLifecycleListeners;
 	}
 	
@@ -89,7 +85,7 @@ public final class ListenerRegistry {
 		/**
 		 * Interceptor entries.
 		 */
-		private List<ListenerEntry> listenerEntries = new ArrayList<ListenerEntry>();
+		private List<ListenerEntry> listenerEntries = new ArrayList<>();
 		
 		@AfterConfiguration public void reconfigure(){
 			buildListeners(StaticQuickSorter.sort(listenerEntries, new DummySortType()));

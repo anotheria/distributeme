@@ -13,12 +13,6 @@
   <description>DistributeMe core functionality</description>
 
     <dependencies>
-        <!--
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <scope>test</scope>
-        </dependency> -->
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
@@ -45,10 +39,6 @@
                     <groupId>net.sf.dozer</groupId>
                     <artifactId>dozer</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>blowfish</groupId>
-                    <artifactId>blowfish</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
@@ -61,16 +51,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-<!--        <dependency>
-            <groupId>net.anotheria</groupId>
-            <artifactId>moskito-webui</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>*</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency> -->
         <dependency>
             <groupId>net.anotheria</groupId>
             <artifactId>ano-prise</artifactId>

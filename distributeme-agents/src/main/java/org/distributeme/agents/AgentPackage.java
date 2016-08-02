@@ -28,7 +28,7 @@ public class AgentPackage implements Serializable{
 	private String rootClazzName;
 	
 	public AgentPackage(){
-		clazzDefinitions = new HashMap<String, byte[]>();
+		clazzDefinitions = new HashMap<>();
 	}
 	
 	public String toString(){

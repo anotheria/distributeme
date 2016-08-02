@@ -10,7 +10,6 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-@SuppressWarnings({"unchecked","rawtypes"})
 public class ParameterBasedModRouterTest {
 	
 	@Test public void testInteger(){

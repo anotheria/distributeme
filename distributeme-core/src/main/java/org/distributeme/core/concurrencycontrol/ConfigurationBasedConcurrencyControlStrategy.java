@@ -45,7 +45,7 @@ public class ConfigurationBasedConcurrencyControlStrategy implements Concurrency
 	}
 
 	private void customizeFromAnnotationParameter(String parameter){
-		if (parameter==null || parameter.length()==0)
+		if (parameter==null || parameter.isEmpty())
 			throw new IllegalArgumentException("Empty or null parameter, expected clientlimit,serverlimit");
 		String limits[] = StringUtils.tokenize(parameter, ',');
 		int aClientSideLimit = Integer.parseInt(limits[0]);

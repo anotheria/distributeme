@@ -17,7 +17,7 @@ public class SysOutRouter extends AbstractRouter implements Router{
 
 	@Override
 	public String getServiceIdForCall(ClientSideCallContext callContext) {
-		System.out.println("Router sees service call to "+callContext.getServiceId()+" method: "+callContext.getMethodName()+"("+callContext.getParameters()+")");
+		System.out.println("Router sees service call to "+callContext.getServiceId()+" method: "+callContext.getMethodName()+ '(' +callContext.getParameters()+ ')');
 		return callContext.getServiceId();
 	}
 	

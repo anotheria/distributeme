@@ -29,7 +29,7 @@ public class ServerLifecycleListenerShutdownHook extends Thread{
 
 	@Override public void run(){
 		//embedded listeners
-		if (listeners!=null && listeners.size()>0){
+		if (listeners!=null && !listeners.isEmpty()){
 			for (ServerLifecycleListener listener : listeners){
 				try{
 					listener.beforeShutdown();
@@ -41,7 +41,7 @@ public class ServerLifecycleListenerShutdownHook extends Thread{
 		
 		//configured listeners
 		List<ServerLifecycleListener> configuredListeners = ListenerRegistry.getInstance().getServerLifecycleListeners();
-		if (configuredListeners!=null && configuredListeners.size()>0){
+		if (configuredListeners!=null && !configuredListeners.isEmpty()){
 			for (ServerLifecycleListener listener : configuredListeners){
 				try{
 					listener.beforeShutdown();

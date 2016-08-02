@@ -34,11 +34,11 @@ public final class InterceptorRegistry {
 	/**
 	 * Configured clientSideInterceptors.
 	 */
-	private volatile List<ClientSideRequestInterceptor> clientSideInterceptors = new ArrayList<ClientSideRequestInterceptor>();
+	private volatile List<ClientSideRequestInterceptor> clientSideInterceptors = new ArrayList<>();
 	/**
 	 * Configured serverSideInterceptors.
 	 */
-	private volatile List<ServerSideRequestInterceptor> serverSideInterceptors = new ArrayList<ServerSideRequestInterceptor>();
+	private volatile List<ServerSideRequestInterceptor> serverSideInterceptors = new ArrayList<>();
 	
 	/**
 	 * Returns the singleton instances.
@@ -67,9 +67,9 @@ public final class InterceptorRegistry {
 		return serverSideInterceptors;
 	}
 	
-	static void buildInterceptors(List<InterceptorEntry> entries, String[] interceptorNames){
-		List<ClientSideRequestInterceptor> clientSide = new ArrayList<ClientSideRequestInterceptor>();
-		List<ServerSideRequestInterceptor> serverSide = new ArrayList<ServerSideRequestInterceptor>();
+	static void buildInterceptors(Iterable<InterceptorEntry> entries, String[] interceptorNames){
+		List<ClientSideRequestInterceptor> clientSide = new ArrayList<>();
+		List<ServerSideRequestInterceptor> serverSide = new ArrayList<>();
 		for (InterceptorEntry entry : entries){
 			try {
 				Object interceptorInstance = Class.forName(entry.clazzName).newInstance();
@@ -79,14 +79,10 @@ public final class InterceptorRegistry {
 				if (interceptorInstance instanceof ServerSideRequestInterceptor){
 					serverSide.add((ServerSideRequestInterceptor)interceptorInstance);
 				}
-			} catch (InstantiationException e) {
-				log.error("buildInterceptors(... "+entry.clazzName+")", e);
-			} catch (IllegalAccessException e) {
-				log.error("buildInterceptors(... "+entry.clazzName+")", e);
-			} catch (ClassNotFoundException e) {
-				log.error("buildInterceptors(... "+entry.clazzName+")", e);
+			} catch (InstantiationException | ClassNotFoundException | IllegalAccessException e) {
+				log.error("buildInterceptors(... "+entry.clazzName+ ')', e);
 			}
-		}
+        }
 		if (interceptorNames!=null){
 			for (String interceptorName : interceptorNames){
 				try {
@@ -97,14 +93,10 @@ public final class InterceptorRegistry {
 					if (interceptorInstance instanceof ServerSideRequestInterceptor){
 						serverSide.add((ServerSideRequestInterceptor)interceptorInstance);
 					}
-				} catch (InstantiationException e) {
-					log.error("buildInterceptors(... "+interceptorName+")", e);
-				} catch (IllegalAccessException e) {
-					log.error("buildInterceptors(... "+interceptorName+")", e);
-				} catch (ClassNotFoundException e) {
-					log.error("buildInterceptors(... "+interceptorName+")", e);
+				} catch (InstantiationException | ClassNotFoundException | IllegalAccessException e) {
+					log.error("buildInterceptors(... "+interceptorName+ ')', e);
 				}
-			}
+            }
 		}
 		instance.clientSideInterceptors = clientSide;
 		instance.serverSideInterceptors = serverSide;
@@ -124,7 +116,7 @@ public final class InterceptorRegistry {
 		/**
 		 * Interceptor entries.
 		 */
-		private List<InterceptorEntry> interceptorEntries = new ArrayList<InterceptorEntry>();
+		private List<InterceptorEntry> interceptorEntries = new ArrayList<>();
 		
 		@AfterConfiguration public void reconfigure(){
 			buildInterceptors(StaticQuickSorter.sort(interceptorEntries, new DummySortType()), interceptors);

@@ -7,7 +7,7 @@ public class AbstractECTester {
 	private int myNumber = instanceCounter.incrementAndGet();
 	
 	protected void out(Object o){
-		System.out.println("["+(getClass().getSimpleName()) +myNumber+"] "+o);
+		System.out.println('[' +(getClass().getSimpleName()) +myNumber+"] "+o);
 	}
 	
 	protected int getInstanceNumber(){

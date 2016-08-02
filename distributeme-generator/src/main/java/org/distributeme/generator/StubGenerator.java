@@ -7,6 +7,7 @@ import org.distributeme.annotation.Route;
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.Defaults;
 import org.distributeme.core.DiscoveryMode;
+import org.distributeme.core.RegistryUtil;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.core.concurrencycontrol.ConcurrencyControlStrategy;
 import org.distributeme.core.exception.DistributemeRuntimeException;
@@ -50,7 +51,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		
 		//System.out.println("%%%\nStarting generating "+type+"\n\n");
 		
-		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getStubName(type));
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+ '.' +getStubName(type));
         PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
@@ -65,7 +66,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeImport(Logger.class);
 		writeImport(RemoteException.class);
 		writeImport(NotBoundException.class);
-		writeImport(org.distributeme.core.RegistryUtil.class);
+		writeImport(RegistryUtil.class);
 		writeImport("java.rmi.registry.LocateRegistry");
 		writeImport("java.rmi.registry.Registry");
 		writeImport(ServiceDescriptor.class);
@@ -87,7 +88,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeImport(FailedByInterceptorException.class);
 		emptyline();
 		
-		writeString("public class "+getStubName(type)+" implements "+type.getQualifiedName()+"{");
+		writeString("public class "+getStubName(type)+" implements "+type.getQualifiedName()+ '{');
 		increaseIdent();
 		emptyline();
 		
@@ -103,7 +104,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			if (logWriterClazzValue==null){
 				logWriterClazzName = SysErrorLogWriter.class.getName();
 			}else{
-				logWriterClazzName = ""+logWriterClazzValue.getValue();
+				logWriterClazzName = String.valueOf(logWriterClazzValue.getValue());
 			}
 			
 			logWriter = (LogWriter)(Class.forName(logWriterClazzName).newInstance());
@@ -115,7 +116,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		//System.out.println("====================");
 
 		String loggerInitialization = logWriter.createLoggerInitialization(getStubName(type));
-		if (loggerInitialization!=null && loggerInitialization.length()>0)
+		if (loggerInitialization!=null && !loggerInitialization.isEmpty())
 			writeStatement(loggerInitialization);
 		emptyline();
 	
@@ -134,7 +135,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 
 		//OLD ROUTER HANDLING
 		Collection<? extends ExecutableElement> methods = getAllDeclaredMethods(type);
-		Set<ExecutableElement> routedMethods = new HashSet<ExecutableElement>();
+		Collection<ExecutableElement> routedMethods = new HashSet<>();
 		for (ExecutableElement method : methods){
 			AnnotationMirror methodRoute = findMirror(method, Route.class);
 			if (methodRoute!=null){
@@ -150,7 +151,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		AnnotationMirror clazzWideFailingStrategyAnnotation = findMirror(type, FailBy.class);
 		String clazzWideFailingStrategyName = null;
 		if (clazzWideFailingStrategyAnnotation != null){
-			clazzWideFailingStrategyName = ""+findMethodValue(clazzWideFailingStrategyAnnotation, "strategyClass").getValue();
+			clazzWideFailingStrategyName = String.valueOf(findMethodValue(clazzWideFailingStrategyAnnotation, "strategyClass").getValue());
 		}
 
 		//start clazz wide failing
@@ -182,7 +183,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 					String targetRouterName = routedMethods.contains(method) ? getMethodRouterName(method) : "clazzWideRouter";
 					writeStatement("private FailingStrategy "+getFailingStrategyVariableName(method)+" = (FailingStrategy) "+targetRouterName);
 				}else{
-					String methodFailingStrategyName = ""+findMethodValue(methodFailingStrategyAnnotation, "strategyClass").getValue();
+					String methodFailingStrategyName = String.valueOf(findMethodValue(methodFailingStrategyAnnotation, "strategyClass").getValue());
 					writeStatement("private FailingStrategy "+getFailingStrategyVariableName(method)+" = new "+methodFailingStrategyName+"()");
 				}
 			}else{
@@ -204,7 +205,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeString("public "+getStubName(type)+"(){");
 		increaseIdent();
 		writeStatement("discoveryMode = DiscoveryMode.AUTO");
-		closeBlock();
+		closeBlockNEW();
 		emptyline();
 	
 		//create MANUAL constructor
@@ -220,25 +221,25 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeString("}catch(NoConnectionToServerException e){");
 		writeIncreasedStatement("throw new IllegalStateException("+quote("Can not resolve manually set reference")+", e)");
 		closeBlockWithoutIdent();
-		closeBlock();
+		closeBlockNEW();
 		emptyline();
 		
 		////////// METHODS ///////////
 		for (ExecutableElement method : methods){
-			writeString("public "+getStubMethodDeclaration(method)+"{");
+			writeString("public "+getStubMethodDeclaration(method)+ '{');
 			increaseIdent();
 			StringBuilder callToPrivate = new StringBuilder(method.getSimpleName()+"(");
 			for (VariableElement p : method.getParameters()){
 				callToPrivate.append(p.getSimpleName());
 				callToPrivate.append(", ");
 			}
-			writeStatement((isVoidReturn(method) ? "" : "return ")+callToPrivate.toString()+"(ClientSideCallContext)null)");
+			writeStatement((isVoidReturn(method) ? "" : "return ")+ callToPrivate +"(ClientSideCallContext)null)");
 			closeBlock("public "+getStubMethodDeclaration(method));
 			emptyline();
 
 			
 			String methodDecl = getInternalStubMethodDeclaration(method);
-			writeString("private "+methodDecl+"{");
+			writeString("private "+methodDecl+ '{');
 			increaseIdent();
 			writeStatement("List __fromServerSide = null");
 			writeStatement("Exception exceptionInMethod = null");
@@ -247,7 +248,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			//if true the call will not be executed, instead we jump into failing.
 			writeStatement("boolean abortAndFail = false");
 			writeString("if (diMeCallContext == null)");
-			writeIncreasedStatement("diMeCallContext = new ClientSideCallContext("+quote(method.getSimpleName())+")");
+			writeIncreasedStatement("diMeCallContext = new ClientSideCallContext("+quote(method.getSimpleName())+ ')');
 			writeString("if (discoveryMode == DiscoveryMode.MANUAL) {");
 			writeIncreasedStatement("diMeCallContext.setServiceId(manuallySetDescriptor.getServiceId())");
 			writeString("}");
@@ -274,7 +275,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 				writeStatement("ArrayList<Object> diMeParameters = new ArrayList<Object>()");
 				Collection<? extends VariableElement> parameters = method.getParameters();
 				for (VariableElement p : parameters){
-					writeStatement("diMeParameters.add("+p.getSimpleName()+")");
+					writeStatement("diMeParameters.add("+p.getSimpleName()+ ')');
 				}
 				writeStatement("diMeCallContext.setParameters(diMeParameters)");
 			}
@@ -297,7 +298,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 						writeStatement("ArrayList<Object> diMeParameters = new ArrayList<Object>()");
 						Collection<? extends VariableElement> parameters = method.getParameters();
 						for (VariableElement p : parameters){
-							writeStatement("diMeParameters.add("+p.getSimpleName()+")");
+							writeStatement("diMeParameters.add("+p.getSimpleName()+ ')');
 						}
 						writeStatement("diMeCallContext.setParameters(diMeParameters)");
 						
@@ -315,7 +316,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			Collection<? extends VariableElement> parameters = method.getParameters();
 			int parameterCounter = 0;
 			for (VariableElement p : parameters){
-				writeStatement(p.getSimpleName()+" = " +convertReturnValue(p.asType(), "diMeParameters.get("+(parameterCounter++)+")"));
+				writeStatement(p.getSimpleName()+" = " +convertReturnValue(p.asType(), "diMeParameters.get("+(parameterCounter++)+ ')'));
 				//writeStatement("diMeParameters.add("+p.getSimpleName()+")");
 			}
 			
@@ -329,7 +330,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			if (paramCall.length()>0)
 				paramCall.append(", ");
 			paramCall.append(" __transportableCallContext");
-			call += "("+paramCall.toString()+");";
+			call += paramCall.insert(0, '(').append(");");
 			writeString("if (!abortAndFail){");
 			increaseIdent();
 			writeString(call);
@@ -339,7 +340,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			}else{
 				writeStatement("return "+convertReturnValue(method.getReturnType(), "__fromServerSide.get(0)"));
 			}
-			closeBlock();
+			closeBlockNEW();
 			decreaseIdent();
 			writeString("}catch(RemoteException e){");
 			increaseIdent();
@@ -397,12 +398,12 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			writeCommentLine("Fail or default is to do nothing at all and let the request fail");
 			closeBlock("switch(failDecision)");
 			
-			closeBlock();
+			closeBlockNEW();
 			writeCommentLine("fail through, if we are here, we must have had an exception before.");
 			writeString("if (exceptionInMethod == null)");
-			writeIncreasedStatement("throw new AssertionError("+quote("Exception must have been thrown before, but it wasn't, framework error!")+")");
+			writeIncreasedStatement("throw new AssertionError("+quote("Exception must have been thrown before, but it wasn't, framework error!")+ ')');
 			writeStatement("throw mapException(exceptionInMethod)");
-			closeBlock();
+			closeBlockNEW();
 			emptyline();
 		}
 
@@ -411,7 +412,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeString("//private void notifyDelegateFailed(){");
 		increaseIdent();
 		writeStatement("//notifyDelegateFailed("+getConstantsName(type)+".getServiceId())");
-		//closeBlock();
+		//closeBlockNEW();
 		decreaseIdent();
 		writeString("//}");
 		emptyline();
@@ -438,7 +439,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeStatement("return manuallySetTarget");
 		closeBlock("if (mode==MANUAL)");
 		writeStatement("return getDelegate("+getConstantsName(type)+".getServiceId())");
-		closeBlock();
+		closeBlockNEW();
 		emptyline();
 	
 		writeString("private "+getRemoteInterfaceName(type)+" getDelegate(String serviceId) throws NoConnectionToServerException{");
@@ -471,14 +472,14 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeStatement("ServiceDescriptor toLookup = new ServiceDescriptor(Protocol.RMI, serviceId)");
 		writeStatement("ServiceDescriptor targetService = RegistryUtil.resolve(toLookup)");
 		writeString("if (targetService==null)");
-		writeIncreasedStatement("throw new RuntimeException("+quote("Can't resolve host for an instance of ")+"+"+getConstantsName(type)+".getServiceId())");
+		writeIncreasedStatement("throw new RuntimeException("+quote("Can't resolve host for an instance of ")+ '+' +getConstantsName(type)+".getServiceId())");
 		writeStatement("Registry registry = null");
 		openTry();
 		writeStatement("registry = LocateRegistry.getRegistry(targetService.getHost(), targetService.getPort())");
 		decreaseIdent();
 		writeString("}catch(Exception e){");
 		writeIncreasedStatement(logWriter.createErrorOutputWithException(quote("lookup - couldn't obtain rmi registry on ")+"+targetService+"+quote(", aborting lookup"), "e"));
-		writeIncreasedStatement("throw new NoConnectionToServerException("+quote("Can't resolve rmi registry for an instance of ")+"+"+getConstantsName(type)+".getServiceId())");
+		writeIncreasedStatement("throw new NoConnectionToServerException("+quote("Can't resolve rmi registry for an instance of ")+ '+' +getConstantsName(type)+".getServiceId())");
 		writeString("}");
 		
 		openTry();
@@ -490,7 +491,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeIncreasedStatement("throw new NoConnectionToServerException("+quote("Can't lookup service in the target rmi registry for an instance of ")+"+serviceId, e)");
 		writeString("}");
 	
-		closeBlock();
+		closeBlockNEW();
 		emptyline();
 	
 		
@@ -516,18 +517,18 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeIncreasedStatement("throw new NoConnectionToServerException("+quote("Can't lookup service in the target rmi registry for an instance of ")+"+serviceDescriptor, e)");
 		writeString("}");
 	
-		closeBlock();
+		closeBlockNEW();
 
 		//write exception mapping block
 		emptyline();
 		writeString("private "+DistributemeRuntimeException.class.getSimpleName()+" mapException(Exception in){");
 		increaseIdent();
-		writeString("if (in instanceof "+DistributemeRuntimeException.class.getSimpleName()+")");
+		writeString("if (in instanceof "+DistributemeRuntimeException.class.getSimpleName()+ ')');
 		writeIncreasedStatement("return ("+DistributemeRuntimeException.class.getSimpleName()+") in");
-		writeString("if (in instanceof "+RemoteException.class.getSimpleName()+")");
+		writeString("if (in instanceof "+RemoteException.class.getSimpleName()+ ')');
 		writeIncreasedStatement("return new "+ServiceUnavailableException.class.getSimpleName()+" (\"Service unavailable due to rmi failure: \"+in.getMessage(), in)");
 		writeStatement("return new "+ServiceUnavailableException.class.getSimpleName()+"(\"Unexpected exception: \"+in.getMessage()+\" \" + in.getClass().getName(), in)");
-		closeBlock();
+		closeBlockNEW();
 		
 		//write concurrency control strategy created methods
 		for (TranslatedCCAnnotation cca: concurrencyControlAnnotations){
@@ -539,7 +540,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			writeRouterCreationMethod(getConstantsName(type)+".getServiceId()", tra);
 		}
 
-		closeBlock();
+		closeBlockNEW();
 		
 		
 		writer.flush();
@@ -551,7 +552,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 	
 	private void writeInterceptionBlock(InterceptionPhase phase, ExecutableElement method){
 		boolean afterCall = phase == InterceptionPhase.AFTER_SERVICE_CALL;
-		writeStatement("diMeInterceptionContext.setCurrentPhase(InterceptionPhase."+phase.toString()+")");
+		writeStatement("diMeInterceptionContext.setCurrentPhase(InterceptionPhase."+ phase + ')');
 		if (afterCall){
 			writeString("if (__fromServerSide!=null){");
 			writeIncreasedStatement("diMeInterceptionContext.setReturnValue(__fromServerSide.get(0))");
@@ -568,8 +569,8 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeString("if (interceptorResponse.getException() instanceof RuntimeException)");
 		writeIncreasedStatement("throw (RuntimeException) interceptorResponse.getException()");
 		for (TypeMirror type : method.getThrownTypes()){
-			writeString("if (interceptorResponse.getException() instanceof "+type.toString()+")");
-			writeIncreasedStatement("throw ("+type.toString()+") interceptorResponse.getException()");
+			writeString("if (interceptorResponse.getException() instanceof "+ type + ')');
+			writeIncreasedStatement("throw ("+ type +") interceptorResponse.getException()");
 		}
 		writeStatement("throw new RuntimeException("+quote("Interceptor exception")+",interceptorResponse.getException())");
 		decreaseIdent();
@@ -583,7 +584,7 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			writeString("case OVERWRITE_RETURN_AND_CONTINUE:");
 			writeIncreasedString("if (__fromServerSide == null)");
 			increaseIdent();
-			writeIncreasedStatement("throw new AssertionError("+quote("Incorrect use of interceptor, there is no return value in this method or it is null")+")");
+			writeIncreasedStatement("throw new AssertionError("+quote("Incorrect use of interceptor, there is no return value in this method or it is null")+ ')');
 			decreaseIdent();
 			writeIncreasedStatement("__fromServerSide.set(0, interceptorResponse.getReturnValue())");
 			writeIncreasedStatement("diMeInterceptionContext.setReturnValue(interceptorResponse.getReturnValue())");

@@ -35,12 +35,10 @@ public class RemoteConsumerWrapper implements RemoteEventServiceConsumer{
 		try{
 			bridgeToHome.deliverEvent(event);
 			errorCount.set(0);
-		}catch(EventServiceRMIBridgeServiceException e){
-			handleError();
-		}catch(RuntimeException e){
+		}catch(EventServiceRMIBridgeServiceException | RuntimeException e){
 			handleError();
 		}
-	}
+    }
 	
 	private void handleError(){
 		errorCount.incrementAndGet();

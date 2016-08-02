@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -132,26 +133,26 @@ public class EventServiceRegistryServlet extends BaseRegistryServlet{
 	}
 
 	//yes, this isn't nice, but it had to be worked out fast.
-	private void list(HttpServletRequest req, HttpServletResponse res){
+	private void list(HttpServletRequest req, ServletResponse res){
 		
 		StringBuilder m = new StringBuilder();
 		m.append("<?xml version=\"1.0\"?>");
 		m.append("<channels>");
 		List<ChannelDescriptor> channels = registry.getChannels();
 		for (ChannelDescriptor channel : channels){
-			m.append("<channel name=\"").append(channel.getName()).append("\"");
-			m.append(">");
+			m.append("<channel name=\"").append(channel.getName()).append('"');
+			m.append('>');
 			m.append('\n');
 			m.append("<suppliers>");
 			for (ServiceDescriptor supplier : channel.getSuppliers()){
-				m.append("<supplier>"+supplier.getSystemWideUniqueId()+"</supplier>");
+				m.append("<supplier>").append(supplier.getSystemWideUniqueId()).append("</supplier>");
 				m.append('\n');
 			}
 			m.append("</suppliers>");
 			m.append('\n');
 			m.append("<consumers>");
 			for (ServiceDescriptor consumer : channel.getConsumers()){
-				m.append("<consumer>"+consumer.getSystemWideUniqueId()+"</consumer>");
+				m.append("<consumer>").append(consumer.getSystemWideUniqueId()).append("</consumer>");
 				m.append('\n');
 			}
 			m.append("</consumers>");
@@ -171,7 +172,7 @@ public class EventServiceRegistryServlet extends BaseRegistryServlet{
 			 out.write(message.getBytes());
 			 out.flush();
 		}catch(IOException e){
-			LOG.warn("sendResponse(res, "+message+")", e);
+			LOG.warn("sendResponse(res, "+message+ ')', e);
 		}finally{
 			if (out!=null){
 				try{

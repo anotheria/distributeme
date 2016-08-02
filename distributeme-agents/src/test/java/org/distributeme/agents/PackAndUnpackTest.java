@@ -59,7 +59,7 @@ public class PackAndUnpackTest {
 		PlainAgent agent1 = new PlainAgent();
 		List<Class<?>> list1 = AgentPackageUtility.scanForCustomClasses(agent1);
 		assertNotNull("The class list shouldn't be null", list1);
-		assertTrue("The class list shouldn't be empty", list1.size()>0);
+		assertTrue("The class list shouldn't be empty", !list1.isEmpty());
 		assertEquals(agent1.getClass(), list1.get(0));
 		//System.out.println(list1);
 
@@ -67,7 +67,7 @@ public class PackAndUnpackTest {
 		ComplexAgent agent2 = new ComplexAgent();
 		List<Class<?>> list2 = AgentPackageUtility.scanForCustomClasses(agent2);
 		assertNotNull("The class list shouldn't be null", list2);
-		assertTrue("The class list shouldn't be empty", list2.size()>0);
+		assertTrue("The class list shouldn't be empty", !list2.isEmpty());
 		assertEquals(agent2.getClass(), list2.get(0));
 		assertEquals(ComplexAgentComponent.class, list2.get(1));
 		//System.out.println(list2);
@@ -75,7 +75,7 @@ public class PackAndUnpackTest {
 		ClassScanAgent agent3 = new ClassScanAgent();
 		List<Class<?>> list3 = AgentPackageUtility.scanForCustomClasses(agent3);
 		assertNotNull("The class list shouldn't be null", list3);
-		assertTrue("The class list shouldn't be empty", list3.size()>0);
+		assertTrue("The class list shouldn't be empty", !list3.isEmpty());
 		assertEquals(agent3.getClass(), list3.get(0));
 		assertEquals(ClassScanAgentComponent.class, list3.get(1));
 		assertEquals(PlainAgent.class, list3.get(2));

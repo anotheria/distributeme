@@ -37,7 +37,7 @@ public class AbstractStubGenerator extends AbstractGenerator{
 		if (rt.equals("byte")){
 			return "((Byte)"+returnValue+").byteValue()";
 		}
-		return "("+rt+") "+returnValue;
+		return '(' +rt+") "+returnValue;
 	}
 
 }

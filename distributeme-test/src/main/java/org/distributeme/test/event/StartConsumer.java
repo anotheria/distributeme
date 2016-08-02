@@ -2,6 +2,7 @@ package org.distributeme.test.event;
 
 import net.anotheria.anoprise.eventservice.EventChannel;
 import net.anotheria.anoprise.eventservice.EventService;
+import net.anotheria.anoprise.eventservice.EventServiceConsumer;
 import net.anotheria.anoprise.eventservice.EventServiceFactory;
 import net.anotheria.anoprise.eventservice.ProxyType;
 import org.distributeme.support.eventservice.DiMeRemoteEventChannelRMISupport;
@@ -12,7 +13,7 @@ public class StartConsumer {
 		
 		EventService es = EventServiceFactory.createEventService();
 		EventChannel forConsumer = es.obtainEventChannel("TEST", ProxyType.PUSH_CONSUMER_PROXY);
-		PushConsumer consumer = new PushConsumer();
+		EventServiceConsumer consumer = new PushConsumer();
 		forConsumer.addConsumer(consumer);
 		System.out.println("Setup finished");
 		

@@ -24,7 +24,7 @@ public class RemoteFactoryGenerator extends AbstractGenerator implements Generat
 
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
-		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getFactoryName(type));
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+ '.' +getFactoryName(type));
 		PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
@@ -49,11 +49,11 @@ public class RemoteFactoryGenerator extends AbstractGenerator implements Generat
 		if (!ann.moskitoSupport()){
 			writeStatement("return instance");
 		}else{
-			String name = type.getSimpleName().toString()+"DiMe";
-			writeStatement("return ProxyUtils.createServiceInstance(instance, "+quote(name)+", \"remote-service\", \"default\", "+getImplementedInterfacesAsString(type)+")");
+			String name = type.getSimpleName() +"DiMe";
+			writeStatement("return ProxyUtils.createServiceInstance(instance, "+quote(name)+", \"remote-service\", \"default\", "+getImplementedInterfacesAsString(type)+ ')');
 		}
 		closeBlock("create");
-		closeBlock();
+		closeBlockNEW();
 		
 		
 		writer.flush();

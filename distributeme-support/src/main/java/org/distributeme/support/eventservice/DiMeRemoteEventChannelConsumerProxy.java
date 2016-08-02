@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DiMeRemoteEventChannelConsumerProxy implements RemoteEventChannelConsumerProxy{
@@ -18,7 +19,7 @@ public class DiMeRemoteEventChannelConsumerProxy implements RemoteEventChannelCo
 	/**
 	 * List of registered consumers.
 	 */
-	private CopyOnWriteArrayList<RemoteEventServiceConsumer> consumers = new CopyOnWriteArrayList<RemoteEventServiceConsumer>();
+	private List<RemoteEventServiceConsumer> consumers = new CopyOnWriteArrayList<>();
 	/**
 	 * Name of the channel
 	 */
@@ -61,7 +62,7 @@ public class DiMeRemoteEventChannelConsumerProxy implements RemoteEventChannelCo
 	@Override
 	public void pushEvent(Event e) {
 		EventTransportShell shell = new EventTransportShell();
-		shell.setChannelName(getName());
+        shell.setChannelName(channelName);
 		try{
 			shell.setData(ByteArraySerializer.serializeObject(e));
 		}catch(IOException ex){

@@ -37,7 +37,7 @@ public class TestRemoteClient {
 		
 		//and now the very special test.
 		System.out.println("=== TESTING testCallByRef ===");
-		HashMap<String, String> params = new HashMap<String, String>();
+		HashMap<String, String> params = new HashMap<>();
 		params.put("CLIENTSIDE", "hello from client");
 		System.out.println("Client side parameters.... "+params);
 		service.testCallByRef(params);
@@ -45,7 +45,7 @@ public class TestRemoteClient {
 
 		//and now the very special test.
 		System.out.println("=== TESTING testCallByRefWithInterceptors ===");
-		params = new HashMap<String, String>();
+		params = new HashMap<>();
 		params.put("CLIENTSIDE", "hello from client");
 		System.out.println("Client side parameters.... "+params);
 		service.testCallByRefWithInterceptors(params);

@@ -33,7 +33,7 @@ public class EventServiceRegistryUtil extends BaseRegistryUtil{
 	 * @param descriptors
 	 * @return
 	 */
-	public static final String list2string(List<ServiceDescriptor> descriptors){
+	public static final String list2string(Iterable<ServiceDescriptor> descriptors){
 		StringBuilder ret = new StringBuilder();
 		for (ServiceDescriptor d : descriptors){
 			if (ret.length()>0)
@@ -49,7 +49,7 @@ public class EventServiceRegistryUtil extends BaseRegistryUtil{
 	 */
 	public static final List<ServiceDescriptor> string2list(String encodedString){
 		String tokens[] = StringUtils.tokenize(encodedString, DELIMITER);
-		ArrayList<ServiceDescriptor> ret = new ArrayList<ServiceDescriptor>();
+		List<ServiceDescriptor> ret = new ArrayList<>();
 		for(String t : tokens){
 			ret.add(ServiceDescriptor.fromSystemWideUniqueId(t));
 		}
@@ -117,7 +117,7 @@ public class EventServiceRegistryUtil extends BaseRegistryUtil{
 		String[] tokens = StringUtils.tokenize(reply, DELIMITER);
 		if (tokens.length==0)
 			return EMPTY_LIST;
-		List<ServiceDescriptor> ret = new ArrayList<ServiceDescriptor>(tokens.length);
+		List<ServiceDescriptor> ret = new ArrayList<>(tokens.length);
 		for (String t : tokens){
 			ret.add(ServiceDescriptor.fromSystemWideUniqueId(t));
 		}

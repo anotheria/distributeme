@@ -48,8 +48,8 @@ public class BaseRegistryUtil {
 	}
 	
 	protected static String getRegistryBaseUrl(String app, String host, int port){
-		String url = "http://"+host+":"+port;
-		url += "/distributeme/"+app+"/";
+		String url = "http://"+host+ ':' +port;
+		url += "/distributeme/"+app+ '/';
 		return url;
 	}
 

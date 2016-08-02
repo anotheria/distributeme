@@ -18,7 +18,6 @@ public abstract class AbstractCallContext {
 	/**
 	 * Parameters to the call if set.
 	 */
-	@SuppressWarnings("rawtypes")
 	private List parameters;
 	/**
 	 * Name of the called method.
@@ -28,7 +27,6 @@ public abstract class AbstractCallContext {
 	/**
 	 * Writeable context. This is a place where different involved components can write and/or share information.
 	 */
-	@SuppressWarnings("rawtypes")
 	private HashMap transportableCallContext = new HashMap();
 
 	public AbstractCallContext(String aMethodName){
@@ -43,12 +41,10 @@ public abstract class AbstractCallContext {
 		currentCallContext.set(this);
 	}
 
-	@SuppressWarnings("rawtypes")
 	public List getParameters() {
 		return parameters;
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void setParameters(List parameters) {
 		this.parameters = parameters;
 	}
@@ -68,27 +64,25 @@ public abstract class AbstractCallContext {
 		this.serviceId = serviceId;
 	}
 
-	@SuppressWarnings("rawtypes")
 	public HashMap getTransportableCallContext() {
 		return transportableCallContext;
 	}
 	
-	@SuppressWarnings("rawtypes")
 	protected void setIncomingTransportableCallContext(Map map){
 		transportableCallContext.putAll(map);
 	}
 
 	@Override public String toString(){
-		return getMethodName()+"("+getParameters()+") --> "+getServiceId();
+		return methodName + '(' + parameters +") --> "+ serviceId;
 	}
 
-	private static ThreadLocal<AbstractCallContext> currentCallContext = new ThreadLocal<AbstractCallContext>();
+	private static ThreadLocal<AbstractCallContext> currentCallContext = new ThreadLocal<>();
 
 	public static HashMap getCurrentTransportableCallContext(){
 		AbstractCallContext currentContext = currentCallContext.get();
 		if (currentContext == null)
 			return null;
-		return currentContext.getTransportableCallContext();
+		return currentContext.transportableCallContext;
 
 	}
 
