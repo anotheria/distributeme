@@ -2,6 +2,7 @@ package org.distributeme.core.util;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.anotheria.util.StringUtils;
+import org.distributeme.core.Location;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.core.conventions.WebOperations;
 
@@ -176,7 +177,7 @@ public class EventServiceRegistryUtil extends BaseRegistryUtil{
 	 * @param port customized port.
 	 * @return
 	 */
-	protected static String getRegistryBaseUrl(String host, int port){
-		return getRegistryBaseUrl(APP, host, port);
+	protected static String getRegistryBaseUrl(Location location){
+		return getRegistryBaseUrl(APP, location.getHost(), location.getPort(), location.getProtocol(), location.getContext());
 	}
 }

@@ -127,7 +127,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * @return
 	 */
 	public static String createRegistryOperationUrl(Location loc, String operation, String parameters){
-		return getRegistryBaseUrl(loc.getHost(), loc.getPort())+operation+"?"+parameters;
+		return getRegistryBaseUrl(loc)+operation+"?"+parameters;
 	}
 	
 	/**
@@ -144,7 +144,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 */
 	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	public static String getXMLServiceList(Location loc){
-		String url = getRegistryBaseUrl(loc.getHost(), loc.getPort())+"list";
+		String url = getRegistryBaseUrl(loc)+"list";
 		byte data[] = getUrlContent(url);
 		if (data == null )
 			return null;
@@ -171,12 +171,11 @@ public class RegistryUtil extends BaseRegistryUtil{
 	
 	/**
 	 * Get registry url for internal use.
-	 * @param host registry host.
-	 * @param port registry port.
+	 * @param location registry location.
 	 * @return
 	 */
-	protected static String getRegistryBaseUrl(String host, int port){
-		return getRegistryBaseUrl(APP, host, port);
+	protected static String getRegistryBaseUrl(Location location){
+		return getRegistryBaseUrl(APP, location.getHost(), location.getPort(), location.getProtocol(), location.getContext());
 	}
 	
 	public static ServiceDescriptor createLocalServiceDescription(Protocol protocol, String serviceId, String instanceId, int port){

@@ -21,6 +21,17 @@ public final class RegistryLocation implements Location {
 	 * Configured host.
 	 */
 	private String registryContainerHost;
+
+	/**
+	 * Protocol, defaults to http.
+	 */
+	private String registryContainerProtocol = "http";
+
+	/**
+	 * Context, defaults to distributeme.
+	 */
+	private String registryContainerContext = "distributeme";
+
 	/**
 	 * Configured port.
 	 */
@@ -61,9 +72,25 @@ public final class RegistryLocation implements Location {
 	public void setRmiRegistryMaxPort(int rmiRegistryMaxPort) {
 		this.rmiRegistryMaxPort = rmiRegistryMaxPort;
 	}
-	
+
+	public String getRegistryContainerProtocol() {
+		return registryContainerProtocol;
+	}
+
+	public void setRegistryContainerProtocol(String registryContainerProtocol) {
+		this.registryContainerProtocol = registryContainerProtocol;
+	}
+
+	public String getRegistryContainerContext() {
+		return registryContainerContext;
+	}
+
+	public void setRegistryContainerContext(String registryContainerContext) {
+		this.registryContainerContext = registryContainerContext;
+	}
+
 	@Override public String toString(){
-		return "MetaRegistry " + getRegistryContainerHost() + ":" +getRegistryContainerPort()+", local range: ["+rmiRegistryMinPort+" .. "+rmiRegistryMaxPort+"]";
+		return "DistributeMeRegistry " + getRegistryContainerProtocol()+"://"+getRegistryContainerHost() + ":" +getRegistryContainerPort()+"/"+getRegistryContainerContext()+", local range: ["+rmiRegistryMinPort+" .. "+rmiRegistryMaxPort+"]";
 	}
 
 	/**
@@ -86,6 +113,8 @@ public final class RegistryLocation implements Location {
 	private boolean configureFromSystemPropertiesAndReturnTrueIfConfigured(){
 		registryContainerHost = SystemProperties.CENTRAL_REGISTRY_HOST.get();
 		registryContainerPort = SystemProperties.CENTRAL_REGISTRY_PORT.getAsInt();
+		registryContainerProtocol = SystemProperties.CENTRAL_REGISTRY_PROTOCOL.get();
+		registryContainerContext  = SystemProperties.CENTRAL_REGISTRY_CONTEXT.get();
 		rmiRegistryMinPort = SystemProperties.LOCAL_RMI_REGISTRY_MIN_PORT.getAsInt();
 		rmiRegistryMaxPort = SystemProperties.LOCAL_RMI_REGISTRY_MAX_PORT.getAsInt();
 		return registryContainerHost!=null && registryContainerHost.length()>0;
@@ -109,4 +138,14 @@ public final class RegistryLocation implements Location {
 	public int getPort() {
 		return registryContainerPort;
 	}
+
+	public String getProtocol(){
+		return registryContainerProtocol;
+	}
+
+	public String getContext(){
+		return registryContainerContext;
+	}
+
+
 }

@@ -16,4 +16,10 @@ public interface Location {
 	 * @return
 	 */
 	int getPort();
+
+
+	String getProtocol();
+
+	String getContext();
+
 }

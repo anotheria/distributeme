@@ -4,8 +4,9 @@ import net.anotheria.util.NumberUtils;
 import org.distributeme.core.Location;
 
 /**
- * This class represents an entry in the cluser management. Each registry instance has a corresponding ClusterEntry.
+ * This class represents an entry in the cluster management. Each registry instance has a corresponding ClusterEntry.
  * @author lrosenberg
+ * TODO ClusterEntry contains fields from Location: context and protocol, but they are not used yet.
  *
  */
 public class ClusterEntry implements Location{
@@ -38,6 +39,16 @@ public class ClusterEntry implements Location{
 	 */
 	
 	private long firstSeen;
+
+	/**
+	 * Context.
+	 */
+	private String context = "distributeme";
+
+	/**
+	 * Protocol under which the cluster enty is accessable.
+	 */
+	private String protocol = "http";
 	
 	public ClusterEntry(String aHost, int aPort){
 		host = aHost;
@@ -117,5 +128,23 @@ public class ClusterEntry implements Location{
 	private String getTimeString(long when){
 		return when == 0 ? "Never" : NumberUtils.makeISO8601TimestampString(when);
 		
+	}
+
+	@Override
+	public String getContext() {
+		return context;
+	}
+
+	public void setContext(String context) {
+		this.context = context;
+	}
+
+	@Override
+	public String getProtocol() {
+		return protocol;
+	}
+
+	public void setProtocol(String protocol) {
+		this.protocol = protocol;
 	}
 }

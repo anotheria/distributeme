@@ -25,6 +25,16 @@ public final class MetaRegistryConfig implements Location {
 	 * Host of the parent registry.
 	 */
 	private String registryParentHost;
+
+	/**
+	 * Context (distributeme).
+	 */
+	private String registryParentContext = "distributeme";
+	/**
+	 * Protocol (defaults to http).
+	 */
+	private String registryParentProtocol = "http";
+
 	/**
 	 * If true the registry will lookup a service in a parent registry.
 	 */
@@ -108,5 +118,14 @@ public final class MetaRegistryConfig implements Location {
 	@Override public int getPort() {
 		return registryParentPort;
 	}
-	
+
+	@Override
+	public String getProtocol() {
+		return registryParentProtocol;
+	}
+
+	@Override
+	public String getContext() {
+		return registryParentContext;
+	}
 }

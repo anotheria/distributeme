@@ -35,5 +35,13 @@
 			"interceptor.2": "org.distributeme.core.interceptor.availabilitytesting.FlippingServerSideSlowDownByConfigurationInterceptor",
 			"interceptor.3": "org.distributeme.core.interceptor.availabilitytesting.FlippingServerSideSlowDownByConfigurationInterceptor", 
 		},
+	},
+	"registrynamingtest": {
+		"yada": {
+			"registryContainerContext": "yada"
+		},
+		"ROOT": {
+			"registryContainerContext": ""
+		}
 	}
 }  

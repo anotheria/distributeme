@@ -44,12 +44,21 @@ public class BaseRegistryUtil {
 	 * @return
 	 */
 	protected static String getRegistryBaseUrl(String app){
-		return getRegistryBaseUrl(app, registryLocation.getRegistryContainerHost(), registryLocation.getRegistryContainerPort());
+		return getRegistryBaseUrl(app,
+				registryLocation.getRegistryContainerHost(),
+				registryLocation.getRegistryContainerPort(),
+				registryLocation.getRegistryContainerProtocol(),
+				registryLocation.getRegistryContainerContext()
+		);
 	}
 	
-	protected static String getRegistryBaseUrl(String app, String host, int port){
-		String url = "http://"+host+":"+port;
-		url += "/distributeme/"+app+"/";
+	protected static String getRegistryBaseUrl(String app, String host, int port, String protocol, String context){
+		String url = protocol+"://"+host+":"+port;
+		if (context!=null && context.length()>0) {
+			url += "/" + context + "/" + app + "/";
+		}else {
+			url += "/" + app + "/";
+		}
 		return url;
 	}
 

@@ -21,6 +21,14 @@ public enum SystemProperties {
 	 */
 	CENTRAL_REGISTRY_PORT("registryContainerPort", "9229"),
 	/**
+	 * Protocol under which the registry is access-able.
+	 */
+	CENTRAL_REGISTRY_PROTOCOL("registryContainerProtocol", "http"),
+	/**
+	 * Context under which the registry is access-able.
+	 */
+	CENTRAL_REGISTRY_CONTEXT("registryContainerContext", "distributeme"),
+	/**
 	 * Minimal port to use for the local rmi registry.
 	 */
 	LOCAL_RMI_REGISTRY_MIN_PORT("localRmiRegistryMinPort", "9250"),
