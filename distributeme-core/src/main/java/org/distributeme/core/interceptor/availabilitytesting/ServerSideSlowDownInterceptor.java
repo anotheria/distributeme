@@ -7,11 +7,13 @@ import org.distributeme.core.interceptor.InterceptorResponse;
 
 /**
  * Base class for service side slow down interceptors.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public abstract class ServerSideSlowDownInterceptor extends AbstractServerSideRequestInterceptor{
 
+	/** {@inheritDoc} */
 	@Override
 	public InterceptorResponse beforeServantCall(ServerSideCallContext context,
 			InterceptionContext iContext) {
@@ -27,14 +29,16 @@ public abstract class ServerSideSlowDownInterceptor extends AbstractServerSideRe
 	
 	/**
 	 * Returns true if current call should be slowed down. This decision is mostly based on service id.
-	 * @param context
-	 * @return
+	 *
+	 * @param context a {@link org.distributeme.core.ServerSideCallContext} object.
+	 * @return a boolean.
 	 */
 	protected abstract boolean slowDown(ServerSideCallContext context);
 	
 	/**
 	 * Returns the amount of time in milliseconds the call should be slowed down.
-	 * @return
+	 *
+	 * @return a long.
 	 */
 	protected abstract long getSlowDownTime();
 

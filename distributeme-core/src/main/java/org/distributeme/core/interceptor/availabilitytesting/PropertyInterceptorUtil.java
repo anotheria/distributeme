@@ -9,8 +9,9 @@ import java.util.List;
 
 /**
  * Utility to handle availabilitytesting properties..
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class PropertyInterceptorUtil {
 	/**
@@ -22,6 +23,11 @@ public class PropertyInterceptorUtil {
 	 */
 	private static List<String> serviceIds = extractServiceIds();
 
+	/**
+	 * <p>extractServiceIds.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public static List<String> extractServiceIds() {
 		List<String> propertyValues = new ArrayList<String>();
 		String pValue = System.getProperty(Constants.PROPERTY_SERVICE_ID);
@@ -33,6 +39,11 @@ public class PropertyInterceptorUtil {
 		return propertyValues;
 	}
 	
+	/**
+	 * <p>getSlowDownTime.</p>
+	 *
+	 * @return a long.
+	 */
 	public static final long getSlowDownTime(){
 		try{
 			String slowDownTimeAsString = System.getProperty(Constants.PROPERTY_SLOWDOWN_TIME_IN_MILLIS);
@@ -45,13 +56,20 @@ public class PropertyInterceptorUtil {
 		return Constants.DEFAULT_SLOW_DOWN_TIME;
 	}
 
+	/**
+	 * <p>isServiceIdConfiguredByProperty.</p>
+	 *
+	 * @param serviceId a {@link java.lang.String} object.
+	 * @return a boolean.
+	 */
 	public static boolean isServiceIdConfiguredByProperty(String serviceId){
 		return serviceIds.contains(serviceId) || serviceIds.contains("*");
 	}
 	
 	/**
 	 * Returns true if the service should be flipped.
-	 * @return
+	 *
+	 * @return a boolean.
 	 */
 	public static boolean flip(){
 		return false;

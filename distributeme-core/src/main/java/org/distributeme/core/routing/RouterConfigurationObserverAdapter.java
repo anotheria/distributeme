@@ -5,18 +5,22 @@ package org.distributeme.core.routing;
  *
  * @author lrosenberg
  * @since 23.09.15 23:03
+ * @version $Id: $Id
  */
 public class RouterConfigurationObserverAdapter implements RouterConfigurationObserver{
+	/** {@inheritDoc} */
 	@Override
 	public void routerConfigurationChange(GenericRouterConfiguration configuration) {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void routerConfigurationInitialChange(GenericRouterConfiguration configuration) {
 
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void routerConfigurationFollowupChange(GenericRouterConfiguration configuration) {
 

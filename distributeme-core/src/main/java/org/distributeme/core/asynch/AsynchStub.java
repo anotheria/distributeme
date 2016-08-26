@@ -2,8 +2,9 @@ package org.distributeme.core.asynch;
 
 /**
  * General interface all asynch stubs implement.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public interface AsynchStub {
 	/**

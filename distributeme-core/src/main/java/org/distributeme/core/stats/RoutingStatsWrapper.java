@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author lrosenberg
  * @since 21.09.15 01:18
+ * @version $Id: $Id
  */
 public class RoutingStatsWrapper implements RoutingStatsCollector{
 
@@ -25,12 +26,20 @@ public class RoutingStatsWrapper implements RoutingStatsCollector{
 
 	private String serviceId;
 
+	/**
+	 * <p>Constructor for RoutingStatsWrapper.</p>
+	 *
+	 * @param aServiceId a {@link java.lang.String} object.
+	 * @param aCaseStats a {@link org.distributeme.core.stats.RoutingStats} object.
+	 * @param aDefaultStats a {@link org.distributeme.core.stats.RoutingStats} object.
+	 */
 	public RoutingStatsWrapper(String aServiceId, RoutingStats aCaseStats, RoutingStats aDefaultStats){
 		caseStats = aCaseStats;
 		defaultStats = aDefaultStats;
 		serviceId = aServiceId;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addFailDecision() {
 		if (log.isDebugEnabled()){
@@ -42,6 +51,7 @@ public class RoutingStatsWrapper implements RoutingStatsCollector{
 			defaultStats.addFailDecision();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addFailedCall() {
 		if (log.isDebugEnabled()){
@@ -53,6 +63,7 @@ public class RoutingStatsWrapper implements RoutingStatsCollector{
 			defaultStats.addFailedCall();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addRetryDecision() {
 		if (log.isDebugEnabled()){
@@ -65,6 +76,7 @@ public class RoutingStatsWrapper implements RoutingStatsCollector{
 			defaultStats.addRetryDecision();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addBlacklisted() {
 		if (log.isDebugEnabled()){
@@ -77,6 +89,7 @@ public class RoutingStatsWrapper implements RoutingStatsCollector{
 			defaultStats.addBlacklisted();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void addRequestRoutedTo() {
 		if (log.isDebugEnabled()){

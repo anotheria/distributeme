@@ -7,8 +7,9 @@ import java.util.List;
 
 /**
  * A shutdown hook that unregisters a service upon jvm exit.
- * @author another
  *
+ * @author another
+ * @version $Id: $Id
  */
 public class ServerLifecycleListenerShutdownHook extends Thread{
 	
@@ -23,10 +24,16 @@ public class ServerLifecycleListenerShutdownHook extends Thread{
 	 */
 	private List<ServerLifecycleListener> listeners;
 	
+	/**
+	 * <p>Constructor for ServerLifecycleListenerShutdownHook.</p>
+	 *
+	 * @param someListeners a {@link java.util.List} object.
+	 */
 	public ServerLifecycleListenerShutdownHook(List<ServerLifecycleListener> someListeners){
 		listeners = someListeners;
 	}
 
+	/** {@inheritDoc} */
 	@Override public void run(){
 		//embedded listeners
 		if (listeners!=null && listeners.size()>0){

@@ -5,8 +5,9 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 import java.io.Serializable;
 /**
  * This class is used to place void values into the return lists.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 @JsonSerialize
 public class VoidMarker implements Serializable{
@@ -21,6 +22,7 @@ public class VoidMarker implements Serializable{
 	 */
 	public static final VoidMarker VOID = new VoidMarker();
 	
+	/** {@inheritDoc} */
 	@Override public String toString(){
 		return "void";
 	}

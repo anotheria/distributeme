@@ -15,6 +15,7 @@ import static net.anotheria.moskito.core.decorators.DecoratorRegistryFactory.get
  *
  * @author lrosenberg
  * @since 21.09.15 00:26
+ * @version $Id: $Id
  */
 public class RoutingStats extends AbstractStats implements RoutingStatsCollector {
 
@@ -68,6 +69,11 @@ public class RoutingStats extends AbstractStats implements RoutingStatsCollector
 
 	private HashMap<String, StatValue> name2value = new HashMap<String, StatValue>();
 
+	/**
+	 * <p>Constructor for RoutingStats.</p>
+	 *
+	 * @param name a {@link java.lang.String} object.
+	 */
 	public RoutingStats(String name) {
 		super(name);
 
@@ -86,11 +92,13 @@ public class RoutingStats extends AbstractStats implements RoutingStatsCollector
 	}
 
 
+	/** {@inheritDoc} */
 	@Override
 	public String toStatsString(String s, TimeUnit timeUnit) {
 		return null;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getValueByNameAsString(String valueName, String intervalName, TimeUnit timeUnit) {
 		StatValue value = name2value.get(valueName);
@@ -99,48 +107,95 @@ public class RoutingStats extends AbstractStats implements RoutingStatsCollector
 				value.getValueAsString(intervalName);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<String> getAvailableValueNames() {
 		return StatDef.getStatNames();
 	}
 
 
+	/**
+	 * <p>addFailedCall.</p>
+	 */
 	public void addFailedCall(){
 		failedCall.increase();
 	}
 
+	/**
+	 * <p>addFailDecision.</p>
+	 */
 	public void addFailDecision(){
 		failDecision.increase();
 
 	}
 
+	/**
+	 * <p>addRetryDecision.</p>
+	 */
 	public void addRetryDecision(){
 		retryDecision.increase();
 	}
 
+	/**
+	 * <p>addRequestRoutedTo.</p>
+	 */
 	public void addRequestRoutedTo() {
 		requestRoutedTo.increase();
 	}
 
+	/**
+	 * <p>addBlacklisted.</p>
+	 */
 	public void addBlacklisted() {
 		blackListed.increase();
 	}
 
 
+	/**
+	 * <p>getFailedCallCount.</p>
+	 *
+	 * @param intervalName a {@link java.lang.String} object.
+	 * @return a long.
+	 */
 	public long getFailedCallCount(String intervalName){
 		return failedCall.getValueAsLong(intervalName);
 	}
+	/**
+	 * <p>getFailDecisionCount.</p>
+	 *
+	 * @param intervalName a {@link java.lang.String} object.
+	 * @return a long.
+	 */
 	public long getFailDecisionCount(String intervalName){
 		return failDecision.getValueAsLong(intervalName);
 	}
+	/**
+	 * <p>getRetryDecisionCount.</p>
+	 *
+	 * @param intervalName a {@link java.lang.String} object.
+	 * @return a long.
+	 */
 	public long getRetryDecisionCount(String intervalName){
 		return retryDecision.getValueAsLong(intervalName);
 	}
+	/**
+	 * <p>getRequestRoutedToCount.</p>
+	 *
+	 * @param intervalName a {@link java.lang.String} object.
+	 * @return a long.
+	 */
 	public long getRequestRoutedToCount(String intervalName){
 		return requestRoutedTo.getValueAsLong(intervalName);
 	}
+	/**
+	 * <p>getBlacklistedCount.</p>
+	 *
+	 * @param intervalName a {@link java.lang.String} object.
+	 * @return a long.
+	 */
 	public long getBlacklistedCount(String intervalName){ return blackListed.getValueAsLong(intervalName);}
 
+	/** {@inheritDoc} */
 	@Override public String toString(){
 		StringBuilder ret = new StringBuilder();
 

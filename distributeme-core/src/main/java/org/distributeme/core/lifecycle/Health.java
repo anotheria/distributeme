@@ -2,7 +2,9 @@ package org.distributeme.core.lifecycle;
 
 /**
  * Health state of a service.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public enum Health {
 	/**

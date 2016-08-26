@@ -1,8 +1,9 @@
 package org.distributeme.core;
 /**
  * Options for service discovery mode. Discovery modes defines how the stub selects a remote instance to connect to.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public enum DiscoveryMode {
 	/**

@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentMap;
  * By implementing getModableValue(<?>) method - You can simply extract some long from incoming parameter, for further calculations.
  *
  * @author h3llka,dvayanu
+ * @version $Id: $Id
  */
 public abstract class AbstractRouterWithStickyFailOverToNextNode extends AbstractRouterWithFailover implements ConfigurableRouter, FailingStrategy {
 
@@ -60,6 +61,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 	 */
 	private ConcurrentMap<String, Long> serverFailureTimestamps = new ConcurrentHashMap<String, Long>();
 
+	/** {@inheritDoc} */
 	@Override
 	public FailDecision callFailed(final ClientSideCallContext clientSideCallContext) {
 		getLog().info(clientSideCallContext.getServiceId()+ " marked as failed and will be blacklisted for "+getConfiguration().getBlacklistTime()+" ms");
@@ -67,6 +69,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		return super.callFailed(clientSideCallContext);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getServiceIdForCall(final ClientSideCallContext clientSideCallContext) {
 
@@ -177,6 +180,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 
 
 
+	/** {@inheritDoc} */
 	@Override
 	public void customize(String s) {
 		String tokens[] = StringUtils.tokenize(s, ',');

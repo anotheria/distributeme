@@ -1,7 +1,9 @@
 package org.distributeme.core.interceptor;
 /**
- * Describes various interception phases during a call. 
+ * Describes various interception phases during a call.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public enum InterceptionPhase {
 	/**

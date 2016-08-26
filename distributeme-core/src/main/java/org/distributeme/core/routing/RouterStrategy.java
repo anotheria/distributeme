@@ -5,6 +5,7 @@ package org.distributeme.core.routing;
  *
  * @author lrosenberg
  * @since 13.03.15 00:59
+ * @version $Id: $Id
  */
 public enum RouterStrategy {
 	/**

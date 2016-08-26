@@ -50,6 +50,9 @@ abstract class AbstractRouterWithFailover extends AbstractRouter implements Conf
 	private final Map<String, Integer> modRouteMethodRegistry;
 
 
+	/**
+	 * <p>Constructor for AbstractRouterWithFailover.</p>
+	 */
 	public AbstractRouterWithFailover() {
 		log = LoggerFactory.getLogger(Constants.ROUTING_LOGGER_NAME);
 		delegateCallCounter = new AtomicInteger(0);
@@ -58,6 +61,7 @@ abstract class AbstractRouterWithFailover extends AbstractRouter implements Conf
 		modRouteMethodRegistry = new HashMap<String, Integer>();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public FailDecision callFailed(final ClientSideCallContext clientSideCallContext) {
 
@@ -143,10 +147,16 @@ abstract class AbstractRouterWithFailover extends AbstractRouter implements Conf
 		return log;
 	}
 
+	/**
+	 * <p>Getter for the field <code>configuration</code>.</p>
+	 *
+	 * @return a {@link org.distributeme.core.routing.GenericRouterConfiguration} object.
+	 */
 	protected GenericRouterConfiguration getConfiguration(){
 		return configuration;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void setConfigurationName(String serviceId, String configurationName) {
 		setServiceId(serviceId);
@@ -180,7 +190,7 @@ abstract class AbstractRouterWithFailover extends AbstractRouter implements Conf
 	 * Return RouterStrategy - which should be used for current Router implementation.
 	 * Current method should not return NULL, value validation will be performed in constructor.
 	 *
-	 * @return {@link RouterStrategy}
+	 * @return {@link org.distributeme.core.routing.RouterStrategy}
 	 */
 	protected abstract RouterStrategy getStrategy();
 

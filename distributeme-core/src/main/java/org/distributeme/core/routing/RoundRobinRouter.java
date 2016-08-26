@@ -8,7 +8,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This router sends each call to another instance. It is useful if you want to cluster a service
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class RoundRobinRouter extends AbstractRouter implements Router{
 	/**
@@ -24,6 +26,7 @@ public class RoundRobinRouter extends AbstractRouter implements Router{
 	 */
 	private static Logger log = LoggerFactory.getLogger(RoundRobinRouter.class);
 	
+	/** {@inheritDoc} */
 	@Override
 	public void customize(String parameter) {
 		try{
@@ -33,6 +36,7 @@ public class RoundRobinRouter extends AbstractRouter implements Router{
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getServiceIdForCall(ClientSideCallContext callContext) {
 		if (MAX==0)

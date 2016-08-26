@@ -5,8 +5,9 @@ import org.configureme.annotations.ConfigureMe;
 
 /**
  * Configuration holder class for some output options.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 @ConfigureMe(allfields=true,name="distributeme")
 public class Verbosity {
@@ -31,22 +32,43 @@ public class Verbosity {
 	 */
 	private boolean logClientSideExceptions = false;
 	
+	/**
+	 * <p>Setter for the field <code>logServerSideExceptions</code>.</p>
+	 *
+	 * @param aValue a boolean.
+	 */
 	public void setLogServerSideExceptions(boolean aValue){
 		logServerSideExceptions = aValue;
 	}
 	
+	/**
+	 * <p>Setter for the field <code>logClientSideExceptions</code>.</p>
+	 *
+	 * @param aValue a boolean.
+	 */
 	public void setLogClientSideExceptions(boolean aValue){
 		logClientSideExceptions = aValue;
 	}
 
+	/**
+	 * <p>logServerSideExceptions.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public static boolean logServerSideExceptions(){
 		return instance.logServerSideExceptions;
 	}
 	
+	/**
+	 * <p>logClientSideExceptions.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public static boolean logClientSideExceptions(){
 		return instance.logClientSideExceptions;
 	}
 	
+	/** {@inheritDoc} */
 	@Override public String toString(){
 		return "( logServerSideExceptions: "+logServerSideExceptions+
 			" logClientSideExceptions: "+logClientSideExceptions+

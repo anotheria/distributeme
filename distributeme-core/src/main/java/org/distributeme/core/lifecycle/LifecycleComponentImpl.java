@@ -12,8 +12,9 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  * Implementation of the LifecycleComponent. This one is a singleton.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public enum LifecycleComponentImpl implements LifecycleComponent{
 	/**
@@ -32,21 +33,25 @@ public enum LifecycleComponentImpl implements LifecycleComponent{
 		publicServices = new ConcurrentHashMap<String, ServiceAdapter>();
 	}
 	
+	/** {@inheritDoc} */
 	@Override
 	public boolean isOnline() {
 		return true;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void printStatusToSystemOut() {
 		System.out.println(LifecycleComponent.class+" is online.");
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void printStatusToLogInfo() {
 		LoggerFactory.getLogger(LifecycleComponent.class).info(LifecycleComponent.class+" is online.");
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<String> getPublicServices() {
 		ArrayList<String> ret = new ArrayList<String>();
@@ -54,12 +59,14 @@ public enum LifecycleComponentImpl implements LifecycleComponent{
 		return ret;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void registerPublicService(String descriptor,
 			ServiceAdapter instance) {
 		publicServices.put(descriptor, instance);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public ServiceInfo getServiceInfo(String serviceId) {
 		ServiceAdapter adapter = publicServices.get(serviceId);
@@ -75,6 +82,7 @@ public enum LifecycleComponentImpl implements LifecycleComponent{
 		return info;
 	}
 	
+	/** {@inheritDoc} */
 	@Override public void shutdown(final String message){
 		new Thread(){
 			public void run(){
@@ -89,6 +97,7 @@ public enum LifecycleComponentImpl implements LifecycleComponent{
 		}.start();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public HealthStatus getHealthStatus(String serviceId) {
 		ServiceAdapter adapter = publicServices.get(serviceId);
@@ -99,6 +108,7 @@ public enum LifecycleComponentImpl implements LifecycleComponent{
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public Map<String, HealthStatus> getHealthStatuses() {
 		HashMap<String, HealthStatus> ret = new HashMap<String, HealthStatus>();

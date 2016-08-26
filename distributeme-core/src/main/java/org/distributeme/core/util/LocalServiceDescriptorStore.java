@@ -10,20 +10,36 @@ import java.util.List;
  *
  * @author lrosenberg
  * @since 22.02.15 18:25
+ * @version $Id: $Id
  */
 public class LocalServiceDescriptorStore {
 	private List<ServiceDescriptor> descriptors = new LinkedList<ServiceDescriptor>();
 
 	private static LocalServiceDescriptorStore instance = new LocalServiceDescriptorStore();
 
+	/**
+	 * <p>Getter for the field <code>instance</code>.</p>
+	 *
+	 * @return a {@link org.distributeme.core.util.LocalServiceDescriptorStore} object.
+	 */
 	public static final LocalServiceDescriptorStore getInstance(){
 		return instance;
 	}
 
+	/**
+	 * <p>addServiceDescriptor.</p>
+	 *
+	 * @param serviceDescriptor a {@link org.distributeme.core.ServiceDescriptor} object.
+	 */
 	public void addServiceDescriptor(ServiceDescriptor serviceDescriptor){
 		descriptors.add(serviceDescriptor);
 	}
 
+	/**
+	 * <p>getServiceDescriptors.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<ServiceDescriptor> getServiceDescriptors(){
 		return descriptors;
 	}

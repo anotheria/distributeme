@@ -4,8 +4,9 @@ import org.distributeme.core.exception.DistributemeRuntimeException;
 
 /**
  * This exception is thrown whenever a call is aborted due timeout.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class CallTimeoutedException extends DistributemeRuntimeException{
 	/**

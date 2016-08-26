@@ -13,6 +13,7 @@ import java.util.List;
  * TODO comment this class
  *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class RoutingStatsDecorator extends AbstractDecorator {
 
@@ -56,6 +57,7 @@ public class RoutingStatsDecorator extends AbstractDecorator {
 		super("Routing", CAPTIONS, SHORT_EXPLANATIONS, EXPLANATIONS);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public List<StatValueAO> getValues(IStats statsObject, String interval, TimeUnit unit) {
 		RoutingStats stats = (RoutingStats)statsObject;

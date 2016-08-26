@@ -9,11 +9,13 @@ import org.distributeme.core.interceptor.InterceptorResponse;
 /**
  * Base interceptor class for service unavailable interceptors. This kind of interceptors throw
  * a ServiceUnavailableException as if the service would be down.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public abstract class ServiceUnavailableInterceptor extends AbstractClientSideRequestInterceptor{
 
+	/** {@inheritDoc} */
 	@Override
 	public InterceptorResponse beforeServiceCall(ClientSideCallContext context,
 			InterceptionContext iContext) {
@@ -25,8 +27,9 @@ public abstract class ServiceUnavailableInterceptor extends AbstractClientSideRe
 
 	/**
 	 * Returns true if current call should be aborted.
-	 * @param context
-	 * @return
+	 *
+	 * @param context a {@link org.distributeme.core.ClientSideCallContext} object.
+	 * @return a boolean.
 	 */
 	protected abstract boolean abortCall(ClientSideCallContext context);
 }

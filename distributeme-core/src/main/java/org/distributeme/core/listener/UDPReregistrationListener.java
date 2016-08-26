@@ -19,6 +19,7 @@ import java.util.List;
  *
  * @author lrosenberg
  * @since 22.02.15 17:51
+ * @version $Id: $Id
  */
 public class UDPReregistrationListener implements ServerLifecycleListener{
 
@@ -32,6 +33,7 @@ public class UDPReregistrationListener implements ServerLifecycleListener{
 	 */
 	public static final String CMD_REGISTER = "register";
 
+	/** {@inheritDoc} */
 	@Override
 	public void afterStart() {
 		int port = RMIRegistryUtil.getRmiRegistryPort();
@@ -39,6 +41,7 @@ public class UDPReregistrationListener implements ServerLifecycleListener{
 		startUdpServer(port);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void beforeShutdown() {
 

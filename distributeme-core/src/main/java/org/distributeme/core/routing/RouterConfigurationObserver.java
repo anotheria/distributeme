@@ -8,23 +8,27 @@ package org.distributeme.core.routing;
  *
  * @author lrosenberg
  * @since 23.09.15 22:55
+ * @version $Id: $Id
  */
 public interface RouterConfigurationObserver {
 	/**
 	 * Called upon FIRST configuration of the router.
-	 * @param configuration
+	 *
+	 * @param configuration a {@link org.distributeme.core.routing.GenericRouterConfiguration} object.
 	 */
 	void routerConfigurationInitialChange(GenericRouterConfiguration configuration);
 
 	/**
 	 * Called upon
-	 * @param configuration
+	 *
+	 * @param configuration a {@link org.distributeme.core.routing.GenericRouterConfiguration} object.
 	 */
 	void routerConfigurationFollowupChange(GenericRouterConfiguration configuration);
 
 	/**
 	 * Called after every router configuration change.
-	 * @param configuration
+	 *
+	 * @param configuration a {@link org.distributeme.core.routing.GenericRouterConfiguration} object.
 	 */
 	void routerConfigurationChange(GenericRouterConfiguration configuration);
 }

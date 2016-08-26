@@ -1,8 +1,9 @@
 package org.distributeme.core.interceptor;
 /**
  * Returned by the interceptor as a result of call interception.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class InterceptorResponse {
 	/**
@@ -64,29 +65,55 @@ public class InterceptorResponse {
 	 */
 	public static final InterceptorResponse ABORT_AND_FAIL = new InterceptorResponse(InterceptorCommand.ABORT_AND_FAIL);
 
+	/**
+	 * <p>Constructor for InterceptorResponse.</p>
+	 *
+	 * @param aCommand a {@link org.distributeme.core.interceptor.InterceptorResponse.InterceptorCommand} object.
+	 */
 	public InterceptorResponse(InterceptorCommand aCommand){
 		command = aCommand;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>command</code>.</p>
+	 *
+	 * @return a {@link org.distributeme.core.interceptor.InterceptorResponse.InterceptorCommand} object.
+	 */
 	public InterceptorCommand getCommand(){
 		return command;
 	}
 	
+	/**
+	 * <p>toString.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String toString(){
 		return "InterceptionResponse "+getCommand();
 	}
 
 	
+	/**
+	 * <p>Getter for the field <code>exception</code>.</p>
+	 *
+	 * @return a {@link java.lang.Exception} object.
+	 */
 	public Exception getException(){
 		return exception;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>returnValue</code>.</p>
+	 *
+	 * @return a {@link java.lang.Object} object.
+	 */
 	public Object getReturnValue(){
 		return returnValue;
 	}
 	
 	/**
 	 * Factory method to create a ready to use response. This response signalizes that the execution should be immediately stopped and a return value returned to the caller.
+	 *
 	 * @param returnValue return value which should be returned to the caller.
 	 * @return the ready-to-use InterceptorResponse object.
 	 */
@@ -98,7 +125,8 @@ public class InterceptorResponse {
 	
 	/**
 	 * Factory method to create a ready to use response. This response signalizes that the execution should be continued and a return value returned to the caller later.
-	 * This is useful if you want to give other interceptors a chance to interact with the new return value (logging, debug etc). 
+	 * This is useful if you want to give other interceptors a chance to interact with the new return value (logging, debug etc).
+	 *
 	 * @param returnValue return value which should be returned to the caller.
 	 * @return the ready-to-use InterceptorResponse object.
 	 */
@@ -110,6 +138,7 @@ public class InterceptorResponse {
 
 	/**
 	 * Factory method to create a ready to use response. Aborts immediately and throws the exception.
+	 *
 	 * @param anException exception to be thrown on the client side.
 	 * @return the ready-to-use InterceptorResponse object.
 	 */

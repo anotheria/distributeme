@@ -9,8 +9,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * A helper class to synchronously execute multiple asynchronous calls and collect results.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class MultiCallCollector {
 	/**
@@ -26,24 +27,51 @@ public class MultiCallCollector {
 	 */
 	private int numberOfCalls;
 	
+	/**
+	 * <p>Constructor for MultiCallCollector.</p>
+	 *
+	 * @param aNumberOfCalls a int.
+	 */
 	public MultiCallCollector(int aNumberOfCalls){
 		numberOfCalls = aNumberOfCalls;
 		latch = new CountDownLatch(numberOfCalls);
 		handlers = new ConcurrentHashMap<String, MultiCallCollector.SubCallBackHandler>();
 	}
 	
+	/**
+	 * <p>waitForResults.</p>
+	 *
+	 * @param timeout a long.
+	 * @throws java.lang.InterruptedException if any.
+	 */
 	public void waitForResults(long timeout) throws InterruptedException{
 		latch.await(timeout, TimeUnit.MILLISECONDS);
 	}
 	
+	/**
+	 * <p>waitForResults.</p>
+	 *
+	 * @throws java.lang.InterruptedException if any.
+	 */
 	public void waitForResults() throws InterruptedException{
 		waitForResults(Defaults.getDefaultAsynchCallTimeout());
 	}
 	
+	/**
+	 * <p>isFinished.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public boolean isFinished(){
 		return latch.getCount() == 0;
 	}
 	
+	/**
+	 * <p>createSubCallHandler.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @return a {@link org.distributeme.core.asynch.CallBackHandler} object.
+	 */
 	public CallBackHandler createSubCallHandler(String id){
 		if (handlers.size()>=numberOfCalls)
 			throw new IllegalStateException("There are already "+numberOfCalls+" calls running");
@@ -54,6 +82,9 @@ public class MultiCallCollector {
 		return newHandler;
 	}
 	
+	/**
+	 * <p>notifySubCallFinished.</p>
+	 */
 	protected void notifySubCallFinished(){
 		latch.countDown();
 	}
@@ -106,18 +137,42 @@ public class MultiCallCollector {
 		return handlers.get(id);
 	}
 	
+	/**
+	 * <p>isError.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @return a boolean.
+	 */
 	public boolean isError(String id){
 		return isFinished() && getHandler(id).returnException!=null;
 	}
 	
+	/**
+	 * <p>isSuccess.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @return a boolean.
+	 */
 	public boolean isSuccess(String id){
 		return isFinished() && getHandler(id).returnException==null;
 	}
 	
+	/**
+	 * <p>getReturnValue.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @return a {@link java.lang.Object} object.
+	 */
 	public Object getReturnValue(String id){
 		return getHandler(id).returnValue;
 	}
 	
+	/**
+	 * <p>getReturnException.</p>
+	 *
+	 * @param id a {@link java.lang.String} object.
+	 * @return a {@link java.lang.Exception} object.
+	 */
 	public Exception getReturnException(String id){
 		return getHandler(id).returnException;
 	}

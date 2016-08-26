@@ -7,6 +7,7 @@ import org.configureme.annotations.ConfigureMe;
  *
  * @author lrosenberg
  * @since 20.02.15 23:07
+ * @version $Id: $Id
  */
 @ConfigureMe (allfields = true)
 public class GenericRouterConfiguration {
@@ -19,22 +20,43 @@ public class GenericRouterConfiguration {
 	 */
 	private long blacklistTime;
 
+	/**
+	 * <p>Getter for the field <code>blacklistTime</code>.</p>
+	 *
+	 * @return a long.
+	 */
 	public long getBlacklistTime() {
 		return blacklistTime;
 	}
 
+	/**
+	 * <p>Setter for the field <code>blacklistTime</code>.</p>
+	 *
+	 * @param blacklistTime a long.
+	 */
 	public void setBlacklistTime(long blacklistTime) {
 		this.blacklistTime = blacklistTime;
 	}
 
+	/**
+	 * <p>Getter for the field <code>numberOfInstances</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getNumberOfInstances() {
 		return numberOfInstances;
 	}
 
+	/**
+	 * <p>Setter for the field <code>numberOfInstances</code>.</p>
+	 *
+	 * @param numberOfInstances a int.
+	 */
 	public void setNumberOfInstances(int numberOfInstances) {
 		this.numberOfInstances = numberOfInstances;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toString(){
 		return "NumberOfInstances: "+getNumberOfInstances()+", blacklistTime: "+getBlacklistTime();

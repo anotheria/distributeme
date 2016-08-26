@@ -13,8 +13,9 @@ import java.util.Random;
 
 /**
  * Utility to handle availabilitytesting configuration.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class ConfigurationInterceptorUtil {
 	/**
@@ -41,12 +42,18 @@ public class ConfigurationInterceptorUtil {
 	}
 	
 	
+	/**
+	 * <p>getSlowDownTime.</p>
+	 *
+	 * @return a long.
+	 */
 	public static final long getSlowDownTime(){
 		return config.getSlowDownTimeInMillis();
 	}
 	/**
-	 * Returns true if this call should be fliped. Fliping mean that an exceptional situation can occure but doesn't occure all the time. 
-	 * @return
+	 * Returns true if this call should be fliped. Fliping mean that an exceptional situation can occure but doesn't occure all the time.
+	 *
+	 * @return a boolean.
 	 */
 	public static final boolean flip(){
 		if (config.getFlipChanceInPercent()==0)
@@ -57,6 +64,12 @@ public class ConfigurationInterceptorUtil {
 		
 	}
 
+	/**
+	 * <p>isServiceIdConfiguredByProperty.</p>
+	 *
+	 * @param serviceId a {@link java.lang.String} object.
+	 * @return a boolean.
+	 */
 	public static boolean isServiceIdConfiguredByProperty(String serviceId){
 		List<String> serviceIds = config.getServiceIdsList();
 		return serviceIds.contains(serviceId) || serviceIds.contains("*");
@@ -129,6 +142,9 @@ public class ConfigurationInterceptorUtil {
 		}
 	}
 	
+	/**
+	 * <p>debugOutConfig.</p>
+	 */
 	public static void debugOutConfig() {
 		System.out.println(config);
 	}

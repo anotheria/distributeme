@@ -7,8 +7,9 @@ import java.util.List;
 
 /**
  * This router is based on numeric parameters and their mod value.
- * @author lrosenberg.
  *
+ * @author lrosenberg.
+ * @version $Id: $Id
  */
 public class ParameterBasedModRouter extends AbstractRouter implements Router{
 
@@ -21,6 +22,7 @@ public class ParameterBasedModRouter extends AbstractRouter implements Router{
 	 */
 	private int parameterPosition;
 	
+	/** {@inheritDoc} */
 	@Override
 	public String getServiceIdForCall(ClientSideCallContext callContext) {
 		List<?> parameters = callContext.getParameters();
@@ -52,6 +54,7 @@ public class ParameterBasedModRouter extends AbstractRouter implements Router{
 		
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void customize(String parameter) {
 		try{
@@ -67,10 +70,20 @@ public class ParameterBasedModRouter extends AbstractRouter implements Router{
 		}
 	}
 
+	/**
+	 * <p>Getter for the field <code>mod</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getMod() {
 		return mod;
 	}
 
+	/**
+	 * <p>Getter for the field <code>parameterPosition</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getParameterPosition() {
 		return parameterPosition;
 	}

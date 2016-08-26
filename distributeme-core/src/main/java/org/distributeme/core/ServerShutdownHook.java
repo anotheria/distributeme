@@ -5,8 +5,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A shutdown hook that un-registers a service upon jvm exit.
- * @author another
  *
+ * @author another
+ * @version $Id: $Id
  */
 public class ServerShutdownHook extends Thread{
 	
@@ -20,10 +21,16 @@ public class ServerShutdownHook extends Thread{
 	 */
 	private ServiceDescriptor targetDescriptor;
 	
+	/**
+	 * <p>Constructor for ServerShutdownHook.</p>
+	 *
+	 * @param aDescriptor a {@link org.distributeme.core.ServiceDescriptor} object.
+	 */
 	public ServerShutdownHook(ServiceDescriptor aDescriptor){
 		targetDescriptor = aDescriptor;
 	}
 	
+	/** {@inheritDoc} */
 	@Override public void run(){
 		log.info("Unregister "+targetDescriptor);
 		try{

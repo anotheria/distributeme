@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author lrosenberg
  * @since 21.09.15 00:45
+ * @version $Id: $Id
  */
 public abstract class AbstractRouter implements Router{
 
@@ -25,6 +26,7 @@ public abstract class AbstractRouter implements Router{
 
 	private String serviceId;
 
+	/** {@inheritDoc} */
 	@Override
 	public void customize(String serviceId, String parameter) {
 		setServiceId(serviceId);
@@ -33,18 +35,30 @@ public abstract class AbstractRouter implements Router{
 
 	/**
 	 * This is old style customize. It is called by the 'new' customize.
-	 * @param parameter
+	 *
+	 * @param parameter a {@link java.lang.String} object.
 	 */
 	public void customize(String parameter){
 		//do nothing.
 	}
 
+	/**
+	 * <p>Setter for the field <code>serviceId</code>.</p>
+	 *
+	 * @param serviceId a {@link java.lang.String} object.
+	 */
 	protected void setServiceId(String serviceId) {
 		this.serviceId = serviceId;
 		producer = new OnDemandStatsProducer<RoutingStats>(serviceId2ProducerId(serviceId), "router", "distributeme", RoutingStatsFactory.DEFAULT_INSTANCE);
 		ProducerRegistryFactory.getProducerRegistryInstance().registerProducer(producer);
 	}
 
+	/**
+	 * <p>getRoutingStats.</p>
+	 *
+	 * @param serviceId a {@link java.lang.String} object.
+	 * @return a {@link org.distributeme.core.stats.RoutingStatsCollector} object.
+	 */
 	protected RoutingStatsCollector getRoutingStats(String serviceId){
 
 		//if there is no producer, return empty wrapper, which does nothing.

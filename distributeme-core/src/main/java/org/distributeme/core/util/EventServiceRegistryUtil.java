@@ -12,8 +12,9 @@ import java.util.List;
 
 /**
  * Utility classes for requests to the registry via http.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class EventServiceRegistryUtil extends BaseRegistryUtil{
 	
@@ -31,8 +32,9 @@ public class EventServiceRegistryUtil extends BaseRegistryUtil{
 	public static final String APP = "esregistry";
 	/**
 	 * Converts a list of service descriptors to a string.
-	 * @param descriptors
-	 * @return
+	 *
+	 * @param descriptors a {@link java.util.List} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	public static final String list2string(List<ServiceDescriptor> descriptors){
 		StringBuilder ret = new StringBuilder();
@@ -44,9 +46,10 @@ public class EventServiceRegistryUtil extends BaseRegistryUtil{
 		return ret.toString();
 	}
 	/**
-	 * Converts a list of string representations of service descriptors to a list of ServiceDescriptor objects. 
-	 * @param encodedString
-	 * @return
+	 * Converts a list of string representations of service descriptors to a list of ServiceDescriptor objects.
+	 *
+	 * @param encodedString a {@link java.lang.String} object.
+	 * @return a {@link java.util.List} object.
 	 */
 	public static final List<ServiceDescriptor> string2list(String encodedString){
 		String tokens[] = StringUtils.tokenize(encodedString, DELIMITER);
@@ -102,6 +105,14 @@ public class EventServiceRegistryUtil extends BaseRegistryUtil{
 		}
 	}
 
+	/**
+	 * <p>registerAtRegistryAs.</p>
+	 *
+	 * @param channelName a {@link java.lang.String} object.
+	 * @param as a {@link org.distributeme.core.util.EventServiceRegistryUtil.Target} object.
+	 * @param descriptor a {@link org.distributeme.core.ServiceDescriptor} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	protected static final List<ServiceDescriptor> registerAtRegistryAs(String channelName, Target as, ServiceDescriptor descriptor){
 		String url = getRegistryBaseUrl();
@@ -126,26 +137,51 @@ public class EventServiceRegistryUtil extends BaseRegistryUtil{
 		return ret;
 	}
 	
+	/**
+	 * <p>registerConsumerAtRegistryAndGetSuppliers.</p>
+	 *
+	 * @param channelName a {@link java.lang.String} object.
+	 * @param myConsumer a {@link org.distributeme.core.ServiceDescriptor} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public static final List<ServiceDescriptor> registerConsumerAtRegistryAndGetSuppliers(String channelName, ServiceDescriptor myConsumer){
 		return registerAtRegistryAs(channelName, Target.CONSUMER, myConsumer);
 	}
 
+	/**
+	 * <p>registerSupplierAtRegistryAndGetConsumers.</p>
+	 *
+	 * @param channelName a {@link java.lang.String} object.
+	 * @param mySupplier a {@link org.distributeme.core.ServiceDescriptor} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	public static final List<ServiceDescriptor> registerSupplierAtRegistryAndGetConsumers(String channelName, ServiceDescriptor mySupplier){
 		return registerAtRegistryAs(channelName, Target.SUPPLIER, mySupplier);
 	}
 
+	/**
+	 * <p>notifyConsumerNotAvailable.</p>
+	 *
+	 * @param consumer a {@link org.distributeme.core.ServiceDescriptor} object.
+	 */
 	public static final void notifyConsumerNotAvailable(ServiceDescriptor consumer){
 		notifyNotAvailable(Target.CONSUMER, consumer);
 	}
 
+	/**
+	 * <p>notifySupplierNotAvailable.</p>
+	 *
+	 * @param supplier a {@link org.distributeme.core.ServiceDescriptor} object.
+	 */
 	public static final void notifySupplierNotAvailable(ServiceDescriptor supplier){
 		notifyNotAvailable(Target.SUPPLIER, supplier);
 	}
 
 	/**
 	 * Offers a possibility to mark a descriptor as unavailable.
+	 *
 	 * @param as the type of descriptor, supplier or consumer.
-	 * @param descriptor
+	 * @param descriptor a {@link org.distributeme.core.ServiceDescriptor} object.
 	 */
 	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	public static final void notifyNotAvailable(Target as, ServiceDescriptor descriptor){
@@ -165,7 +201,8 @@ public class EventServiceRegistryUtil extends BaseRegistryUtil{
 
 	/**
 	 * Returns the base url for this registry application. Globally configured host and port are used.
-	 * @return
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected static String getRegistryBaseUrl(){
 		return getRegistryBaseUrl(APP);
@@ -173,9 +210,9 @@ public class EventServiceRegistryUtil extends BaseRegistryUtil{
 	
 	/**
 	 * Returns the base url for this registry application.
-	 * @param host customized host.
-	 * @param port customized port.
-	 * @return
+	 *
+	 * @param location a {@link org.distributeme.core.Location} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected static String getRegistryBaseUrl(Location location){
 		return getRegistryBaseUrl(APP, location.getHost(), location.getPort(), location.getProtocol(), location.getContext());

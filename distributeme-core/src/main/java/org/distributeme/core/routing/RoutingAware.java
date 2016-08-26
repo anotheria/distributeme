@@ -7,13 +7,15 @@ package org.distributeme.core.routing;
  *
  * @author lrosenberg
  * @since 23.09.15 22:52
+ * @version $Id: $Id
  */
 public interface RoutingAware {
 
 	/**
 	 * Called when the service id of the service instance is determined and the service is registered..
-	 * @param definedServiceId
-	 * @param registeredAsServiceId
+	 *
+	 * @param definedServiceId a {@link java.lang.String} object.
+	 * @param registeredAsServiceId a {@link java.lang.String} object.
 	 * @param routerParameter value of the @Route annotation parameter.
 	 * @param routerConfigurationName value of the router configuration name parameter. Allows you to actively watch the same config.
 	 */

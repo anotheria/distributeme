@@ -10,11 +10,13 @@ import java.util.Map;
  *
  * @author lrosenberg
  * @since 23.09.15 14:29
+ * @version $Id: $Id
  */
 public class ServerSideUtils {
 	/**
 	 * Returns true if current call is failover.
-	 * @return
+	 *
+	 * @return a boolean.
 	 */
 	public static final boolean isFailoverCall(){
 		Map transportableCallContext = AbstractCallContext.getCurrentTransportableCallContext();
@@ -37,6 +39,11 @@ public class ServerSideUtils {
 		return false;
 	}
 
+	/**
+	 * <p>isBlacklisted.</p>
+	 *
+	 * @return a boolean.
+	 */
 	public static final boolean isBlacklisted() {
 		Map transportableCallContext = AbstractCallContext.getCurrentTransportableCallContext();
 		if (transportableCallContext == null) {

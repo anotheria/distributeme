@@ -14,7 +14,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Utils for handling the RMIRegistry object.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class RMIRegistryUtil {
 
@@ -37,8 +39,9 @@ public class RMIRegistryUtil {
 
 	/**
 	 * Finds or creates a new registry.
+	 *
 	 * @return Returns created registry instance.
-	 * @throws RemoteException
+	 * @throws java.rmi.RemoteException if any.
 	 */
 	public static Registry findOrCreateRegistry() throws RemoteException {
 		return findOrCreateRegistry(-1);
@@ -46,9 +49,10 @@ public class RMIRegistryUtil {
 
 	/**
 	 * Finds or creates a new registry.
+	 *
 	 * @param port port to listen to. If port is below zero, it will be ignored.
 	 * @return Returns created registry instance.
-	 * @throws RemoteException
+	 * @throws java.rmi.RemoteException if any.
 	 */
 	public static Registry findOrCreateRegistry(int port) throws RemoteException{
 		
@@ -103,6 +107,11 @@ public class RMIRegistryUtil {
 		}
 	}
 
+	/**
+	 * <p>Getter for the field <code>rmiRegistryPort</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public static int getRmiRegistryPort() {
 		return rmiRegistryPort;
 	}
