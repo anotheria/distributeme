@@ -52,8 +52,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Generator for RMI based server programm. 
+ * Generator for RMI based server programm.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class ServerGenerator extends AbstractGenerator implements Generator{
 	
@@ -68,10 +70,16 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		"org.distributeme.agents.transporter.generated.TransporterServer",
 	};
 
+	/**
+	 * <p>Constructor for ServerGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
 	public ServerGenerator(ProcessingEnvironment environment) {
 		super(environment);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
 		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getServerName(type));

@@ -15,6 +15,7 @@ import java.util.Map;
  * Utilities for generators.
  *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class GeneratorUtil {
 
@@ -41,6 +42,12 @@ public class GeneratorUtil {
             ConstantsGenerator.class
     };
 
+    /**
+     * <p>generateJAXRS.</p>
+     *
+     * @param type a {@link javax.lang.model.element.TypeElement} object.
+     * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+     */
     public static void generateJAXRS(TypeElement type, ProcessingEnvironment environment) {
         System.out.println("DistributeMe JAXRS generation started for type: " + type);
         Map<String, String> generatorOptions = getGeneratorOptions(environment);
@@ -66,6 +73,12 @@ public class GeneratorUtil {
         }
     }
 
+    /**
+     * <p>generateRMI.</p>
+     *
+     * @param type a {@link javax.lang.model.element.TypeElement} object.
+     * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+     */
     public static void generateRMI(TypeElement type, ProcessingEnvironment environment) {
         Map<String, String> generatorOptions = getGeneratorOptions(environment);
         generate(type, environment, generatorOptions, getGeneratorsForType(type));

@@ -2,7 +2,11 @@ package org.distributeme.annotation;
 
 import org.distributeme.core.routing.RegistrationNameProvider;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * This annotation is needed by the Routing mechanism. The purpose of this annotation is to indicate to the server at runtime that is has to register himself under other name as default.
@@ -12,6 +16,9 @@ import java.lang.annotation.*;
  * ./start.sh -DinstanceId=0 o.distributeme.test.failingandrr.generated.TestServer -> org_distributeme_test_failingandrr_TestService_0
  * ./start.sh -DinstanceId=1 o.distributeme.test.failingandrr.generated.TestServer -> org_distributeme_test_failingandrr_TestService_1
  * and so on.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 @Retention (RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)

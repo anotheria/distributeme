@@ -13,11 +13,18 @@ import java.util.Map;
 
 
 /**
- * Generator for server start script. 
+ * Generator for server start script.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class ServerScriptGenerator extends AbstractGenerator implements Generator{
 
+	/**
+	 * <p>Constructor for ServerScriptGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
 	public ServerScriptGenerator(ProcessingEnvironment environment) {
 		super(environment);
 	}
@@ -51,6 +58,7 @@ public class ServerScriptGenerator extends AbstractGenerator implements Generato
 		return firstPartOfName.append('-').append(fullName.substring(lastDot+1)).toString();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
 		String relativeName = "scripts/" + makeTypeName(type) + "-server.sh";

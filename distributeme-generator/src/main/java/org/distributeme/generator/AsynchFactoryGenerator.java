@@ -15,14 +15,22 @@ import java.util.Map;
 
 /**
  * Generator for RMI factory (stub factory).
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class AsynchFactoryGenerator extends AbstractGenerator implements Generator{
 
+	/**
+	 * <p>Constructor for AsynchFactoryGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
 	public AsynchFactoryGenerator(ProcessingEnvironment environment) {
 		super(environment);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
 		DistributeMe typeAnnotation = type.getAnnotation(DistributeMe.class);

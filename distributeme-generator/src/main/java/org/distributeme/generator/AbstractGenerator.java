@@ -11,7 +11,14 @@ import org.distributeme.core.interceptor.InterceptionPhase;
 import org.distributeme.core.routing.Router;
 
 import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.*;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.PackageElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.TypeParameterElement;
+import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.ElementFilter;
 import javax.lang.model.util.Elements;
@@ -19,13 +26,18 @@ import javax.lang.model.util.Types;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.lang.annotation.Annotation;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Base generator class.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class AbstractGenerator {
 	/**
@@ -45,50 +57,91 @@ public class AbstractGenerator {
 	 */
 	private static AtomicInteger routerOrders = new AtomicInteger();
 
+	/**
+	 * <p>Constructor for AbstractGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
 	public AbstractGenerator(ProcessingEnvironment environment) {
 		this.environment = environment;
 	}
 
 
+	/**
+	 * <p>Setter for the field <code>writer</code>.</p>
+	 *
+	 * @param aWriter a {@link java.io.Writer} object.
+	 */
 	protected void setWriter(Writer aWriter){
 		writer = new PrintWriter(aWriter);
 		resetIdent();
 	}
 	
+	/**
+	 * <p>Getter for the field <code>writer</code>.</p>
+	 *
+	 * @return a {@link java.io.Writer} object.
+	 */
 	protected Writer getWriter(){
 		return writer;
 	}
 	
 	/**
 	 * Returns the name of the generated Remote interface for a type.
-	 * @param type
-	 * @return
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected static String getRemoteInterfaceName(TypeElement type){
 		return "Remote"+type.getSimpleName().toString();
 	}
 
+	/**
+	 * <p>getAsynchInterfaceName.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected static String getAsynchInterfaceName(TypeElement type){
 		return "Asynch"+type.getSimpleName().toString();
 	}
 
 	/**
 	 * Returns the name of the generated Stub class for a type.
-	 * @param type
-	 * @return
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected static String getStubName(TypeElement type){
 		return "Remote"+type.getSimpleName().toString()+"Stub";
 	}
 
+	/**
+	 * <p>getJaxRsStubName.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected static String getJaxRsStubName(TypeElement type){
 		return type.getSimpleName().toString()+"JaxRsStub";
 	}
 
+	/**
+	 * <p>getAsynchStubName.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected static String getAsynchStubName(TypeElement type){
 		return "Asynch"+type.getSimpleName().toString()+"Stub";
 	}
 
+	/**
+	 * <p>getDefaultImplFactoryName.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static final String getDefaultImplFactoryName(TypeElement type){
 		return type.getQualifiedName()+"Factory";
 	}
@@ -96,29 +149,60 @@ public class AbstractGenerator {
 
 	/**
 	 * Returns the name of the generated Skeleton class for a type.
-	 * @param type
-	 * @return
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected static String getSkeletonName(TypeElement type){
 		return "Remote"+type.getSimpleName().toString()+"Skeleton";
 	}
 
+	/**
+	 * <p>getResourceName.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected static String getResourceName(TypeElement type){
 		return type.getSimpleName().toString()+"Resource";
 	}
 
+	/**
+	 * <p>getConstantsName.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected static String getConstantsName(TypeElement type){
 		return type.getSimpleName().toString()+"Constants";
 	}
 
+	/**
+	 * <p>getFactoryName.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected static String getFactoryName(TypeElement type){
 		return "Remote"+type.getSimpleName().toString()+"Factory";
 	}
 
+	/**
+	 * <p>getAsynchFactoryName.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected static String getAsynchFactoryName(TypeElement type){
 		return "Asynch"+type.getSimpleName().toString()+"Factory";
 	}
 
+	/**
+	 * <p>getServerName.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected static String getServerName(TypeElement type){
 		String name = type.getSimpleName().toString().toString();
 		return getServerName(name);
@@ -126,8 +210,9 @@ public class AbstractGenerator {
 
 	/**
 	 * Return the fully qualified name for the server class.
-	 * @param interfaceName
-	 * @return
+	 *
+	 * @param interfaceName a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected static String getFullyQualifiedServerName(String interfaceName){
 		int indexOfDot = interfaceName.lastIndexOf('.');
@@ -143,6 +228,12 @@ public class AbstractGenerator {
 		return packageName+interfaceName+"Server";
 	}
 
+	/**
+	 * <p>getServerName.</p>
+	 *
+	 * @param interfaceName a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected static String getServerName(String interfaceName){
 		int indexOfDot = interfaceName.lastIndexOf('.');
 		if (indexOfDot!=-1)
@@ -152,47 +243,100 @@ public class AbstractGenerator {
 		return interfaceName+"Server";
 	}
 	
+	/**
+	 * <p>getInterfaceName.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected static String getInterfaceName(TypeElement type){
 		return type.getSimpleName().toString().toString();
 	}
 
+	/**
+	 * <p>getPackageOf.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.Element} object.
+	 * @return a {@link javax.lang.model.element.PackageElement} object.
+	 */
 	protected PackageElement getPackageOf(Element type) {
 		Elements elements = environment.getElementUtils();
 		return elements.getPackageOf(type);
 	}
 	
+	/**
+	 * <p>getPackageName.</p>
+	 *
+	 * @param element a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getPackageName(TypeElement element){
         return getPackageOf(element).getQualifiedName()+".generated";
 	}
 	
+	/**
+	 * <p>writePackage.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 */
 	protected void writePackage(TypeElement type){
 		writeString("package "+getPackageName(type)+";");
 	}
 
 	/**
 	 * Writes comments that disables analyzers like checkstyle.
-	 * @param type
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
 	 */
 	protected void writeAnalyzerComments(TypeElement type){
 		writeString("//CHECKSTYLE:OFF");
 	}
 
+	/**
+	 * <p>quote.</p>
+	 *
+	 * @param s a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String quote(String s){
 		return "\""+s+"\"";
 	}
 	
+	/**
+	 * <p>quote.</p>
+	 *
+	 * @param o a {@link java.lang.Object} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String quote(Object o){
 		return "\""+o+"\"";
 	}
 
+	/**
+	 * <p>quote.</p>
+	 *
+	 * @param s a {@link java.lang.StringBuilder} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String quote(StringBuilder s){
 		return "\""+s.toString()+"\"";
 	}
 
+	/**
+	 * <p>quote.</p>
+	 *
+	 * @param a a int.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String quote(int a){
 		return quote(""+a);
 	}
 
+	/**
+	 * <p>writeIncreasedString.</p>
+	 *
+	 * @param s a {@link java.lang.String} object.
+	 */
 	protected void writeIncreasedString(String s){
 		increaseIdent();
 		writeString(s);
@@ -200,6 +344,11 @@ public class AbstractGenerator {
 		
 	}
 
+	/**
+	 * <p>writeIncreasedStatement.</p>
+	 *
+	 * @param s a {@link java.lang.String} object.
+	 */
 	protected void writeIncreasedStatement(String s){
 		writeIncreasedString(s+";");
 	}
@@ -216,8 +365,8 @@ public class AbstractGenerator {
 
 	/**
 	 * Writes a string in a new line with ident and linefeed.
+	 *
 	 * @param s string to write.
-	 * @return
 	 */
 	protected void writeString(String s){
 		StringBuilder ret = getIdent();
@@ -227,11 +376,19 @@ public class AbstractGenerator {
 	
 
 	//later replace with openTry
+	/**
+	 * <p>openTry.</p>
+	 */
 	protected void openTry(){
 		writeString("try{");
 		increaseIdent();
 	}
 
+	/**
+	 * <p>openFun.</p>
+	 *
+	 * @param s a {@link java.lang.String} object.
+	 */
 	protected void openFun(String s){
 		if (!s.endsWith("{"))
 			s+=" {";
@@ -242,8 +399,8 @@ public class AbstractGenerator {
 	
 	/**
 	 * Writes a statement (';' at the end of the line)
+	 *
 	 * @param s statement to write.
-	 * @return
 	 */
 	protected void writeStatement(String s){
 		StringBuilder ret = getIdent();
@@ -278,6 +435,9 @@ public class AbstractGenerator {
 			ident = 0;
 	}
 	
+	/**
+	 * <p>resetIdent.</p>
+	 */
 	protected void resetIdent(){
 	    ident = 0;
 	}
@@ -291,15 +451,31 @@ public class AbstractGenerator {
 	}
 	
 
+	/**
+	 * <p>writeImport.</p>
+	 *
+	 * @param imp a {@link java.lang.String} object.
+	 */
 	protected void writeImport(String imp){
 		writeString("import "+imp+";");
 	}
 	
+	/**
+	 * <p>writeImport.</p>
+	 *
+	 * @param clazz a {@link java.lang.Class} object.
+	 */
 	protected void writeImport(Class<?> clazz){
 		writeImport(clazz.getName());
 	}
 
 
+	/**
+	 * <p>writeImport.</p>
+	 *
+	 * @param packagename a {@link java.lang.String} object.
+	 * @param classname a {@link java.lang.String} object.
+	 */
 	protected void writeImport(String packagename, String classname){
 		writeString("import "+packagename+"."+classname+";");
 	}
@@ -321,8 +497,9 @@ public class AbstractGenerator {
 	}
 
 	/**
-	 * Closes a block and writes a comment. 
-	 * @param comment
+	 * Closes a block and writes a comment.
+	 *
+	 * @param comment a {@link java.lang.String} object.
 	 */
 	protected void closeBlock(String comment){
 		decreaseIdent();
@@ -331,12 +508,18 @@ public class AbstractGenerator {
 
 	/**
 	 * Closes a block without ident and writes a comment.
-	 * @param comment
+	 *
+	 * @param comment a {@link java.lang.String} object.
 	 */
 	protected void closeBlockWithoutIdent(String comment){
 		writeString("} //..."+comment);
 	}
 
+	/**
+	 * <p>appendMark.</p>
+	 *
+	 * @param markNumber a int.
+	 */
 	protected void appendMark(int markNumber){
 		
 //		String ret = "/* ***** MARK ";
@@ -347,8 +530,9 @@ public class AbstractGenerator {
 	}
 
 	/**
-	 * @param commentline
-	 * @return
+	 * <p>writeCommentLine.</p>
+	 *
+	 * @param commentline a {@link java.lang.String} object.
 	 */
 	protected void writeCommentLine(String commentline){
 		String tokens[] = StringUtils.tokenize(commentline, '\n');
@@ -358,6 +542,11 @@ public class AbstractGenerator {
 			writeString("// "+commentline);
 	}
 	
+	/**
+	 * <p>writeComment.</p>
+	 *
+	 * @param commentline a {@link java.lang.String} object.
+	 */
 	protected void writeComment(String commentline){
 	    String tokens[] = StringUtils.tokenize(commentline, '\n');
 	    
@@ -369,6 +558,9 @@ public class AbstractGenerator {
 	}
 
 
+	/**
+	 * <p>startClassBody.</p>
+	 */
 	protected void startClassBody(){
 		ident = 1;
 	}
@@ -398,6 +590,12 @@ public class AbstractGenerator {
 		return ret;
 	}
 
+    /**
+     * <p>getMethodDeclaration.</p>
+     *
+     * @param method a {@link javax.lang.model.element.ExecutableElement} object.
+     * @return a {@link java.lang.String} object.
+     */
     protected String getMethodDeclaration(ExecutableElement method){
 
 
@@ -421,6 +619,13 @@ public class AbstractGenerator {
 		return methodDecl.toString();
 	}
 	
+	/**
+	 * <p>getInterfaceMethodDeclaration.</p>
+	 *
+	 * @param method a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @param includeTransportableContext a boolean.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getInterfaceMethodDeclaration(ExecutableElement method, boolean includeTransportableContext){
 		
 		
@@ -448,6 +653,12 @@ public class AbstractGenerator {
 		return methodDecl.toString();
 	}
 
+	/**
+	 * <p>getAsynchInterfaceMethodDeclaration.</p>
+	 *
+	 * @param method a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getAsynchInterfaceMethodDeclaration(ExecutableElement method){
 		StringBuilder methodDecl = new StringBuilder();
 		methodDecl.append(getFormalTypeDeclaration(method)).append("void").append(" ");
@@ -469,6 +680,12 @@ public class AbstractGenerator {
 		return methodDecl.toString();
 	}
 
+	/**
+	 * <p>getResourceSkeletonMethodDeclaration.</p>
+	 *
+	 * @param method a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getResourceSkeletonMethodDeclaration(ExecutableElement method){
 		StringBuilder Element = new StringBuilder();
 		Element.append(getInterfaceMethodDeclaration(method, false));
@@ -485,6 +702,12 @@ public class AbstractGenerator {
 		return Element.toString();
 	}
 
+	/**
+	 * <p>getSkeletonMethodDeclaration.</p>
+	 *
+	 * @param method a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getSkeletonMethodDeclaration(ExecutableElement method){
 		StringBuilder Element = new StringBuilder();
 		Element.append(getInterfaceMethodDeclaration(method, true));
@@ -501,10 +724,23 @@ public class AbstractGenerator {
 		return Element.toString();
 	}
 	
+	/**
+	 * <p>getStubParametersDeclaration.</p>
+	 *
+	 * @param method a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getStubParametersDeclaration(ExecutableElement method){
 		return getStubParametersDeclaration(method, false);
 	}
 
+	/**
+	 * <p>getStubParametersDeclaration.</p>
+	 *
+	 * @param method a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @param declareFinal a boolean.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getStubParametersDeclaration(ExecutableElement method, boolean declareFinal){
 		StringBuilder ret = new StringBuilder();
 		Collection<? extends VariableElement> parameters = method.getParameters();
@@ -519,6 +755,12 @@ public class AbstractGenerator {
 		return ret.toString();
 	}
 	
+	/**
+	 * <p>getStubParametersCall.</p>
+	 *
+	 * @param method a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getStubParametersCall(ExecutableElement method){
 		StringBuilder ret = new StringBuilder();
 		Collection<? extends VariableElement> parameters = method.getParameters();
@@ -533,6 +775,12 @@ public class AbstractGenerator {
 		return ret.toString();
 	}
 
+	/**
+	 * <p>getStubMethodDeclaration.</p>
+	 *
+	 * @param method a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getStubMethodDeclaration(ExecutableElement method){
 		StringBuilder methodDecl = new StringBuilder();
 		methodDecl.append(getFormalTypeDeclaration(method)).append(method.getReturnType()).append(" ");
@@ -554,6 +802,12 @@ public class AbstractGenerator {
 		return methodDecl.toString();
 	}
 	
+	/**
+	 * <p>getStubAsynchMethodDeclaration.</p>
+	 *
+	 * @param method a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getStubAsynchMethodDeclaration(ExecutableElement method){
 		StringBuilder methodDecl = new StringBuilder();
 		methodDecl.append(getFormalTypeDeclaration(method)).append(" void ");
@@ -579,10 +833,22 @@ public class AbstractGenerator {
 		return methodDecl.toString();
 	}
 
+	/**
+	 * <p>getAsynchMethodName.</p>
+	 *
+	 * @param method a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getAsynchMethodName(ExecutableElement method){
 		return "asynch"+StringUtils.capitalize(method.getSimpleName().toString());
 	}
 	
+	/**
+	 * <p>getInternalStubMethodDeclaration.</p>
+	 *
+	 * @param method a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getInternalStubMethodDeclaration(ExecutableElement method){
 		StringBuilder methodDecl = new StringBuilder();
 		methodDecl.append(getFormalTypeDeclaration(method)).append(method.getReturnType()).append(" ");
@@ -610,8 +876,9 @@ public class AbstractGenerator {
 
 	/**
 	 * Retrieves all methods including methods from superinterfaces.
-	 * @param type
-	 * @return
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.util.Collection} object.
 	 */
 	protected Collection<? extends ExecutableElement> getAllDeclaredMethods(TypeElement type){
 		List<ExecutableElement> methods = ElementFilter.methodsIn(type.getEnclosedElements());
@@ -627,6 +894,12 @@ public class AbstractGenerator {
 		return methods;
 	}
 	
+	/**
+	 * <p>getAllDeclaredTypes.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	protected List<TypeElement> getAllDeclaredTypes(TypeElement type){
 		ArrayList<TypeElement> typesList = new ArrayList<TypeElement>();
         Types types = environment.getTypeUtils();
@@ -642,6 +915,12 @@ public class AbstractGenerator {
 		return typesList;
 	}
 	
+	/**
+	 * <p>getImplementedInterfacesAsString.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getImplementedInterfacesAsString(TypeElement type){
 		List<TypeElement> implementedInterfaces = getAllDeclaredTypes(type);
 		StringBuilder interfaceAsString = new StringBuilder();
@@ -655,9 +934,10 @@ public class AbstractGenerator {
 	
 	/**
 	 * Returns the mirror Element for a Element.
-	 * @param type
-	 * @param ann
-	 * @return
+	 *
+	 * @param type a {@link javax.lang.model.element.Element} object.
+	 * @param ann a {@link java.lang.Class} object.
+	 * @return a {@link javax.lang.model.element.AnnotationMirror} object.
 	 */
 	protected AnnotationMirror findMirror(Element type, Class<? extends Annotation> ann){
 		//System.out.println("-%- findMirror "+type+" ann "+ann);
@@ -674,6 +954,13 @@ public class AbstractGenerator {
 		return null;
 	}
 	
+	/**
+	 * <p>findMirrors.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.Element} object.
+	 * @param ann a {@link java.lang.Class} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	protected List<AnnotationMirror> findMirrors(Element type, Class<? extends Annotation> ann){
 		//System.out.println("-%- findMirror "+type+" ann "+ann);
 		ArrayList<AnnotationMirror> ret = new ArrayList<AnnotationMirror>();
@@ -688,6 +975,13 @@ public class AbstractGenerator {
 		return ret;
 	}
 	
+	/**
+	 * <p>findMirrorMethod.</p>
+	 *
+	 * @param mirror a {@link javax.lang.model.element.AnnotationMirror} object.
+	 * @param methodName a {@link java.lang.String} object.
+	 * @return a {@link javax.lang.model.element.ExecutableElement} object.
+	 */
 	protected ExecutableElement findMirrorMethod(AnnotationMirror mirror, String methodName){
 		Element executableElement = mirror.getAnnotationType().asElement();
 		Collection<ExecutableElement> methods = ElementFilter.methodsIn(executableElement.getEnclosedElements());
@@ -698,22 +992,53 @@ public class AbstractGenerator {
 		return null;
 	}
 	
+	/**
+	 * <p>findLogWriterValue.</p>
+	 *
+	 * @param mirror a {@link javax.lang.model.element.AnnotationMirror} object.
+	 * @return a {@link javax.lang.model.element.AnnotationValue} object.
+	 */
 	protected AnnotationValue findLogWriterValue(AnnotationMirror mirror){
 		return findMethodValue(mirror, "logWriterClazz");
 	}
 
+	/**
+	 * <p>findRouterClassValue.</p>
+	 *
+	 * @param mirror a {@link javax.lang.model.element.AnnotationMirror} object.
+	 * @return a {@link javax.lang.model.element.AnnotationValue} object.
+	 */
 	protected AnnotationValue findRouterClassValue(AnnotationMirror mirror){
 		return findMethodValue(mirror, "routerClass");
 	}
 
+	/**
+	 * <p>findRouterParameterValue.</p>
+	 *
+	 * @param mirror a {@link javax.lang.model.element.AnnotationMirror} object.
+	 * @return a {@link javax.lang.model.element.AnnotationValue} object.
+	 */
 	protected AnnotationValue findRouterParameterValue(AnnotationMirror mirror){
 		return findMethodValue(mirror, "routerParameter");
 	}
 
+	/**
+	 * <p>findRouterConfigurationName.</p>
+	 *
+	 * @param mirror a {@link javax.lang.model.element.AnnotationMirror} object.
+	 * @return a {@link javax.lang.model.element.AnnotationValue} object.
+	 */
 	protected AnnotationValue findRouterConfigurationName(AnnotationMirror mirror){
 		return findMethodValue(mirror, "configurationName");
 	}
 
+	/**
+	 * <p>findMethodValue.</p>
+	 *
+	 * @param mirror a {@link javax.lang.model.element.AnnotationMirror} object.
+	 * @param methodName a {@link java.lang.String} object.
+	 * @return a {@link javax.lang.model.element.AnnotationValue} object.
+	 */
 	protected AnnotationValue findMethodValue(AnnotationMirror mirror, String methodName){
 		//System.out.println("-- Called findMethodValue on "+methodName+" and "+mirror);
 		ExecutableElement method = findMirrorMethod(mirror, methodName);
@@ -749,6 +1074,12 @@ public class AbstractGenerator {
 		}
 	}
 
+	/**
+	 * <p>findConcurrencyControlAnnotation.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.Element} object.
+	 * @return a {@link org.distributeme.generator.AbstractGenerator.TranslatedCCAnnotation} object.
+	 */
 	protected TranslatedCCAnnotation findConcurrencyControlAnnotation(Element type){
 		//try all shortcuts first.
 		Annotation ann; 
@@ -778,6 +1109,12 @@ public class AbstractGenerator {
 		return null;
 	}
 
+	/**
+	 * <p>writeRouterDeclarations.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	protected List<TranslatedRouterAnnotation> writeRouterDeclarations(TypeElement type){
 		List<TranslatedRouterAnnotation> ret = new ArrayList<AbstractGenerator.TranslatedRouterAnnotation>();
 		Collection<? extends ExecutableElement> methods = getAllDeclaredMethods(type);
@@ -844,6 +1181,12 @@ public class AbstractGenerator {
 		return ret;
 	}
 	
+	/**
+	 * <p>writeConcurrencyControlDeclarations.</p>
+	 *
+	 * @param type a {@link javax.lang.model.element.TypeElement} object.
+	 * @return a {@link java.util.List} object.
+	 */
 	protected List<TranslatedCCAnnotation> writeConcurrencyControlDeclarations(TypeElement type){
 		List<TranslatedCCAnnotation> ret = new ArrayList<AbstractGenerator.TranslatedCCAnnotation>();
 		Collection<? extends ExecutableElement> methods = getAllDeclaredMethods(type);
@@ -886,8 +1229,9 @@ public class AbstractGenerator {
 
 	/**
 	 * Returns the name of the failing strategy variable for a method.
-	 * @param Element
-	 * @return
+	 *
+	 * @param Element a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getFailingStrategyVariableName(ExecutableElement Element){
 		StringBuilder ret = new StringBuilder(Element.getSimpleName()).append("FailingStrategy");
@@ -896,8 +1240,9 @@ public class AbstractGenerator {
 	}
 	/**
 	 * Returns the name for concurrency control strategy variable
-	 * @param Element
-	 * @return
+	 *
+	 * @param Element a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getCCStrategyVariableName(ExecutableElement Element){
 		StringBuilder ret = new StringBuilder(Element.getSimpleName()).append("CCStrategy");
@@ -917,6 +1262,11 @@ public class AbstractGenerator {
 	}
 	
 	
+	/**
+	 * <p>writeConcurrencyControlCreationMethod.</p>
+	 *
+	 * @param cca a {@link org.distributeme.generator.AbstractGenerator.TranslatedCCAnnotation} object.
+	 */
 	protected void writeConcurrencyControlCreationMethod(TranslatedCCAnnotation cca){
 		writeString("private ConcurrencyControlStrategy createConcurrencyControlStrategy"+cca.getOrder()+"(){");
 		increaseIdent();
@@ -926,6 +1276,12 @@ public class AbstractGenerator {
 		closeBlock();
 	}
 	
+	/**
+	 * <p>writeRouterCreationMethod.</p>
+	 *
+	 * @param serviceIdCall a {@link java.lang.String} object.
+	 * @param tra a {@link org.distributeme.generator.AbstractGenerator.TranslatedRouterAnnotation} object.
+	 */
 	protected void writeRouterCreationMethod(String serviceIdCall, TranslatedRouterAnnotation tra){
 		writeString("private "+Router.class.getName()+" createRouterInstance"+tra.getOrder()+"(){");
 		increaseIdent();
@@ -939,6 +1295,12 @@ public class AbstractGenerator {
 		closeBlock();
 	}
 
+	/**
+	 * <p>interceptionPhaseToMethod.</p>
+	 *
+	 * @param phase a {@link org.distributeme.core.interceptor.InterceptionPhase} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String interceptionPhaseToMethod(InterceptionPhase phase){
 		switch(phase){
 		case BEFORE_SERVANT_CALL: 
@@ -956,13 +1318,20 @@ public class AbstractGenerator {
 
 	/**
 	 * Returns true if the method has no return value.
-	 * @param decl
-	 * @return
+	 *
+	 * @param decl a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @return a boolean.
 	 */
 	protected boolean isVoidReturn(ExecutableElement decl){
 		return decl.getReturnType().toString().equals("void");
 	}
 
+	/**
+	 * <p>getMethodRouterName.</p>
+	 *
+	 * @param Element a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getMethodRouterName(ExecutableElement Element){
 		return Element.getSimpleName()+"Router";
 	}

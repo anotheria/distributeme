@@ -16,7 +16,11 @@ import org.distributeme.core.ServerSideCallContext;
 import org.distributeme.core.ServiceLocator;
 import org.distributeme.core.Verbosity;
 import org.distributeme.core.concurrencycontrol.ConcurrencyControlStrategy;
-import org.distributeme.core.interceptor.*;
+import org.distributeme.core.interceptor.InterceptionContext;
+import org.distributeme.core.interceptor.InterceptionPhase;
+import org.distributeme.core.interceptor.InterceptorRegistry;
+import org.distributeme.core.interceptor.InterceptorResponse;
+import org.distributeme.core.interceptor.ServerSideRequestInterceptor;
 import org.distributeme.core.lifecycle.HealthStatus;
 import org.distributeme.core.lifecycle.LifecycleAware;
 import org.distributeme.core.util.VoidMarker;
@@ -39,18 +43,30 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Generator for RMI based skeletons. 
+ * Generator for RMI based skeletons.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class ResourceGenerator extends AbstractGenerator implements Generator{
 
+	/**
+	 * <p>Constructor for ResourceGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
 	public ResourceGenerator(ProcessingEnvironment environment) {
 		super(environment);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
 		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type) + "." + getResourceName(type));

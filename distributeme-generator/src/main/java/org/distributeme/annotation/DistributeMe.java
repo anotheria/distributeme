@@ -4,11 +4,17 @@ import net.anotheria.anoprise.metafactory.Extension;
 import org.distributeme.core.ServiceDescriptor.Protocol;
 import org.distributeme.generator.logwriter.SysErrorLogWriter;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * Main annotation of the distributeme package that indicates that a service has to be distributed.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 @Retention (RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)

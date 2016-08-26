@@ -13,15 +13,22 @@ import java.util.Map;
 
 /**
  * Generates constants class for rmi service distribution.
- * @author lrosenberg.
  *
+ * @author lrosenberg.
+ * @version $Id: $Id
  */
 public class ConstantsGenerator extends AbstractGenerator implements Generator{
 
+	/**
+	 * <p>Constructor for ConstantsGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
 	public ConstantsGenerator(ProcessingEnvironment environment) {
 		super(environment);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
 		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getConstantsName(type));

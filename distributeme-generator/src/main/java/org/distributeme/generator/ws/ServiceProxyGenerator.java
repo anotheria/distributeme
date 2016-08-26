@@ -22,12 +22,24 @@ import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * <p>ServiceProxyGenerator class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class ServiceProxyGenerator extends WSStructureGenerator implements WebServiceMeGenerator {
 
+	/**
+	 * <p>Constructor for ServiceProxyGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
 	public ServiceProxyGenerator(ProcessingEnvironment environment) {
 		super(environment);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void generate(TypeElement type) {
 		PrintWriter writer = createSourceFile(type.getSimpleName().toString().toString(), getWSProxyPackage(type), getWSProxySimpleName(type));

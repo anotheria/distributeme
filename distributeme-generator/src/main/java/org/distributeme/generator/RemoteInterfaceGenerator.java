@@ -17,15 +17,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Generator for RMI based remote interface. 
+ * Generator for RMI based remote interface.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class RemoteInterfaceGenerator extends AbstractGenerator implements Generator{
 
+	/**
+	 * <p>Constructor for RemoteInterfaceGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
 	public RemoteInterfaceGenerator(ProcessingEnvironment environment) {
 		super(environment);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
 		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getRemoteInterfaceName(type));

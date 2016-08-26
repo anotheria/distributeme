@@ -6,12 +6,24 @@ import javax.lang.model.element.TypeElement;
 import java.io.PrintWriter;
 
 
+/**
+ * <p>ConfigurationGenerator class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class ConfigurationGenerator extends WSStructureGenerator implements WebServiceMeGenerator {
 
+	/**
+	 * <p>Constructor for ConfigurationGenerator.</p>
+	 *
+	 * @param filer a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
 	public ConfigurationGenerator(ProcessingEnvironment filer) {
 		super(filer);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void generate(TypeElement type) {
 		// create WebContent folder structure

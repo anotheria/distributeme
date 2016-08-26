@@ -24,7 +24,11 @@ import javax.lang.model.type.TypeMirror;
 import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
@@ -32,17 +36,25 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Generator for RMI based stubs. 
+ * Generator for RMI based stubs.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class AsynchStubGenerator extends AbstractStubGenerator implements Generator{
 	
 	private static Logger log = LoggerFactory.getLogger(AsynchStubGenerator.class);
 
+	/**
+	 * <p>Constructor for AsynchStubGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
 	public AsynchStubGenerator(ProcessingEnvironment environment) {
 		super(environment);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
 		

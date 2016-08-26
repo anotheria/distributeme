@@ -15,7 +15,11 @@ import org.distributeme.core.Defaults;
 import org.distributeme.core.ServerSideCallContext;
 import org.distributeme.core.Verbosity;
 import org.distributeme.core.concurrencycontrol.ConcurrencyControlStrategy;
-import org.distributeme.core.interceptor.*;
+import org.distributeme.core.interceptor.InterceptionContext;
+import org.distributeme.core.interceptor.InterceptionPhase;
+import org.distributeme.core.interceptor.InterceptorRegistry;
+import org.distributeme.core.interceptor.InterceptorResponse;
+import org.distributeme.core.interceptor.ServerSideRequestInterceptor;
 import org.distributeme.core.lifecycle.HealthStatus;
 import org.distributeme.core.lifecycle.LifecycleAware;
 import org.distributeme.core.util.VoidMarker;
@@ -37,15 +41,23 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Generator for RMI based skeletons. 
+ * Generator for RMI based skeletons.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class SkeletonGenerator extends AbstractGenerator implements Generator{
 
+	/**
+	 * <p>Constructor for SkeletonGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
 	public SkeletonGenerator(ProcessingEnvironment environment) {
 		super(environment);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
 		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getSkeletonName(type));

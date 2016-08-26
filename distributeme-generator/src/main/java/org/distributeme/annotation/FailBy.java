@@ -2,12 +2,17 @@ package org.distributeme.annotation;
 
 import org.distributeme.core.failing.FailingStrategy;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  * This annotation configures custom failing behaviour.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 @Retention (RetentionPolicy.SOURCE)
 @Target({ElementType.TYPE,ElementType.METHOD})

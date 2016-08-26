@@ -1,5 +1,13 @@
 package org.distributeme.processors;
 
+import org.distributeme.annotation.DistributeMe;
+import org.distributeme.annotation.WebServiceMe;
+import org.distributeme.core.ServiceDescriptor;
+import org.distributeme.generator.GeneratorUtil;
+import org.distributeme.generator.ws.ConfigurationGenerator;
+import org.distributeme.generator.ws.ServiceProxyGenerator;
+import org.distributeme.generator.ws.WebServiceMeGenerator;
+
 import javax.annotation.processing.Completion;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
@@ -15,18 +23,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.distributeme.annotation.DistributeMe;
-import org.distributeme.annotation.WebServiceMe;
-import org.distributeme.core.ServiceDescriptor;
-import org.distributeme.generator.GeneratorUtil;
-import org.distributeme.generator.ws.ConfigurationGenerator;
-import org.distributeme.generator.ws.ServiceProxyGenerator;
-import org.distributeme.generator.ws.WebServiceMeGenerator;
-
 /**
  * Factory for the annotation processor.
  *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class GeneratorProcessorFactory implements Processor {
 
@@ -46,6 +47,7 @@ public class GeneratorProcessorFactory implements Processor {
 
     private List<WebServiceMeGenerator> wsGenerators;
 
+    /** {@inheritDoc} */
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         this.environment = processingEnv;
@@ -54,6 +56,7 @@ public class GeneratorProcessorFactory implements Processor {
         wsGenerators.add(new ConfigurationGenerator(environment));
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         for (Element element : roundEnv.getRootElements()) {
@@ -94,21 +97,25 @@ public class GeneratorProcessorFactory implements Processor {
         return true;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Iterable<? extends Completion> getCompletions(Element element, AnnotationMirror annotation, ExecutableElement member, String userText) {
         return null;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         return supportedAnnotations;
     }
 
+    /** {@inheritDoc} */
     @Override
     public SourceVersion getSupportedSourceVersion() {
         return SourceVersion.RELEASE_7;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Set<String> getSupportedOptions() {
         return supportedOptions;
