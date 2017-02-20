@@ -8,8 +8,9 @@ import java.util.List;
 
 /**
  * This producer is a dummy class that is used for grouping of requests in journey analyzes.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public enum MoskitoJourneyInterceptorStatsProducer implements IStatsProducer{
 	/**
@@ -21,21 +22,25 @@ public enum MoskitoJourneyInterceptorStatsProducer implements IStatsProducer{
 	 */
 	SKELETON;
 	
+	/** {@inheritDoc} */
 	@Override
 	public List<IStats> getStats() {
 		return Collections.EMPTY_LIST;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getProducerId() {
 		return name();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getCategory() {
 		return "default";
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getSubsystem() {
 		return "default";

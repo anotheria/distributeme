@@ -1,16 +1,17 @@
 package org.distributeme.core;
 
+import net.anotheria.util.BasicComparable;
+
 import java.io.Serializable;
 import java.util.Calendar;
-
-import net.anotheria.util.BasicComparable;
 
 /**
  * This class represents a resolvable address of a service.
  * A server address is build up like following:
  * <protocol>://<serviceid>.<instanceid>@<host>:<port>
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class ServiceDescriptor implements Serializable, Cloneable{
 	
@@ -56,10 +57,6 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 		 * CORBA.
 		 */
 		CORBA,
-        /**
-         * JSON-PRC.
-         */
-        JSONRPC,
 		/**
 		 * Jax Rest Service.
 		 */
@@ -93,13 +90,27 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 	
 	/**
 	 * This constructor is used for registration.
-	 * @param aProtocol
-	 * @param aServiceId
+	 *
+	 * @param aProtocol a {@link org.distributeme.core.ServiceDescriptor.Protocol} object.
+	 * @param aServiceId a {@link java.lang.String} object.
+	 * @param anInstanceId a {@link java.lang.String} object.
+	 * @param aHost a {@link java.lang.String} object.
+	 * @param aPort a int.
 	 */
 	public ServiceDescriptor(Protocol aProtocol, String aServiceId, String anInstanceId, String aHost, int aPort){
 		this(aProtocol, aServiceId, anInstanceId, aHost, aPort, 0);
 	}
 
+	/**
+	 * <p>Constructor for ServiceDescriptor.</p>
+	 *
+	 * @param aProtocol a {@link org.distributeme.core.ServiceDescriptor.Protocol} object.
+	 * @param aServiceId a {@link java.lang.String} object.
+	 * @param anInstanceId a {@link java.lang.String} object.
+	 * @param aHost a {@link java.lang.String} object.
+	 * @param aPort a int.
+	 * @param aTimestamp a long.
+	 */
 	public ServiceDescriptor(Protocol aProtocol, String aServiceId, String anInstanceId, String aHost, int aPort, long aTimestamp){
 		if (aProtocol==null)
 			throw new IllegalArgumentException("Null protocol is not allowed");
@@ -120,8 +131,9 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 
 	/**
 	 * This constructor is used for the lookup.
-	 * @param aProtocol
-	 * @param aServiceId
+	 *
+	 * @param aProtocol a {@link org.distributeme.core.ServiceDescriptor.Protocol} object.
+	 * @param aServiceId a {@link java.lang.String} object.
 	 */
 	public ServiceDescriptor(Protocol aProtocol, String aServiceId){
 		if (aProtocol==null)
@@ -132,34 +144,61 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 		serviceId = aServiceId;
 	}
 
+	/**
+	 * <p>getGlobalServiceId.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getGlobalServiceId(){
 		return protocol.toString().toLowerCase()+"://"+serviceId;
 	}
 	
+	/**
+	 * <p>getRegistrationString.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getRegistrationString(){
 		return getGlobalServiceId()+INSTANCE_SEPARATOR+instanceId+HOST_SEPARATOR+host+PORT_SEPARATOR+port+TIMESTAMP_SEPARATOR+getTimeString(timestamp);
 	}
 	
+	/**
+	 * <p>getLookupString.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getLookupString(){
 		return getGlobalServiceId();
 	}
  
+	/** {@inheritDoc} */
 	@Override public String toString(){
 		return getRegistrationString();
 	}
 	
+	/**
+	 * <p>getSystemWideUniqueId.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public final String getSystemWideUniqueId(){
 		return getRegistrationString();
 	}
 	
+	/**
+	 * <p>Getter for the field <code>timestamp</code>.</p>
+	 *
+	 * @return a long.
+	 */
 	public long getTimestamp() {
 		return timestamp;
 	}
 	
 	/**
 	 * Virtually the same as <b>fromRegistrationString</b> but better named ;-).
-	 * @param systemWideUniqueId
-	 * @return
+	 *
+	 * @param systemWideUniqueId a {@link java.lang.String} object.
+	 * @return a {@link org.distributeme.core.ServiceDescriptor} object.
 	 */
 	public static final ServiceDescriptor fromSystemWideUniqueId(String systemWideUniqueId){
 		return fromRegistrationString(systemWideUniqueId);
@@ -167,8 +206,9 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 	
 	/**
 	 * Factory method to create a service descriptor from a registration string (used for bind in the registry).
-	 * @param registrationString
-	 * @return
+	 *
+	 * @param registrationString a {@link java.lang.String} object.
+	 * @return a {@link org.distributeme.core.ServiceDescriptor} object.
 	 */
 	public static final ServiceDescriptor fromRegistrationString(String registrationString){
 		int indexOfHost = registrationString.indexOf(HOST_SEPARATOR);
@@ -198,9 +238,10 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 	}
 	
 	/**
-	 * Factory method to create a service descriptor from a resolve string (used for lookup in the registry). 
-	 * @param resolveString
-	 * @return
+	 * Factory method to create a service descriptor from a resolve string (used for lookup in the registry).
+	 *
+	 * @param resolveString a {@link java.lang.String} object.
+	 * @return a {@link org.distributeme.core.ServiceDescriptor} object.
 	 */
 	public static final ServiceDescriptor fromResolveString(String resolveString){
 		String protocol = resolveString.substring(0, resolveString.indexOf(':'));
@@ -210,10 +251,11 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 	}
 
 	/**
-	 * Changes the service id in the descriptor to another id. This is useful if you want to access a not publicly registered service (like eventservice or lifecycle servce) 
+	 * Changes the service id in the descriptor to another id. This is useful if you want to access a not publicly registered service (like eventservice or lifecycle servce)
 	 * via the public service id from the registry.
-	 * @param serviceId target service id.
+	 *
 	 * @return new service descriptor with altered service id.
+	 * @param aServiceId a {@link java.lang.String} object.
 	 */
 	public ServiceDescriptor changeServiceId(String aServiceId){
 		try{
@@ -225,6 +267,7 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -240,6 +283,7 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 		return result;
 	}
 
+	/** {@inheritDoc} */
 	@Override public boolean equals(Object o){
 		return o instanceof ServiceDescriptor ?
 				protocol == ((ServiceDescriptor)o).protocol &&
@@ -250,26 +294,57 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 				: false;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>host</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getHost(){
 		return host;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>port</code>.</p>
+	 *
+	 * @return a int.
+	 */
 	public int getPort(){
 		return port;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>protocol</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getProtocol(){
 		return protocol.toString().toLowerCase();
 	}
 	
+	/**
+	 * <p>Getter for the field <code>serviceId</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getServiceId(){
 		return serviceId;
 	}
 	
+	/**
+	 * <p>Getter for the field <code>instanceId</code>.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	public String getInstanceId() {
 		return instanceId;
 	}
 
+	/**
+	 * <p>getTimeString.</p>
+	 *
+	 * @param timestamp a long.
+	 * @return a {@link java.lang.String} object.
+	 */
 	public static String getTimeString(long timestamp) {
 		assert timestamp > 0;
 		
@@ -285,6 +360,12 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 			calendar.get(Calendar.SECOND));
 	}
 	
+	/**
+	 * <p>parseTimeString.</p>
+	 *
+	 * @param s a {@link java.lang.String} object.
+	 * @return a long.
+	 */
 	public static long parseTimeString(String s) {
 		assert s != null;
 		

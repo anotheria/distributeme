@@ -1,8 +1,9 @@
 package org.distributeme.core.interceptor.availabilitytesting;
 /**
  * Constants for availability testing.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class Constants {
 	/**

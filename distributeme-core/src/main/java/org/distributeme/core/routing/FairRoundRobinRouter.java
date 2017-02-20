@@ -8,9 +8,11 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * This router sends each call to another instance. It is useful if you want to cluster a service
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
-public class FairRoundRobinRouter implements Router{
+public class FairRoundRobinRouter extends AbstractRouter implements Router{
 	/**
 	 * Max mod parameter. It is used to scale up the range of instances, and to prevent the counter from too many overflows, thus allowing the distribution be more fair.
 	 */
@@ -29,6 +31,7 @@ public class FairRoundRobinRouter implements Router{
 	 */
 	private static Logger log = LoggerFactory.getLogger(FairRoundRobinRouter.class);
 	
+	/** {@inheritDoc} */
 	@Override
 	public void customize(String parameter) {
 		try{
@@ -39,6 +42,7 @@ public class FairRoundRobinRouter implements Router{
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getServiceIdForCall(ClientSideCallContext callContext) {
 		if (MAX==0)

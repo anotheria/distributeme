@@ -1,24 +1,69 @@
 package org.distributeme.generator;
 
-import java.io.File;
+import net.anotheria.util.StringUtils;
+
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.TypeElement;
+import javax.tools.FileObject;
+import javax.tools.StandardLocation;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 
-import com.sun.mirror.apt.Filer;
-import com.sun.mirror.apt.Filer.Location;
-import com.sun.mirror.declaration.TypeDeclaration;
 
 /**
- * Generator for server start script. 
+ * Generator for server start script.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class ServerScriptGenerator extends AbstractGenerator implements Generator{
 
+	/**
+	 * <p>Constructor for ServerScriptGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
+	public ServerScriptGenerator(ProcessingEnvironment environment) {
+		super(environment);
+	}
+
+	/**
+	 * Creates a script name. Takes first parts of the package, one letter each, adds last part of the package, adds class name.
+	 * For example this class will produce od-generator-serverscriptgenerator.
+	 * @param type
+	 * @return
+	 */
+	private String makeTypeName(TypeElement type){
+		String fullName = type.getQualifiedName().toString().toLowerCase();
+		int lastDot = fullName.lastIndexOf('.');
+		if (lastDot == -1)
+			return fullName;
+
+		String packageName = fullName.substring(0, lastDot);
+		String[] packageParts = StringUtils.tokenize(packageName, '.');
+		StringBuilder firstPartOfName = new StringBuilder();
+		for (int i=0; i<packageParts.length; i++){
+			String token = packageParts[i];
+			if (token != null && token.length()>0) {
+				if (i==packageParts.length-1){
+					firstPartOfName.append('-').append(token);
+				}else {
+					firstPartOfName.append(token.charAt(0));
+				}
+			}
+		}
+
+		return firstPartOfName.append('-').append(fullName.substring(lastDot+1)).toString();
+	}
+
+	/** {@inheritDoc} */
 	@Override
-	public void generate(TypeDeclaration type, Filer filer, Map<String,String> options) throws IOException{
-		//System.out.println("#####  ServerScriptGenerator: "+getServerName(type)+"  #####");
-		PrintWriter writer = filer.createTextFile(Location.SOURCE_TREE, "", new File("../service/"+ type.getSimpleName() +"/" + type.getSimpleName() + "-server.sh"), "UTF-8");
+	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
+		String relativeName = "scripts/" + makeTypeName(type) + "-server.sh";
+		FileObject fileObject = filer.createResource(StandardLocation.SOURCE_OUTPUT, "", relativeName);
+		PrintWriter writer = new PrintWriter(fileObject.openWriter());
 		setWriter(writer);
 		
 		writeString("#!/bin/bash");

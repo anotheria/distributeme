@@ -5,6 +5,7 @@ import org.configureme.ConfigurationManager;
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.failing.FailDecision;
 import org.distributeme.core.failing.FailingStrategy;
+import org.distributeme.core.stats.RoutingStatsCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author lrosenberg
  * @since 13.03.15 00:37
  */
-abstract class AbstractRouterWithFailover implements ConfigurableRouter, FailingStrategy {
+abstract class AbstractRouterWithFailover extends AbstractRouter implements ConfigurableRouter, FailingStrategy {
 
 	/**
 	 * Under line constant.
@@ -49,22 +50,35 @@ abstract class AbstractRouterWithFailover implements ConfigurableRouter, Failing
 	private final Map<String, Integer> modRouteMethodRegistry;
 
 
+	/**
+	 * <p>Constructor for AbstractRouterWithFailover.</p>
+	 */
 	public AbstractRouterWithFailover() {
-		log = LoggerFactory.getLogger(this.getClass());
+		log = LoggerFactory.getLogger(Constants.ROUTING_LOGGER_NAME);
 		delegateCallCounter = new AtomicInteger(0);
 		if (getStrategy() == null)
 			throw new AssertionError("getStrategy() method should not return NULL. Please check " + this.getClass() + " implementation");
 		modRouteMethodRegistry = new HashMap<String, Integer>();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public FailDecision callFailed(final ClientSideCallContext clientSideCallContext) {
-		if (!failingSupported())
+
+		RoutingStatsCollector stats = getRoutingStats(clientSideCallContext.getServiceId());
+		stats.addFailedCall();
+
+		if (!failingSupported()) {
+			stats.addFailDecision();
 			return FailDecision.fail();
+		}
 
-		if (clientSideCallContext.getCallCount() < getServiceAmount() - 1)
+		if (clientSideCallContext.getCallCount() < getServiceAmount() - 1) {
+			stats.addRetryDecision();
 			return FailDecision.retry();
+		}
 
+		stats.addFailDecision();
 		return FailDecision.fail();
 	}
 
@@ -106,6 +120,8 @@ abstract class AbstractRouterWithFailover implements ConfigurableRouter, Failing
 				throw new AssertionError("Not properly configured router, parameter count is less than expected - actual: " + parameters.size() + ", expected: " + parameterPosition);
 			Object parameter = parameters.get(parameterPosition);
 			long parameterValue = getModableValue(parameter);
+			if (parameterValue<0)
+				parameterValue *= -1;
 
 			String result = context.getServiceId() + UNDER_LINE + (parameterValue % getServiceAmount());
 
@@ -131,12 +147,19 @@ abstract class AbstractRouterWithFailover implements ConfigurableRouter, Failing
 		return log;
 	}
 
+	/**
+	 * <p>Getter for the field <code>configuration</code>.</p>
+	 *
+	 * @return a {@link org.distributeme.core.routing.GenericRouterConfiguration} object.
+	 */
 	protected GenericRouterConfiguration getConfiguration(){
 		return configuration;
 	}
 
+	/** {@inheritDoc} */
 	@Override
-	public void setConfigurationName(String configurationName) {
+	public void setConfigurationName(String serviceId, String configurationName) {
+		setServiceId(serviceId);
 		try{
 			ConfigurationManager.INSTANCE.configureAs(configuration, configurationName);
 		}catch(IllegalArgumentException e){
@@ -167,7 +190,7 @@ abstract class AbstractRouterWithFailover implements ConfigurableRouter, Failing
 	 * Return RouterStrategy - which should be used for current Router implementation.
 	 * Current method should not return NULL, value validation will be performed in constructor.
 	 *
-	 * @return {@link RouterStrategy}
+	 * @return {@link org.distributeme.core.routing.RouterStrategy}
 	 */
 	protected abstract RouterStrategy getStrategy();
 

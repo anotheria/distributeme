@@ -1,10 +1,5 @@
 package org.distributeme.generator;
 
-import com.sun.mirror.apt.Filer;
-import com.sun.mirror.declaration.AnnotationMirror;
-import com.sun.mirror.declaration.AnnotationValue;
-import com.sun.mirror.declaration.TypeDeclaration;
-import com.sun.tools.apt.mirror.declaration.AnnotationValueImpl;
 import net.anotheria.anoprise.metafactory.Extension;
 import net.anotheria.anoprise.metafactory.FactoryNotFoundException;
 import net.anotheria.anoprise.metafactory.MetaFactory;
@@ -14,6 +9,7 @@ import net.anotheria.util.PidTools;
 import org.distributeme.annotation.CombinedService;
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.annotation.DummyFactory;
+import org.distributeme.annotation.Route;
 import org.distributeme.annotation.RouteMe;
 import org.distributeme.annotation.ServerListener;
 import org.distributeme.annotation.SupportService;
@@ -30,12 +26,19 @@ import org.distributeme.core.listener.ListenerRegistry;
 import org.distributeme.core.listener.ServerLifecycleListener;
 import org.distributeme.core.listener.ServerLifecycleListenerShutdownHook;
 import org.distributeme.core.routing.RegistrationNameProvider;
+import org.distributeme.core.routing.RoutingAware;
 import org.distributeme.core.util.LocalServiceDescriptorStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.element.TypeElement;
+import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
@@ -49,8 +52,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Generator for RMI based server programm. 
+ * Generator for RMI based server programm.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class ServerGenerator extends AbstractGenerator implements Generator{
 	
@@ -65,9 +70,20 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		"org.distributeme.agents.transporter.generated.TransporterServer",
 	};
 
+	/**
+	 * <p>Constructor for ServerGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
+	public ServerGenerator(ProcessingEnvironment environment) {
+		super(environment);
+	}
+
+	/** {@inheritDoc} */
 	@Override
-	public void generate(TypeDeclaration type, Filer filer, Map<String,String> options) throws IOException{
-		PrintWriter writer = filer.createSourceFile(getPackageName(type)+"."+getServerName(type));
+	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getServerName(type));
+        PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
 		//meta servers rely on other skeletons and just starts them.
@@ -104,6 +120,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		writeImport(ServerShutdownHook.class);
 		writeImport(SystemProperties.class);
 		writeImport(List.class);
+		writeImport(RoutingAware.class);
 		emptyline();
 		
 		DistributeMe annotation = type.getAnnotation(DistributeMe.class);
@@ -114,7 +131,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 				writeImport(sService);
 			}
 		}
-		
+
 		writeString("public class "+getServerName(type)+"{");
 		increaseIdent();
 		emptyline();
@@ -236,7 +253,15 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeStatement("private static "+getRemoteInterfaceName(type)+" rmiServant = null");
 			writeStatement("private static String serviceId = null");
 			emptyline();
+
 			writeString("public static void createServiceAndRegisterLocally() throws Exception{");
+			increaseIdent();
+			writeCommentLine("Use default port, which is -1");
+			writeStatement("createServiceAndRegisterLocally(-1)");
+			closeBlock();
+			emptyline();
+
+			writeString("public static void createServiceAndRegisterLocally(int customRegistryPort) throws Exception{");
 			increaseIdent();
 			writeCommentLine("creating impl");
 			//old , direct instantiation writeStatement(type.getQualifiedName()+" impl = new "+type.getAnnotation(DistributeMe.class).factoryClassName()+"().create()");
@@ -254,7 +279,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			}else{
 				writeCommentLine("No factory specified");
 				if (initCode.length>0){
-					writeCommentLine("init code not empty, assuming it contains factory declaration");
+					writeCommentLine("init code not empty, assuming it contains factory Element");
 				}else{
 					//try autoresolve
 					writeString("try{");
@@ -280,16 +305,18 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeStatement(type.getQualifiedName()+" impl = null");
 			writeString("try{");
 			increaseIdent();
-			writeStatement("impl = MetaFactory.get("+type.getQualifiedName()+".class, Extension."+annotation.extension()+")");
+			writeStatement("impl = MetaFactory.get(" + type.getQualifiedName() + ".class, Extension." + annotation.extension() + ")");
 			decreaseIdent();
 			writeString("}catch (FactoryNotFoundException factoryNotFound){");
-			writeIncreasedStatement("throw new AssertionError("+quote("Un- or mis-configured, can't instantiate service instance for "+type.getQualifiedName()+" tried initcode, submitted factory, autoguessed factory ("+factoryClassName+") and impl class ("+implClassName+")")+")");
+			writeIncreasedStatement("throw new AssertionError(" + quote("Un- or mis-configured, can't instantiate service instance for " + type.getQualifiedName() + " tried initcode, submitted factory, autoguessed factory (" + factoryClassName + ") and impl class (" + implClassName + ")") + ")");
 			writeString("}");
 			
 			
-			writeStatement("skeleton = new "+getSkeletonName(type)+"(impl)");
-			writeStatement("rmiServant = ("+getRemoteInterfaceName(type)+") UnicastRemoteObject.exportObject(skeleton, SystemProperties.SERVICE_BINDING_PORT.getAsInt())");
+			writeStatement("skeleton = new " + getSkeletonName(type) + "(impl)");
+			writeStatement("rmiServant = (" + getRemoteInterfaceName(type) + ") UnicastRemoteObject.exportObject(skeleton, SystemProperties.SERVICE_BINDING_PORT.getAsInt())");
 			writeStatement("serviceId = "+getConstantsName(type)+".getServiceId()");
+			writeCommentLine("Save original serviceId for later RoutingAware call");
+			writeStatement("String definedServiceId = serviceId");
 			emptyline();
 			
 			//determine whether we have a custom registration name.
@@ -317,7 +344,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeStatement("log.info("+quote("Getting local registry")+")");
 			writeStatement("Registry registry = null");
 			openTry();
-			writeStatement("registry = RMIRegistryUtil.findOrCreateRegistry()");
+			writeStatement("registry = RMIRegistryUtil.findOrCreateRegistry(customRegistryPort)");
 			decreaseIdent();
 			writeString("}catch(RemoteException e){");
 			increaseIdent();
@@ -327,7 +354,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			closeBlock();
 					
 			emptyline();
-			writeStatement("log.info("+quote("Registering ")+"+serviceId+"+quote(" locally.")+")");
+			writeStatement("log.info(" + quote("Registering ") + "+serviceId+" + quote(" locally.") + ")");
 		
 			emptyline();
 			openTry();
@@ -341,6 +368,27 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeStatement("System.exit(-2)"); 
 			closeBlock("local registry bind.");
 			emptyline();
+
+			//ROUTING AWARE-NESS.
+			AnnotationMirror annotationMirrorRoute = findMirror(type, Route.class);
+			if (annotationMirror!=null){
+				AnnotationValue routerParameter = findMethodValue(annotationMirror, "routerParameter");
+				AnnotationValue configurationName = findMethodValue(annotationMirror, "configurationName");
+
+
+				//after registration, if service is RoutingAware we should notify it about its name.
+				//of course it only makes sense if the service had Route annotation.
+				writeString("if (impl instanceof RoutingAware){");
+				increaseIdent();
+				writeStatement("((RoutingAware)impl).notifyServiceId(definedServiceId, serviceId, "
+						+ (routerParameter == null ? "null" : quote(routerParameter.getValue()))
+						+ ", "
+						+ (configurationName == null ? "null" : quote(configurationName.getValue()))
+						+ ") ");
+				closeBlock("/if impl RoutingAware");
+			}
+
+
 			//finally locally register service
 			if (!supportService){
 				writeStatement("LifecycleComponentImpl.INSTANCE.registerPublicService(serviceId, skeleton)");
@@ -440,10 +488,16 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			emptyline();
 			writeString("public static void createCombinedServicesAndRegisterLocally() throws Exception{");
 			increaseIdent();
+			writeStatement("createCombinedServicesAndRegisterLocally(-1)");
+			closeBlock("createCombinedServicesAndRegisterLocally");
+			emptyline();
+
+			writeString("public static void createCombinedServicesAndRegisterLocally(int customRegistryPort) throws Exception{");
+			increaseIdent();
 			List<String> targetServicesNames = getCombinedServicesNames(type);
 			for (String service : targetServicesNames){
 				writeStatement(getFullyQualifiedServerName(service)+".init()");
-				writeStatement(getFullyQualifiedServerName(service)+".createServiceAndRegisterLocally()");
+				writeStatement(getFullyQualifiedServerName(service)+".createServiceAndRegisterLocally(customRegistryPort)");
 			}
 //			for (String s : SUPPORT_SERVICES){
 //				writeStatement(s+".init()");
@@ -460,12 +514,12 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		writer.close();
 	}
 	
-	private List<String> getCombinedServicesNames(TypeDeclaration type){
+	private List<String> getCombinedServicesNames(TypeElement type){
 		AnnotationMirror ann = findMirror(type, CombinedService.class);
 		AnnotationValue val = findMethodValue(ann, "services");
-		@SuppressWarnings("unchecked")ArrayList<AnnotationValueImpl> values = (ArrayList<AnnotationValueImpl>)val.getValue();
+		List<? extends AnnotationValue> values = (List<? extends AnnotationValue>)val.getValue();
 		ArrayList<String> ret = new ArrayList<String>();
-		for (AnnotationValueImpl o : values){
+		for (AnnotationValue o : values){
 			ret.add(o.getValue().toString());
 		}
 		return ret;

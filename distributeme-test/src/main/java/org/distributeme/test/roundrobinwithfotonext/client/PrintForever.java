@@ -1,11 +1,15 @@
 package org.distributeme.test.roundrobinwithfotonext.client;
 
+import net.anotheria.moskito.webui.embedded.StartMoSKitoInspectBackendForRemote;
 import org.distributeme.core.ServiceLocator;
 import org.distributeme.test.roundrobinwithfotonext.RoundRobinService;
 
 
 public class PrintForever extends Client{
 	public static void main(String a[]) throws Exception{
+
+		StartMoSKitoInspectBackendForRemote.startMoSKitoInspectBackend();
+
 		RoundRobinService service = ServiceLocator.getRemote(RoundRobinService.class);
 
 		long start = System.currentTimeMillis();

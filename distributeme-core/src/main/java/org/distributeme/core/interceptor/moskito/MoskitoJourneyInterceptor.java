@@ -15,8 +15,9 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This interceptor supports moskito journeys over the network, it transmits server side call trace back to the client.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class MoskitoJourneyInterceptor implements ClientSideRequestInterceptor, ServerSideRequestInterceptor{
 
@@ -38,6 +39,7 @@ public class MoskitoJourneyInterceptor implements ClientSideRequestInterceptor, 
 	 */
 	private static Logger log = LoggerFactory.getLogger(MoskitoJourneyInterceptor.class);
 	
+	/** {@inheritDoc} */
 	@Override
 	public InterceptorResponse beforeServantCall(ServerSideCallContext context,
 			InterceptionContext iContext) {
@@ -54,6 +56,7 @@ public class MoskitoJourneyInterceptor implements ClientSideRequestInterceptor, 
 
 		
 
+	/** {@inheritDoc} */
 	@Override
 	public InterceptorResponse afterServantCall(ServerSideCallContext context,
 			InterceptionContext iContext) {
@@ -77,6 +80,7 @@ public class MoskitoJourneyInterceptor implements ClientSideRequestInterceptor, 
 		return InterceptorResponse.CONTINUE;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public InterceptorResponse beforeServiceCall(ClientSideCallContext context,
 			InterceptionContext iContext) {
@@ -93,6 +97,7 @@ public class MoskitoJourneyInterceptor implements ClientSideRequestInterceptor, 
 		
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public InterceptorResponse afterServiceCall(ClientSideCallContext context,
 			InterceptionContext iContext) {

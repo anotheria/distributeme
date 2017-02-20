@@ -1,8 +1,8 @@
 package org.distributeme.agents.singleton;
 
-import java.io.Serializable;
-
 import org.distributeme.agents.Agent;
+
+import java.io.Serializable;
 
 public class SingletonAgent implements Agent, Serializable, SingletonTestable{
 

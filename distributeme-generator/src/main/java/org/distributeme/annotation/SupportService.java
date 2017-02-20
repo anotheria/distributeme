@@ -8,8 +8,9 @@ import java.lang.annotation.Target;
 
 /**
  * This annotations marks a service as support service. This is an instruction for the generator not to generate main method for this service.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 @Retention (RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)

@@ -1,12 +1,13 @@
 package org.distributeme.test.interception.interceptor;
 
-import java.util.Map;
-
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.ServerSideCallContext;
 import org.distributeme.core.interceptor.AbstractRequestInterceptor;
 import org.distributeme.core.interceptor.InterceptionContext;
 import org.distributeme.core.interceptor.InterceptorResponse;
+
+import java.util.Map;
+import java.util.Set;
 
 public class PiggybackingInterceptor extends AbstractRequestInterceptor{
 
@@ -37,8 +38,9 @@ public class PiggybackingInterceptor extends AbstractRequestInterceptor{
 
 		Map originalMap = (Map)context.getTransportableCallContext().get("piggyback");
 		if (originalMap!=null){
-			for (Object key : originalMap.keySet()){
-				((Map)context.getParameters().get(0)).put(key, originalMap.get(key));
+			Set<Map.Entry> entries = originalMap.entrySet();
+			for (Map.Entry entry : entries){
+				((Map)context.getParameters().get(0)).put(entry.getKey(), entry.getValue());
 			}
 		}
 		

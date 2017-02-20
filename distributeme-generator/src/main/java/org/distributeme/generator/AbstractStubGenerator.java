@@ -1,13 +1,32 @@
 package org.distributeme.generator;
 
-import com.sun.mirror.type.TypeMirror;
+
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.type.TypeMirror;
 
 /**
  * Base class for stub generators.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class AbstractStubGenerator extends AbstractGenerator{
+	/**
+	 * <p>Constructor for AbstractStubGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
+	public AbstractStubGenerator(ProcessingEnvironment environment) {
+		super(environment);
+	}
+
+	/**
+	 * <p>convertReturnValue.</p>
+	 *
+	 * @param returnType a {@link javax.lang.model.type.TypeMirror} object.
+	 * @param returnValue a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String convertReturnValue(TypeMirror returnType, String returnValue){
 		String rt = returnType.toString();
 		if (rt.equals("long")){

@@ -1,7 +1,10 @@
 package org.distributeme.core.conventions;
 
 /**
- * Helper class for accessing and accounting for supported system properties. 
+ * Helper class for accessing and accounting for supported system properties.
+ *
+ * @author another
+ * @version $Id: $Id
  */
 public enum SystemProperties {
 	/**
@@ -20,6 +23,14 @@ public enum SystemProperties {
 	 * Port where the registry is running.
 	 */
 	CENTRAL_REGISTRY_PORT("registryContainerPort", "9229"),
+	/**
+	 * Protocol under which the registry is access-able.
+	 */
+	CENTRAL_REGISTRY_PROTOCOL("registryContainerProtocol", "http"),
+	/**
+	 * Context under which the registry is access-able.
+	 */
+	CENTRAL_REGISTRY_CONTEXT("registryContainerContext", "distributeme"),
 	/**
 	 * Minimal port to use for the local rmi registry.
 	 */
@@ -54,7 +65,8 @@ public enum SystemProperties {
 	
 	/**
 	 * Returns true if the property is set.
-	 * @return
+	 *
+	 * @return a boolean.
 	 */
 	public boolean isSet(){
 		return get()!=null;
@@ -63,7 +75,8 @@ public enum SystemProperties {
 	
 	/**
 	 * Returns the set value.
-	 * @return
+	 *
+	 * @return a {@link java.lang.String} object.
 	 */
 	public String get(){
 		return System.getProperty(propertyName, defaultValue);
@@ -71,7 +84,8 @@ public enum SystemProperties {
 	
 	/**
 	 * Returns the system property value as boolean.
-	 * @return
+	 *
+	 * @return a boolean.
 	 */
 	public boolean getAsBoolean(){
 		return Boolean.parseBoolean(get());
@@ -79,7 +93,8 @@ public enum SystemProperties {
 	
 	/**
 	 * Returns the system property value as int.
-	 * @return
+	 *
+	 * @return a int.
 	 */
 	public int getAsInt(){
 		return Integer.parseInt(get());

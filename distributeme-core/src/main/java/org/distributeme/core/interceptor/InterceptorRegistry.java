@@ -18,8 +18,9 @@ import java.util.List;
 
 /**
  * The registry for the interceptors.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public final class InterceptorRegistry {
 	/**
@@ -42,7 +43,8 @@ public final class InterceptorRegistry {
 	
 	/**
 	 * Returns the singleton instances.
-	 * @return
+	 *
+	 * @return a {@link org.distributeme.core.interceptor.InterceptorRegistry} object.
 	 */
 	public static final InterceptorRegistry getInstance(){ return instance; }
 	
@@ -59,10 +61,20 @@ public final class InterceptorRegistry {
 	private InterceptorRegistry(){
 	}
 	
+	/**
+	 * <p>getClientSideRequestInterceptors.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<ClientSideRequestInterceptor> getClientSideRequestInterceptors(){
 		return clientSideInterceptors;
 	}
 	
+	/**
+	 * <p>getServerSideRequestInterceptors.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<ServerSideRequestInterceptor> getServerSideRequestInterceptors(){
 		return serverSideInterceptors;
 	}

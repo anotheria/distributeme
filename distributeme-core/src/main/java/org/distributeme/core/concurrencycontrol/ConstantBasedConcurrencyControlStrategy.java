@@ -1,16 +1,16 @@
 package org.distributeme.core.concurrencycontrol;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import net.anotheria.util.StringUtils;
-
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.ServerSideCallContext;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 /**
  * This implementation of a concurrencycontrolstrategy is based on constants which are annotated to the target interface.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class ConstantBasedConcurrencyControlStrategy implements ConcurrencyControlStrategy{
 	/**
@@ -30,6 +30,7 @@ public class ConstantBasedConcurrencyControlStrategy implements ConcurrencyContr
 	 */
 	private AtomicLong serverSideRequestCount = new AtomicLong(0);
 	
+	/** {@inheritDoc} */
 	@Override
 	public void customize(String parameter) {
 		if (parameter==null || parameter.length()==0)
@@ -46,6 +47,7 @@ public class ConstantBasedConcurrencyControlStrategy implements ConcurrencyContr
 		
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void notifyClientSideCallStarted(ClientSideCallContext context) {
 		if (clientSideRequestCount.incrementAndGet()>clientSideLimit){
@@ -54,11 +56,13 @@ public class ConstantBasedConcurrencyControlStrategy implements ConcurrencyContr
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void notifyClientSideCallFinished(ClientSideCallContext context) {
 		clientSideRequestCount.decrementAndGet();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void notifyServerSideCallStarted(ServerSideCallContext context) {
 		if (serverSideRequestCount.incrementAndGet()>serverSideLimit){
@@ -67,11 +71,13 @@ public class ConstantBasedConcurrencyControlStrategy implements ConcurrencyContr
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void notifyServerSideCallFinished(ServerSideCallContext context) {
 		serverSideRequestCount.decrementAndGet();
 	}
 	
+	/** {@inheritDoc} */
 	@Override public String toString(){
 		return getClass().getSimpleName()+" with limits ("+clientSideLimit+", "+serverSideLimit+")";
 	}

@@ -7,8 +7,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 /**
  * This annotation configures easy to use version of the concurrency control by specifying hard call limits on both client and server side.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 @Retention (RetentionPolicy.SOURCE)
 @Target({ElementType.TYPE,ElementType.METHOD})

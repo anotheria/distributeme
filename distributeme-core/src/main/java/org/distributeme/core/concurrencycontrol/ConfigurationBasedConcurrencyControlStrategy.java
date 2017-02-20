@@ -9,8 +9,9 @@ import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * This implementation of a concurrencycontrolstrategy is based on constants which are annotated to the target interface.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class ConfigurationBasedConcurrencyControlStrategy implements ConcurrencyControlStrategy{
 
@@ -28,6 +29,7 @@ public class ConfigurationBasedConcurrencyControlStrategy implements Concurrency
 	 */
 	private AtomicLong serverSideRequestCount = new AtomicLong(0);
 	
+	/** {@inheritDoc} */
 	@Override
 	public void customize(String parameter) {
 		//if configuration parameter contains a comma its old style configuration parameter.
@@ -58,6 +60,7 @@ public class ConfigurationBasedConcurrencyControlStrategy implements Concurrency
 			configuration.setServerSideLimit(aServerSideLimit);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void notifyClientSideCallStarted(ClientSideCallContext context) {
 		if (clientSideRequestCount.incrementAndGet()>configuration.getClientSideLimit()){
@@ -66,11 +69,13 @@ public class ConfigurationBasedConcurrencyControlStrategy implements Concurrency
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void notifyClientSideCallFinished(ClientSideCallContext context) {
 		clientSideRequestCount.decrementAndGet();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void notifyServerSideCallStarted(ServerSideCallContext context) {
 		if (serverSideRequestCount.incrementAndGet()>configuration.getServerSideLimit()){
@@ -79,11 +84,13 @@ public class ConfigurationBasedConcurrencyControlStrategy implements Concurrency
 		}
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void notifyServerSideCallFinished(ServerSideCallContext context) {
 		serverSideRequestCount.decrementAndGet();
 	}
 	
+	/** {@inheritDoc} */
 	@Override public String toString(){
 		return getClass().getSimpleName()+" with limits configuration: "+configuration;
 	}

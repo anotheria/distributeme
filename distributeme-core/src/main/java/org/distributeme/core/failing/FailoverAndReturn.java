@@ -1,15 +1,18 @@
 package org.distributeme.core.failing;
 
 import org.distributeme.core.ClientSideCallContext;
+import org.distributeme.core.routing.AbstractRouter;
 import org.distributeme.core.routing.RegistrationNameProvider;
 import org.distributeme.core.routing.Router;
 
 /**
- * This is base class for failing strategy / router combination which is pretty much the same as Failover, but instead of staying on 
+ * This is base class for failing strategy / router combination which is pretty much the same as Failover, but instead of staying on
  * the failover instance forever, it tries to switch back after some timeout.
+ *
  * @author another
+ * @version $Id: $Id
  */
-public abstract class FailoverAndReturn implements FailingStrategy, RegistrationNameProvider, Router{
+public abstract class FailoverAndReturn extends AbstractRouter implements FailingStrategy, RegistrationNameProvider, Router{
 
 	/**
 	 * Target service id after first failover.
@@ -31,10 +34,12 @@ public abstract class FailoverAndReturn implements FailingStrategy, Registration
 	
 	/**
 	 * Returns the time unit in milliseconds between the router retries to get back to original server.
-	 * @return
+	 *
+	 * @return a long.
 	 */
 	protected abstract long getFailbackTimeout();
 	
+	/** {@inheritDoc} */
 	@Override
 	public String getServiceIdForCall(ClientSideCallContext callContext) {
 		
@@ -57,16 +62,19 @@ public abstract class FailoverAndReturn implements FailingStrategy, Registration
 	 */
 	public static final String SUFFIX = "-failover";
 	
+	/** {@inheritDoc} */
 	@Override
 	public String getRegistrationName(String serviceId) {
 		return serviceId+SUFFIX;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void customize(String parameter) {
 		// not used.
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public FailDecision callFailed(ClientSideCallContext context) {
 		FailDecision ret = FailDecision.retryOnce();
@@ -74,6 +82,11 @@ public abstract class FailoverAndReturn implements FailingStrategy, Registration
 		return ret;
 	}
 
+	/**
+	 * <p>getSuffix.</p>
+	 *
+	 * @return a {@link java.lang.String} object.
+	 */
 	protected String getSuffix(){
 		return SUFFIX;
 	}

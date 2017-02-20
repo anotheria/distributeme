@@ -1,5 +1,7 @@
 package org.distributeme.test.udpbroadcast;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -11,6 +13,7 @@ import java.net.InetAddress;
  * @since 22.02.15 18:11
  */
 public class BroadcastToAllServers {
+	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	public static void main(String a[]) throws Exception{
 		System.out.println("Trying to broadcast");
 		DatagramPacket outgoing = new DatagramPacket(new String("register").getBytes(), "register".length());

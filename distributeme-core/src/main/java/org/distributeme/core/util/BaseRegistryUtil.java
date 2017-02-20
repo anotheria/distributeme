@@ -12,7 +12,9 @@ import java.net.URLEncoder;
 
 /**
  * Base class for registry utilities.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class BaseRegistryUtil {
 	/**
@@ -27,8 +29,9 @@ public class BaseRegistryUtil {
 
 	/**
 	 * URLEncodes a string.
+	 *
 	 * @param urlPart string to encode.
-	 * @return
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected static String encode(String urlPart){
 		try{
@@ -40,28 +43,56 @@ public class BaseRegistryUtil {
 	
 	/**
 	 * Returns the base url of the specified registry application.
-	 * @param app
-	 * @return
+	 *
+	 * @param app a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
 	 */
 	protected static String getRegistryBaseUrl(String app){
-		return getRegistryBaseUrl(app, registryLocation.getRegistryContainerHost(), registryLocation.getRegistryContainerPort());
+		return getRegistryBaseUrl(app,
+				registryLocation.getRegistryContainerHost(),
+				registryLocation.getRegistryContainerPort(),
+				registryLocation.getRegistryContainerProtocol(),
+				registryLocation.getRegistryContainerContext()
+		);
 	}
 	
-	protected static String getRegistryBaseUrl(String app, String host, int port){
-		String url = "http://"+host+":"+port;
-		url += "/distributeme/"+app+"/";
+	/**
+	 * <p>getRegistryBaseUrl.</p>
+	 *
+	 * @param app a {@link java.lang.String} object.
+	 * @param host a {@link java.lang.String} object.
+	 * @param port a int.
+	 * @param protocol a {@link java.lang.String} object.
+	 * @param context a {@link java.lang.String} object.
+	 * @return a {@link java.lang.String} object.
+	 */
+	protected static String getRegistryBaseUrl(String app, String host, int port, String protocol, String context){
+		String url = protocol+"://"+host+":"+port;
+		if (context!=null && context.length()>0) {
+			url += "/" + context + "/" + app + "/";
+		}else {
+			url += "/" + app + "/";
+		}
 		return url;
 	}
 
 	/**
 	 * Reads the server reply to an url and returns it as string.
+	 *
 	 * @param url as string.
-	 * @return
+	 * @return an array of byte.
 	 */
 	protected static byte[] getUrlContent(String url){
 		return getUrlContent(url, false);
 	}
 	
+	/**
+	 * <p>getUrlContent.</p>
+	 *
+	 * @param url a {@link java.lang.String} object.
+	 * @param silently a boolean.
+	 * @return an array of byte.
+	 */
 	protected static byte[] getUrlContent(String url, boolean silently){
 		try{
 			URL myURL = new URL(url);

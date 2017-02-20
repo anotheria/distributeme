@@ -1,5 +1,6 @@
 package org.distributeme.test.roundrobinwithfotonext.client;
 
+import net.anotheria.moskito.webui.embedded.StartMoSKitoInspectBackendForRemote;
 import net.anotheria.util.NumberUtils;
 import org.distributeme.core.ServiceLocator;
 import org.distributeme.test.roundrobinwithfotonext.RoundRobinService;
@@ -7,6 +8,9 @@ import org.distributeme.test.roundrobinwithfotonext.RoundRobinService;
 
 public class PrintClient extends Client{
 	public static void main(String a[]) throws Exception{
+
+		StartMoSKitoInspectBackendForRemote.startMoSKitoInspectBackend();
+
 		RoundRobinService service = ServiceLocator.getRemote(RoundRobinService.class);
 
 		long start = System.currentTimeMillis();
@@ -23,12 +27,19 @@ public class PrintClient extends Client{
 		
 		long end = System.currentTimeMillis();
 		
-		System.out.println("Tries "+LIMIT+", errors: "+errors+", replies: "+replies+", time: "+(end-start)+" ms");
+		System.out.println("Tries " + LIMIT + ", errors: " + errors + ", replies: " + replies + ", time: " + (end - start) + " ms");
 		//now print results
 		service.printResults();
 		service.printResults();
 		service.printResults();
 		service.printResults();
+
+		System.out.println("Sleeping .... ");
+		while(true){
+			try{
+				Thread.sleep(10000);
+			}catch(InterruptedException ignored){};
+		}
 
 	}
 

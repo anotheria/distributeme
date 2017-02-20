@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentMap;
  * By implementing getModableValue(<?>) method - You can simply extract some long from incoming parameter, for further calculations.
  *
  * @author h3llka,dvayanu
+ * @version $Id: $Id
  */
 public abstract class AbstractRouterWithStickyFailOverToNextNode extends AbstractRouterWithFailover implements ConfigurableRouter, FailingStrategy {
 
@@ -60,23 +61,31 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 	 */
 	private ConcurrentMap<String, Long> serverFailureTimestamps = new ConcurrentHashMap<String, Long>();
 
+	/** {@inheritDoc} */
 	@Override
 	public FailDecision callFailed(final ClientSideCallContext clientSideCallContext) {
+		getLog().info(clientSideCallContext.getServiceId()+ " marked as failed and will be blacklisted for "+getConfiguration().getBlacklistTime()+" ms");
 		serverFailureTimestamps.put(clientSideCallContext.getServiceId(), System.currentTimeMillis());
 		return super.callFailed(clientSideCallContext);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String getServiceIdForCall(final ClientSideCallContext clientSideCallContext) {
 
 		if (getLog().isDebugEnabled())
 			getLog().debug("Incoming call " + clientSideCallContext);
 
-		if (getServiceAmount() == 0)
+		if (getServiceAmount() == 0) {
+			getRoutingStats(clientSideCallContext.getServiceId()).addRequestRoutedTo();
 			return clientSideCallContext.getServiceId();
+		}
 
-		if (failingSupported() && !clientSideCallContext.isFirstCall())
-			return getServiceIdForFailing(clientSideCallContext);
+		if (failingSupported() && !clientSideCallContext.isFirstCall()) {
+			String serviceId = getServiceIdForFailing(clientSideCallContext);
+			getRoutingStats(serviceId).addRequestRoutedTo();
+			return serviceId;
+		}
 
 
 		String selectedServiceId = null;
@@ -98,9 +107,14 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		//the service id we picked up is blacklisted due to previous failing.
 		if (blacklisted) {
 			clientSideCallContext.setServiceId(selectedServiceId);
-			return getServiceIdForFailing(clientSideCallContext);
+			getRoutingStats(selectedServiceId).addBlacklisted();
+			selectedServiceId = getServiceIdForFailing(clientSideCallContext);
+			getRoutingStats(selectedServiceId).addRequestRoutedTo();
+			clientSideCallContext.getTransportableCallContext().put(Constants.ATT_BLACKLISTED, Boolean.TRUE);
+			return selectedServiceId;
 		}
 
+		getRoutingStats(selectedServiceId).addRequestRoutedTo();
 		return selectedServiceId;
 	}
 
@@ -127,7 +141,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		instancesThatIAlreadyTried.add(idSubstring);
 
 		//now pick next candidate.
-		if (instancesThatIAlreadyTried.size()==getConfiguration().getNumberOfInstances()){
+		if (instancesThatIAlreadyTried.size() == getConfiguration().getNumberOfInstances()){
 			//we tried everything, it won't work
 			throw new DistributemeRuntimeException("No instance available, we tried all already.");
 		}
@@ -166,6 +180,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 
 
 
+	/** {@inheritDoc} */
 	@Override
 	public void customize(String s) {
 		String tokens[] = StringUtils.tokenize(s, ',');

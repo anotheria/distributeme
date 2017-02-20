@@ -1,11 +1,5 @@
 package org.distributeme.generator.jaxrs;
 
-import com.sun.mirror.apt.Filer;
-import com.sun.mirror.declaration.MethodDeclaration;
-import com.sun.mirror.declaration.ParameterDeclaration;
-import com.sun.mirror.declaration.TypeDeclaration;
-import com.sun.mirror.type.InterfaceType;
-import com.sun.mirror.type.ReferenceType;
 import net.anotheria.moskito.core.dynamic.MoskitoInvokationProxy;
 import net.anotheria.moskito.core.logging.DefaultStatsLogger;
 import net.anotheria.moskito.core.logging.IntervalStatsLogger;
@@ -35,13 +29,20 @@ import org.distributeme.generator.Generator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
+import javax.tools.JavaFileObject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -49,14 +50,27 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Generator for RMI based skeletons. 
+ * Generator for RMI based skeletons.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class ResourceGenerator extends AbstractGenerator implements Generator{
 
+	/**
+	 * <p>Constructor for ResourceGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
+	public ResourceGenerator(ProcessingEnvironment environment) {
+		super(environment);
+	}
+
+	/** {@inheritDoc} */
 	@Override
-	public void generate(TypeDeclaration type, Filer filer, Map<String,String> options) throws IOException{
-		PrintWriter writer = filer.createSourceFile(getPackageName(type)+"."+getResourceName(type));
+	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type) + "." + getResourceName(type));
+		Writer writer = sourceFile.openWriter();
 		setWriter(writer);
 		
 		DistributeMe ann = type.getAnnotation(DistributeMe.class);
@@ -101,7 +115,8 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		
 		//check if the service is LifecycleAware
 		boolean lifecycleAware = false;
-		Collection<InterfaceType> superInterfaces = type.getSuperinterfaces();
+
+		List<? extends TypeMirror> superInterfaces = type.getInterfaces();
 		for (Object si : superInterfaces){
 			if (si.toString().equals("org.distributeme.core.lifecycle.LifecycleAware")){
 				lifecycleAware = true;
@@ -115,7 +130,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		}
 		
 
-		writeString("@Path(\"/"+type.getSimpleName()+"\")");
+		writeString("@Path(\"/"+type.getSimpleName().toString()+"\")");
 		writeString("@Produces(MediaType.APPLICATION_JSON)");
 		writeString("@Consumes(MediaType.APPLICATION_JSON)");
 
@@ -150,7 +165,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 			writeIncreasedString("anImplementation,");
 			writeIncreasedString("new ServiceStatsCallHandler(),");
 			writeIncreasedString("new ServiceStatsFactory(),");
-			writeIncreasedString(quote(type.getSimpleName())+", ");
+			writeIncreasedString(quote(type.getSimpleName().toString())+", ");
 			writeIncreasedString(quote("service")+",");
 			writeIncreasedString(quote("default")+",");
 			writeIncreasedString(getImplementedInterfacesAsString(type));
@@ -189,10 +204,10 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		
 		
 		//WRITING METHODS
-		Collection<? extends MethodDeclaration> methods = getAllDeclaredMethods(type);
-		for (MethodDeclaration method : methods){
+		Collection<? extends ExecutableElement> methods = getAllDeclaredMethods(type);
+		for (ExecutableElement method : methods){
 			String methodDecl = getResourceSkeletonMethodDeclaration(method);
-			Collection<ReferenceType> exceptions = method.getThrownTypes();
+			List<? extends TypeMirror> exceptions = method.getThrownTypes();
 			writeString("@POST @Path(\""+method.getSimpleName()+"\")");
 			writeString("public "+methodDecl+"{");
 			increaseIdent();
@@ -201,8 +216,8 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 			writeStatement("ServerSideCallContext diMeCallContext = new ServerSideCallContext("+quote(method.getSimpleName())+", __transportableCallContext)");
 			writeStatement("diMeCallContext.setServiceId("+getConstantsName(type)+".getServiceId())");
 			writeStatement("ArrayList<Object> diMeParameters = new ArrayList<Object>()");
-			Collection<? extends ParameterDeclaration> parameters = method.getParameters();
-			for (ParameterDeclaration p : parameters){
+			Collection<? extends VariableElement> parameters = method.getParameters();
+			for (VariableElement p : parameters){
 				writeStatement("diMeParameters.add("+p.getSimpleName()+")");
 			}
 			writeStatement("diMeCallContext.setParameters(diMeParameters)");
@@ -232,7 +247,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 				call +="Object __result = ";
 			call += "implementation."+method.getSimpleName();
 			String paramCall = "";
-			for (ParameterDeclaration p : parameters){
+			for (VariableElement p : parameters){
 				if (paramCall.length()!=0)
 					paramCall += ", ";
 				paramCall += p.getSimpleName();
@@ -252,7 +267,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 
 			decreaseIdent();
 
-			for (ReferenceType exc : exceptions) {
+			for (TypeMirror exc : exceptions) {
 				writeString("}catch(" + exc.toString() + " e){");
 				increaseIdent();
 				writeString("if (Verbosity.logServerSideExceptions())");
@@ -293,7 +308,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		writer.close();
 	}
 	
-	private void writeInterceptionBlock(InterceptionPhase phase, MethodDeclaration method){
+	private void writeInterceptionBlock(InterceptionPhase phase, ExecutableElement method){
 		//boolean afterCall = phase == InterceptionPhase.AFTER_SERVANT_CALL; 
 		writeStatement("diMeInterceptionContext.setCurrentPhase(InterceptionPhase."+phase.toString()+")");
 		writeString("for (ServerSideRequestInterceptor interceptor : diMeInterceptors){");
@@ -304,7 +319,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		increaseIdent();
 		writeString("if (interceptorResponse.getException() instanceof RuntimeException)");
 		writeIncreasedStatement("throw (RuntimeException) interceptorResponse.getException()");
-		for (ReferenceType type : method.getThrownTypes()){
+		for (TypeMirror type : method.getThrownTypes()){
 			writeString("if (interceptorResponse.getException() instanceof "+type.toString()+")");
 			writeIncreasedStatement("throw ("+type.toString()+") interceptorResponse.getException()");
 		}

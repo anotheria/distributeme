@@ -3,12 +3,12 @@
   <parent>
 	<groupId>net.anotheria</groupId>
 	<artifactId>distributeme-parent</artifactId>
-	<version>2.2.2-SNAPSHOT</version>
+	<version>2.3.2-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>distributeme-registry</artifactId>
-  <version>2.2.2-SNAPSHOT</version>
+  <version>2.3.2-SNAPSHOT</version>
   <name>distributeme-registry</name>
   <packaging>war</packaging>
 
@@ -155,4 +155,16 @@
   	</plugins>
   </pluginManagement>
 </build>
+<repositories>
+    <repository>
+        <id>anotheria</id>
+        <url>http://nexus.anotheria.net/nexus/content/groups/public</url>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+</repositories>
 </project>

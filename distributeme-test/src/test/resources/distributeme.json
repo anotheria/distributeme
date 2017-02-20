@@ -14,8 +14,9 @@
 	"interceptor.1": "org.distributeme.core.interceptor.availabilitytesting.ServiceUnavailableByPropertyInterceptor",
 	"interceptor.2": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByPropertyInterceptor",
 	"interceptor.3": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByConfigurationInterceptor",
+    //"interceptor.4": "org.distributeme.test.list.ListInterceptor",
 //    "interceptor.20": "org.distributeme.test.roundrobinwithfotonext.interceptor.ClientSideMarkLongRequestAsFailedInterceptor",
-    "interceptor.5": "org.distributeme.core.qos.QOSMonitoringInterceptor",
+//    "interceptor.5": "org.distributeme.core.qos.QOSMonitoringInterceptor",
 	
 	"test": {
 		"interceptors": {
@@ -34,5 +35,13 @@
 			"interceptor.2": "org.distributeme.core.interceptor.availabilitytesting.FlippingServerSideSlowDownByConfigurationInterceptor",
 			"interceptor.3": "org.distributeme.core.interceptor.availabilitytesting.FlippingServerSideSlowDownByConfigurationInterceptor", 
 		},
+	},
+	"registrynamingtest": {
+		"yada": {
+			"registryContainerContext": "yada"
+		},
+		"ROOT": {
+			"registryContainerContext": ""
+		}
 	}
 }  

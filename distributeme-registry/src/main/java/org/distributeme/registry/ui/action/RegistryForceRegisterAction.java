@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.nio.charset.Charset;
 
 /**
  * This action sends out a signal that forces all other services to re-register.
@@ -32,7 +33,7 @@ public class RegistryForceRegisterAction extends BaseRegistryAction implements A
 		int maxPort = registryConfig.getRegistryPortMax();
 
 		try {
-			DatagramPacket outgoing = new DatagramPacket(new String("register").getBytes(), "register".length());
+			DatagramPacket outgoing = new DatagramPacket("register".getBytes(Charset.defaultCharset()), "register".length());
 			DatagramSocket socket = new DatagramSocket();
 			socket.setBroadcast(true);
 			outgoing.setAddress(InetAddress.getByAddress(new byte[]{(byte) 255, (byte) 255, (byte) 255, (byte) 255}));

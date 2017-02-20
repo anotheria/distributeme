@@ -1,10 +1,10 @@
 package org.distributeme.registry.servlet;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-
 import org.distributeme.registry.metaregistry.Cluster;
 import org.distributeme.registry.metaregistry.ClusterChecker;
+
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
 
 /**
  * ServletContextListener which is used to start up the cluster properly.

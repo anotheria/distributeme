@@ -1,13 +1,19 @@
 package org.distributeme.annotation;
 
+import org.distributeme.core.concurrencycontrol.ConcurrencyControlStrategy;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.distributeme.core.concurrencycontrol.ConcurrencyControlStrategy;
-
+/**
+ * <p>ConcurrencyControl class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 @Retention (RetentionPolicy.SOURCE)
 @Target({ElementType.TYPE,ElementType.METHOD})
 @Documented

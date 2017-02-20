@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -18,6 +19,7 @@ import java.util.List;
  *
  * @author lrosenberg
  * @since 22.02.15 17:51
+ * @version $Id: $Id
  */
 public class UDPReregistrationListener implements ServerLifecycleListener{
 
@@ -31,6 +33,7 @@ public class UDPReregistrationListener implements ServerLifecycleListener{
 	 */
 	public static final String CMD_REGISTER = "register";
 
+	/** {@inheritDoc} */
 	@Override
 	public void afterStart() {
 		int port = RMIRegistryUtil.getRmiRegistryPort();
@@ -38,6 +41,7 @@ public class UDPReregistrationListener implements ServerLifecycleListener{
 		startUdpServer(port);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void beforeShutdown() {
 
@@ -57,7 +61,7 @@ public class UDPReregistrationListener implements ServerLifecycleListener{
 						DatagramPacket incomingPacket = new DatagramPacket(new byte[100], 100);
 						try {
 							serverSocket.receive(incomingPacket);
-							String command = new String(incomingPacket.getData());
+							String command = new String(incomingPacket.getData(), Charset.defaultCharset());
 							command = command.trim();
 							System.out.println("Incoming command: "+command+".");
 

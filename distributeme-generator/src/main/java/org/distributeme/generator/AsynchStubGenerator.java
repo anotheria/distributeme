@@ -1,11 +1,5 @@
 package org.distributeme.generator;
 
-import com.sun.mirror.apt.Filer;
-import com.sun.mirror.declaration.AnnotationMirror;
-import com.sun.mirror.declaration.AnnotationValue;
-import com.sun.mirror.declaration.MethodDeclaration;
-import com.sun.mirror.declaration.TypeDeclaration;
-import com.sun.mirror.type.ReferenceType;
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.core.Defaults;
 import org.distributeme.core.ServiceLocator;
@@ -20,6 +14,14 @@ import org.distributeme.generator.logwriter.SysErrorLogWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.type.TypeMirror;
+import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -34,22 +36,35 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Generator for RMI based stubs. 
+ * Generator for RMI based stubs.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public class AsynchStubGenerator extends AbstractStubGenerator implements Generator{
 	
 	private static Logger log = LoggerFactory.getLogger(AsynchStubGenerator.class);
-	
+
+	/**
+	 * <p>Constructor for AsynchStubGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
+	public AsynchStubGenerator(ProcessingEnvironment environment) {
+		super(environment);
+	}
+
+	/** {@inheritDoc} */
 	@Override
-	public void generate(TypeDeclaration type, Filer filer, Map<String,String> options) throws IOException{
+	public void generate(TypeElement type, Filer filer, Map<String,String> options) throws IOException{
 		
 		//System.out.println("%%%\nStarting generating "+type+"\n\n");
 		
 		DistributeMe typeAnnotation = type.getAnnotation(DistributeMe.class);
 		if (!typeAnnotation.asynchSupport())
 			return;
-		PrintWriter writer = filer.createSourceFile(getPackageName(type)+"."+getAsynchStubName(type));
+		JavaFileObject sourceFile = filer.createSourceFile(getPackageName(type)+"."+getAsynchStubName(type));
+		PrintWriter writer = new PrintWriter(sourceFile.openWriter());
 		setWriter(writer);
 		
 		writePackage(type);
@@ -61,7 +76,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 		writeImport(ConcurrentMap.class);
 		writeImport(ConcurrentHashMap.class);
 		writeImport(Logger.class);
-		writeImport(type.getQualifiedName());
+		writeImport(type.getQualifiedName().toString());
 		writeImport(InterruptedException.class);
 		
 		
@@ -112,7 +127,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 		emptyline();
 	
 		
-		Collection<? extends MethodDeclaration> methods = getAllDeclaredMethods(type);
+		Collection<? extends ExecutableElement> methods = getAllDeclaredMethods(type);
 		
 		writeStatement("private final "+getInterfaceName(type)+" diMeTarget");
 		writeStatement("private final ExecutorService diMeExecutor");
@@ -122,7 +137,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 		//create AUTO constructor
 		writeString("public "+getAsynchStubName(type)+"(){");
 		increaseIdent();
-		writeStatement("this(ServiceLocator.getRemote("+type.getSimpleName()+".class))");
+		writeStatement("this(ServiceLocator.getRemote("+type.getSimpleName().toString()+".class))");
 		closeBlock();
 		emptyline();
 	
@@ -141,7 +156,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 		emptyline();
 	
 		////////// METHODS ///////////
-		for (MethodDeclaration method : methods){
+		for (ExecutableElement method : methods){
 			writeString("public "+getStubMethodDeclaration(method)+"{");
 			increaseIdent();
 			writeStatement("SingleCallHandler diMeCallHandler = new SingleCallHandler()");
@@ -182,7 +197,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 			writeString("if (exceptionInMethod instanceof RuntimeException)");
 			writeIncreasedStatement("throw (RuntimeException)exceptionInMethod");
 			if (method.getThrownTypes().size()>0){
-				for (ReferenceType refType : method.getThrownTypes()){
+				for (TypeMirror refType : method.getThrownTypes()){
 					writeString("if (exceptionInMethod instanceof "+refType.toString()+")");
 					writeIncreasedStatement("throw ("+refType.toString()+")exceptionInMethod");
 				}
@@ -204,7 +219,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 			writeString("@Override");
 			writeString("public void run() {");
 			increaseIdent();
-			writeStatement("long diMeRequestNumber = diMeRequestCounter.incrementAndGet()");
+			//writeStatement("long diMeRequestNumber = diMeRequestCounter.incrementAndGet()"); removed due to findbug warning.
 			//writeStatement("System.out.println(this+\" started \"+diMeRequestNumber)");
 			openTry();
 			writeCommentLine("make the real call here");

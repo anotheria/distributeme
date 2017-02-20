@@ -1,8 +1,7 @@
 package org.distributeme.test.regression;
 
-import org.distributeme.annotation.DistributeMe;
-
 import net.anotheria.anoprise.metafactory.Service;
+import org.distributeme.annotation.DistributeMe;
 
 /**
  * This service ensures that we have support for all primary types at compile level.

@@ -1,9 +1,9 @@
 package org.distributeme.test.event;
 
-import java.util.Random;
-
-import net.anotheria.anoprise.eventservice.EventChannel;
 import net.anotheria.anoprise.eventservice.Event;
+import net.anotheria.anoprise.eventservice.EventChannel;
+
+import java.util.Random;
 
 public class PushSupplier extends AbstractECTester  implements Runnable {
 	

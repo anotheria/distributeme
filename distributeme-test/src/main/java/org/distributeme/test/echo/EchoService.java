@@ -1,13 +1,12 @@
 package org.distributeme.test.echo;
 
-import java.io.Serializable;
-import java.util.HashMap;
-
 import net.anotheria.anoprise.metafactory.Service;
-
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.annotation.ServerListener;
 import org.distributeme.core.listener.ServerLifecycleSysOutPrinterListener;
+
+import java.io.Serializable;
+import java.util.HashMap;
 
 @DistributeMe()
 @ServerListener(listenerClass=ServerLifecycleSysOutPrinterListener.class)

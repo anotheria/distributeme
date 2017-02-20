@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -162,13 +163,14 @@ public class EventServiceRegistryServlet extends BaseRegistryServlet{
 		m.append("</channels>");
 		
 		String message = m.toString();
-		
-		res.setContentLength(message.getBytes().length);
+
+		byte[] messageBytes = message.getBytes(Charset.forName("UTF-8"));
+		res.setContentLength(messageBytes.length);
 		res.setContentType("text/xml");
 		OutputStream out = null;
 		try{
 			 out = res.getOutputStream();
-			 out.write(message.getBytes());
+			 out.write(messageBytes);
 			 out.flush();
 		}catch(IOException e){
 			LOG.warn("sendResponse(res, "+message+")", e);

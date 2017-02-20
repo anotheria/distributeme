@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author lrosenberg
  * @since 20.02.15 17:29
+ * @version $Id: $Id
  */
 public final class QOSRegistry {
 	/**
@@ -60,7 +61,8 @@ public final class QOSRegistry {
 
 	/**
 	 * Returns the singleton instance.
-	 * @return
+	 *
+	 * @return a {@link org.distributeme.core.qos.QOSRegistry} object.
 	 */
 	public static final QOSRegistry getInstance(){
 		return instance;
@@ -68,8 +70,9 @@ public final class QOSRegistry {
 
 	/**
 	 * Called before a call is executed. Returns if the call may be executed.
-	 * @param serviceId
-	 * @param callId
+	 *
+	 * @param serviceId a {@link java.lang.String} object.
+	 * @param callId a {@link java.lang.String} object.
 	 * @return true if the call should be executed, false if the target service is blacklisted.
 	 */
 	public boolean callStarted(String serviceId, String callId) {
@@ -82,8 +85,9 @@ public final class QOSRegistry {
 
 	/**
 	 * Called when a call has returned.
-	 * @param serviceId
-	 * @param callId
+	 *
+	 * @param serviceId a {@link java.lang.String} object.
+	 * @param callId a {@link java.lang.String} object.
 	 */
 	public void callFinished(String serviceId, String callId){
 		entries.remove(QOSEntry.getKey(serviceId, callId));

@@ -1,12 +1,12 @@
 package org.distributeme.test.lifecycle;
 
-import java.util.List;
-
 import org.distributeme.core.RegistryUtil;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.support.lifecycle.LifecycleSupportService;
 import org.distributeme.support.lifecycle.generated.LifecycleSupportServiceConstants;
 import org.distributeme.support.lifecycle.generated.RemoteLifecycleSupportServiceStub;
+
+import java.util.List;
 
 public class ShutdownAll extends AbstractLifecycleTest{
 	public static void main(String[] args) throws Exception{

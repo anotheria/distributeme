@@ -26,7 +26,7 @@ public enum AgencyImpl implements Agency{
 	
 	
 	
-	class AgentRunnable implements Runnable{
+	static class AgentRunnable implements Runnable{
 		private Agent agent;
 		public AgentRunnable(Agent toRun) {
 			agent = toRun;

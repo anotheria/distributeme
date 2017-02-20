@@ -12,7 +12,9 @@ import java.lang.annotation.Target;
 
 /**
  * Main annotation of the distributeme package that indicates that a service has to be distributed.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 @Retention (RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)

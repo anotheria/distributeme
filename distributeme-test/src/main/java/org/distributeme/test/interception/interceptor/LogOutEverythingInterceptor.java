@@ -1,12 +1,12 @@
 package org.distributeme.test.interception.interceptor;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.distributeme.core.AbstractCallContext;
 import org.distributeme.core.interceptor.InterceptionContext;
 import org.distributeme.core.interceptor.InterceptionPhase;
 import org.distributeme.core.interceptor.InterceptorResponse;
 import org.distributeme.core.interceptor.SinglePhaseInterceptor;
+
+import java.util.concurrent.atomic.AtomicLong;
 
 abstract class LogOutEverythingInterceptor extends SinglePhaseInterceptor{
 

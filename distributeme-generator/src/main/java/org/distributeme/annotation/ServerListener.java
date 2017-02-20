@@ -1,18 +1,19 @@
 package org.distributeme.annotation;
 
+import org.distributeme.core.listener.ServerLifecycleListener;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.distributeme.core.listener.ServerLifecycleListener;
-
 
 /**
  * This annotations advices generator to add the specified class as listener to the generated server.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 @Retention (RetentionPolicy.SOURCE)
 @Target(ElementType.TYPE)

@@ -10,6 +10,7 @@ import org.distributeme.core.interceptor.InterceptorResponse;
  *
  * @author lrosenberg
  * @since 06.02.15 01:09
+ * @version $Id: $Id
  */
 public class ClientSideMarkLongRequestAsFailedInterceptor implements ClientSideRequestInterceptor{
 
@@ -28,12 +29,16 @@ public class ClientSideMarkLongRequestAsFailedInterceptor implements ClientSideR
 	 */
 	private long TIMEOUT = 60000L;
 
+	/**
+	 * <p>Constructor for ClientSideMarkLongRequestAsFailedInterceptor.</p>
+	 */
 	public ClientSideMarkLongRequestAsFailedInterceptor(){
 		String timeoutProperty = System.getProperty(TIMEOUT_PROPERTY);
 		if (timeoutProperty!= null && timeoutProperty.length()>0)
 			TIMEOUT = Long.parseLong(timeoutProperty);
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public InterceptorResponse afterServiceCall(ClientSideCallContext context, InterceptionContext iContext) {
 		long start = (Long)iContext.getLocalStore().get(START_ATTRIBUTE);
@@ -46,6 +51,7 @@ public class ClientSideMarkLongRequestAsFailedInterceptor implements ClientSideR
 		return InterceptorResponse.CONTINUE;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public InterceptorResponse beforeServiceCall(ClientSideCallContext context, InterceptionContext iContext) {
 		iContext.getLocalStore().put(START_ATTRIBUTE, System.currentTimeMillis());

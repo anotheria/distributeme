@@ -1,10 +1,5 @@
 package org.distributeme.generator.ws;
 
-import com.sun.mirror.apt.Filer;
-import com.sun.mirror.declaration.MethodDeclaration;
-import com.sun.mirror.declaration.ParameterDeclaration;
-import com.sun.mirror.declaration.TypeDeclaration;
-import com.sun.mirror.type.ReferenceType;
 import net.anotheria.anoprise.metafactory.Extension;
 import net.anotheria.anoprise.metafactory.MetaFactory;
 import net.anotheria.moskito.core.dynamic.MoskitoInvokationProxy;
@@ -18,18 +13,36 @@ import org.distributeme.annotation.WebServiceMe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 import java.io.PrintWriter;
 import java.util.Collection;
+import java.util.List;
 
+/**
+ * <p>ServiceProxyGenerator class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 public class ServiceProxyGenerator extends WSStructureGenerator implements WebServiceMeGenerator {
 
-	public ServiceProxyGenerator(Filer filer) {
-		super(filer);
+	/**
+	 * <p>Constructor for ServiceProxyGenerator.</p>
+	 *
+	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
+	 */
+	public ServiceProxyGenerator(ProcessingEnvironment environment) {
+		super(environment);
 	}
 
+	/** {@inheritDoc} */
 	@Override
-	public void generate(TypeDeclaration type) {
-		PrintWriter writer = createSourceFile(type.getSimpleName(), getWSProxyPackage(type), getWSProxySimpleName(type));
+	public void generate(TypeElement type) {
+		PrintWriter writer = createSourceFile(type.getSimpleName().toString().toString(), getWSProxyPackage(type), getWSProxySimpleName(type));
 		setWriter(writer);
 
 		WebServiceMe ann = type.getAnnotation(WebServiceMe.class);
@@ -38,7 +51,7 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 		writeString("package " + getWSProxyPackage(type) + ";");
 		emptyline();
 		// imports
-		writeImport(type.getPackage().getQualifiedName(), type.getSimpleName());
+		writeImport(getPackageOf(type).getQualifiedName().toString(), type.getSimpleName().toString());
 		writeImport(Logger.class);
 		writeImport(LoggerFactory.class);
 		if (ann.moskitoSupport()) {
@@ -56,7 +69,7 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 		emptyline();
 		// class
 		writeString("@WebService");
-		writeString("public class " + getWSProxySimpleName(type) + " implements " + type.getSimpleName() + " {");
+		writeString("public class " + getWSProxySimpleName(type) + " implements " + type.getSimpleName().toString() + " {");
 		increaseIdent();
 		emptyline();
 		// variables
@@ -73,7 +86,7 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 			writeIncreasedString("implementation,");
 			writeIncreasedString("new ServiceStatsCallHandler(),");
 			writeIncreasedString("new ServiceStatsFactory(),");
-			writeIncreasedString(quote(type.getSimpleName()) + ", ");
+			writeIncreasedString(quote(type.getSimpleName().toString()) + ", ");
 			writeIncreasedString(quote("service") + ",");
 			writeIncreasedString(quote("default") + ",");
 			writeIncreasedString(getImplementedInterfacesAsString(type));
@@ -106,10 +119,10 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 		writeString("}");
 		closeBlock();
 		// methods
-		Collection<? extends MethodDeclaration> methods = getAllDeclaredMethods(type);
-		for (MethodDeclaration method : methods) {
+		Collection<? extends ExecutableElement> methods = getAllDeclaredMethods(type);
+		for (ExecutableElement method : methods) {
 			String methodDecl = getStubMethodDeclaration(method);
-			Collection<ReferenceType> exceptions = method.getThrownTypes();
+			List<? extends TypeMirror> exceptions = method.getThrownTypes();
 			writeString("@Override");
 			writeString("public " + methodDecl + " {");
 			increaseIdent();
@@ -121,9 +134,9 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 			if (!method.getReturnType().toString().equals("void"))
 				call += "return ";
 			call += "implementation." + method.getSimpleName();
-			Collection<? extends ParameterDeclaration> parameters = method.getParameters();
+			Collection<? extends VariableElement> parameters = method.getParameters();
 			String paramCall = "";
-			for (ParameterDeclaration p : parameters) {
+			for (VariableElement p : parameters) {
 				if (paramCall.length() != 0)
 					paramCall += ", ";
 				paramCall += p.getSimpleName();
@@ -133,7 +146,7 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 			if (exceptions.size() > 0) {
 				decreaseIdent();
 
-				for (ReferenceType exc : exceptions) {
+				for (TypeMirror exc : exceptions) {
 					writeString("} catch (" + exc.toString() + " e) {");
 					writeIncreasedStatement("LOGGER.error(" + quote(method.getSimpleName() + "()") + ", e)");
 					writeIncreasedStatement("throw(e)");

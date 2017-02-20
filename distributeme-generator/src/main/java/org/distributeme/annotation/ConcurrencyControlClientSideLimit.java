@@ -6,6 +6,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * <p>ConcurrencyControlClientSideLimit class.</p>
+ *
+ * @author another
+ * @version $Id: $Id
+ */
 @Retention (RetentionPolicy.SOURCE)
 @Target({ElementType.TYPE,ElementType.METHOD})
 @Documented

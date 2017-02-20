@@ -71,7 +71,7 @@ public class FairRoundRobinRouterConcurrentTest {
 		}catch(InterruptedException ignore){}
 
 
-		System.out.println(requestCounter0); System.out.println(requestCounter1); System.out.println(requestCounter2);
+		//System.out.println(requestCounter0); System.out.println(requestCounter1); System.out.println(requestCounter2);
 		assertEquals(0, wtf.get());
 
 

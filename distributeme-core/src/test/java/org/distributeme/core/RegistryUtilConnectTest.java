@@ -1,14 +1,12 @@
 package org.distributeme.core;
 
-import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.server.ExportException;
-
-import org.distributeme.core.RegistryUtil;
-import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.core.ServiceDescriptor.Protocol;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.server.ExportException;
 
 public class RegistryUtilConnectTest {
 	@Test @Ignore

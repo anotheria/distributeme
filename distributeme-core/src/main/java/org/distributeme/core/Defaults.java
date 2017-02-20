@@ -9,8 +9,9 @@ import org.distributeme.core.failing.FailingStrategy;
 
 /**
  * This class provides methods for runtime overriding of the default behaviour.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class Defaults {
 	/**
@@ -28,20 +29,36 @@ public class Defaults {
 	
 	/**
 	 * Returns the default failing strategy.
-	 * @return
+	 *
+	 * @return a {@link org.distributeme.core.failing.FailingStrategy} object.
 	 */
 	public static final FailingStrategy getDefaultFailingStrategy(){
 		return new DefaultFailingStrategy();
 	}
 	
+	/**
+	 * <p>getDefaultConcurrencyControlStrategy.</p>
+	 *
+	 * @return a {@link org.distributeme.core.concurrencycontrol.ConcurrencyControlStrategy} object.
+	 */
 	public static final ConcurrencyControlStrategy getDefaultConcurrencyControlStrategy(){
 		return new UnlimitedConcurrencyStrategy(); 
 	}
 	
+	/**
+	 * <p>getDefaultAsynchCallTimeout.</p>
+	 *
+	 * @return a long.
+	 */
 	public static final long getDefaultAsynchCallTimeout(){
 		return config.getDefaultAsynchCallTimeout();
 	}
 	
+	/**
+	 * <p>getAsynchExecutorPoolSize.</p>
+	 *
+	 * @return a int.
+	 */
 	public static final int getAsynchExecutorPoolSize(){
 		return config.getAsynchExecutorPoolSize();
 	}

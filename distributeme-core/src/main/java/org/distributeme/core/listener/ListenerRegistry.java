@@ -17,8 +17,9 @@ import java.util.List;
 
 /**
  * The registry for the ServerLifecycleListener instances..
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public final class ListenerRegistry {
 	/**
@@ -37,7 +38,8 @@ public final class ListenerRegistry {
 	
 	/**
 	 * Returns the singleton instances.
-	 * @return
+	 *
+	 * @return a {@link org.distributeme.core.listener.ListenerRegistry} object.
 	 */
 	public static final ListenerRegistry getInstance(){ return instance; }
 	
@@ -54,6 +56,11 @@ public final class ListenerRegistry {
 	private ListenerRegistry(){
 	}
 	
+	/**
+	 * <p>Getter for the field <code>serverLifecycleListeners</code>.</p>
+	 *
+	 * @return a {@link java.util.List} object.
+	 */
 	public List<ServerLifecycleListener> getServerLifecycleListeners(){
 		return serverLifecycleListeners;
 	}

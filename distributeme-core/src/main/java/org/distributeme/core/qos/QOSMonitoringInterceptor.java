@@ -11,8 +11,10 @@ import org.distributeme.core.interceptor.InterceptorResponse;
  *
  * @author lrosenberg
  * @since 20.02.15 17:29
+ * @version $Id: $Id
  */
 public class QOSMonitoringInterceptor implements ClientSideRequestInterceptor{
+	/** {@inheritDoc} */
 	@Override
 	public InterceptorResponse afterServiceCall(ClientSideCallContext context, InterceptionContext iContext) {
 		QOSCallContext callContext = QOSCallContext.currentQOSCallContext();
@@ -23,6 +25,7 @@ public class QOSMonitoringInterceptor implements ClientSideRequestInterceptor{
 		return InterceptorResponse.CONTINUE;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public InterceptorResponse beforeServiceCall(ClientSideCallContext context, InterceptionContext iContext) {
 		String serviceId = context.getServiceId();

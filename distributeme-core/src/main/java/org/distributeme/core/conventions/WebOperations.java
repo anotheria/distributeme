@@ -1,7 +1,9 @@
 package org.distributeme.core.conventions;
 /**
  * Defines operations supported by the EventServiceRegistryServlet.
+ *
  * @author lrosenberg
+ * @version $Id: $Id
  */
 public enum WebOperations {
 	/**
@@ -33,7 +35,8 @@ public enum WebOperations {
 	 */
 	CHANNEL_INFO;
 	/**
-	 * Returns the presentation of the constant as it's used in the web. 
+	 * Returns the presentation of the constant as it's used in the web.
+	 *
 	 * @return the lowercase of the string value.
 	 */
 	public String toWeb(){

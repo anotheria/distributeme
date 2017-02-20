@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 /**
- * Abstract implementation of {@link Router} which supports {@link FailingStrategy}.
+ * Abstract implementation of {@link org.distributeme.core.routing.Router} which supports {@link org.distributeme.core.failing.FailingStrategy}.
  * <p/>
  * By methods overriding/implementing router can be configured to support :
  * - Mod or RoundRobin strategy (override properly getStrategy() method  - <p>NOTE : should not return null</p>);
@@ -30,6 +30,7 @@ import java.util.Random;
  * By implementing getModableValue(<?>) method - You can simply extract some long from incoming parameter, for further calculations.
  *
  * @author h3llka
+ * @version $Id: $Id
  */
 public abstract class AbstractRouterWithFailOverToNextNode extends AbstractRouterWithFailover implements ConfigurableRouter, FailingStrategy {
 
@@ -46,6 +47,7 @@ public abstract class AbstractRouterWithFailOverToNextNode extends AbstractRoute
 
 
 
+	/** {@inheritDoc} */
 	@Override
 	public String getServiceIdForCall(final ClientSideCallContext clientSideCallContext) {
 		if (getLog().isDebugEnabled())
@@ -117,7 +119,7 @@ public abstract class AbstractRouterWithFailOverToNextNode extends AbstractRoute
 			}
 		}
 
-		if (result==null){
+		if (result == null){
 			//if we are here we have more than one possible candidate.
 			int[] candidates = new int[getConfiguration().getNumberOfInstances()-instancesThatIAlreadyTried.size()];
 			int i=0;
@@ -144,6 +146,7 @@ public abstract class AbstractRouterWithFailOverToNextNode extends AbstractRoute
 	}
 
 
+	/** {@inheritDoc} */
 	@Override
 	public void customize(String s) {
 		int serviceAmount = 0;

@@ -1,8 +1,9 @@
 package org.distributeme.core;
 /**
  * Constants class for holding constants used for transmission of parameters to VM that distributeme understands.
- * @author lrosenberg
  *
+ * @author lrosenberg
+ * @version $Id: $Id
  */
 public class SystemPropertyNames {
 	/**

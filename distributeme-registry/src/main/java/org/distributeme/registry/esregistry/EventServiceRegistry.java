@@ -1,8 +1,8 @@
 package org.distributeme.registry.esregistry;
 
-import java.util.List;
-
 import org.distributeme.core.ServiceDescriptor;
+
+import java.util.List;
 /**
  * Defines the registry for the event service.
  * @author lrosenberg
