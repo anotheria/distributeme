@@ -1,6 +1,6 @@
 {
 	registryContainerPort: 9229,
-	registryContainerHost: "localhost",
+	registryContainerHost: "registry.localhost.parship.dev",
 	
 	//if true the server will log all exceptions including expected exception (defined by the interface), otherwise expected exceptions will be ignored
 	logServerSideExceptions: false,
