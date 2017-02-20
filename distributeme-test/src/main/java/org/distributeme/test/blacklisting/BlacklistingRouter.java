@@ -8,7 +8,7 @@ public class BlacklistingRouter extends AbstractRouterWithStickyFailOverToNextNo
 
 	@Override
 	protected boolean failingSupported() {
-		return false;
+		return true;
 	}
 
 	@Override

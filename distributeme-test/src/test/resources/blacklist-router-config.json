@@ -1,0 +1,5 @@
+{
+	"numberOfInstances": "$<blacklist-config.numberOfInstances>",
+	"blacklistTime": 20000,
+	"overrideBlacklistIfAllBlacklisted": true
+}

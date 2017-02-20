@@ -9,4 +9,3 @@ Visit http://www.distributeme.org for details.
 
 Code of prior versions is located under http://svn.anotheria.net/opensource/distributeme/trunk/.
 
-Check it
