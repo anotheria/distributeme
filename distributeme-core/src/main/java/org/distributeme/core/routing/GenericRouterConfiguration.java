@@ -20,6 +20,8 @@ public class GenericRouterConfiguration {
 	 */
 	private long blacklistTime;
 
+	private boolean overrideBlacklistIfAllBlacklisted;
+
 	/**
 	 * <p>Getter for the field <code>blacklistTime</code>.</p>
 	 *
@@ -59,6 +61,14 @@ public class GenericRouterConfiguration {
 	/** {@inheritDoc} */
 	@Override
 	public String toString(){
-		return "NumberOfInstances: "+getNumberOfInstances()+", blacklistTime: "+getBlacklistTime();
+		return "NumberOfInstances: "+getNumberOfInstances()+", blacklistTime: "+getBlacklistTime()+", overrideBlacklistIfAllBlacklisted: "+overrideBlacklistIfAllBlacklisted;
+	}
+
+	public boolean isOverrideBlacklistIfAllBlacklisted() {
+		return overrideBlacklistIfAllBlacklisted;
+	}
+
+	public void setOverrideBlacklistIfAllBlacklisted(boolean overrideBlacklistIfAllBlacklisted) {
+		this.overrideBlacklistIfAllBlacklisted = overrideBlacklistIfAllBlacklisted;
 	}
 }

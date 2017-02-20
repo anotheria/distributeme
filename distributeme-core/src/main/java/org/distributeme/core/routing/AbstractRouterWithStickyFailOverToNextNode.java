@@ -1,15 +1,15 @@
 package org.distributeme.core.routing;
 
+import java.util.HashSet;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 import net.anotheria.util.StringUtils;
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.exception.DistributemeRuntimeException;
 import org.distributeme.core.failing.FailDecision;
 import org.distributeme.core.failing.FailingStrategy;
-
-import java.util.HashSet;
-import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * Abstract implementation of {@link org.distributeme.core.routing.Router} which supports {@link org.distributeme.core.failing.FailingStrategy}.
@@ -108,7 +108,15 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		if (blacklisted) {
 			clientSideCallContext.setServiceId(selectedServiceId);
 			getRoutingStats(selectedServiceId).addBlacklisted();
-			selectedServiceId = getServiceIdForFailing(clientSideCallContext);
+			try {
+				selectedServiceId = getServiceIdForFailing(clientSideCallContext);
+			}catch(DistributemeRuntimeException allInstancesAreBlacklisted){
+				if (getConfiguration().isOverrideBlacklistIfAllBlacklisted()){
+					return selectedServiceId;
+				}else{
+					throw allInstancesAreBlacklisted;
+				}
+			}
 			getRoutingStats(selectedServiceId).addRequestRoutedTo();
 			clientSideCallContext.getTransportableCallContext().put(Constants.ATT_BLACKLISTED, Boolean.TRUE);
 			return selectedServiceId;
@@ -175,7 +183,19 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		if (getLog().isDebugEnabled())
 			getLog().debug("serviceIdForFailing result[" + result + "]. ClientSideCallContext[" + context + "]");
 
-		return result;
+
+		//check if failover instance is also blacklisted
+		Long lastFailed = serverFailureTimestamps.get(result);
+		boolean blacklisted = lastFailed != null && (System.currentTimeMillis() - lastFailed) < getConfiguration().getBlacklistTime();
+		if (!blacklisted)
+			return result;
+
+		context.setServiceId(result);
+		getRoutingStats(result).addBlacklisted();
+		String selectedServiceIdAfterBlacklist = getServiceIdForFailing(context);
+		getRoutingStats(selectedServiceIdAfterBlacklist).addRequestRoutedTo();
+		return selectedServiceIdAfterBlacklist;
+
 	}
 
 
