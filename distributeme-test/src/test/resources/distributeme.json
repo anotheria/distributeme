@@ -1,6 +1,6 @@
 {
 	registryContainerPort: 9229,
-	registryContainerHost: "registry.localhost.parship.dev",
+	registryContainerHost: "localhost",
 	
 	//if true the server will log all exceptions including expected exception (defined by the interface), otherwise expected exceptions will be ignored
 	logServerSideExceptions: false,
@@ -14,7 +14,7 @@
 	"interceptor.1": "org.distributeme.core.interceptor.availabilitytesting.ServiceUnavailableByPropertyInterceptor",
 	"interceptor.2": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByPropertyInterceptor",
 	"interceptor.3": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByConfigurationInterceptor",
-	"interceptor.4": "org.distributeme.test.roundrobinwithfotonext.interceptor.ClientSideMarkLongRequestAsFailedInterceptor",
+//	"interceptor.4": "org.distributeme.test.roundrobinwithfotonext.interceptor.ClientSideMarkLongRequestAsFailedInterceptor",
     //"interceptor.4": "org.distributeme.test.list.ListInterceptor",
 //    "interceptor.20": "org.distributeme.test.roundrobinwithfotonext.interceptor.ClientSideMarkLongRequestAsFailedInterceptor",
 //    "interceptor.5": "org.distributeme.core.qos.QOSMonitoringInterceptor",
