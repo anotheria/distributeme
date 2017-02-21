@@ -56,7 +56,6 @@ public abstract class AbstractRouterWithFailOverToNextNode extends AbstractRoute
 		if (getServiceAmount() == 0)
 			return clientSideCallContext.getServiceId();
 
-
 		if (failingSupported() && !clientSideCallContext.isFirstCall())
 			return getServiceIdForFailing(clientSideCallContext);
 

@@ -20,6 +20,9 @@ public class BlacklistingTestServiceClient {
 				success++;
 			} catch (Exception exception) {
 				System.out.println("exception "+ exception.getMessage());
+				exception.printStackTrace();
+
+
 				error++;
 			}
 
