@@ -8,6 +8,9 @@ import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.exception.DistributemeRuntimeException;
 import org.distributeme.core.failing.FailDecision;
 import org.distributeme.core.failing.FailingStrategy;
+import org.distributeme.core.routing.blacklisting.BlacklistingStrategy;
+import org.distributeme.core.routing.blacklisting.DefaultBlacklistingStrategy;
+
 
 /**
  * Abstract implementation of {@link org.distributeme.core.routing.Router} which supports {@link org.distributeme.core.failing.FailingStrategy}.
@@ -33,7 +36,7 @@ import org.distributeme.core.failing.FailingStrategy;
  * @author h3llka,dvayanu
  * @version $Id: $Id
  */
-public abstract class AbstractRouterWithStickyFailOverToNextNode extends AbstractRouterWithFailover implements ConfigurableRouter, FailingStrategy {
+public abstract class AbstractRouterWithStickyFailOverToNextNode extends AbstractRouterWithFailover implements ConfigurableRouter, FailingStrategy, RouterConfigurationObserver {
 
 	/**
 	 * Services parameter.
@@ -222,7 +225,35 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 
 	@Override
 	public void setConfigurationName(String serviceId, String configurationName) {
+		getConfiguration().addRouterConfigurationObserver(this);
 		super.setConfigurationName(serviceId, configurationName);
+
+	}
+
+	BlacklistingStrategy getBlacklistingStrategy() {
+		return blacklistingStrategy;
+	}
+
+
+	@Override
+	public void routerConfigurationInitialChange(GenericRouterConfiguration configuration) {
+
+	}
+
+	@Override
+	public void routerConfigurationFollowupChange(GenericRouterConfiguration configuration) {
+
+	}
+
+	@Override
+	public void routerConfigurationChange(GenericRouterConfiguration configuration) {
+		if(getConfiguration().getBlacklistStrategyClazz() != null) {
+			try {
+				blacklistingStrategy = (BlacklistingStrategy)Class.forName(getConfiguration().getBlacklistStrategyClazz()).newInstance();
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+				getLog().error("Could not initialize black listing strategy " + getConfiguration().getBlacklistStrategyClazz(), e);
+			}
+		}
 		blacklistingStrategy.setConfiguration(getConfiguration());
 	}
 }

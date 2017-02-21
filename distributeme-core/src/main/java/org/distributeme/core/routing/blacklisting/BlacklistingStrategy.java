@@ -1,6 +1,7 @@
-package org.distributeme.core.routing;
+package org.distributeme.core.routing.blacklisting;
 
 import org.distributeme.core.ClientSideCallContext;
+import org.distributeme.core.routing.GenericRouterConfiguration;
 
 
 /**

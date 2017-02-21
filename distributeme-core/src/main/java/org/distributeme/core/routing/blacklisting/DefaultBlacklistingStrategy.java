@@ -1,9 +1,10 @@
-package org.distributeme.core.routing;
+package org.distributeme.core.routing.blacklisting;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.distributeme.core.ClientSideCallContext;
+import org.distributeme.core.routing.GenericRouterConfiguration;
 
 
 /**

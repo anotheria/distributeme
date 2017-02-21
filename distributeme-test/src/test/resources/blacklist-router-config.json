@@ -1,5 +1,6 @@
 {
 	"numberOfInstances": "$<blacklist-config.numberOfInstances>",
 	"blacklistTime": 20000,
-	"overrideBlacklistIfAllBlacklisted": true
+	"overrideBlacklistIfAllBlacklisted": true,
+	"blacklistStrategyClazz": "org.distributeme.core.routing.blacklisting.DefaultBlacklistingStrategy"
 }
