@@ -4,7 +4,6 @@ import net.anotheria.anoprise.metafactory.Service;
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.annotation.FailBy;
 import org.distributeme.annotation.Route;
-import org.distributeme.core.failing.*;
 import org.distributeme.core.failing.FailoverAndReturnInTenSeconds;
 
 @DistributeMe
