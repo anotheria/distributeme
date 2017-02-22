@@ -250,7 +250,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		if(getConfiguration().getBlacklistStrategyClazz() != null) {
 			try {
 				blacklistingStrategy = (BlacklistingStrategy)Class.forName(getConfiguration().getBlacklistStrategyClazz()).newInstance();
-			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+			} catch (Exception e) {
 				getLog().error("Could not initialize black listing strategy " + getConfiguration().getBlacklistStrategyClazz(), e);
 			}
 		}
