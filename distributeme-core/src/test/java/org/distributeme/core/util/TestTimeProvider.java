@@ -15,4 +15,8 @@ public class TestTimeProvider implements TimeProvider {
 	public void setCurrentMillis(long currentMillis) {
 		this.currentMillis = currentMillis;
 	}
+
+	public void increaseBySeconds(int seconds) {
+		currentMillis += seconds * 1000;
+	}
 }

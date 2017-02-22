@@ -4,9 +4,7 @@ import java.util.Collections;
 
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.util.TestTimeProvider;
-import org.distributeme.core.util.TimeProvider;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -17,104 +15,149 @@ import static org.junit.Assert.*;
  */
 public class ErrorsPerTimeUnitBlacklistingStrategyTest {
 
+	private static final int PERIOD_DURATION = 10;
+	private static final int PERIOD_DURATION_PLUS_ONE = PERIOD_DURATION + 1;
+	private static final int PERIOD_DURATION_MINUS_ONE = PERIOD_DURATION - 1;
 	private TestTimeProvider timeProvider = new TestTimeProvider();
 	private ErrorsPerTimeUnitBlacklistingStrategy strategy = new ErrorsPerTimeUnitBlacklistingStrategy();
 	private static final String SERVICE_ID = "serviceId";
 	private ClientSideCallContext clientSideCallContext = new ClientSideCallContext(SERVICE_ID, "someMethod", Collections.emptyList());
 
+
 	@Before
 	public void setUp() throws Exception {
 		strategy.setTimeProvider(timeProvider);
-		strategy.setPeriodDurationInSeconds(10);
+		strategy.setPeriodDurationInSeconds(PERIOD_DURATION);
+		strategy.setRequiredNumberOfPeriodsWithErrors(2);
+		timeProvider.setCurrentMillis(0);
+		assertFalse("ServiceId should not be blacklisted before failure call", strategy.isBlacklisted(SERVICE_ID));
+	}
+
+
+	@Test
+	public void isBlacklisted_IfErrorsPerPeriodExceedsThreshold_ForOneRequiredPeriod_WithinPeriod() {
+		strategy.setRequiredNumberOfPeriodsWithErrors(1);
+		strategy.setErrorsPerPeriodThreshold(1);
+
+		whenNotifiyCallFailed(2);
+		whenJumpInTimePlusSeconds(PERIOD_DURATION_MINUS_ONE);
+
+		thenServiceIsBlacklisted();
 
 	}
 
+
+
 	@Test
-	public void isBlacklistedIfErrorsPerTimeUnitExceedsLimit() {
-		boolean blacklisted = strategy.isBlacklisted(SERVICE_ID);
-
-		assertFalse("ServiceId should not be blacklisted before failure call", blacklisted);
-
+	public void isBlacklistedIfErrorsPerPeriodExceedsThreshold_ForOneRequiredPeriod_OnPeriodBorder() {
+		strategy.setRequiredNumberOfPeriodsWithErrors(1);
 		strategy.setErrorsPerPeriodThreshold(1);
-		timeProvider.setCurrentMillis(0);
-		strategy.notifyCallFailed(clientSideCallContext);
-		strategy.notifyCallFailed(clientSideCallContext);
-		timeProvider.setCurrentMillis(9000);
-		blacklisted = strategy.isBlacklisted(SERVICE_ID);
 
-		assertTrue("ServiceId should be blacklisted", blacklisted);
+		whenNotifiyCallFailed(2);
+
+		whenJumpInTimePlusSeconds(PERIOD_DURATION);
+		thenServiceIsBlacklisted();
+	}
+
+
+
+	@Test
+	public void isBlacklistedIfErrorsPerPeriodExceedsThreshold_InFirstPeriod_AndCurrentPeriod() {
+		strategy.setErrorsPerPeriodThreshold(1);
+
+		whenNotifiyCallFailed(2);
+		whenJumpInTimePlusSeconds(PERIOD_DURATION_PLUS_ONE);
+
+		whenNotifiyCallFailed(2);
+		whenJumpInTimePlusSeconds(PERIOD_DURATION_MINUS_ONE);
+
+		thenServiceIsBlacklisted();
 	}
 
 	@Test
-	public void isBlacklistedIfErrorsPerTimeUnitReachesLimit() {
-		boolean blacklisted = strategy.isBlacklisted(SERVICE_ID);
-
-		assertFalse("ServiceId should not be blacklisted before failure call", blacklisted);
-
-
+	public void isNotBlacklistedIfErrorsExceedThreshold_InFirstPeriod_ButZeroInCurrent() {
 		strategy.setErrorsPerPeriodThreshold(1);
-		timeProvider.setCurrentMillis(0);
-		strategy.notifyCallFailed(clientSideCallContext);
-		timeProvider.setCurrentMillis(9000);
-		blacklisted = strategy.isBlacklisted(SERVICE_ID);
 
-		assertTrue("ServiceId should be blacklisted", blacklisted);
+		whenNotifiyCallFailed(2);
+		whenJumpInTimePlusSeconds(PERIOD_DURATION_PLUS_ONE);
+
+		thenServiceIsNotBlacklisted();
 	}
 
 	@Test
 	public void isNotBlacklistedIfThresholdIsNotReached() {
-		boolean blacklisted = strategy.isBlacklisted(SERVICE_ID);
-
-		assertFalse("ServiceId should not be blacklisted before failure call", blacklisted);
-
-
 		strategy.setErrorsPerPeriodThreshold(2);
-		strategy.notifyCallFailed(clientSideCallContext);
 
-		blacklisted = strategy.isBlacklisted(SERVICE_ID);
+		whenNotifiyCallFailed(1);
 
-		assertFalse("ServiceId should be blacklisted, because threshold is not reached", blacklisted);
+		thenServiceIsNotBlacklisted();
 	}
 
 	@Test
-	public void isNotBlacklistedIfErrorsPerTimeUnitDoNotExceedLimit() {
-		boolean blacklisted = strategy.isBlacklisted(SERVICE_ID);
-
-		assertFalse("ServiceId should not be blacklisted before failure call", blacklisted);
-
+	public void isNotBlacklistedInFirstPeriodButInSecond() {
 		strategy.setErrorsPerPeriodThreshold(1);
-		timeProvider.setCurrentMillis(0);
-		strategy.notifyCallFailed(clientSideCallContext);
-		strategy.notifyCallFailed(clientSideCallContext);
-		timeProvider.setCurrentMillis(11000);
-		assertFalse("ServiceId should not be blacklisted, because not enough errors in one period", strategy.isBlacklisted(SERVICE_ID));
 
-		strategy.notifyCallFailed(clientSideCallContext);
-		strategy.notifyCallFailed(clientSideCallContext);
-		timeProvider.setCurrentMillis(15000);
+		whenNotifiyCallFailed(1);
+		whenJumpInTimePlusSeconds(PERIOD_DURATION_PLUS_ONE);
+		thenServiceIsNotBlacklisted();
 
-		assertTrue("ServiceId should be blacklisted, because too many errors in one period", strategy.isBlacklisted(SERVICE_ID));
+		whenNotifiyCallFailed(1);
+		whenJumpInTimePlusSeconds(PERIOD_DURATION_MINUS_ONE);
+
+		thenServiceIsBlacklisted();
 	}
 
-	@Ignore
 	@Test
-	public void isNotBlacklistedIfErrorsPerTimeUnitDoNotExceedLimitWithinTwoLastPeriods() {
-		boolean blacklisted = strategy.isBlacklisted(SERVICE_ID);
+	public void isNotBlacklistedIfErrorsPerPeriodDoNotExceedThreshold_WithinTwoLastPeriods() {
+		strategy.setErrorsPerPeriodThreshold(2);
 
-		assertFalse("ServiceId should not be blacklisted before failure call", blacklisted);
+		whenNotifiyCallFailed(2);
+		whenJumpInTimePlusSeconds(PERIOD_DURATION_PLUS_ONE);
 
-		strategy.setErrorsPerPeriodThreshold(1);
-		timeProvider.setCurrentMillis(0);
-		strategy.notifyCallFailed(clientSideCallContext);
-		strategy.notifyCallFailed(clientSideCallContext);
-		timeProvider.setCurrentMillis(11000);
-		assertFalse("ServiceId should not be blacklisted, because not enough errors in first period", strategy.isBlacklisted(SERVICE_ID));
+		thenServiceIsNotBlacklisted();
 
-		strategy.notifyCallFailed(clientSideCallContext);
-		strategy.notifyCallFailed(clientSideCallContext);
-		timeProvider.setCurrentMillis(20000);
+		whenNotifiyCallFailed(1);
+		whenJumpInTimePlusSeconds(PERIOD_DURATION);
 
-		assertFalse("ServiceId should not be blacklisted, because not enough errors in second period", strategy.isBlacklisted(SERVICE_ID));
+		thenServiceIsNotBlacklisted();
+	}
+
+
+	@Test
+	public void isNotBlacklistedIfNotAllRequieredPeriodsHaveEnoughErrors() {
+		strategy.setErrorsPerPeriodThreshold(3);
+
+		whenNotifiyCallFailed(1);
+		whenJumpInTimePlusSeconds(PERIOD_DURATION);
+		thenServiceIsNotBlacklisted();
+
+		whenNotifiyCallFailed(0);
+		whenJumpInTimePlusSeconds(PERIOD_DURATION);
+		thenServiceIsNotBlacklisted();
+
+		whenNotifiyCallFailed(1);
+		whenJumpInTimePlusSeconds(PERIOD_DURATION);
+		thenServiceIsNotBlacklisted();
+	}
+
+	private void thenServiceIsBlacklisted() {
+		assertTrue("ServiceId should be blacklisted", strategy.isBlacklisted(SERVICE_ID));
+	}
+
+
+	private void thenServiceIsNotBlacklisted() {
+		assertFalse("ServiceId should not be blacklisted", strategy.isBlacklisted(SERVICE_ID));
+	}
+
+	private void whenJumpInTimePlusSeconds(int seconds) {
+		timeProvider.increaseBySeconds(seconds);
+		strategy.timerTick();
+	}
+
+	private void whenNotifiyCallFailed(int times) {
+		for(int i = 0; i < times; i++) {
+			strategy.notifyCallFailed(clientSideCallContext);
+		}
 	}
 
 }

@@ -16,18 +16,29 @@ public class ErrorsPerTimeUnitBlacklistingStrategy implements BlacklistingStrate
 
 	private int errorsPerPeriodThreshold = 10;
 	private int periodDurationInSeconds = 10;
-	private AtomicInteger errorCounter = new AtomicInteger();
+	private AtomicInteger currentPeriodErrorCounter = new AtomicInteger();
 	private TimeProvider timeProvider = new SystemTimeProvider();
 	private long startTime;
+	private AtomicInteger nonStopPeriodsWithErrorsCounter = new AtomicInteger(0);
+	private int requiredNumberOfPeriodsWithErrors = 1;
+
 
 
 
 	@Override
 	public boolean isBlacklisted(String selectedServiceId) {
-		if(errorCounter.get() >= errorsPerPeriodThreshold && !isTimePeriodExceeded()) {
+		if(errorCountReachesThreshold() && reachedThresholdsInPreviousPeriods()) {
 			return true;
 		}
 		return false;
+	}
+
+	private boolean reachedThresholdsInPreviousPeriods() {
+		return nonStopPeriodsWithErrorsCounter.get() >= (requiredNumberOfPeriodsWithErrors - 1);
+	}
+
+	private boolean errorCountReachesThreshold() {
+		return currentPeriodErrorCounter.get() >= errorsPerPeriodThreshold;
 	}
 
 	private boolean isTimePeriodExceeded() {
@@ -36,13 +47,7 @@ public class ErrorsPerTimeUnitBlacklistingStrategy implements BlacklistingStrate
 
 	@Override
 	public void notifyCallFailed(ClientSideCallContext clientSideCallContext) {
-		if(isTimePeriodExceeded()) {
-			errorCounter.set(0);
-		}
-		if(errorCounter.get() == 0) {
-			startTime = timeProvider.getCurrentTimeMillis();
-		}
-		errorCounter.incrementAndGet();
+		currentPeriodErrorCounter.incrementAndGet();
 	}
 
 	@Override
@@ -60,5 +65,31 @@ public class ErrorsPerTimeUnitBlacklistingStrategy implements BlacklistingStrate
 
 	void setTimeProvider(TimeProvider timeProvider) {
 		this.timeProvider = timeProvider;
+	}
+
+	public void setRequiredNumberOfPeriodsWithErrors(int requiredNumberOfPeriodsWithErrors) {
+		this.requiredNumberOfPeriodsWithErrors = requiredNumberOfPeriodsWithErrors;
+	}
+
+	void timerTick() {
+		if(isTimePeriodExceeded()) {
+			setNonStopPeriodsWithErrorCounter();
+			currentPeriodErrorCounter.set(0);
+		}
+		resetStartTime();
+	}
+
+	private void setNonStopPeriodsWithErrorCounter() {
+		if(errorCountReachesThreshold()) {
+			nonStopPeriodsWithErrorsCounter.incrementAndGet();
+		} else {
+			nonStopPeriodsWithErrorsCounter.set(0);
+		}
+	}
+
+	private void resetStartTime() {
+		if(currentPeriodErrorCounter.get() == 0) {
+			startTime = timeProvider.getCurrentTimeMillis();
+		}
 	}
 }
