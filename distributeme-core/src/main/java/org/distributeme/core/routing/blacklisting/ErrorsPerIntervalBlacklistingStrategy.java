@@ -11,18 +11,15 @@ import org.distributeme.core.util.SystemTimeProvider;
 import org.distributeme.core.util.TimeProvider;
 
 
-/**
- * Created by rboehling on 2/22/17.
- */
 public class ErrorsPerIntervalBlacklistingStrategy implements BlacklistingStrategy {
 
 	private AtomicInteger currentIntervalErrorCounter = new AtomicInteger();
-	private TimeProvider timeProvider = new SystemTimeProvider();
-	private long startTime;
 	private AtomicInteger nonStopIntervalsWithErrorsCounter = new AtomicInteger();
 	private int errorsPerIntervalThreshold;
 	private int intervalDurationInSeconds;
 	private int requiredNumberOfIntervalsWithErrors;
+	private long startTime;
+	private TimeProvider timeProvider = new SystemTimeProvider();
 	private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 
 	public ErrorsPerIntervalBlacklistingStrategy() {
@@ -30,6 +27,7 @@ public class ErrorsPerIntervalBlacklistingStrategy implements BlacklistingStrate
 	}
 
 	private class TimeTicker implements Runnable {
+
 		@Override
 		public void run() {
 			timerTick();
@@ -38,11 +36,15 @@ public class ErrorsPerIntervalBlacklistingStrategy implements BlacklistingStrate
 
 	@Override
 	public boolean isBlacklisted(String selectedServiceId) {
-		return reachedThresholdWithinCurrentInterval() && reachedThresholdInPreviousIntervals();
+		return reachedRequiredNumberOfIntervalsWithErrors() || reachRequiredNumberOfIntervalsWithErrorsWithCurrentInterval();
 	}
 
-	private boolean reachedThresholdInPreviousIntervals() {
-		return nonStopIntervalsWithErrorsCounter.get() >= (requiredNumberOfIntervalsWithErrors - 1);
+	private boolean reachRequiredNumberOfIntervalsWithErrorsWithCurrentInterval() {
+		return reachedThresholdWithinCurrentInterval() && nonStopIntervalsWithErrorsCounter.get() >= requiredNumberOfIntervalsWithErrors - 1;
+	}
+
+	private boolean reachedRequiredNumberOfIntervalsWithErrors() {
+		return nonStopIntervalsWithErrorsCounter.get() >= requiredNumberOfIntervalsWithErrors;
 	}
 
 	private boolean reachedThresholdWithinCurrentInterval() {
@@ -76,32 +78,26 @@ public class ErrorsPerIntervalBlacklistingStrategy implements BlacklistingStrate
 	}
 
 	void timerTick() {
-		if(isIntervalDurationExceeded()) {
+		if (isIntervalDurationReached()) {
 			setNonStopIntervalsWithErrorCounter();
 			currentIntervalErrorCounter.set(0);
+			startTime = timeProvider.getCurrentTimeMillis();
 		}
-		resetStartTime();
 	}
 
 	void setScheduledExecutorService(ScheduledExecutorService scheduledExecutorService) {
 		this.scheduledExecutorService = scheduledExecutorService;
 	}
 
-	private boolean isIntervalDurationExceeded() {
-		return ((timeProvider.getCurrentTimeMillis() - startTime) / 1000) > intervalDurationInSeconds;
+	private boolean isIntervalDurationReached() {
+		return ((timeProvider.getCurrentTimeMillis() - startTime) / 1000) >= intervalDurationInSeconds;
 	}
 
 	private void setNonStopIntervalsWithErrorCounter() {
-		if(reachedThresholdWithinCurrentInterval()) {
+		if (reachedThresholdWithinCurrentInterval()) {
 			nonStopIntervalsWithErrorsCounter.incrementAndGet();
 		} else {
 			nonStopIntervalsWithErrorsCounter.set(0);
-		}
-	}
-
-	private void resetStartTime() {
-		if(currentIntervalErrorCounter.get() == 0) {
-			startTime = timeProvider.getCurrentTimeMillis();
 		}
 	}
 
