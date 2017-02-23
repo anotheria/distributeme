@@ -16,7 +16,6 @@ import org.distributeme.core.util.TimeProvider;
  */
 public class ErrorsPerPeriodBlacklistingStrategy implements BlacklistingStrategy {
 
-	private final Runnable timerTicker = new TimeTicker();
 	private AtomicInteger currentPeriodErrorCounter = new AtomicInteger();
 	private TimeProvider timeProvider = new SystemTimeProvider();
 	private long startTime;
@@ -27,22 +26,29 @@ public class ErrorsPerPeriodBlacklistingStrategy implements BlacklistingStrategy
 	private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 
 	public ErrorsPerPeriodBlacklistingStrategy() {
-		scheduledExecutorService.schedule(timerTicker, 10000, TimeUnit.MILLISECONDS);
+		scheduledExecutorService.schedule(new TimeTicker(), 10000, TimeUnit.MILLISECONDS);
+	}
+
+	private class TimeTicker implements Runnable {
+		@Override
+		public void run() {
+			timerTick();
+		}
 	}
 
 	@Override
 	public boolean isBlacklisted(String selectedServiceId) {
-		if(errorCountReachesThreshold() && reachedThresholdsInPreviousPeriods()) {
+		if(reachedThresholdWithinCurrentPeriod() && reachedThresholdInPreviousPeriods()) {
 			return true;
 		}
 		return false;
 	}
 
-	private boolean reachedThresholdsInPreviousPeriods() {
+	private boolean reachedThresholdInPreviousPeriods() {
 		return nonStopPeriodsWithErrorsCounter.get() >= (requiredNumberOfPeriodsWithErrors - 1);
 	}
 
-	private boolean errorCountReachesThreshold() {
+	private boolean reachedThresholdWithinCurrentPeriod() {
 		return currentPeriodErrorCounter.get() >= errorsPerPeriodThreshold;
 	}
 
@@ -85,7 +91,7 @@ public class ErrorsPerPeriodBlacklistingStrategy implements BlacklistingStrategy
 	}
 
 	private void setNonStopPeriodsWithErrorCounter() {
-		if(errorCountReachesThreshold()) {
+		if(reachedThresholdWithinCurrentPeriod()) {
 			nonStopPeriodsWithErrorsCounter.incrementAndGet();
 		} else {
 			nonStopPeriodsWithErrorsCounter.set(0);
@@ -98,10 +104,4 @@ public class ErrorsPerPeriodBlacklistingStrategy implements BlacklistingStrategy
 		}
 	}
 
-	private class TimeTicker implements Runnable {
-		@Override
-		public void run() {
-			timerTick();
-		}
-	}
 }

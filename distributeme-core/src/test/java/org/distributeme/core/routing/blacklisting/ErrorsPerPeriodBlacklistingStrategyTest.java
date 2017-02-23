@@ -5,6 +5,7 @@ import java.util.Collections;
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.util.TestTimeProvider;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -143,18 +144,47 @@ public class ErrorsPerPeriodBlacklistingStrategyTest {
 	@Test
 	public void isNotBlacklisted_IfFirstAndSecondPeriodHaveErrorsButThirdHasNot() {
 		strategy.setErrorsPerPeriodThreshold(3);
+		strategy.setRequiredNumberOfPeriodsWithErrors(3);
 
-		whenNotifiyCallFailed(1);
+		whenNotifiyCallFailed(3);
 		whenJumpInTimePlusSeconds(PERIOD_DURATION);
 		thenServiceIsNotBlacklisted();
 
-		whenNotifiyCallFailed(1);
+		whenNotifiyCallFailed(4);
 		whenJumpInTimePlusSeconds(PERIOD_DURATION);
 		thenServiceIsNotBlacklisted();
 
 		whenNotifiyCallFailed(1);
 		whenJumpInTimePlusSeconds(PERIOD_DURATION_MINUS_ONE);
 		thenServiceIsNotBlacklisted();
+	}
+
+	@Ignore
+	@Test
+	public void isBlacklisted_IfThreeRequiredIntervalsHaveErrors() {
+		strategy.setErrorsPerPeriodThreshold(3);
+		strategy.setRequiredNumberOfPeriodsWithErrors(3);
+
+		whenNotifiyCallFailed(3);
+		whenJumpInTimePlusSeconds(PERIOD_DURATION);
+		thenServiceIsNotBlacklisted();
+
+		whenNotifiyCallFailed(4);
+		whenJumpInTimePlusSeconds(PERIOD_DURATION);
+		thenServiceIsNotBlacklisted();
+
+		whenNotifiyCallFailed(3);
+		whenJumpInTimePlusSeconds(PERIOD_DURATION_MINUS_ONE);
+		thenServiceIsBlacklisted();
+	}
+
+	@Test
+	public void isBlackListedIfAllThresholdsAreSetToZero() {
+		strategy.setErrorsPerPeriodThreshold(0);
+		strategy.setRequiredNumberOfPeriodsWithErrors(0);
+		strategy.setPeriodDurationInSeconds(0);
+
+		whenNotifiyCallFailed(0);
 	}
 
 	private void thenServiceIsBlacklisted() {
