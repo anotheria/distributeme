@@ -17,20 +17,18 @@ public class ErrorsPerIntervalBlacklistingStrategyTest {
 
 	private static final String SERVICE_ID = "serviceId";
 	private static final int INTERVAL_DURATION = 10;
-	private static final int INTERVAL_DURATION_PLUS_ONE = INTERVAL_DURATION + 1;
 	private static final int INTERVAL_DURATION_MINUS_ONE = INTERVAL_DURATION - 1;
 	private TestTimeProvider timeProvider = new TestTimeProvider();
 	private ClientSideCallContext clientSideCallContext = new ClientSideCallContext(SERVICE_ID, "someMethod", Collections.emptyList());
 	private ScheduledExecutorService dummyScheduledExecutorService = mock(ScheduledExecutorService.class);
 
-	private ErrorsPerIntervalBlacklistingStrategy strategy = new ErrorsPerIntervalBlacklistingStrategy();
+	private ErrorsPerIntervalBlacklistingStrategy strategy = new ErrorsPerIntervalBlacklistingStrategy(dummyScheduledExecutorService);
 
 	@Before
 	public void setUp() throws Exception {
 		strategy.setTimeProvider(timeProvider);
 		strategy.setIntervalDurationInSeconds(INTERVAL_DURATION);
 		strategy.setErrorsPerIntervalThreshold(10);
-		strategy.setScheduledExecutorService(dummyScheduledExecutorService);
 		strategy.setRequiredNumberOfIntervalsWithErrors(1);
 		timeProvider.setCurrentMillis(0);
 		assertFalse("ServiceId should not be blacklisted before failure call", strategy.isBlacklisted(SERVICE_ID));
@@ -79,34 +77,12 @@ public class ErrorsPerIntervalBlacklistingStrategyTest {
 		strategy.setErrorsPerIntervalThreshold(1);
 
 		whenNotifiyCallFailed(2);
-		whenJumpInTimePlusSeconds(INTERVAL_DURATION_PLUS_ONE);
-
-		thenServiceIsNotBlacklisted();
-	}
-
-	@Test
-	public void isNotBlacklistedIfThresholdIsNotReached() {
-		strategy.setRequiredNumberOfIntervalsWithErrors(2);
-		strategy.setErrorsPerIntervalThreshold(2);
-
-		whenNotifiyCallFailed(1);
-
-		thenServiceIsNotBlacklisted();
-	}
-
-	@Test
-	public void isNotBlacklistedInFirstIntervalButInSecond() {
-		strategy.setRequiredNumberOfIntervalsWithErrors(2);
-		strategy.setErrorsPerIntervalThreshold(1);
-
-		whenNotifiyCallFailed(1);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
 		thenServiceIsNotBlacklisted();
 
-		whenNotifiyCallFailed(1);
+		whenNotifiyCallFailed(0);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION_MINUS_ONE);
-
-		thenServiceIsBlacklisted();
+		thenServiceIsNotBlacklisted();
 	}
 
 	@Test
@@ -196,23 +172,23 @@ public class ErrorsPerIntervalBlacklistingStrategyTest {
 	}
 
 	@Test
-	public void isBlackListedIfAllThresholdsAreSetToZero() {
+	public void isNotBlackListedIfAllThresholdsAreSetToZero() {
 		strategy.setErrorsPerIntervalThreshold(0);
 		strategy.setRequiredNumberOfIntervalsWithErrors(0);
 		strategy.setIntervalDurationInSeconds(0);
 
 		whenNotifiyCallFailed(0);
-		thenServiceIsBlacklisted();
+		thenServiceIsNotBlacklisted();
 	}
 
 	@Test
-	public void isBlacklistedIfThresholdsAreSetToNegative() {
+	public void isNotBlacklistedIfStrategyIfConfigurationIsFaulty() {
 		strategy.setErrorsPerIntervalThreshold(-1);
 		strategy.setRequiredNumberOfIntervalsWithErrors(-1);
 		strategy.setIntervalDurationInSeconds(-1);
 
 		whenNotifiyCallFailed(0);
-		thenServiceIsBlacklisted();
+		thenServiceIsNotBlacklisted();
 	}
 
 	private void thenServiceIsBlacklisted() {

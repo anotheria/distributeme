@@ -11,7 +11,7 @@ public class DebugBlacklistingStrategy implements BlacklistingStrategy {
 
 	@Override
 	public boolean isBlacklisted(String selectedServiceId) {
-		System.out.println("DebugBlacklistingStrategy isBlacklisted for " + selectedServiceId);
+		System.out.println("DebugBlacklistingStrategy isBlacklisted called for " + selectedServiceId);
 		return false;
 	}
 
