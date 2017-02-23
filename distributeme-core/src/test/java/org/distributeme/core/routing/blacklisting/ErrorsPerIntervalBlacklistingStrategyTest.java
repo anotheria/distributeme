@@ -22,11 +22,10 @@ public class ErrorsPerIntervalBlacklistingStrategyTest {
 	private ClientSideCallContext clientSideCallContext = new ClientSideCallContext(SERVICE_ID, "someMethod", Collections.emptyList());
 	private ScheduledExecutorService dummyScheduledExecutorService = mock(ScheduledExecutorService.class);
 
-	private ErrorsPerIntervalBlacklistingStrategy strategy = new ErrorsPerIntervalBlacklistingStrategy(dummyScheduledExecutorService);
+	private ErrorsPerIntervalBlacklistingStrategy strategy = new ErrorsPerIntervalBlacklistingStrategy(dummyScheduledExecutorService, timeProvider);
 
 	@Before
 	public void setUp() throws Exception {
-		strategy.setTimeProvider(timeProvider);
 		strategy.setIntervalDurationInSeconds(INTERVAL_DURATION);
 		strategy.setErrorsPerIntervalThreshold(10);
 		strategy.setRequiredNumberOfIntervalsWithErrors(1);
