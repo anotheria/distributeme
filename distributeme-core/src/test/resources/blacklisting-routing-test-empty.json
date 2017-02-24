@@ -1,0 +1,6 @@
+{
+	"numberOfInstances": 1,
+	"blacklistTime": 20000,
+	"overrideBlacklistIfAllBlacklisted": true,
+	"blacklistStrategyClazz": ""
+}

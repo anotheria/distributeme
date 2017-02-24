@@ -1,6 +1,15 @@
 package org.distributeme.core.routing;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.configureme.annotations.AfterConfiguration;
+import org.configureme.annotations.AfterInitialConfiguration;
+import org.configureme.annotations.AfterReConfiguration;
 import org.configureme.annotations.ConfigureMe;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Generic configuration file that will work with most routers, even many routers most probably won't support all of the options.
@@ -11,6 +20,9 @@ import org.configureme.annotations.ConfigureMe;
  */
 @ConfigureMe (allfields = true)
 public class GenericRouterConfiguration {
+
+
+	private static Logger logger = LoggerFactory.getLogger(GenericRouterConfiguration.class);
 	/**
 	 * Number of instances of this service.
 	 */
@@ -20,7 +32,26 @@ public class GenericRouterConfiguration {
 	 */
 	private long blacklistTime;
 
+	/**
+	 * If true and all instances are blacklisted, then blacklisting for all instances will be cancelled.
+	 */
 	private boolean overrideBlacklistIfAllBlacklisted;
+
+	/**
+	 * Fully qualified class name of blacklist strategy.
+	 *  If not set org.distributeme.core.routing.blacklisting.DefaultBlacklistingStrategy will be used
+	 */
+	private String blacklistStrategyClazz;
+
+	/**
+	 * Name of configureme configuration for blacklist strategy. Json file sufffix is not part of the name.
+	 */
+	private String blacklistStrategyConfigurationName;
+
+	/**
+	 * Observer wich can react onf configuration changes.
+	 */
+	private List<RouterConfigurationObserver> routerConfigurationObservers = new ArrayList<>();
 
 	/**
 	 * <p>Getter for the field <code>blacklistTime</code>.</p>
@@ -58,11 +89,7 @@ public class GenericRouterConfiguration {
 		this.numberOfInstances = numberOfInstances;
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString(){
-		return "NumberOfInstances: "+getNumberOfInstances()+", blacklistTime: "+getBlacklistTime()+", overrideBlacklistIfAllBlacklisted: "+overrideBlacklistIfAllBlacklisted;
-	}
+
 
 	public boolean isOverrideBlacklistIfAllBlacklisted() {
 		return overrideBlacklistIfAllBlacklisted;
@@ -71,4 +98,73 @@ public class GenericRouterConfiguration {
 	public void setOverrideBlacklistIfAllBlacklisted(boolean overrideBlacklistIfAllBlacklisted) {
 		this.overrideBlacklistIfAllBlacklisted = overrideBlacklistIfAllBlacklisted;
 	}
+
+	public String getBlacklistStrategyClazz() {
+		return blacklistStrategyClazz;
+	}
+
+	public void setBlacklistStrategyClazz(String blacklistStrategyClazz) {
+		this.blacklistStrategyClazz = blacklistStrategyClazz;
+	}
+
+	public void setBlacklistStrategyConfigurationName(String blacklistStrategyConfigurationName) {
+		this.blacklistStrategyConfigurationName = blacklistStrategyConfigurationName;
+	}
+
+	public String getBlacklistStrategyConfigurationName() {
+		return blacklistStrategyConfigurationName;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		return "GenericRouterConfiguration{" +
+				"numberOfInstances=" + numberOfInstances +
+				", blacklistTime=" + blacklistTime +
+				", overrideBlacklistIfAllBlacklisted=" + overrideBlacklistIfAllBlacklisted +
+				", blacklistStrategyClazz='" + blacklistStrategyClazz + '\'' +
+				", blacklistStrategyConfigurationName='" + blacklistStrategyConfigurationName + '\'' +
+				", routerConfigurationObservers=" + routerConfigurationObservers +
+				'}';
+	}
+
+
+	public void addRouterConfigurationObserver(RouterConfigurationObserver routerConfigurationObserver) {
+		routerConfigurationObservers.add(routerConfigurationObserver);
+	}
+
+	@AfterInitialConfiguration
+	public void afterInitialConfiguration() {
+		for(RouterConfigurationObserver observer: routerConfigurationObservers) {
+			try {
+				observer.routerConfigurationInitialChange(this);
+			} catch (Exception e) {
+				logger.warn("Could not call routerConfigurationInitialChange in " + observer, e);
+			}
+		}
+	}
+
+	@AfterReConfiguration
+	public void afterReConfiguration() {
+		for(RouterConfigurationObserver observer: routerConfigurationObservers) {
+			try {
+				observer.routerConfigurationFollowupChange(this);
+			} catch (Exception e) {
+				logger.warn("Could not call routerConfigurationFollowupChange in " + observer, e);
+			}
+		}
+	}
+
+	@AfterConfiguration
+	public void afterConfiguration() {
+		for(RouterConfigurationObserver observer: routerConfigurationObservers) {
+			try {
+				observer.routerConfigurationChange(this);
+			} catch (Exception e) {
+				logger.warn("Could not call routerConfigurationChange in " + observer, e);
+			}
+		}
+	}
+
+
 }

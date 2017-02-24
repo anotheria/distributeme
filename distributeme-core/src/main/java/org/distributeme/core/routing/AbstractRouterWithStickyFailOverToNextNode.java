@@ -2,14 +2,15 @@ package org.distributeme.core.routing;
 
 import java.util.HashSet;
 import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 import net.anotheria.util.StringUtils;
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.exception.DistributemeRuntimeException;
 import org.distributeme.core.failing.FailDecision;
 import org.distributeme.core.failing.FailingStrategy;
+import org.distributeme.core.routing.blacklisting.BlacklistingStrategy;
+import org.distributeme.core.routing.blacklisting.DefaultBlacklistingStrategy;
+
 
 /**
  * Abstract implementation of {@link org.distributeme.core.routing.Router} which supports {@link org.distributeme.core.failing.FailingStrategy}.
@@ -35,7 +36,7 @@ import org.distributeme.core.failing.FailingStrategy;
  * @author h3llka,dvayanu
  * @version $Id: $Id
  */
-public abstract class AbstractRouterWithStickyFailOverToNextNode extends AbstractRouterWithFailover implements ConfigurableRouter, FailingStrategy {
+public abstract class AbstractRouterWithStickyFailOverToNextNode extends AbstractRouterWithFailover implements ConfigurableRouter, FailingStrategy, RouterConfigurationObserver {
 
 	/**
 	 * Services parameter.
@@ -56,16 +57,14 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 	 */
 	private Random random = new Random(System.nanoTime());
 
-	/**
-	 * Map with timestamps for last server failures.
-	 */
-	private ConcurrentMap<String, Long> serverFailureTimestamps = new ConcurrentHashMap<String, Long>();
+	private BlacklistingStrategy blacklistingStrategy = new DefaultBlacklistingStrategy();
 
 	/** {@inheritDoc} */
 	@Override
 	public FailDecision callFailed(final ClientSideCallContext clientSideCallContext) {
 		getLog().info(clientSideCallContext.getServiceId()+ " marked as failed and will be blacklisted for "+getConfiguration().getBlacklistTime()+" ms");
-		serverFailureTimestamps.put(clientSideCallContext.getServiceId(), System.currentTimeMillis());
+
+		blacklistingStrategy.notifyCallFailed(clientSideCallContext);
 		return super.callFailed(clientSideCallContext);
 	}
 
@@ -82,7 +81,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		}
 
 		if (failingSupported() && !clientSideCallContext.isFirstCall()) {
-			String serviceId = getServiceIdForFailing(clientSideCallContext);
+			String serviceId = getServiceIdIfPrimaryServiceIsNotAvailable(clientSideCallContext);
 			getRoutingStats(serviceId).addRequestRoutedTo();
 			return serviceId;
 		}
@@ -101,15 +100,13 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 				throw new AssertionError(" Routing Strategy " + getStrategy() + " not supported in current implementation.");
 		}
 
-		Long lastFailed = serverFailureTimestamps.get(selectedServiceId);
-		boolean blacklisted = lastFailed != null && (System.currentTimeMillis() - lastFailed) < getConfiguration().getBlacklistTime();
 
 		//the service id we picked up is blacklisted due to previous failing.
-		if (blacklisted) {
+		if (blacklistingStrategy.isBlacklisted(selectedServiceId)) {
 			clientSideCallContext.setServiceId(selectedServiceId);
 			getRoutingStats(selectedServiceId).addBlacklisted();
 			try {
-				selectedServiceId = getServiceIdForFailing(clientSideCallContext);
+				selectedServiceId = getServiceIdIfPrimaryServiceIsNotAvailable(clientSideCallContext);
 			}catch(DistributemeRuntimeException allInstancesAreBlacklisted){
 				if (getConfiguration().isOverrideBlacklistIfAllBlacklisted()){
 					return selectedServiceId;
@@ -133,9 +130,9 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 	 * @param context {@link org.distributeme.core.ClientSideCallContext}
 	 * @return serviceId string
 	 */
-	private String getServiceIdForFailing(final ClientSideCallContext context) {
+	private String getServiceIdIfPrimaryServiceIsNotAvailable(final ClientSideCallContext context) {
 		if (getLog().isDebugEnabled())
-			getLog().debug("Calculating serviceIdForFailing call. ClientSideCallContext[" + context + "]");
+			getLog().debug("Calculating getServiceIdIfPrimaryServiceIsNotAvailable call. ClientSideCallContext[" + context + "]");
 
 		String originalServiceId = context.getServiceId();
 		HashSet<String> instancesThatIAlreadyTried = (HashSet<String>)context.getTransportableCallContext().get(ATTR_TRIED_INSTANCES);
@@ -185,14 +182,12 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 
 
 		//check if failover instance is also blacklisted
-		Long lastFailed = serverFailureTimestamps.get(result);
-		boolean blacklisted = lastFailed != null && (System.currentTimeMillis() - lastFailed) < getConfiguration().getBlacklistTime();
-		if (!blacklisted)
+		if (!blacklistingStrategy.isBlacklisted(result))
 			return result;
 
 		context.setServiceId(result);
 		getRoutingStats(result).addBlacklisted();
-		String selectedServiceIdAfterBlacklist = getServiceIdForFailing(context);
+		String selectedServiceIdAfterBlacklist = getServiceIdIfPrimaryServiceIsNotAvailable(context);
 		getRoutingStats(selectedServiceIdAfterBlacklist).addRequestRoutedTo();
 		return selectedServiceIdAfterBlacklist;
 
@@ -228,5 +223,37 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 			throw new AssertionError("Customization Error! " + s + " Should be positive value, or at least 0");
 	}
 
+	@Override
+	public void setConfigurationName(String serviceId, String configurationName) {
+		getConfiguration().addRouterConfigurationObserver(this);
+		super.setConfigurationName(serviceId, configurationName);
 
+	}
+
+	BlacklistingStrategy getBlacklistingStrategy() {
+		return blacklistingStrategy;
+	}
+
+
+	@Override
+	public void routerConfigurationInitialChange(GenericRouterConfiguration configuration) {
+
+	}
+
+	@Override
+	public void routerConfigurationFollowupChange(GenericRouterConfiguration configuration) {
+
+	}
+
+	@Override
+	public void routerConfigurationChange(GenericRouterConfiguration configuration) {
+		if(getConfiguration().getBlacklistStrategyClazz() != null) {
+			try {
+				blacklistingStrategy = (BlacklistingStrategy)Class.forName(getConfiguration().getBlacklistStrategyClazz()).newInstance();
+			} catch (Exception e) {
+				getLog().error("Could not initialize black listing strategy " + getConfiguration().getBlacklistStrategyClazz(), e);
+			}
+		}
+		blacklistingStrategy.setConfiguration(getConfiguration());
+	}
 }
