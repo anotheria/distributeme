@@ -1,0 +1,5 @@
+{
+	"errorsPerIntervalThreshold": 5,
+	"intervalDurationInSeconds": 10,
+	"requiredNumberOfIntervalsWithErrors": 5
+}
