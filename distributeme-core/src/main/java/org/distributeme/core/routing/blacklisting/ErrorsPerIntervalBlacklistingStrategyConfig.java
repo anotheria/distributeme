@@ -39,4 +39,13 @@ public class ErrorsPerIntervalBlacklistingStrategyConfig {
 	public void setRequiredNumberOfIntervalsWithErrors(int requiredNumberOfIntervalsWithErrors) {
 		this.requiredNumberOfIntervalsWithErrors = requiredNumberOfIntervalsWithErrors;
 	}
+
+	@Override
+	public String toString() {
+		return "ErrorsPerIntervalBlacklistingStrategyConfig{" +
+				"errorsPerIntervalThreshold=" + errorsPerIntervalThreshold +
+				", intervalDurationInSeconds=" + intervalDurationInSeconds +
+				", requiredNumberOfIntervalsWithErrors=" + requiredNumberOfIntervalsWithErrors +
+				'}';
+	}
 }

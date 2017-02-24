@@ -1,10 +1,11 @@
 package org.distributeme.core.routing.blacklisting;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.configureme.ConfigurationManager;
 import org.distributeme.core.ClientSideCallContext;
@@ -19,22 +20,15 @@ public class ErrorsPerIntervalBlacklistingStrategy implements BlacklistingStrate
 
 	private Logger logger = LoggerFactory.getLogger(ErrorsPerIntervalBlacklistingStrategy.class);
 	private static final int ONE_SECOND = 1000;
-	private AtomicInteger currentIntervalErrorCounter = new AtomicInteger();
-	private AtomicInteger nonStopIntervalsWithErrorsCounter = new AtomicInteger();
-	private AtomicLong startTime = new AtomicLong(0);
+	private ConcurrentHashMap<String, ErrorCounter> errorCountersForServices = new ConcurrentHashMap<>();
 	private TimeProvider timeProvider = new SystemTimeProvider();
 	private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-
 	private ErrorsPerIntervalBlacklistingStrategyConfig config = new ErrorsPerIntervalBlacklistingStrategyConfig();
+	private AtomicBoolean validConfiguration = new AtomicBoolean(false);
 
 
 	public ErrorsPerIntervalBlacklistingStrategy() {
 		scheduledExecutorService.scheduleAtFixedRate(new TimeTicker(), ONE_SECOND, ONE_SECOND, TimeUnit.MILLISECONDS);
-		try {
-			ConfigurationManager.INSTANCE.configureAs(config, "errorsPerIntervalBlacklistingStrategy");
-		} catch (Exception e) {
-			logger.warn("Could not load configuration errorsPerIntervalBlacklistingStrategy.json", e);
-		}
 	}
 
 	ErrorsPerIntervalBlacklistingStrategy(ScheduledExecutorService scheduledExecutorService, TimeProvider timeProvider) {
@@ -52,65 +46,59 @@ public class ErrorsPerIntervalBlacklistingStrategy implements BlacklistingStrate
 
 	@Override
 	public boolean isBlacklisted(String selectedServiceId) {
-		return isValidConfiguration() && (reachedRequiredNumberOfIntervalsWithErrors() || reachRequiredNumberOfIntervalsWithErrorsWithCurrentInterval());
+		if(validConfiguration.get()) {
+			ErrorCounter errorCounterForService = getErrorCounters(selectedServiceId);
+			return errorCounterForService.reachedRequiredNumberOfIntervalsWithErrors() || errorCounterForService
+					.reachRequiredNumberOfIntervalsWithErrorsWithCurrentInterval();
+		}
+		return false;
+	}
+
+	private ErrorCounter getErrorCounters(String selectedServiceId) {
+		ErrorCounter errorCounters = errorCountersForServices.get(selectedServiceId);
+		if(errorCounters == null) {
+			errorCounters = new ErrorCounter(config);
+			ErrorCounter errorCountersOld = errorCountersForServices.putIfAbsent(selectedServiceId, errorCounters);
+			if(errorCountersOld != null) {
+				errorCounters = errorCountersOld;
+			}
+		}
+		return errorCounters;
 	}
 
 	private boolean isValidConfiguration() {
 		return config.getErrorsPerIntervalThreshold() > 0 && config.getIntervalDurationInSeconds() > 0 && config.getRequiredNumberOfIntervalsWithErrors() > 0;
 	}
 
-	private boolean reachedRequiredNumberOfIntervalsWithErrors() {
-		return nonStopIntervalsWithErrorsCounter.get() >= config.getRequiredNumberOfIntervalsWithErrors();
-	}
-
-	private boolean reachRequiredNumberOfIntervalsWithErrorsWithCurrentInterval() {
-		return reachedThresholdWithinCurrentInterval() && nonStopIntervalsWithErrorsCounter.get() >= config.getRequiredNumberOfIntervalsWithErrors() - 1;
-	}
-
-	private boolean reachedThresholdWithinCurrentInterval() {
-		return currentIntervalErrorCounter.get() >= config.getErrorsPerIntervalThreshold();
-	}
 
 	@Override
 	public void notifyCallFailed(ClientSideCallContext clientSideCallContext) {
-		currentIntervalErrorCounter.incrementAndGet();
+		ErrorCounter errorCounters = getErrorCounters(clientSideCallContext.getServiceId());
+		errorCounters.notifyCallFailed();
 	}
 
 	@Override
 	public void setConfiguration(GenericRouterConfiguration configuration) {
-
-	}
-
-	void setErrorsPerIntervalThreshold(int errorsPerIntervalThreshold) {
-		config.setErrorsPerIntervalThreshold(errorsPerIntervalThreshold);
-	}
-
-	void setIntervalDurationInSeconds(int intervalDurationInSeconds) {
-		config.setIntervalDurationInSeconds(intervalDurationInSeconds);
-	}
-
-	void setRequiredNumberOfIntervalsWithErrors(int requiredNumberOfIntervalsWithErrors) {
-		config.setRequiredNumberOfIntervalsWithErrors(requiredNumberOfIntervalsWithErrors);
+		try {
+			ConfigurationManager.INSTANCE.configureAs(config, configuration.getBlacklistStrategyConfigurationName());
+			if(isValidConfiguration()) {
+				validConfiguration.set(true);
+			} else {
+				validConfiguration.set(false);
+				logger.warn("Invalid configuration " + configuration.getBlacklistStrategyConfigurationName() + " " + config);
+			}
+		} catch (Exception e) {
+			logger.warn("Could not load configuration " + configuration.getBlacklistStrategyConfigurationName());
+		}
 	}
 
 	void timerTick() {
-		if (isIntervalDurationReached()) {
-			setNonStopIntervalsWithErrorCounter();
-			currentIntervalErrorCounter.set(0);
-			startTime.set(timeProvider.getCurrentTimeMillis());
+		for(Map.Entry<String, ErrorCounter> entry: errorCountersForServices.entrySet()) {
+			entry.getValue().timerTick(timeProvider.getCurrentTimeMillis());
 		}
 	}
 
-	private boolean isIntervalDurationReached() {
-		return ((timeProvider.getCurrentTimeMillis() - startTime.get()) / 1000) >= config.getIntervalDurationInSeconds();
+	void setLogger(Logger logger) {
+		this.logger = logger;
 	}
-
-	private void setNonStopIntervalsWithErrorCounter() {
-		if (reachedThresholdWithinCurrentInterval()) {
-			nonStopIntervalsWithErrorsCounter.incrementAndGet();
-		} else {
-			nonStopIntervalsWithErrorsCounter.set(0);
-		}
-	}
-
 }

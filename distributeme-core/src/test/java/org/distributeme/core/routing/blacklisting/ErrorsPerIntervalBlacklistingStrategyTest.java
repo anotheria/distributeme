@@ -3,199 +3,217 @@ package org.distributeme.core.routing.blacklisting;
 import java.util.Collections;
 import java.util.concurrent.ScheduledExecutorService;
 
+import org.configureme.ConfigurationManager;
 import org.distributeme.core.ClientSideCallContext;
+import org.distributeme.core.routing.GenericRouterConfiguration;
 import org.distributeme.core.util.TestTimeProvider;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.slf4j.Logger;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 
 public class ErrorsPerIntervalBlacklistingStrategyTest {
 
-	private static final String SERVICE_ID = "serviceId";
+	private static final String SERVICE_ID_0 = "serviceId_0";
+	private static final String SERVICE_ID_1 = "serviceId_1";
 	private static final int INTERVAL_DURATION = 10;
 	private static final int INTERVAL_DURATION_MINUS_ONE = INTERVAL_DURATION - 1;
 	private TestTimeProvider timeProvider = new TestTimeProvider();
-	private ClientSideCallContext clientSideCallContext = new ClientSideCallContext(SERVICE_ID, "someMethod", Collections.emptyList());
+	private ClientSideCallContext clientSideCallContext = new ClientSideCallContext(SERVICE_ID_0, "someMethod", Collections.emptyList());
 	private ScheduledExecutorService dummyScheduledExecutorService = mock(ScheduledExecutorService.class);
-
+	private GenericRouterConfiguration routerConfiguration = new GenericRouterConfiguration();
 	private ErrorsPerIntervalBlacklistingStrategy strategy = new ErrorsPerIntervalBlacklistingStrategy(dummyScheduledExecutorService, timeProvider);
+	private Logger logger = mock(Logger.class);
 
 	@Before
 	public void setUp() throws Exception {
-		strategy.setIntervalDurationInSeconds(INTERVAL_DURATION);
-		strategy.setErrorsPerIntervalThreshold(10);
-		strategy.setRequiredNumberOfIntervalsWithErrors(1);
+		strategy.setLogger(logger);
 		timeProvider.setCurrentMillis(0);
-		assertFalse("ServiceId should not be blacklisted before failure call", strategy.isBlacklisted(SERVICE_ID));
+		givenConfigWith("epbs_2RequiredNumberOfIntervalsWithErrors_2ErrorsPerIntervalThreshold");
+		assertFalse("ServiceId should not be blacklisted before failure call", strategy.isBlacklisted(SERVICE_ID_0));
 	}
 
 	@Test
 	public void isBlacklisted_IfErrorsPerIntervalExceedsThreshold_ForOneRequiredInterval_WithinInterval() {
-		strategy.setRequiredNumberOfIntervalsWithErrors(1);
-		strategy.setErrorsPerIntervalThreshold(1);
+		givenConfigWith("epbs_1RequiredNumberOfIntervalsWithErrors_1ErrorsPerIntervalThreshold");
 
-		whenNotifiyCallFailed(2);
+		whenNotifiyCallFailed(SERVICE_ID_0, 2);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION_MINUS_ONE);
 
-		thenServiceIsBlacklisted();
+		thenServiceIsBlacklisted(SERVICE_ID_0);
 
 	}
 
 	@Test
 	public void isBlacklistedIfErrorsPerIntervalExceedsThreshold_ForOneRequiredInterval_OnIntervalBorder() {
-		strategy.setRequiredNumberOfIntervalsWithErrors(1);
-		strategy.setErrorsPerIntervalThreshold(1);
+		givenConfigWith("epbs_1RequiredNumberOfIntervalsWithErrors_1ErrorsPerIntervalThreshold");
 
-		whenNotifiyCallFailed(1);
+		whenNotifiyCallFailed(SERVICE_ID_0, 1);
 
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
-		thenServiceIsBlacklisted();
+		thenServiceIsBlacklisted(SERVICE_ID_0);
 	}
 
 	@Test
 	public void isBlacklistedIfErrorsPerIntervalExceedsThreshold_InFirstInterval_AndCurrentInterval() {
-		strategy.setRequiredNumberOfIntervalsWithErrors(2);
-		strategy.setErrorsPerIntervalThreshold(1);
+		givenConfigWith("epbs_2RequiredNumberOfIntervalsWithErrors_1ErrorsPerIntervalThreshold");
 
-		whenNotifiyCallFailed(2);
+		whenNotifiyCallFailed(SERVICE_ID_0, 2);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
 
-		whenNotifiyCallFailed(2);
+		whenNotifiyCallFailed(SERVICE_ID_0, 2);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION_MINUS_ONE);
 
-		thenServiceIsBlacklisted();
+		thenServiceIsBlacklisted(SERVICE_ID_0);
 	}
 
 	@Test
 	public void isNotBlacklistedIfErrorsExceedThreshold_InFirstInterval_ButZeroInCurrent() {
-		strategy.setRequiredNumberOfIntervalsWithErrors(2);
-		strategy.setErrorsPerIntervalThreshold(1);
+		givenConfigWith("epbs_2RequiredNumberOfIntervalsWithErrors_1ErrorsPerIntervalThreshold");
 
-		whenNotifiyCallFailed(2);
+		whenNotifiyCallFailed(SERVICE_ID_0, 2);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
-		thenServiceIsNotBlacklisted();
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 
-		whenNotifiyCallFailed(0);
+		whenNotifiyCallFailed(SERVICE_ID_0, 0);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION_MINUS_ONE);
-		thenServiceIsNotBlacklisted();
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 	}
 
 	@Test
 	public void isNotBlacklistedIfErrorsPerIntervalDoNotExceedThreshold_WithinTwoLastIntervals() {
-		strategy.setRequiredNumberOfIntervalsWithErrors(2);
-		strategy.setErrorsPerIntervalThreshold(2);
+		givenConfigWith("epbs_2RequiredNumberOfIntervalsWithErrors_2ErrorsPerIntervalThreshold");
 
-		whenNotifiyCallFailed(2);
+		whenNotifiyCallFailed(SERVICE_ID_0, 2);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
-		thenServiceIsNotBlacklisted();
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 
-		whenNotifiyCallFailed(1);
+		whenNotifiyCallFailed(SERVICE_ID_0, 1);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
-		thenServiceIsNotBlacklisted();
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 	}
 
 	@Test
 	public void isNotBlacklisted_IfFirstAndThirdIntervalHaveErrors_ButSecondIntervalHasNot() {
-		strategy.setRequiredNumberOfIntervalsWithErrors(2);
-		strategy.setErrorsPerIntervalThreshold(1);
+		givenConfigWith("epbs_2RequiredNumberOfIntervalsWithErrors_1ErrorsPerIntervalThreshold");
 
-		whenNotifiyCallFailed(1);
+		whenNotifiyCallFailed(SERVICE_ID_0, 1);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
-		thenServiceIsNotBlacklisted();
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 
-		whenNotifiyCallFailed(0);
+		whenNotifiyCallFailed(SERVICE_ID_0, 0);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
-		thenServiceIsNotBlacklisted();
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 
-		whenNotifiyCallFailed(1);
+		whenNotifiyCallFailed(SERVICE_ID_0, 1);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
-		thenServiceIsNotBlacklisted();
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 	}
 
 	@Test
 	public void isNotBlacklisted_IfFirstAndSecondIntervalHaveErrorsButThirdHasNot() {
-		strategy.setErrorsPerIntervalThreshold(3);
-		strategy.setRequiredNumberOfIntervalsWithErrors(3);
+		givenConfigWith("epbs_3RequiredNumberOfIntervalsWithErrors_3ErrorsPerIntervalThreshold");
 
-		whenNotifiyCallFailed(3);
+		whenNotifiyCallFailed(SERVICE_ID_0, 3);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
-		thenServiceIsNotBlacklisted();
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 
-		whenNotifiyCallFailed(4);
+		whenNotifiyCallFailed(SERVICE_ID_0, 4);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
-		thenServiceIsNotBlacklisted();
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 
-		whenNotifiyCallFailed(1);
+		whenNotifiyCallFailed(SERVICE_ID_0, 1);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION_MINUS_ONE);
-		thenServiceIsNotBlacklisted();
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 	}
 
 	@Test
 	public void isBlacklisted_IfThreeRequiredIntervalsHaveErrors_ThirdIntervalNotOnBorder() {
-		strategy.setErrorsPerIntervalThreshold(3);
-		strategy.setRequiredNumberOfIntervalsWithErrors(3);
+		givenConfigWith("epbs_3RequiredNumberOfIntervalsWithErrors_3ErrorsPerIntervalThreshold");
 
-		whenNotifiyCallFailed(3);
+		whenNotifiyCallFailed(SERVICE_ID_0, 3);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
-		thenServiceIsNotBlacklisted();
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 
-		whenNotifiyCallFailed(4);
+		whenNotifiyCallFailed(SERVICE_ID_0, 4);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
-		thenServiceIsNotBlacklisted();
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 
-		whenNotifiyCallFailed(3);
+		whenNotifiyCallFailed(SERVICE_ID_0, 3);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION_MINUS_ONE);
-		thenServiceIsBlacklisted();
+		thenServiceIsBlacklisted(SERVICE_ID_0);
 	}
 
 	@Test
 	public void isBlacklisted_IfThreeRequiredIntervalsHaveErrors_ThirdIntervalOnBorder() {
-		strategy.setErrorsPerIntervalThreshold(3);
-		strategy.setRequiredNumberOfIntervalsWithErrors(3);
+		givenConfigWith("epbs_3RequiredNumberOfIntervalsWithErrors_3ErrorsPerIntervalThreshold");
 
-		whenNotifiyCallFailed(3);
+		whenNotifiyCallFailed(SERVICE_ID_0, 3);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
-		thenServiceIsNotBlacklisted();
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 
-		whenNotifiyCallFailed(4);
+		whenNotifiyCallFailed(SERVICE_ID_0, 4);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
-		thenServiceIsNotBlacklisted();
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 
-		whenNotifiyCallFailed(3);
+		whenNotifiyCallFailed(SERVICE_ID_0, 3);
 		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
-		thenServiceIsBlacklisted();
+		thenServiceIsBlacklisted(SERVICE_ID_0);
 	}
 
 	@Test
 	public void isNotBlackListedIfAllThresholdsAreSetToZero() {
-		strategy.setErrorsPerIntervalThreshold(0);
-		strategy.setRequiredNumberOfIntervalsWithErrors(0);
-		strategy.setIntervalDurationInSeconds(0);
-
-		whenNotifiyCallFailed(0);
-		thenServiceIsNotBlacklisted();
+		givenConfigWith("epbs_0RequiredNumberOfIntervalsWithErrors_0ErrorsPerIntervalThreshold");
+		whenNotifiyCallFailed(SERVICE_ID_0, 0);
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
 	}
 
 	@Test
-	public void isNotBlacklistedIfStrategyIfConfigurationIsFaulty() {
-		strategy.setErrorsPerIntervalThreshold(-1);
-		strategy.setRequiredNumberOfIntervalsWithErrors(-1);
-		strategy.setIntervalDurationInSeconds(-1);
+	public void isNotBlacklistedIfStrategyConfigurationIsFaulty() {
+		givenConfigWith("epbs_Miuns1RequiredNumberOfIntervalsWithErrors_Minus1ErrorsPerIntervalThreshold");
 
-		whenNotifiyCallFailed(0);
-		thenServiceIsNotBlacklisted();
+		whenNotifiyCallFailed(SERVICE_ID_0, 0);
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
+		thenConfigurationErrorIsLogged("Invalid configuration epbs_Miuns1RequiredNumberOfIntervalsWithErrors_Minus1ErrorsPerIntervalThreshold ErrorsPerIntervalBlacklistingStrategyConfig{errorsPerIntervalThreshold=-1, intervalDurationInSeconds=-1, requiredNumberOfIntervalsWithErrors=-1}");
 	}
 
-	private void thenServiceIsBlacklisted() {
-		assertTrue("ServiceId should be blacklisted", strategy.isBlacklisted(SERVICE_ID));
+
+	@Test
+	public void isNotBlacklistedIfStrategyIfConfigurationIsNotExistend() {
+		givenConfigWith("notExists");
+
+		whenNotifiyCallFailed(SERVICE_ID_0, 0);
+		thenServiceIsNotBlacklisted(SERVICE_ID_0);
+		thenConfigurationErrorIsLogged("Could not load configuration notExists");
 	}
 
-	private void thenServiceIsNotBlacklisted() {
-		assertFalse("ServiceId should not be blacklisted", strategy.isBlacklisted(SERVICE_ID));
+	private void thenConfigurationErrorIsLogged(String message) {
+		verify(logger).warn(message);
+	}
+
+	@Test
+	public void whenOneServiceInstanceIsBlacklistedThenOtherHealthyInstanceIsNotBlacklisted() {
+		givenConfigWith("epbs_1RequiredNumberOfIntervalsWithErrors_1ErrorsPerIntervalThreshold");
+
+		whenNotifiyCallFailed(SERVICE_ID_0, 1);
+		whenJumpInTimePlusSeconds(INTERVAL_DURATION);
+
+		thenServiceIsBlacklisted(SERVICE_ID_0);
+		thenServiceIsNotBlacklisted(SERVICE_ID_1);
+	}
+
+	private void thenServiceIsBlacklisted(String serviceID) {
+		assertTrue(serviceID + "  should be blacklisted", strategy.isBlacklisted(serviceID));
+	}
+
+	private void thenServiceIsNotBlacklisted(String serviceID) {
+		assertFalse(serviceID + " should not be blacklisted", strategy.isBlacklisted(serviceID));
 	}
 
 	private void whenJumpInTimePlusSeconds(int seconds) {
@@ -203,10 +221,14 @@ public class ErrorsPerIntervalBlacklistingStrategyTest {
 		strategy.timerTick();
 	}
 
-	private void whenNotifiyCallFailed(int times) {
+	private void whenNotifiyCallFailed(String serviceID, int times) {
 		for (int i = 0; i < times; i++) {
 			strategy.notifyCallFailed(clientSideCallContext);
 		}
 	}
 
+	private void givenConfigWith(String configName) {
+		routerConfiguration.setBlacklistStrategyConfigurationName(configName);
+		strategy.setConfiguration(routerConfiguration);
+	}
 }

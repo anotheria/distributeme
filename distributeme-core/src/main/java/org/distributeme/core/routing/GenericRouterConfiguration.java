@@ -32,10 +32,25 @@ public class GenericRouterConfiguration {
 	 */
 	private long blacklistTime;
 
+	/**
+	 * If true and all instances are blacklisted, then blacklisting for all instances will be cancelled.
+	 */
 	private boolean overrideBlacklistIfAllBlacklisted;
 
+	/**
+	 * Fully qualified class name of blacklist strategy.
+	 *  If not set org.distributeme.core.routing.blacklisting.DefaultBlacklistingStrategy will be used
+	 */
 	private String blacklistStrategyClazz;
 
+	/**
+	 * Name of configureme configuration for blacklist strategy. Json file sufffix is not part of the name.
+	 */
+	private String blacklistStrategyConfigurationName;
+
+	/**
+	 * Observer wich can react onf configuration changes.
+	 */
 	private List<RouterConfigurationObserver> routerConfigurationObservers = new ArrayList<>();
 
 	/**
@@ -92,6 +107,14 @@ public class GenericRouterConfiguration {
 		this.blacklistStrategyClazz = blacklistStrategyClazz;
 	}
 
+	public void setBlacklistStrategyConfigurationName(String blacklistStrategyConfigurationName) {
+		this.blacklistStrategyConfigurationName = blacklistStrategyConfigurationName;
+	}
+
+	public String getBlacklistStrategyConfigurationName() {
+		return blacklistStrategyConfigurationName;
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
@@ -100,8 +123,11 @@ public class GenericRouterConfiguration {
 				", blacklistTime=" + blacklistTime +
 				", overrideBlacklistIfAllBlacklisted=" + overrideBlacklistIfAllBlacklisted +
 				", blacklistStrategyClazz='" + blacklistStrategyClazz + '\'' +
+				", blacklistStrategyConfigurationName='" + blacklistStrategyConfigurationName + '\'' +
+				", routerConfigurationObservers=" + routerConfigurationObservers +
 				'}';
 	}
+
 
 	public void addRouterConfigurationObserver(RouterConfigurationObserver routerConfigurationObserver) {
 		routerConfigurationObservers.add(routerConfigurationObserver);
