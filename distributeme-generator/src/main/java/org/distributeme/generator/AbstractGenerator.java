@@ -966,9 +966,9 @@ public class AbstractGenerator {
 		ArrayList<AnnotationMirror> ret = new ArrayList<AnnotationMirror>();
 		List<? extends AnnotationMirror> mirrors = type.getAnnotationMirrors();
 		for (AnnotationMirror m : mirrors){
-			Element Element = m.getAnnotationType().asElement();
+			Element element = m.getAnnotationType().asElement();
 			//System.out.println("--- checking "+Element.getSimpleName()+" compare with "+ann+" --> "+Element.getSimpleName().equals(ann.getSimpleName()));
-			if (Element.getSimpleName().equals(ann.getSimpleName())){
+			if (element.getSimpleName().equals(ann.getSimpleName())){
 				ret.add(m);
 			}
 		}
