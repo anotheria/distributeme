@@ -16,11 +16,28 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+/**
+ * A service instance is blacklisted after x successive intervals of length y, in which
+ * z failures occur. x, y and z are configurable via configureme.
+ * x: requiredNumberOfIntervalsWithErrors
+ * y: intervalDurationInSeconds
+ * z: errorsPerIntervalThreshold
+ *
+ * If no valid configuration is given, then isBlacklisted() always returns false.
+ *
+ * @author rboehling
+ */
 public class ErrorsPerIntervalBlacklistingStrategy implements BlacklistingStrategy {
 
 	private Logger logger = LoggerFactory.getLogger(ErrorsPerIntervalBlacklistingStrategy.class);
-	private static final int ONE_SECOND = 1000;
+	private static final long ONE_SECOND = TimeUnit.SECONDS.toMillis(1);
+	/**
+	 * Map with counters for each service instance
+	 */
 	private ConcurrentHashMap<String, ErrorCounter> errorCountersForServices = new ConcurrentHashMap<>();
+	/**
+	 * timeProvider abstracts System.currentTimeMillis() to enable unit testing
+	 */
 	private TimeProvider timeProvider = new SystemTimeProvider();
 	private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 	private ErrorsPerIntervalBlacklistingStrategyConfig config = new ErrorsPerIntervalBlacklistingStrategyConfig();
@@ -31,9 +48,16 @@ public class ErrorsPerIntervalBlacklistingStrategy implements BlacklistingStrate
 		scheduledExecutorService.scheduleAtFixedRate(new TimeTicker(), ONE_SECOND, ONE_SECOND, TimeUnit.MILLISECONDS);
 	}
 
-	ErrorsPerIntervalBlacklistingStrategy(ScheduledExecutorService scheduledExecutorService, TimeProvider timeProvider) {
+	/**
+	 * package private construtor intended for unit tests
+	 * @param scheduledExecutorService
+	 * @param timeProvider
+	 * @param logger
+	 */
+	ErrorsPerIntervalBlacklistingStrategy(ScheduledExecutorService scheduledExecutorService, TimeProvider timeProvider, Logger logger) {
 		this.scheduledExecutorService = scheduledExecutorService;
 		this.timeProvider = timeProvider;
+		this.logger = logger;
 	}
 
 	private class TimeTicker implements Runnable {
@@ -45,14 +69,14 @@ public class ErrorsPerIntervalBlacklistingStrategy implements BlacklistingStrate
 	}
 
 	@Override
-	public boolean isBlacklisted(String selectedServiceId) {
+	public boolean isBlacklisted(String instanceId) {
 		if(!validConfiguration.get()) {
 			return false;
 		}
-		ErrorCounter errorCounterForService = getErrorCounters(selectedServiceId);
+		ErrorCounter errorCounterForService = getErrorCounters(instanceId);
 		BlacklistDecision blacklisted = errorCounterForService.isBlacklisted();
 		if(blacklisted.statusChanged()) {
-			logger.info(selectedServiceId + " blacklisting changed  to " + blacklisted);
+			logger.info(instanceId + " blacklisting changed  to " + blacklisted);
 		}
 		return blacklisted.isBlacklisted();
 	}
@@ -100,9 +124,5 @@ public class ErrorsPerIntervalBlacklistingStrategy implements BlacklistingStrate
 		for(Map.Entry<String, ErrorCounter> entry: errorCountersForServices.entrySet()) {
 			entry.getValue().timerTick(timeProvider.getCurrentTimeMillis());
 		}
-	}
-
-	void setLogger(Logger logger) {
-		this.logger = logger;
 	}
 }

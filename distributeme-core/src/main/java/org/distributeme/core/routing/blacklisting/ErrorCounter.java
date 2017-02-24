@@ -1,7 +1,5 @@
 package org.distributeme.core.routing.blacklisting;
 
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -15,7 +13,7 @@ class ErrorCounter {
 	private AtomicInteger nonStopIntervalsWithErrorsCounter = new AtomicInteger();
 	private final ErrorsPerIntervalBlacklistingStrategyConfig config;
 	private AtomicLong startTime = new AtomicLong(0);
-	private volatile BlacklistDecision lastDecision = BlacklistDecision.NOT_BLACKLISTED;
+	private volatile BlacklistDecision previousDecision = BlacklistDecision.NOT_BLACKLISTED;
 
 	ErrorCounter(ErrorsPerIntervalBlacklistingStrategyConfig config) {
 		this.config = config;
@@ -25,17 +23,14 @@ class ErrorCounter {
 		BlacklistDecision currentDecision;
 		boolean isCurrentlyBlacklisted = reachedRequiredNumberOfIntervalsWithErrors() || reachRequiredNumberOfIntervalsWithErrorsWithCurrentInterval();
 		if(isCurrentlyBlacklisted) {
-			if(lastDecision.isBlacklisted())
-				currentDecision = BlacklistDecision.IS_BLACKLISTED;
-			else
-				currentDecision = BlacklistDecision.GOT_BLACKLISTED;
+			currentDecision = previousDecision.isBlacklisted() ?
+					BlacklistDecision.IS_BLACKLISTED : BlacklistDecision.GOT_BLACKLISTED;
 		} else {
-			if(lastDecision.isBlacklisted())
-				currentDecision = BlacklistDecision.UNBLACKLISTED;
-			else
-				currentDecision = BlacklistDecision.NOT_BLACKLISTED;
+			currentDecision = previousDecision.isBlacklisted() ?
+					BlacklistDecision.UNBLACKLISTED : BlacklistDecision.NOT_BLACKLISTED;
+
 		}
-		lastDecision = currentDecision;
+		previousDecision = currentDecision;
 		return currentDecision;
 	}
 

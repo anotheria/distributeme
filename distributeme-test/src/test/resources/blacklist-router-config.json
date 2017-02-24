@@ -2,5 +2,6 @@
 	"numberOfInstances": "$<blacklist-config.numberOfInstances>",
 	"blacklistTime": 20000,
 	"overrideBlacklistIfAllBlacklisted": false,
-	"blacklistStrategyClazz": "org.distributeme.core.routing.blacklisting.ErrorsPerIntervalBlacklistingStrategy"
+	"blacklistStrategyClazz": "org.distributeme.core.routing.blacklisting.ErrorsPerIntervalBlacklistingStrategy",
+	"blacklistStrategyConfigurationName": "errorsPerIntervalBlacklistingStrategy"
 }

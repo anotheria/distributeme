@@ -8,6 +8,10 @@ import org.distributeme.core.routing.GenericRouterConfiguration;
 
 
 /**
+ * Default blacklisting strategy. A service instance will be blacklisted after one failed call.
+ * This behavior was default in distributeme 2.3.1
+ *
+ *
  * Created by rboehling on 2/21/17.
  */
 public class DefaultBlacklistingStrategy implements BlacklistingStrategy {
@@ -19,8 +23,8 @@ public class DefaultBlacklistingStrategy implements BlacklistingStrategy {
 	private GenericRouterConfiguration configuration;
 
 	@Override
-	public boolean isBlacklisted(String selectedServiceId) {
-		Long lastFailed = serverFailureTimestamps.get(selectedServiceId);
+	public boolean isBlacklisted(String instanceId) {
+		Long lastFailed = serverFailureTimestamps.get(instanceId);
 		return lastFailed != null && (System.currentTimeMillis() - lastFailed) < configuration.getBlacklistTime();
 	}
 

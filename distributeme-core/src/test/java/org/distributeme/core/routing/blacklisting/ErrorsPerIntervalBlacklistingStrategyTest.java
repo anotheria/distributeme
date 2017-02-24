@@ -3,12 +3,10 @@ package org.distributeme.core.routing.blacklisting;
 import java.util.Collections;
 import java.util.concurrent.ScheduledExecutorService;
 
-import org.configureme.ConfigurationManager;
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.routing.GenericRouterConfiguration;
 import org.distributeme.core.util.TestTimeProvider;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
 
@@ -28,12 +26,11 @@ public class ErrorsPerIntervalBlacklistingStrategyTest {
 	private ClientSideCallContext clientSideCallContext = new ClientSideCallContext(SERVICE_ID_0, "someMethod", Collections.emptyList());
 	private ScheduledExecutorService dummyScheduledExecutorService = mock(ScheduledExecutorService.class);
 	private GenericRouterConfiguration routerConfiguration = new GenericRouterConfiguration();
-	private ErrorsPerIntervalBlacklistingStrategy strategy = new ErrorsPerIntervalBlacklistingStrategy(dummyScheduledExecutorService, timeProvider);
 	private Logger logger = mock(Logger.class);
+	private ErrorsPerIntervalBlacklistingStrategy strategy = new ErrorsPerIntervalBlacklistingStrategy(dummyScheduledExecutorService, timeProvider, logger);
 
 	@Before
 	public void setUp() throws Exception {
-		strategy.setLogger(logger);
 		timeProvider.setCurrentMillis(0);
 		givenConfigWith("epbs_2RequiredNumberOfIntervalsWithErrors_2ErrorsPerIntervalThreshold");
 		assertFalse("ServiceId should not be blacklisted before failure call", strategy.isBlacklisted(SERVICE_ID_0));

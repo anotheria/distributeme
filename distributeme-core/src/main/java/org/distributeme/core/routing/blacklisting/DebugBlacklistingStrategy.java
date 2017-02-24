@@ -5,13 +5,15 @@ import org.distributeme.core.routing.GenericRouterConfiguration;
 
 
 /**
+ * Debug blacklisting strategie. This strategy actually never blacklists any service instance.
+ * It just prints a debug message on system out. This might be useful for debugging.
  * Created by rboehling on 2/21/17.
  */
 public class DebugBlacklistingStrategy implements BlacklistingStrategy {
 
 	@Override
-	public boolean isBlacklisted(String selectedServiceId) {
-		System.out.println("DebugBlacklistingStrategy isBlacklisted called for " + selectedServiceId);
+	public boolean isBlacklisted(String instanceId) {
+		System.out.println("DebugBlacklistingStrategy isBlacklisted called for " + instanceId);
 		return false;
 	}
 
