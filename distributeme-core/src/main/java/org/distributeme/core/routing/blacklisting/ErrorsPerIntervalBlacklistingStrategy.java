@@ -46,13 +46,17 @@ public class ErrorsPerIntervalBlacklistingStrategy implements BlacklistingStrate
 
 	@Override
 	public boolean isBlacklisted(String selectedServiceId) {
-		if(validConfiguration.get()) {
-			ErrorCounter errorCounterForService = getErrorCounters(selectedServiceId);
-			return errorCounterForService.reachedRequiredNumberOfIntervalsWithErrors() || errorCounterForService
-					.reachRequiredNumberOfIntervalsWithErrorsWithCurrentInterval();
+		if(!validConfiguration.get()) {
+			return false;
 		}
-		return false;
+		ErrorCounter errorCounterForService = getErrorCounters(selectedServiceId);
+		BlacklistDecision blacklisted = errorCounterForService.isBlacklisted();
+		if(blacklisted.statusChanged()) {
+			logger.info(selectedServiceId + " blacklisting changed  to " + blacklisted);
+		}
+		return blacklisted.isBlacklisted();
 	}
+
 
 	private ErrorCounter getErrorCounters(String selectedServiceId) {
 		ErrorCounter errorCounters = errorCountersForServices.get(selectedServiceId);
