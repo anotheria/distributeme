@@ -5,6 +5,8 @@ package org.distributeme.core;
  */
 public interface RegistryConnector {
 
+	String describeRegistry();
+
 	boolean bind(ServiceDescriptor service);
 
 	boolean notifyBind(Location location, ServiceDescriptor descriptor);

@@ -1,7 +1,7 @@
 package org.distributeme.consulintegration;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import com.google.gson.Gson;
 import com.sun.jersey.api.client.Client;
@@ -10,14 +10,10 @@ import com.sun.jersey.api.client.WebResource;
 import net.anotheria.util.StringUtils;
 import org.distributeme.core.Location;
 import org.distributeme.core.RegistryConnector;
+import org.distributeme.core.RegistryLocation;
 import org.distributeme.core.ServiceDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.distributeme.core.ServiceDescriptor.HOST_SEPARATOR;
-import static org.distributeme.core.ServiceDescriptor.INSTANCE_SEPARATOR;
-import static org.distributeme.core.ServiceDescriptor.PORT_SEPARATOR;
-import static org.distributeme.core.ServiceDescriptor.TIMESTAMP_SEPARATOR;
 
 
 /**
@@ -27,7 +23,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 
 	private Logger logger = LoggerFactory.getLogger(ConsulRegistryConnector.class);
 
-	private static final String HOST = "http://psdeoffws0077.parship.internal:8500";
+	private RegistryLocation registryLocation = RegistryLocation.create();
 	private static final String TAG_INSTANCE_ID = "instanceId";
 	private static final String TAG_PROTOCOL = "protocol";
 	private static final String TAG_TIMESTAMP = "timestamp";
@@ -35,25 +31,25 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	static class ConsulServiceDescription {
 		String ID;
 		String Name;
-		String[] Tags = new String[4];
-		String Address = "192.168.140.63";
+		List<String> Tags = new ArrayList<>();
+		String Address;
 		int Port;
 		boolean EnableTagOverride = false;
 
 		void addJmxPort(String jmxPort) {
-			Tags[0] = "jmx=" + jmxPort;
+			Tags.add("jmx=" + jmxPort);
 		}
 
 		void addInstanceId(String instanceId) {
-			Tags[1] = TAG_INSTANCE_ID + "=" + instanceId;
+			Tags.add(TAG_INSTANCE_ID + "=" + instanceId);
 		}
 
 		void addProtocol(String protocol) {
-			Tags[2] = TAG_PROTOCOL + "=" + protocol;
+			Tags.add(TAG_PROTOCOL + "=" + protocol);
 		}
 
 		void addTimestamp(long timestamp) {
-			Tags[3] = TAG_TIMESTAMP + "=" + timestamp;
+			Tags.add(TAG_TIMESTAMP + "=" + timestamp);
 		}
 	}
 
@@ -114,6 +110,11 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	}
 
 	@Override
+	public String describeRegistry() {
+		return "Consul@" + getRegistryUrl();
+	}
+
+	@Override
 	public boolean bind(ServiceDescriptor service) {
 		ClientResponse response = null;
 		try {
@@ -122,6 +123,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 			serviceDescription.ID = service.getServiceId();
 			serviceDescription.Name = service.getServiceId();
 			serviceDescription.Port = service.getPort();
+			serviceDescription.Address = service.getHost();
 			serviceDescription.addInstanceId(service.getInstanceId());
 			serviceDescription.addJmxPort("XXXXX");
 			serviceDescription.addProtocol(service.getProtocol());
@@ -130,7 +132,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 			String requestAsJsonString = gson.toJson(serviceDescription);
 
 			WebResource webResource = Client.create()
-											.resource(HOST + "/v1/agent/service/register");
+											.resource(getRegistryUrl() + "/v1/agent/service/register");
 
 			response = webResource.accept("application/json")
 												 .put(ClientResponse.class, requestAsJsonString);
@@ -151,6 +153,10 @@ public class ConsulRegistryConnector implements RegistryConnector {
 		}
 	}
 
+	private String getRegistryUrl() {
+		return registryLocation.getRegistryContainerProtocol() + "://" + registryLocation.getRegistryContainerHost() + ":" + registryLocation.getRegistryContainerPort();
+	}
+
 	@Override
 	public boolean notifyBind(Location location, ServiceDescriptor descriptor) {
 		return false;
@@ -165,7 +171,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	public boolean unbind(ServiceDescriptor service) {
 		ClientResponse response = null;
 		try {
-			WebResource webResource = Client.create().resource(HOST + "/v1/agent/service/deregister/" + service.getServiceId());
+			WebResource webResource = Client.create().resource(getRegistryUrl() + "/v1/agent/service/deregister/" + service.getServiceId());
 
 			response = webResource.accept("application/json").get(ClientResponse.class);
 
@@ -187,7 +193,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 		ClientResponse response = null;
 		try {
 			Gson gson = new Gson();
-			WebResource webResource = Client.create().resource(HOST + "/v1/catalog/service/" + toResolve.getServiceId());
+			WebResource webResource = Client.create().resource(getRegistryUrl() + "/v1/catalog/service/" + toResolve.getServiceId());
 
 			response = webResource.accept("application/json").get(ClientResponse.class);
 

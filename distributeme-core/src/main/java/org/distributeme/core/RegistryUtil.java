@@ -220,16 +220,6 @@ public class RegistryUtil extends BaseRegistryUtil{
 	}
 
 	/**
-	 * Returns a string representing current state of the registry.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public static final String describeRegistry(){
-		return registryLocation.toString();
-	}
-	
-	
-	/**
 	 * Inner configuration holder class.
 	 * @author lrosenberg
 	 */
@@ -279,6 +269,10 @@ public class RegistryUtil extends BaseRegistryUtil{
 		public void setRegistryConnectorClazz(String registryConnectorClazz) {
 			this.registryConnectorClazz = registryConnectorClazz;
 		}
+	}
+
+	public static final String describeRegistry(){
+		return registryConnector.describeRegistry();
 	}
 	
 }

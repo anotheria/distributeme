@@ -24,6 +24,16 @@ public class DistributemeRegistryConnector implements RegistryConnector {
 	public static final String APP = "registry";
 
 	/**
+	 * Returns a string representing current state of the registry.
+	 *
+	 * @return a {@link String} object.
+	 */
+	@Override
+	public String describeRegistry(){
+		return BaseRegistryUtil.getRegistryLocation().toString();
+	}
+
+	/**
 	 * Binds a service.
 	 *
 	 * @param service a {@link org.distributeme.core.ServiceDescriptor} object.

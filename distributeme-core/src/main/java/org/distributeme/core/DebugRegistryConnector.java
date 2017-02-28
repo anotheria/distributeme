@@ -6,6 +6,12 @@ package org.distributeme.core;
 public class DebugRegistryConnector implements RegistryConnector {
 
 	@Override
+	public String describeRegistry() {
+		System.out.println("describeRegistry");
+		return "DebugRegistry";
+	}
+
+	@Override
 	public boolean bind(ServiceDescriptor service) {
 		System.out.println("bind: "  + service);
 		return true;

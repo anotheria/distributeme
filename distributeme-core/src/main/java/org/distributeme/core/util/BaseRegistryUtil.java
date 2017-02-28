@@ -130,5 +130,9 @@ public class BaseRegistryUtil {
 			throw new AssertionError("WTF, UTF-8 is not supported?");
 		}
 	}
+
+	public static RegistryLocation getRegistryLocation() {
+		return registryLocation;
+	}
 }
  
