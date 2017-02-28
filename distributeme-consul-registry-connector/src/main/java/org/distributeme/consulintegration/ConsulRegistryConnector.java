@@ -1,12 +1,9 @@
 package org.distributeme.consulintegration;
 
 import com.google.gson.Gson;
-import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 import org.distributeme.core.Location;
 import org.distributeme.core.RegistryConnector;
-import org.distributeme.core.RegistryLocation;
 import org.distributeme.core.ServiceDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,26 +20,18 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	static final String TAG_PROTOCOL = "protocol";
 	static final String TAG_TIMESTAMP = "timestamp";
 
-	private RegistryLocation registryLocation = RegistryLocation.create();
+	private ConsulRestClient consulRestClient = new ConsulRestClient();
 
 	@Override
 	public String describeRegistry() {
-		return "Consul@" + getRegistryUrl();
+		return "Consul@" + consulRestClient.getRegistryUrl();
 	}
 
 	@Override
 	public boolean bind(ServiceDescriptor service) {
 		ClientResponse response = null;
 		try {
-
-			String requestAsJsonString = new Gson().toJson(new ConsulServiceDescription(service));
-
-			WebResource webResource = Client.create()
-											.resource(getRegistryUrl() + "/v1/agent/service/register");
-
-			response = webResource.accept("application/json")
-												 .put(ClientResponse.class, requestAsJsonString);
-
+			response = consulRestClient.bind(service);
 			if (response.getStatus() != 200) {
 				logger.error("Registry returns status: " + response.getStatus());
 				return false;
@@ -57,28 +46,11 @@ public class ConsulRegistryConnector implements RegistryConnector {
 		}
 	}
 
-	private String getRegistryUrl() {
-		return registryLocation.getRegistryContainerProtocol() + "://" + registryLocation.getRegistryContainerHost() + ":" + registryLocation.getRegistryContainerPort();
-	}
-
-	@Override
-	public boolean notifyBind(Location location, ServiceDescriptor descriptor) {
-		return false;
-	}
-
-	@Override
-	public boolean notifyUnbind(Location location, ServiceDescriptor descriptor) {
-		return false;
-	}
-
 	@Override
 	public boolean unbind(ServiceDescriptor service) {
 		ClientResponse response = null;
 		try {
-			WebResource webResource = Client.create().resource(getRegistryUrl() + "/v1/agent/service/deregister/" + service.getServiceId());
-
-			response = webResource.accept("application/json").get(ClientResponse.class);
-
+			response = consulRestClient.unbind(service);
 			if (response.getStatus() != 200) {
 				logger.error("Registry returns status: " + response.getStatus());
 				return false;
@@ -96,11 +68,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	public ServiceDescriptor resolve(ServiceDescriptor toResolve, Location loc) {
 		ClientResponse response = null;
 		try {
-
-			WebResource webResource = Client.create().resource(getRegistryUrl() + "/v1/catalog/service/" + toResolve.getServiceId());
-
-			response = webResource.accept("application/json").get(ClientResponse.class);
-
+			response = consulRestClient.resolve(toResolve);
 			if (response.getStatus() != 200) {
 				logger.error("Failed : HTTP error code : " + response.getStatus());
 			}
@@ -115,6 +83,17 @@ public class ConsulRegistryConnector implements RegistryConnector {
 			closeResponseNullSafe(response);
 		}
 		return null;
+	}
+
+
+	@Override
+	public boolean notifyBind(Location location, ServiceDescriptor descriptor) {
+		return false;
+	}
+
+	@Override
+	public boolean notifyUnbind(Location location, ServiceDescriptor descriptor) {
+		return false;
 	}
 
 	private ServiceResolveReply getServiceReplyFromConsulResponse(ClientResponse response) {
