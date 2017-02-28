@@ -42,10 +42,13 @@ public class RegistryUtil extends BaseRegistryUtil{
 		}catch(Exception ignored){
 			//ignored
 		}
-		try {
-			registryConnector = (RegistryConnector)Class.forName(configuration.getRegistryConnectorClazz()).newInstance();
-		} catch (Exception e) {
-			log.error("Could not initiate registry connector " + configuration.getRegistryConnectorClazz(), e);
+		String registryConnectorClazz = configuration.getRegistryConnectorClazz();
+		if(!StringUtils.isEmpty(registryConnectorClazz)) {
+			try {
+				registryConnector = (RegistryConnector)Class.forName(registryConnectorClazz).newInstance();
+			} catch (Exception e) {
+				log.error("Could not initiate registry connector " + registryConnectorClazz, e);
+			}
 		}
 	}
 	

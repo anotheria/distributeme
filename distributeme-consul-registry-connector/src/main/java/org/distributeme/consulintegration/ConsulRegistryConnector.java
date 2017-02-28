@@ -137,8 +137,6 @@ public class ConsulRegistryConnector implements RegistryConnector {
 			response = webResource.accept("application/json")
 												 .put(ClientResponse.class, requestAsJsonString);
 
-
-
 			if (response.getStatus() != 200) {
 				logger.error("Registry returns status: " + response.getStatus());
 				return false;
