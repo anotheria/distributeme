@@ -76,6 +76,12 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>net.anotheria</groupId>
+            <artifactId>distributeme-consul-registry-connector</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
         </dependency>

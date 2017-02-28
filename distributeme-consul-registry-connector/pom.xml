@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>net.anotheria</groupId>
+        <artifactId>distributeme-parent</artifactId>
+        <version>2.3.2-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.anotheria</groupId>
+    <artifactId>distributeme-consul-registry-connector</artifactId>
+    <version>2.3.2-SNAPSHOT</version>
+    <name>DistributeMe Consul registry connector</name>
+    <description>Connects the DistributeMe framework with the Consul</description>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>net.anotheria</groupId>
+            <artifactId>distributeme-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- needed for byte array serializer -->
+        <dependency>
+            <groupId>net.anotheria</groupId>
+            <artifactId>ano-net</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>1.19.1</version>
+        </dependency>
+    </dependencies>
+</project>
