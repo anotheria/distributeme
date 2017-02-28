@@ -1,8 +1,14 @@
 package org.distributeme.core;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.anotheria.util.StringUtils;
 import org.configureme.ConfigurationManager;
+import org.configureme.annotations.Configure;
 import org.configureme.annotations.ConfigureMe;
 import org.configureme.annotations.Set;
 import org.configureme.annotations.SetAll;
@@ -10,11 +16,6 @@ import org.distributeme.core.ServiceDescriptor.Protocol;
 import org.distributeme.core.util.BaseRegistryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
 
 /**
  * Utilities for communication with the registry over http protocol.
@@ -40,6 +41,11 @@ public class RegistryUtil extends BaseRegistryUtil{
 			ConfigurationManager.INSTANCE.configure(configuration);
 		}catch(Exception ignored){
 			//ignored
+		}
+		try {
+			registryConnector = (RegistryConnector)Class.forName(configuration.getRegistryConnectorClazz()).newInstance();
+		} catch (Exception e) {
+			log.error("Could not initiate registry connector " + configuration.getRegistryConnectorClazz(), e);
 		}
 	}
 	
@@ -233,6 +239,9 @@ public class RegistryUtil extends BaseRegistryUtil{
 		 * IP Mappings.
 		 */
 		private volatile HashMap<String, String> mappings = new HashMap<String, String>();
+
+		@Configure
+		private String registryConnectorClazz = DistributemeRegistryConnector.class.getName();
 		
 		@Set("registrationIpMapping")
 		public void setRegistrationIpMapping(String registrationIpMapping) {
@@ -261,6 +270,14 @@ public class RegistryUtil extends BaseRegistryUtil{
 		
 		@Override public String toString(){
 			return "Configurable mappings: "+mappings;
+		}
+
+		public String getRegistryConnectorClazz() {
+			return registryConnectorClazz;
+		}
+
+		public void setRegistryConnectorClazz(String registryConnectorClazz) {
+			this.registryConnectorClazz = registryConnectorClazz;
 		}
 	}
 	
