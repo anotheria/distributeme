@@ -27,19 +27,7 @@ public class BaseRegistryUtil {
 	 */
 	private static Logger LOG = LoggerFactory.getLogger(BaseRegistryUtil.class);
 
-	/**
-	 * URLEncodes a string.
-	 *
-	 * @param urlPart string to encode.
-	 * @return a {@link java.lang.String} object.
-	 */
-	protected static String encode(String urlPart){
-		try{
-			return URLEncoder.encode(urlPart, "UTF-8");
-		}catch(UnsupportedEncodingException e){
-			throw new AssertionError("WTF, UTF-8 is not supported?"); 
-		}
-	}
+
 	
 	/**
 	 * Returns the base url of the specified registry application.
@@ -82,7 +70,7 @@ public class BaseRegistryUtil {
 	 * @param url as string.
 	 * @return an array of byte.
 	 */
-	protected static byte[] getUrlContent(String url){
+	public static byte[] getUrlContent(String url){
 		return getUrlContent(url, false);
 	}
 	
@@ -129,6 +117,18 @@ public class BaseRegistryUtil {
 
 	}
 
-
+	/**
+	 * URLEncodes a string.
+	 *
+	 * @param urlPart string to encode.
+	 * @return a {@link String} object.
+	 */
+	public static String encode(String urlPart){
+		try{
+			return URLEncoder.encode(urlPart, "UTF-8");
+		}catch(UnsupportedEncodingException e){
+			throw new AssertionError("WTF, UTF-8 is not supported?");
+		}
+	}
 }
  
