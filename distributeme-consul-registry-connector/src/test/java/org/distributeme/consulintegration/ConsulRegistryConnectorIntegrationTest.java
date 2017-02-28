@@ -23,10 +23,6 @@ public class ConsulRegistryConnectorIntegrationTest {
 
 	private ConsulRegistryConnector connector = new ConsulRegistryConnector();
 	private ConsulProcess consul;
-	String customConfiguration =
-			"{" +
-					"\"bootstrap_expect\": 1" +
-					"}";
 
 	@Before
 	public void setup() {
