@@ -22,8 +22,8 @@ import static org.junit.Assert.*;
  */
 public class ConsulRegistryConnectorIntegrationTest {
 
-	public static final String SERVICE_ID = "org_distributeme_test_blacklisting_BlacklistingTestService_0";
-	public static final String INSTANCE_ID = "anInstanceId";
+	private static final String SERVICE_ID = "org_distributeme_test_blacklisting_BlacklistingTestService_0";
+	private static final String INSTANCE_ID = "anInstanceId";
 	private ConsulRegistryConnector connector = new ConsulRegistryConnector();
 	private ConsulProcess consul;
 

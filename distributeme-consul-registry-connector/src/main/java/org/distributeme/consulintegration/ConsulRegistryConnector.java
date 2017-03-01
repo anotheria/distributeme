@@ -18,7 +18,21 @@ import static org.distributeme.consulintegration.ServiceNameTranslator.toConsul;
 
 
 /**
- * Created by rboehling on 2/28/17.
+ * <p>Connector to use consul service registry with distributeme framework.</p>
+ *
+ * <p>Consul support is configurable via distributeme.json
+ * To activate consul instead of distributeme default registry:</p>
+ *  "registryConnectorClazz": "org.distributeme.consulintegration.ConsulRegistryConnector"
+ *
+ * <p>To configure the location of consul:</p>
+ * 	"registryContainerPort": 8500<br />
+ *  "registryContainerHost": "localhost"<br />
+ *  "registryContainerProtocol" : "http"<br />
+ *
+ * <p>To configure java system properties as optional tags for consul (comma separated list):</p>
+ *  "systemPropertiesToTags": "com.sun.management.jmxremote.port,java.vm.version,configureme.defaultEnvironment,java.version",
+ *
+ * <p>Created by rboehling on 2/28/17.</p>
  */
 public class ConsulRegistryConnector implements RegistryConnector {
 

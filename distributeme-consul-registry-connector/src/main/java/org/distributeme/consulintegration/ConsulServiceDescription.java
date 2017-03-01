@@ -3,16 +3,13 @@ package org.distributeme.consulintegration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
 import com.google.gson.annotations.SerializedName;
-import net.anotheria.util.StringUtils;
 import org.distributeme.core.ServiceDescriptor;
-import org.distributeme.core.conventions.SystemProperties;
 
 
 /**
+ * Request object for register a service at the consul registry.
  * Created by rboehling on 2/28/17.
  */
 class ConsulServiceDescription {
@@ -30,7 +27,7 @@ class ConsulServiceDescription {
 	@SerializedName("EnableTagOverride")
 	private boolean enableTagOverride = false;
 
-	public ConsulServiceDescription(ServiceDescriptor serviceDescriptor, Map<String, String> tagableSystemProperties) {
+	ConsulServiceDescription(ServiceDescriptor serviceDescriptor, Map<String, String> tagableSystemProperties) {
 		String consulFriendlyServiceName = ServiceNameTranslator.toConsul(serviceDescriptor.getServiceId());
 		id = consulFriendlyServiceName;
 		name = consulFriendlyServiceName;
