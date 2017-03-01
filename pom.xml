@@ -147,6 +147,7 @@
         <module>distributeme-registry</module>
         <module>distributeme-agents</module>
         <module>distributeme-test</module>
+        <module>distributeme-consul-registry-connector</module>
     </modules>
     <scm>
         <url>https://github.com/anotheria/distributeme.git</url>

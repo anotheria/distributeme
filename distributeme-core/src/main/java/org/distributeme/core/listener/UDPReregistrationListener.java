@@ -1,5 +1,6 @@
 package org.distributeme.core.listener;
 
+import org.distributeme.core.DistributemeRegistryConnector;
 import org.distributeme.core.RMIRegistryUtil;
 import org.distributeme.core.RegistryUtil;
 import org.distributeme.core.ServiceDescriptor;
@@ -88,8 +89,8 @@ public class UDPReregistrationListener implements ServerLifecycleListener{
 		System.out.println("Have to register following descriptors: "+descriptors);
 		for (ServiceDescriptor descriptor : descriptors){
 			if (!RegistryUtil.bind(descriptor)){
-				log.error("Couldn't re-bind myself to the central registry at "+RegistryUtil.describeRegistry()+" for "+descriptor);
-				System.err.println("Couldn't re-bind myself at the central registry at "+RegistryUtil.describeRegistry()+" for "+descriptor);
+				log.error("Couldn't re-bind myself to the central registry at "+ RegistryUtil.describeRegistry()+" for "+descriptor);
+				System.err.println("Couldn't re-bind myself at the central registry at "+ RegistryUtil.describeRegistry()+" for "+descriptor);
 			}
 		}
 	}
