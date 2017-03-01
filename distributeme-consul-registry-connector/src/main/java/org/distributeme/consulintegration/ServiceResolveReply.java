@@ -8,7 +8,7 @@ import org.distributeme.core.ServiceDescriptor;
 
 
 /**
- * Created by rboehling on 2/28/17.
+ *  * Created by rboehling on 2/28/17.
  */
 class ServiceResolveReply {
 
