@@ -1,8 +1,14 @@
 package org.distributeme.core;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.charset.Charset;
+import java.util.HashMap;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.anotheria.util.StringUtils;
 import org.configureme.ConfigurationManager;
+import org.configureme.annotations.Configure;
 import org.configureme.annotations.ConfigureMe;
 import org.configureme.annotations.Set;
 import org.configureme.annotations.SetAll;
@@ -11,11 +17,6 @@ import org.distributeme.core.util.BaseRegistryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.charset.Charset;
-import java.util.HashMap;
-
 /**
  * Utilities for communication with the registry over http protocol.
  *
@@ -23,16 +24,8 @@ import java.util.HashMap;
  * @version $Id: $Id
  */
 public class RegistryUtil extends BaseRegistryUtil{
-	
 
-	/**
-	 * Value for the parameter name for the id-param.
-	 */
-	public static final String PARAM_ID = "id";
-	/**
-	 * Name of the registry's web-application.
-	 */
-	public static final String APP = "registry";
+	private static RegistryConnector registryConnector = new DistributemeRegistryConnector();
 
 	/**
 	 * Logger.
@@ -49,6 +42,14 @@ public class RegistryUtil extends BaseRegistryUtil{
 		}catch(Exception ignored){
 			//ignored
 		}
+		String registryConnectorClazz = configuration.getRegistryConnectorClazz();
+		if(!StringUtils.isEmpty(registryConnectorClazz)) {
+			try {
+				registryConnector = (RegistryConnector)Class.forName(registryConnectorClazz).newInstance();
+			} catch (Exception e) {
+				log.error("Could not initiate registry connector " + registryConnectorClazz, e);
+			}
+		}
 	}
 	
 	/**
@@ -58,8 +59,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * @return true if sucessful, false otherwise.
 	 */
 	public static boolean bind(ServiceDescriptor service){
-		String url = createRegistryOperationUrl("bind", PARAM_ID+"="+encode(service.getRegistrationString()));
-		return getSuccessOrError(url);
+		return registryConnector.bind(service);
 	}
 	
 	/**
@@ -85,8 +85,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * @return a boolean.
 	 */
 	public static boolean notifyBind(Location location, ServiceDescriptor descriptor){
-		String url = createRegistryOperationUrl(location, "nbind", PARAM_ID+"="+encode(descriptor.getRegistrationString()));
-		return getSuccessOrError(url);
+		return registryConnector.notifyBind(location, descriptor);
 	}
 	
 	/**
@@ -97,8 +96,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * @return a boolean.
 	 */
 	public static boolean notifyUnbind(Location location, ServiceDescriptor descriptor){
-		String url = createRegistryOperationUrl(location, "nunbind", PARAM_ID+"="+encode(descriptor.getRegistrationString()));
-		return getSuccessOrError(url);
+		return registryConnector.notifyUnbind(location, descriptor);
 	}
 	
 	/**
@@ -108,8 +106,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * @return a boolean.
 	 */
 	public static boolean unbind(ServiceDescriptor service){
-		String url = createRegistryOperationUrl("unbind", PARAM_ID+"="+encode(service.getRegistrationString()));
-		return getSuccessOrError(url);
+		return registryConnector.unbind(service);
 	}
 
 	/**
@@ -120,12 +117,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * @return a {@link org.distributeme.core.ServiceDescriptor} object.
 	 */
 	public static ServiceDescriptor resolve(ServiceDescriptor toResolve, Location loc){
-		String url = createRegistryOperationUrl(loc, "resolve", PARAM_ID+"="+encode(toResolve.getLookupString()));
-		byte data[] = getUrlContent(url);
-		if (data == null )
-			return null;
-		String reply = new String(data, Charset.defaultCharset());
-		return "ERROR".equals(reply) ? null : ServiceDescriptor.fromRegistrationString(reply);		
+		return registryConnector.resolve(toResolve, loc);
 	}
 	
 	/**
@@ -192,7 +184,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * @return a {@link java.lang.String} object.
 	 */
 	protected static String getRegistryBaseUrl(){
-		return getRegistryBaseUrl(APP);
+		return getRegistryBaseUrl(DistributemeRegistryConnector.APP);
 	}
 	
 	/**
@@ -202,7 +194,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 * @return a {@link java.lang.String} object.
 	 */
 	protected static String getRegistryBaseUrl(Location location){
-		return getRegistryBaseUrl(APP, location.getHost(), location.getPort(), location.getProtocol(), location.getContext());
+		return getRegistryBaseUrl(DistributemeRegistryConnector.APP, location.getHost(), location.getPort(), location.getProtocol(), location.getContext());
 	}
 	
 	/**
@@ -229,29 +221,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 			return "unknown";
 		}
 	}
-	
-	/**
-	 * Helper method to determine whether the reply was an error.
-	 * @param url
-	 * @return
-	 */
-	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
-	private static boolean getSuccessOrError(String url){
-		byte[] data = getUrlContent(url);
-		return data != null && new String(data).equals("SUCCESS");
-	}
-	
 
-	/**
-	 * Returns a string representing current state of the registry.
-	 *
-	 * @return a {@link java.lang.String} object.
-	 */
-	public static final String describeRegistry(){
-		return registryLocation.toString();
-	}
-	
-	
 	/**
 	 * Inner configuration holder class.
 	 * @author lrosenberg
@@ -262,6 +232,9 @@ public class RegistryUtil extends BaseRegistryUtil{
 		 * IP Mappings.
 		 */
 		private volatile HashMap<String, String> mappings = new HashMap<String, String>();
+
+		@Configure
+		private String registryConnectorClazz = DistributemeRegistryConnector.class.getName();
 		
 		@Set("registrationIpMapping")
 		public void setRegistrationIpMapping(String registrationIpMapping) {
@@ -291,6 +264,18 @@ public class RegistryUtil extends BaseRegistryUtil{
 		@Override public String toString(){
 			return "Configurable mappings: "+mappings;
 		}
+
+		public String getRegistryConnectorClazz() {
+			return registryConnectorClazz;
+		}
+
+		public void setRegistryConnectorClazz(String registryConnectorClazz) {
+			this.registryConnectorClazz = registryConnectorClazz;
+		}
+	}
+
+	public static final String describeRegistry(){
+		return registryConnector.describeRegistry();
 	}
 	
 }

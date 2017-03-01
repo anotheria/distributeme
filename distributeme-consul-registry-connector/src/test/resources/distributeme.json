@@ -1,0 +1,5 @@
+{
+	"registryContainerPort": 33507,
+	"registryContainerHost": "localhost",
+	"registryContainerProtocol" : "http"
+}

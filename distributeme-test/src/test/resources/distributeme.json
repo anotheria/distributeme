@@ -1,11 +1,14 @@
 {
-	registryContainerPort: 9229,
-	registryContainerHost: "localhost",
+	"registryContainerPort": 8500,
+	"registryContainerHost": "psdeoffws0077.parship.internal",
+	"registryContainerProtocol" : "http",
 	
 	//if true the server will log all exceptions including expected exception (defined by the interface), otherwise expected exceptions will be ignored
-	logServerSideExceptions: false,
+	"logServerSideExceptions": false,
 	//if true the client (stub) will log all caught exceptions (remote exception and runtime exceptions)
-	logClientSideExceptions: false,
+	"logClientSideExceptions": false,
+	//Could not be changed at runtime, because that makes no sense
+	"registryConnectorClazz": "org.distributeme.consulintegration.ConsulRegistryConnector" ,
 	
 	//registrationIpMapping: "192.168.200.5:10.0.0.0",
 	
