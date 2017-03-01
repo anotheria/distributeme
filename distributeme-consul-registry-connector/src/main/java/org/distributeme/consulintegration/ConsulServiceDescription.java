@@ -7,6 +7,7 @@ import java.util.Properties;
 import java.util.Set;
 
 import com.google.gson.annotations.SerializedName;
+import net.anotheria.util.StringUtils;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.core.conventions.SystemProperties;
 
@@ -30,8 +31,9 @@ class ConsulServiceDescription {
 	private boolean enableTagOverride = false;
 
 	public ConsulServiceDescription(ServiceDescriptor serviceDescriptor, Map<String, String> tagableSystemProperties) {
-		id = serviceDescriptor.getServiceId();
-		name = serviceDescriptor.getServiceId();
+		String consulFriendlyServiceName = ServiceNameTranslator.toConsul(serviceDescriptor.getServiceId());
+		id = consulFriendlyServiceName;
+		name = consulFriendlyServiceName;
 		port = serviceDescriptor.getPort();
 		address = serviceDescriptor.getHost();
 		addInstanceId(serviceDescriptor.getInstanceId());

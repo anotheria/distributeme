@@ -12,6 +12,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.*;
 
@@ -21,6 +22,8 @@ import static org.junit.Assert.*;
  */
 public class ConsulRegistryConnectorIntegrationTest {
 
+	public static final String SERVICE_ID = "org_distributeme_test_blacklisting_BlacklistingTestService_0";
+	public static final String INSTANCE_ID = "anInstanceId";
 	private ConsulRegistryConnector connector = new ConsulRegistryConnector();
 	private ConsulProcess consul;
 
@@ -36,20 +39,21 @@ public class ConsulRegistryConnectorIntegrationTest {
 
 	@Test
 	public void bindsToConsulRegistry() {
-		ServiceDescriptor serviceDescriptor = new ServiceDescriptor(ServiceDescriptor.Protocol.RMI, "serviceID", "anInstanceId","aHost", 9559, 1L);
+		ServiceDescriptor serviceDescriptor = new ServiceDescriptor(ServiceDescriptor.Protocol.RMI, SERVICE_ID, INSTANCE_ID,"aHost", 9559, 1L);
 
 		boolean bind = connector.bind(serviceDescriptor);
 		assertTrue("Service should have been bind", bind);
 
-		ServiceDescriptor serviceDescriptorToResolve = new ServiceDescriptor(ServiceDescriptor.Protocol.RMI, "serviceID");
+		ServiceDescriptor serviceDescriptorToResolve = new ServiceDescriptor(ServiceDescriptor.Protocol.RMI, SERVICE_ID);
 		ServiceDescriptor resolvedDescriptor = connector.resolve(serviceDescriptorToResolve, RegistryLocation.create());
 
+		assertThat(resolvedDescriptor, is(notNullValue()));
 		assertThat(resolvedDescriptor.getInstanceId(), is(serviceDescriptor.getInstanceId()));
 	}
 
 	@Test
 	public void notRegisteredServiceIsNotResolved() {
-		ServiceDescriptor serviceDescriptor = new ServiceDescriptor(ServiceDescriptor.Protocol.RMI, "serviceID", "anInstanceId","aHost", 9559, 1L);
+		ServiceDescriptor serviceDescriptor = new ServiceDescriptor(ServiceDescriptor.Protocol.RMI, SERVICE_ID, INSTANCE_ID,"aHost", 9559, 1L);
 
 		boolean bind = connector.bind(serviceDescriptor);
 		assertTrue("Service should have been bind", bind);

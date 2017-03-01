@@ -14,6 +14,8 @@ import org.distributeme.core.ServiceDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.distributeme.consulintegration.ServiceNameTranslator.toConsul;
+
 
 /**
  * Created by rboehling on 2/28/17.
@@ -59,7 +61,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	public boolean unbind(ServiceDescriptor service) {
 		ClientResponse response = null;
 		try {
-			WebResource webResource = Client.create().resource(getRegistryUrl() + "/v1/agent/service/deregister/" + service.getServiceId());
+			WebResource webResource = Client.create().resource(getRegistryUrl() + "/v1/agent/service/deregister/" + toConsul(service.getServiceId()));
 
 			response = webResource.accept("application/json").get(ClientResponse.class);
 			if (response.getStatus() != 200) {
@@ -79,7 +81,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	public ServiceDescriptor resolve(ServiceDescriptor toResolve, Location loc) {
 		ClientResponse response = null;
 		try {
-			WebResource webResource = Client.create().resource(getRegistryUrl() + "/v1/catalog/service/" + toResolve.getServiceId());
+			WebResource webResource = Client.create().resource(getRegistryUrl() + "/v1/catalog/service/" + toConsul(toResolve.getServiceId()));
 
 			response = webResource.accept("application/json").get(ClientResponse.class);
 			if (response.getStatus() != 200) {
