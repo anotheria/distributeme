@@ -2,9 +2,14 @@ package org.distributeme.consulintegration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 
 import com.google.gson.annotations.SerializedName;
+import net.anotheria.util.StringUtils;
 import org.distributeme.core.ServiceDescriptor;
+import org.distributeme.core.conventions.SystemProperties;
 
 
 /**
@@ -25,19 +30,26 @@ class ConsulServiceDescription {
 	@SerializedName("EnableTagOverride")
 	private boolean enableTagOverride = false;
 
-	ConsulServiceDescription(ServiceDescriptor serviceDescriptor) {
-		id = serviceDescriptor.getServiceId();
-		name = serviceDescriptor.getServiceId();
+	public ConsulServiceDescription(ServiceDescriptor serviceDescriptor, Map<String, String> tagableSystemProperties) {
+		String consulFriendlyServiceName = ServiceNameTranslator.toConsul(serviceDescriptor.getServiceId());
+		id = consulFriendlyServiceName;
+		name = consulFriendlyServiceName;
 		port = serviceDescriptor.getPort();
 		address = serviceDescriptor.getHost();
 		addInstanceId(serviceDescriptor.getInstanceId());
-		addJmxPort("XXXXX");
+		addSystemProperties(tagableSystemProperties);
 		addProtocol(serviceDescriptor.getProtocol());
 		addTimestamp(serviceDescriptor.getTimestamp());
 	}
 
-	private void addJmxPort(String jmxPort) {
-		tags.add("jmx=" + jmxPort);
+
+
+	private void addSystemProperties(Map<String, String> tagableSystemProperties) {
+		for(Map.Entry<String, String> entry: tagableSystemProperties.entrySet()) {
+			String tagName = entry.getKey();
+			String tagValue = entry.getValue();
+			tags.add(tagName + "=" + tagValue);
+		}
 	}
 
 	private void addInstanceId(String instanceId) {

@@ -28,7 +28,7 @@ class ServiceResolveReply {
 	 * @return a {@link org.distributeme.core.ServiceDescriptor} object.
 	 */
 	ServiceDescriptor createServiceDescriptor(){
-		return new ServiceDescriptor(ServiceDescriptor.Protocol.valueOf(getProtocol().toUpperCase()), serviceID, getInstanceId(), serviceAddress, servicePort, getTimestamp());
+		return new ServiceDescriptor(ServiceDescriptor.Protocol.valueOf(getProtocol().toUpperCase()), ServiceNameTranslator.fromConsul(serviceID), getInstanceId(), serviceAddress, servicePort, getTimestamp());
 	}
 
 	private List<String> getServiceTags() {

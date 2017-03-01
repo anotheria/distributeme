@@ -1,6 +1,7 @@
 package org.distributeme.core;
 
 import java.nio.charset.Charset;
+import java.util.Map;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.distributeme.core.util.BaseRegistryUtil;
@@ -99,6 +100,11 @@ public class DistributemeRegistryConnector implements RegistryConnector {
 			return null;
 		String reply = new String(data, Charset.defaultCharset());
 		return "ERROR".equals(reply) ? null : ServiceDescriptor.fromRegistrationString(reply);
+	}
+
+	@Override
+	public void setTagableSystemProperties(Map<String, String> tagableSystemProperties) {
+		//TODO support for tags
 	}
 
 	/**
