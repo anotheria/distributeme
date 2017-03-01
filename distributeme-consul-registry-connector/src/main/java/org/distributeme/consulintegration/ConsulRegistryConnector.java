@@ -1,5 +1,8 @@
 package org.distributeme.consulintegration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gson.Gson;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -20,6 +23,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	private Logger logger = LoggerFactory.getLogger(ConsulRegistryConnector.class);
 
 	private RegistryLocation registryLocation = RegistryLocation.create();
+	private Map<String, String> tagableSystemProperties = new HashMap<>();
 
 	@Override
 	public String describeRegistry() {
@@ -30,7 +34,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	public boolean bind(ServiceDescriptor service) {
 		ClientResponse response = null;
 		try {
-			String requestAsJsonString = new Gson().toJson(new ConsulServiceDescription(service));
+			String requestAsJsonString = new Gson().toJson(new ConsulServiceDescription(service, tagableSystemProperties));
 
 			WebResource webResource = Client.create()
 											.resource(getRegistryUrl() + "/v1/agent/service/register");
@@ -94,6 +98,10 @@ public class ConsulRegistryConnector implements RegistryConnector {
 		return null;
 	}
 
+	@Override
+	public void setTagableSystemProperties(Map<String, String> tagableSystemProperties) {
+		this.tagableSystemProperties = tagableSystemProperties;
+	}
 
 	@Override
 	public boolean notifyBind(Location location, ServiceDescriptor descriptor) {

@@ -1,5 +1,8 @@
 package org.distributeme.core;
 
+import java.util.Map;
+
+
 /**
  * Created by rboehling on 2/28/17.
  */
@@ -39,5 +42,10 @@ public class DebugRegistryConnector implements RegistryConnector {
 	public ServiceDescriptor resolve(ServiceDescriptor toResolve, Location loc) {
 		System.out.println("resolve: "  +  toResolve+ ", " + loc);
 		return toResolve;
+	}
+
+	@Override
+	public void setTagableSystemProperties(Map<String, String> tagableSystemProperties) {
+		System.out.println(tagableSystemProperties);
 	}
 }

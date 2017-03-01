@@ -8,7 +8,8 @@
 	//if true the client (stub) will log all caught exceptions (remote exception and runtime exceptions)
 	"logClientSideExceptions": false,
 	//Could not be changed at runtime, because that makes no sense
-	"registryConnectorClazz": "org.distributeme.consulintegration.ConsulRegistryConnector" ,
+	"registryConnectorClazz": "org.distributeme.consulintegration.ConsulRegistryConnector",
+	"systemPropertiesToTags": "com.sun.management.jmxremote.port,java.vm.version,configureme.defaultEnvironment,java.version",
 	
 	//registrationIpMapping: "192.168.200.5:10.0.0.0",
 	

@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Map;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.anotheria.util.StringUtils;
@@ -46,6 +47,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 		if(!StringUtils.isEmpty(registryConnectorClazz)) {
 			try {
 				registryConnector = (RegistryConnector)Class.forName(registryConnectorClazz).newInstance();
+				registryConnector.setTagableSystemProperties(configuration.getTagableSystemProperties());
 			} catch (Exception e) {
 				log.error("Could not initiate registry connector " + registryConnectorClazz, e);
 			}
@@ -235,6 +237,9 @@ public class RegistryUtil extends BaseRegistryUtil{
 
 		@Configure
 		private String registryConnectorClazz = DistributemeRegistryConnector.class.getName();
+		@Configure
+		private String systemPropertiesToTags;
+		private Map<String, String> tagableSystemProperties = new HashMap<>();
 		
 		@Set("registrationIpMapping")
 		public void setRegistrationIpMapping(String registrationIpMapping) {
@@ -271,6 +276,30 @@ public class RegistryUtil extends BaseRegistryUtil{
 
 		public void setRegistryConnectorClazz(String registryConnectorClazz) {
 			this.registryConnectorClazz = registryConnectorClazz;
+		}
+
+		public String getSystemPropertiesToTags() {
+			return systemPropertiesToTags;
+		}
+
+		public void setSystemPropertiesToTags(String systemPropertiesToTags) {
+			this.systemPropertiesToTags = systemPropertiesToTags;
+
+			String[] properties = StringUtils.tokenize(systemPropertiesToTags, ',');
+
+			Map<String, String> newTagableSystemProperties = new HashMap();
+			for(String property: properties) {
+				property = property.trim();
+				String value = System.getProperty(property);
+				if(value != null) {
+					newTagableSystemProperties.put(property, value);
+				}
+			}
+			tagableSystemProperties = newTagableSystemProperties;
+		}
+
+		public Map<String, String> getTagableSystemProperties() {
+			return tagableSystemProperties;
 		}
 	}
 
