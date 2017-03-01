@@ -4,6 +4,10 @@ import net.anotheria.util.StringUtils;
 
 
 /**
+ * Distributeme use underscore as separators inside service names. Consul discourage
+ * underscores because they do not confirm to dns naming conventions. This util translates
+ * serviceId between both worlds: underscores are replaced with dashes.
+ *
  * Created by rboehling on 3/1/17.
  */
 class ServiceNameTranslator {
