@@ -36,13 +36,13 @@ class ServiceResolveReply {
 	}
 
 	private String getInstanceId() {
-		return getTag(ConsulRegistryConnector.TAG_INSTANCE_ID);
+		return getTag(ConsulTag.INSTANCE_ID);
 	}
 
-	private String getTag(String tag) {
+	private String getTag(ConsulTag tag) {
 		for (String t : getServiceTags()) {
 			String[] tokens = StringUtils.tokenize(t, '=');
-			if (tokens[0].equals(tag)) {
+			if (tokens[0].equals(tag.getTagName())) {
 				return tokens[1];
 			}
 		}
@@ -50,11 +50,11 @@ class ServiceResolveReply {
 	}
 
 	private String getProtocol() {
-		return getTag(ConsulRegistryConnector.TAG_PROTOCOL);
+		return getTag(ConsulTag.PROTOCOL);
 	}
 
 	private long getTimestamp() {
-		return Long.parseLong(getTag(ConsulRegistryConnector.TAG_TIMESTAMP));
+		return Long.parseLong(getTag(ConsulTag.TIMESTAMP));
 	}
 
 	@Override

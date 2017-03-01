@@ -25,15 +25,15 @@ class ConsulServiceDescription {
 	@SerializedName("EnableTagOverride")
 	private boolean enableTagOverride = false;
 
-	ConsulServiceDescription(ServiceDescriptor service) {
-		id = service.getServiceId();
-		name = service.getServiceId();
-		port = service.getPort();
-		address = service.getHost();
-		addInstanceId(service.getInstanceId());
+	ConsulServiceDescription(ServiceDescriptor serviceDescriptor) {
+		id = serviceDescriptor.getServiceId();
+		name = serviceDescriptor.getServiceId();
+		port = serviceDescriptor.getPort();
+		address = serviceDescriptor.getHost();
+		addInstanceId(serviceDescriptor.getInstanceId());
 		addJmxPort("XXXXX");
-		addProtocol(service.getProtocol());
-		addTimestamp(service.getTimestamp());
+		addProtocol(serviceDescriptor.getProtocol());
+		addTimestamp(serviceDescriptor.getTimestamp());
 	}
 
 	private void addJmxPort(String jmxPort) {
@@ -41,14 +41,14 @@ class ConsulServiceDescription {
 	}
 
 	private void addInstanceId(String instanceId) {
-		tags.add(ConsulRegistryConnector.TAG_INSTANCE_ID + "=" + instanceId);
+		tags.add(ConsulTag.INSTANCE_ID.getTagName() + "=" + instanceId);
 	}
 
 	private void addProtocol(String protocol) {
-		tags.add(ConsulRegistryConnector.TAG_PROTOCOL + "=" + protocol);
+		tags.add(ConsulTag.PROTOCOL.getTagName() + "=" + protocol);
 	}
 
 	private void addTimestamp(long timestamp) {
-		tags.add(ConsulRegistryConnector.TAG_TIMESTAMP + "=" + timestamp);
+		tags.add(ConsulTag.TIMESTAMP.getTagName() + "=" + timestamp);
 	}
 }
