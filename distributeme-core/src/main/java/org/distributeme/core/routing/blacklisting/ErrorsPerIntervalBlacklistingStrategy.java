@@ -111,6 +111,7 @@ public class ErrorsPerIntervalBlacklistingStrategy implements BlacklistingStrate
 			ConfigurationManager.INSTANCE.configureAs(config, configuration.getBlacklistStrategyConfigurationName());
 			if(isValidConfiguration()) {
 				validConfiguration.set(true);
+				logger.info("New configuration " + configuration.getBlacklistStrategyConfigurationName()+" loaded " + config);
 			} else {
 				validConfiguration.set(false);
 				logger.error("Invalid configuration " + configuration.getBlacklistStrategyConfigurationName() + " " + config);
