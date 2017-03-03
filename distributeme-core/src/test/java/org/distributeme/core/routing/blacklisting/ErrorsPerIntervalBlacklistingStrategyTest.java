@@ -177,7 +177,7 @@ public class ErrorsPerIntervalBlacklistingStrategyTest {
 
 		whenNotifiyCallFailed(SERVICE_ID_0, 0);
 		thenServiceIsNotBlacklisted(SERVICE_ID_0);
-		thenConfigurationErrorIsLogged("Invalid configuration epbs_Miuns1RequiredNumberOfIntervalsWithErrors_Minus1ErrorsPerIntervalThreshold ErrorsPerIntervalBlacklistingStrategyConfig{errorsPerIntervalThreshold=-1, intervalDurationInSeconds=-1, requiredNumberOfIntervalsWithErrors=-1}");
+		thenConfigurationErrorIsLoggedAsError("Invalid configuration epbs_Miuns1RequiredNumberOfIntervalsWithErrors_Minus1ErrorsPerIntervalThreshold ErrorsPerIntervalBlacklistingStrategyConfig{errorsPerIntervalThreshold=-1, intervalDurationInSeconds=-1, requiredNumberOfIntervalsWithErrors=-1}");
 	}
 
 
@@ -187,11 +187,15 @@ public class ErrorsPerIntervalBlacklistingStrategyTest {
 
 		whenNotifiyCallFailed(SERVICE_ID_0, 0);
 		thenServiceIsNotBlacklisted(SERVICE_ID_0);
-		thenConfigurationErrorIsLogged("Could not load configuration notExists");
+		thenConfigurationErrorIsLoggedAsWarning("Could not load configuration notExists");
 	}
 
-	private void thenConfigurationErrorIsLogged(String message) {
+	private void thenConfigurationErrorIsLoggedAsWarning(String message) {
 		verify(logger).warn(message);
+	}
+
+	private void thenConfigurationErrorIsLoggedAsError(String message) {
+		verify(logger).error(message);
 	}
 
 	@Test
