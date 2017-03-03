@@ -113,7 +113,7 @@ public class ErrorsPerIntervalBlacklistingStrategy implements BlacklistingStrate
 				validConfiguration.set(true);
 			} else {
 				validConfiguration.set(false);
-				logger.warn("Invalid configuration " + configuration.getBlacklistStrategyConfigurationName() + " " + config);
+				logger.error("Invalid configuration " + configuration.getBlacklistStrategyConfigurationName() + " " + config);
 			}
 		} catch (Exception e) {
 			logger.warn("Could not load configuration " + configuration.getBlacklistStrategyConfigurationName());
