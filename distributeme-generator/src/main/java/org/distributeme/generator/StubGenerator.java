@@ -285,8 +285,9 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			writeStatement("List<ClientSideRequestInterceptor> diMeInterceptors = InterceptorRegistry.getInstance().getClientSideRequestInterceptors()");
 			writeStatement("InterceptionContext diMeInterceptionContext = new InterceptionContext()");
 //			writeInterceptionBlock(InterceptionPhase.BEFORE_CLIENT, method);
-			
-			
+
+			writeString("try{");
+			increaseIdent();
 			//concurrency control
 			writeCommentLine("Concurrency control, client side - start");
 			writeStatement(getCCStrategyVariableName(method)+".notifyClientSideCallStarted(diMeCallContext)");
@@ -329,8 +330,6 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 				}
 			}
 			
-			writeString("try{");
-			increaseIdent();
 			writeInterceptionBlock(InterceptionPhase.BEFORE_SERVICE_CALL, method);
 			
 			//now re-parse parameters
