@@ -1,5 +1,28 @@
 package org.distributeme.generator;
 
+import javax.annotation.processing.Filer;
+import javax.annotation.processing.ProcessingEnvironment;
+import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.AnnotationValue;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
+import javax.tools.JavaFileObject;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.annotation.DontRoute;
 import org.distributeme.annotation.FailBy;
@@ -24,29 +47,6 @@ import org.distributeme.generator.logwriter.LogWriter;
 import org.distributeme.generator.logwriter.SysErrorLogWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.annotation.processing.Filer;
-import javax.annotation.processing.ProcessingEnvironment;
-import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.AnnotationValue;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.element.TypeElement;
-import javax.lang.model.element.VariableElement;
-import javax.lang.model.type.TypeMirror;
-import javax.tools.JavaFileObject;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * Generator for RMI based stubs.
@@ -286,13 +286,15 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 			writeStatement("InterceptionContext diMeInterceptionContext = new InterceptionContext()");
 //			writeInterceptionBlock(InterceptionPhase.BEFORE_CLIENT, method);
 
-			writeString("try{");
-			increaseIdent();
+			emptyline();
 			//concurrency control
 			writeCommentLine("Concurrency control, client side - start");
 			writeStatement(getCCStrategyVariableName(method)+".notifyClientSideCallStarted(diMeCallContext)");
+
 			emptyline();
-			
+			writeString("try{");
+			increaseIdent();
+
 			if (interceptionEnabled){
 				//create parameters
 				writeStatement("ArrayList<Object> diMeParameters = new ArrayList<Object>()");
