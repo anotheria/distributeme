@@ -173,7 +173,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 				}
 			}
 			//now pick a candidate
-			int candidate = candidates[random.nextInt(candidates.length)];
+			int candidate = candidates[getRandomInt(candidates.length)];
 			result = originalServiceId.substring(0, lastUnderscore + 1) + candidate;
 		}
 
@@ -193,6 +193,9 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 
 	}
 
+	protected int getRandomInt(final int length) {
+		return random.nextInt(length);
+	}
 
 
 	/** {@inheritDoc} */
