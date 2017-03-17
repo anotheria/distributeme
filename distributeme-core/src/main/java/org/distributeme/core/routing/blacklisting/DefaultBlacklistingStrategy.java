@@ -21,7 +21,7 @@ public class DefaultBlacklistingStrategy implements BlacklistingStrategy {
 	/**
 	 * Map with timestamps for last server failures.
 	 */
-	private ConcurrentMap<String, Long> serverFailureTimestamps = new ConcurrentHashMap<String, Long>();
+	private ConcurrentMap<String, Long> serverFailureTimestamps = new ConcurrentHashMap<>();
 	private GenericRouterConfiguration configuration;
 	private Logger logger = LoggerFactory.getLogger(DefaultBlacklistingStrategy.class);
 

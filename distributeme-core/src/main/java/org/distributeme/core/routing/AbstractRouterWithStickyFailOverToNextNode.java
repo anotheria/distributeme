@@ -87,7 +87,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		}
 
 
-		String selectedServiceId = null;
+		String selectedServiceId;
 
 		switch (getStrategy()) {
 			case MOD_ROUTER:
@@ -137,7 +137,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		String originalServiceId = context.getServiceId();
 		HashSet<String> instancesThatIAlreadyTried = (HashSet<String>)context.getTransportableCallContext().get(ATTR_TRIED_INSTANCES);
 		if (instancesThatIAlreadyTried==null){
-			instancesThatIAlreadyTried = new HashSet<String>();
+			instancesThatIAlreadyTried = new HashSet<>();
 			context.getTransportableCallContext().put(ATTR_TRIED_INSTANCES, instancesThatIAlreadyTried);
 		}
 
