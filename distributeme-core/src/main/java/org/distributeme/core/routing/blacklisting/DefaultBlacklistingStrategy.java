@@ -5,6 +5,8 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.routing.GenericRouterConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -19,8 +21,9 @@ public class DefaultBlacklistingStrategy implements BlacklistingStrategy {
 	/**
 	 * Map with timestamps for last server failures.
 	 */
-	private ConcurrentMap<String, Long> serverFailureTimestamps = new ConcurrentHashMap<String, Long>();
+	private ConcurrentMap<String, Long> serverFailureTimestamps = new ConcurrentHashMap<>();
 	private GenericRouterConfiguration configuration;
+	private Logger logger = LoggerFactory.getLogger(DefaultBlacklistingStrategy.class);
 
 	@Override
 	public boolean isBlacklisted(String instanceId) {
@@ -30,6 +33,7 @@ public class DefaultBlacklistingStrategy implements BlacklistingStrategy {
 
 	@Override
 	public void notifyCallFailed(ClientSideCallContext clientSideCallContext) {
+		logger.info(clientSideCallContext.getServiceId()+ " will be blacklisted for "+configuration.getBlacklistTime()+" ms");
 		serverFailureTimestamps.put(clientSideCallContext.getServiceId(), System.currentTimeMillis());
 	}
 

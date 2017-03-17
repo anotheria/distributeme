@@ -62,7 +62,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 	/** {@inheritDoc} */
 	@Override
 	public FailDecision callFailed(final ClientSideCallContext clientSideCallContext) {
-		getLog().info(clientSideCallContext.getServiceId()+ " marked as failed and will be blacklisted for "+getConfiguration().getBlacklistTime()+" ms");
+		getLog().info(clientSideCallContext.getServiceId()+ " marked as failed");
 
 		blacklistingStrategy.notifyCallFailed(clientSideCallContext);
 		return super.callFailed(clientSideCallContext);
@@ -87,7 +87,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		}
 
 
-		String selectedServiceId = null;
+		String selectedServiceId;
 
 		switch (getStrategy()) {
 			case MOD_ROUTER:
@@ -137,7 +137,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 		String originalServiceId = context.getServiceId();
 		HashSet<String> instancesThatIAlreadyTried = (HashSet<String>)context.getTransportableCallContext().get(ATTR_TRIED_INSTANCES);
 		if (instancesThatIAlreadyTried==null){
-			instancesThatIAlreadyTried = new HashSet<String>();
+			instancesThatIAlreadyTried = new HashSet<>();
 			context.getTransportableCallContext().put(ATTR_TRIED_INSTANCES, instancesThatIAlreadyTried);
 		}
 
@@ -173,7 +173,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 				}
 			}
 			//now pick a candidate
-			int candidate = candidates[random.nextInt(candidates.length)];
+			int candidate = candidates[getRandomInt(candidates.length)];
 			result = originalServiceId.substring(0, lastUnderscore + 1) + candidate;
 		}
 
@@ -193,6 +193,9 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 
 	}
 
+	protected int getRandomInt(final int length) {
+		return random.nextInt(length);
+	}
 
 
 	/** {@inheritDoc} */

@@ -1,0 +1,6 @@
+{
+	"numberOfInstances": 3,
+	"blacklistTime": 5000000,
+	"overrideBlacklistIfAllBlacklisted": true,
+	"blacklistStrategyClazz": "org.distributeme.core.routing.blacklisting.DefaultBlacklistingStrategy"
+}
