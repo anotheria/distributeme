@@ -62,7 +62,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 	/** {@inheritDoc} */
 	@Override
 	public FailDecision callFailed(final ClientSideCallContext clientSideCallContext) {
-		getLog().info(clientSideCallContext.getServiceId()+ " marked as failed and will be blacklisted for "+getConfiguration().getBlacklistTime()+" ms");
+		getLog().info(clientSideCallContext.getServiceId()+ " marked as failed");
 
 		blacklistingStrategy.notifyCallFailed(clientSideCallContext);
 		return super.callFailed(clientSideCallContext);
