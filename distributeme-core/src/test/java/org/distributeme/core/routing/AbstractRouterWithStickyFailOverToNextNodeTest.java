@@ -42,6 +42,7 @@ public class AbstractRouterWithStickyFailOverToNextNodeTest {
 
 	@Test
 	public void callFailed_CalculatesTheRoutingStatsCorrect() throws Exception {
+		routerWithStickyFailOverToNextNode.setConfigurationName("myService", "blacklisting-routing-test-empty");
 		String serviceId = "myService";
 		ClientSideCallContext clientSideCallContext = new ClientSideCallContext(serviceId, "test", Collections.emptyList());
 		routerWithStickyFailOverToNextNode.callFailed(clientSideCallContext);
