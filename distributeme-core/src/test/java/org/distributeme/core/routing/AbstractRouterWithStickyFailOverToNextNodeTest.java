@@ -24,19 +24,19 @@ public class AbstractRouterWithStickyFailOverToNextNodeTest {
 
 	@Test
 	public void useBlacklistingStrategyFromConfiguration() {
-		routerWithStickyFailOverToNextNode.setConfigurationName("someServiceId", "blacklisting-routing-test-regular");
+		routerWithStickyFailOverToNextNode.setConfigurationName("myService", "blacklisting-routing-test-regular");
 		assertTrue("Router not of specified clazz", routerWithStickyFailOverToNextNode.getBlacklistingStrategy() instanceof NoOpBlacklistingStrategy);
 	}
 
 	@Test
 	public void useDefaultBlacklistingStrategyIfConfigurationFalty() {
-		routerWithStickyFailOverToNextNode.setConfigurationName("someServiceId", "blacklisting-routing-test-faulty");
+		routerWithStickyFailOverToNextNode.setConfigurationName("myService", "blacklisting-routing-test-faulty");
 		assertTrue("Router not of specified clazz", routerWithStickyFailOverToNextNode.getBlacklistingStrategy() instanceof DefaultBlacklistingStrategy);
 	}
 
 	@Test
 	public void useDefaultBlacklistingStrategyIfConfigurationStrategyIsEmpty() {
-		routerWithStickyFailOverToNextNode.setConfigurationName("someServiceId", "blacklisting-routing-test-empty");
+		routerWithStickyFailOverToNextNode.setConfigurationName("myService", "blacklisting-routing-test-empty");
 		assertTrue("Router not of specified clazz", routerWithStickyFailOverToNextNode.getBlacklistingStrategy() instanceof DefaultBlacklistingStrategy);
 	}
 
@@ -74,7 +74,7 @@ public class AbstractRouterWithStickyFailOverToNextNodeTest {
 
 	@Test
 	public void getServiceIdForCall_CalculatesTheRoutingStatsCorrect_WithOneService() throws Exception {
-		routerWithStickyFailOverToNextNode.setConfigurationName("someServiceId", "blacklisting-routing-test-regular");
+		routerWithStickyFailOverToNextNode.setConfigurationName("myService", "blacklisting-routing-test-regular");
 
 		String serviceId = "myService";
 		ClientSideCallContext clientSideCallContext = new ClientSideCallContext(serviceId, "test", Collections.emptyList());
@@ -92,7 +92,7 @@ public class AbstractRouterWithStickyFailOverToNextNodeTest {
 
 	@Test
 	public void getServiceIdForCall_CalculatesTheRoutingStatsCorrect_WithTwoServiceAndFirstIsBlacklistedButRequestGoesToOtherOne() throws Exception {
-		routerWithStickyFailOverToNextNode.setConfigurationName("someServiceId", "blacklisting-routing-test-two-services");
+		routerWithStickyFailOverToNextNode.setConfigurationName("myService", "blacklisting-routing-test-two-services");
 
 		String serviceIdFailed = "myService_0";
 		ClientSideCallContext failedContext = new ClientSideCallContext(serviceIdFailed, "test", Collections.emptyList());
@@ -121,7 +121,7 @@ public class AbstractRouterWithStickyFailOverToNextNodeTest {
 
 	@Test
 	public void getServiceIdForCall_CalculatesTheRoutingStatsCorrect_WithTwoServiceAndRequestGoesToBlacklistedService() throws Exception {
-		routerWithStickyFailOverToNextNode.setConfigurationName("someServiceId", "blacklisting-routing-test-two-services");
+		routerWithStickyFailOverToNextNode.setConfigurationName("myService", "blacklisting-routing-test-two-services");
 
 		String serviceIdFailed = "myService_1";
 		ClientSideCallContext failedContext = new ClientSideCallContext(serviceIdFailed, "test", Collections.emptyList());
@@ -149,7 +149,7 @@ public class AbstractRouterWithStickyFailOverToNextNodeTest {
 
 	@Test
 	public void getServiceIdForCall_CalculatesTheRoutingStatsCorrect_WithThreeServiceAndRequestGoesToBlacklistedService() throws Exception {
-		routerWithStickyFailOverToNextNode.setConfigurationName("someServiceId", "blacklisting-routing-test-three-services");
+		routerWithStickyFailOverToNextNode.setConfigurationName("myService", "blacklisting-routing-test-three-services");
 
 		String serviceIdFailed1 = "myService_1";
 		ClientSideCallContext failedContext1 = new ClientSideCallContext(serviceIdFailed1, "test", Collections.emptyList());
