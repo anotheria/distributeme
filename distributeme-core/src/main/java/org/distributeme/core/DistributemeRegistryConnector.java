@@ -1,6 +1,7 @@
 package org.distributeme.core;
 
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Map;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -105,6 +106,11 @@ public class DistributemeRegistryConnector implements RegistryConnector {
 	@Override
 	public void setTagableSystemProperties(Map<String, String> tagableSystemProperties) {
 		//TODO support for tags
+	}
+
+	@Override
+	public void setCustomTagProviderList(List<String> customTagProviderClassList) {
+		//TODO support for custom tags
 	}
 
 	/**

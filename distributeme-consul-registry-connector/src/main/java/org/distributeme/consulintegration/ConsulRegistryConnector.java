@@ -1,6 +1,8 @@
 package org.distributeme.consulintegration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
@@ -40,6 +42,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 
 	private RegistryLocation registryLocation = RegistryLocation.create();
 	private Map<String, String> tagableSystemProperties = new HashMap<>();
+	private List<String> customTagProviderClassList = new ArrayList<>();
 
 	@Override
 	public String describeRegistry() {
@@ -50,7 +53,8 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	public boolean bind(ServiceDescriptor service) {
 		ClientResponse response = null;
 		try {
-			String requestAsJsonString = new Gson().toJson(new ConsulServiceDescription(service, tagableSystemProperties));
+			List<String> customTagList=createCustomTagsFromProvidedClassList();
+			String requestAsJsonString = new Gson().toJson(new ConsulServiceDescription(service, tagableSystemProperties, customTagList));
 
 			WebResource webResource = Client.create()
 											.resource(getRegistryUrl() + "/v1/agent/service/register");
@@ -69,6 +73,33 @@ public class ConsulRegistryConnector implements RegistryConnector {
 		} finally {
 			closeResponseNullSafe(response);
 		}
+	}
+
+	/**
+	 * Instantiate given Classes and create tags
+	 *
+	 */
+	private List<String> createCustomTagsFromProvidedClassList() {
+
+		List<String> customTagsList=new ArrayList<>();
+		for (String className : customTagProviderClassList) {
+
+			try {
+				Class customTagProviderClass = null;
+				customTagProviderClass = Class.forName(className);
+				CustomTagProvider customTagProvider = null;
+				customTagProvider = (CustomTagProvider)customTagProviderClass.newInstance();
+				String customTag = customTagProvider.getTag();
+				if(customTag!= null) {
+					customTagsList.add(customTag);
+				}
+			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | ClassCastException e) {
+				logger.error("Could NOT create instance of CustomTagProvider class : '"+className+"'");
+			}
+
+
+		}
+		return customTagsList;
 	}
 
 	@Override
@@ -117,6 +148,11 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	@Override
 	public void setTagableSystemProperties(Map<String, String> tagableSystemProperties) {
 		this.tagableSystemProperties = tagableSystemProperties;
+	}
+
+	@Override
+	public void setCustomTagProviderList(List<String> customTagProviderClassList) {
+		this.customTagProviderClassList=customTagProviderClassList;
 	}
 
 	@Override

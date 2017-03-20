@@ -1,10 +1,13 @@
 package org.distributeme.consulintegration;
 
+import java.util.Arrays;
+
 import com.pszymczyk.consul.ConsulProcess;
 import com.pszymczyk.consul.ConsulStarterBuilder;
 import com.pszymczyk.consul.junit.ConsulResource;
 import org.distributeme.core.Location;
 import org.distributeme.core.RegistryLocation;
+import org.distributeme.core.RegistryUtil;
 import org.distributeme.core.ServiceDescriptor;
 import org.junit.After;
 import org.junit.Before;
@@ -41,7 +44,10 @@ public class ConsulRegistryConnectorIntegrationTest {
 	public void bindsToConsulRegistry() {
 		ServiceDescriptor serviceDescriptor = new ServiceDescriptor(ServiceDescriptor.Protocol.RMI, SERVICE_ID, INSTANCE_ID,"aHost", 9559, 1L);
 
+		connector.setCustomTagProviderList(Arrays.asList("org.distributeme.consulintegration.DistributeMeCustomTagTestClassA" ,
+				"org.distributeme.consulintegration.DistributeMeCustomTagTestClassB"));
 		boolean bind = connector.bind(serviceDescriptor);
+
 		assertTrue("Service should have been bind", bind);
 
 		ServiceDescriptor serviceDescriptorToResolve = new ServiceDescriptor(ServiceDescriptor.Protocol.RMI, SERVICE_ID);

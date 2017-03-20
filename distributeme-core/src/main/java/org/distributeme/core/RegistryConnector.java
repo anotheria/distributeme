@@ -1,5 +1,6 @@
 package org.distributeme.core;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -21,4 +22,6 @@ public interface RegistryConnector {
 	ServiceDescriptor resolve(ServiceDescriptor toResolve, Location loc);
 
 	void setTagableSystemProperties(Map<String, String> tagableSystemProperties);
+
+	void setCustomTagProviderList(List<String> customTagProviderClassList);
 }
