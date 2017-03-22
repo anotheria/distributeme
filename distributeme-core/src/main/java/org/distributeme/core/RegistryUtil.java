@@ -3,7 +3,10 @@ package org.distributeme.core;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -41,13 +44,16 @@ public class RegistryUtil extends BaseRegistryUtil{
 		try{
 			ConfigurationManager.INSTANCE.configure(configuration);
 		}catch(Exception ignored){
-			//ignored
+			log.error("Error while reading configuration ! ", ignored);
 		}
+		log.info("Initializing registry connector with configuration: "+ configuration);
+
 		String registryConnectorClazz = configuration.getRegistryConnectorClazz();
 		if(!StringUtils.isEmpty(registryConnectorClazz)) {
 			try {
 				registryConnector = (RegistryConnector)Class.forName(registryConnectorClazz).newInstance();
 				registryConnector.setTagableSystemProperties(configuration.getTagableSystemProperties());
+				registryConnector.setCustomTagProviderList(configuration.getCustomTagProviderClassList());
 			} catch (Exception e) {
 				log.error("Could not initiate registry connector " + registryConnectorClazz, e);
 			}
@@ -235,12 +241,30 @@ public class RegistryUtil extends BaseRegistryUtil{
 		 */
 		private volatile HashMap<String, String> mappings = new HashMap<String, String>();
 
+		/**
+		 * List of custom Tag provider classes
+		 */
+		private volatile List<String> customTagProviderClassList = new ArrayList<>();
+
 		@Configure
 		private String registryConnectorClazz = DistributemeRegistryConnector.class.getName();
 		@Configure
 		private String systemPropertiesToTags;
 		private Map<String, String> tagableSystemProperties = new HashMap<>();
-		
+
+		@Set("customTagProviderClasses")
+		public void setCustomTagProviderClasses(final String customTagProviderClasses) {
+			customTagProviderClassList = new ArrayList<>();
+			String[] fullQualifiedClassName = StringUtils.tokenize(customTagProviderClasses, ',');
+			for (String pair : fullQualifiedClassName) {
+				customTagProviderClassList.add(pair.trim());
+			}
+		}
+
+		public List<String> getCustomTagProviderClassList() {
+			return customTagProviderClassList;
+		}
+
 		@Set("registrationIpMapping")
 		public void setRegistrationIpMapping(String registrationIpMapping) {
 			log.info("registrationIpMappingSet: "+registrationIpMapping);
@@ -265,9 +289,16 @@ public class RegistryUtil extends BaseRegistryUtil{
 		public HashMap<String, String> getMappings(){
 			return mappings;
 		}
-		
-		@Override public String toString(){
-			return "Configurable mappings: "+mappings;
+
+		@Override
+		public String toString() {
+			return "Configurable{" +
+					"mappings=" + mappings +
+					", customTagProviderClassList=" + customTagProviderClassList +
+					", registryConnectorClazz='" + registryConnectorClazz + '\'' +
+					", systemPropertiesToTags='" + systemPropertiesToTags + '\'' +
+					", tagableSystemProperties=" + tagableSystemProperties +
+					'}';
 		}
 
 		public String getRegistryConnectorClazz() {
