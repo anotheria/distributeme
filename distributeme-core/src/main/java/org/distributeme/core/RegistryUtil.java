@@ -44,8 +44,10 @@ public class RegistryUtil extends BaseRegistryUtil{
 		try{
 			ConfigurationManager.INSTANCE.configure(configuration);
 		}catch(Exception ignored){
-			//ignored
+			log.error("Error while reading configuration ! ", ignored);
 		}
+		log.info("Initializing registry connector with configuration: "+ configuration);
+
 		String registryConnectorClazz = configuration.getRegistryConnectorClazz();
 		if(!StringUtils.isEmpty(registryConnectorClazz)) {
 			try {
@@ -287,9 +289,16 @@ public class RegistryUtil extends BaseRegistryUtil{
 		public HashMap<String, String> getMappings(){
 			return mappings;
 		}
-		
-		@Override public String toString(){
-			return "Configurable mappings: "+mappings;
+
+		@Override
+		public String toString() {
+			return "Configurable{" +
+					"mappings=" + mappings +
+					", customTagProviderClassList=" + customTagProviderClassList +
+					", registryConnectorClazz='" + registryConnectorClazz + '\'' +
+					", systemPropertiesToTags='" + systemPropertiesToTags + '\'' +
+					", tagableSystemProperties=" + tagableSystemProperties +
+					'}';
 		}
 
 		public String getRegistryConnectorClazz() {
