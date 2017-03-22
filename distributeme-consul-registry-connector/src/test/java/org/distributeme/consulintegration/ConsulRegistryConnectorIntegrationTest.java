@@ -44,7 +44,7 @@ public class ConsulRegistryConnectorIntegrationTest {
 	public void bindsToConsulRegistry() {
 		ServiceDescriptor serviceDescriptor = new ServiceDescriptor(ServiceDescriptor.Protocol.RMI, SERVICE_ID, INSTANCE_ID,"aHost", 9559, 1L);
 
-		connector.setCustomTagProviderList(Arrays.asList("org.distributeme.consulintegration.DistributeMeCustomTagTestClassA" ,
+		connector.setCustomTagProviderClassList(Arrays.asList("org.distributeme.consulintegration.DistributeMeCustomTagTestClassA" ,
 				"org.distributeme.consulintegration.DistributeMeCustomTagTestClassB"));
 		boolean bind = connector.bind(serviceDescriptor);
 

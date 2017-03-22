@@ -148,7 +148,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	}
 
 	@Override
-	public void setCustomTagProviderList(List<String> customTagProviderClassList) {
+	public void setCustomTagProviderClassList(List<String> customTagProviderClassList) {
 		this.customTagProviderClassList=customTagProviderClassList;
 	}
 
