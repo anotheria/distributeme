@@ -1,4 +1,4 @@
-package org.distributeme.consulintegration;
+package org.distributeme.core;
 
 /**
  * @author bjochheim
