@@ -1,5 +1,6 @@
 package org.distributeme.core;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -47,5 +48,10 @@ public class DebugRegistryConnector implements RegistryConnector {
 	@Override
 	public void setTagableSystemProperties(Map<String, String> tagableSystemProperties) {
 		System.out.println(tagableSystemProperties);
+	}
+
+	@Override
+	public void setCustomTagProviderList(List<String> customTagProviderClassList) {
+		System.out.println(customTagProviderClassList);
 	}
 }

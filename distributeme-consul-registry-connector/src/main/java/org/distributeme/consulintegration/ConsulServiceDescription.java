@@ -27,19 +27,24 @@ class ConsulServiceDescription {
 	@SerializedName("EnableTagOverride")
 	private boolean enableTagOverride = false;
 
-	ConsulServiceDescription(ServiceDescriptor serviceDescriptor, Map<String, String> tagableSystemProperties) {
+	ConsulServiceDescription(ServiceDescriptor serviceDescriptor, Map<String, String> tagableSystemProperties, List<String> customTagList) {
 		String consulFriendlyServiceName = ServiceNameTranslator.toConsul(serviceDescriptor.getServiceId());
 		id = consulFriendlyServiceName;
 		name = consulFriendlyServiceName;
 		port = serviceDescriptor.getPort();
 		address = serviceDescriptor.getHost();
 		addInstanceId(serviceDescriptor.getInstanceId());
+		addCustomTags(customTagList);
 		addSystemProperties(tagableSystemProperties);
 		addProtocol(serviceDescriptor.getProtocol());
 		addTimestamp(serviceDescriptor.getTimestamp());
 	}
 
-
+	private void addCustomTags(List<String> customTagList) {
+		for (String customTag : customTagList) {
+			tags.add(customTag);
+		}
+	}
 
 	private void addSystemProperties(Map<String, String> tagableSystemProperties) {
 		for(Map.Entry<String, String> entry: tagableSystemProperties.entrySet()) {
