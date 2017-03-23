@@ -109,7 +109,7 @@ public class DistributemeRegistryConnector implements RegistryConnector {
 	}
 
 	@Override
-	public void setCustomTagProviderList(List<String> customTagProviderClassList) {
+	public void setCustomTagProviderClassList(List<String> customTagProviderClassList) {
 		//TODO support for custom tags
 	}
 

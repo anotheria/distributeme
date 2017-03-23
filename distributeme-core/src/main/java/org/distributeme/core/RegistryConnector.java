@@ -23,5 +23,5 @@ public interface RegistryConnector {
 
 	void setTagableSystemProperties(Map<String, String> tagableSystemProperties);
 
-	void setCustomTagProviderList(List<String> customTagProviderClassList);
+	void setCustomTagProviderClassList(List<String> customTagProviderClassList);
 }

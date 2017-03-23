@@ -4,7 +4,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +52,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 			try {
 				registryConnector = (RegistryConnector)Class.forName(registryConnectorClazz).newInstance();
 				registryConnector.setTagableSystemProperties(configuration.getTagableSystemProperties());
-				registryConnector.setCustomTagProviderList(configuration.getCustomTagProviderClassList());
+				registryConnector.setCustomTagProviderClassList(configuration.getCustomTagProviderClassList());
 			} catch (Exception e) {
 				log.error("Could not initiate registry connector " + registryConnectorClazz, e);
 			}

@@ -9,10 +9,7 @@ import com.google.gson.Gson;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import org.distributeme.core.Location;
-import org.distributeme.core.RegistryConnector;
-import org.distributeme.core.RegistryLocation;
-import org.distributeme.core.ServiceDescriptor;
+import org.distributeme.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -151,7 +148,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	}
 
 	@Override
-	public void setCustomTagProviderList(List<String> customTagProviderClassList) {
+	public void setCustomTagProviderClassList(List<String> customTagProviderClassList) {
 		this.customTagProviderClassList=customTagProviderClassList;
 	}
 
