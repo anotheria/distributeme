@@ -70,5 +70,4 @@ public class ConsulRegistryConnectorIntegrationTest {
 		assertThat(resolvedDescriptor, is(nullValue()));
 	}
 
-
 }

@@ -31,6 +31,10 @@ class ServiceResolveReply {
 		return new ServiceDescriptor(ServiceDescriptor.Protocol.valueOf(getProtocol().toUpperCase()), ServiceNameTranslator.fromConsul(serviceID), getInstanceId(), serviceAddress, servicePort, getTimestamp());
 	}
 
+	boolean isYoungerThan(ServiceResolveReply reply) {
+		return getTimestamp() > reply.getTimestamp();
+	}
+
 	private List<String> getServiceTags() {
 		return serviceTags;
 	}
@@ -65,5 +69,6 @@ class ServiceResolveReply {
 				", servicePort=" + servicePort +
 				'}';
 	}
+
 
 }

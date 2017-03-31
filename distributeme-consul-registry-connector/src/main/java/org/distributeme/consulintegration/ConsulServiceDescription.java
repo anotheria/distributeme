@@ -40,6 +40,10 @@ class ConsulServiceDescription {
 		addTimestamp(serviceDescriptor.getTimestamp());
 	}
 
+	ConsulServiceDescription(ServiceDescriptor servicesDescriptor, Map<String, String> tagableSystemProperties) {
+		this(servicesDescriptor, tagableSystemProperties, new ArrayList<String>());
+	}
+
 	private void addCustomTags(List<String> customTagList) {
 		for (String customTag : customTagList) {
 			tags.add(customTag);
@@ -64,5 +68,25 @@ class ConsulServiceDescription {
 
 	private void addTimestamp(long timestamp) {
 		tags.add(ConsulTag.TIMESTAMP.getTagName() + "=" + timestamp);
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public List<String> getTags() {
+		return tags;
 	}
 }

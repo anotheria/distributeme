@@ -50,7 +50,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	public boolean bind(ServiceDescriptor service) {
 		ClientResponse response = null;
 		try {
-			List<String> customTagList=createCustomTagsFromProvidedClassList();
+			List<String> customTagList = createCustomTagsFromProvidedClassList();
 			String requestAsJsonString = new Gson().toJson(new ConsulServiceDescription(service, tagableSystemProperties, customTagList));
 
 			WebResource webResource = Client.create()
@@ -129,11 +129,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 			if (response.getStatus() != 200) {
 				logger.error("Failed : HTTP error code : " + response.getStatus());
 			}
-			ServiceResolveReply serviceResolveReply = getServiceReplyFromConsulResponse(response);
-			if(serviceResolveReply == null) {
-				return null;
-			}
-			return serviceResolveReply.createServiceDescriptor();
+			return ServiceDescriptorFactory.createFrom(response);
 		} catch (Exception e) {
 			logger.error("Could not resolve ServiceDescriptor: ", e);
 		} finally {
@@ -160,15 +156,6 @@ public class ConsulRegistryConnector implements RegistryConnector {
 	@Override
 	public boolean notifyUnbind(Location location, ServiceDescriptor descriptor) {
 		return false;
-	}
-
-	private ServiceResolveReply getServiceReplyFromConsulResponse(ClientResponse response) {
-		String responseAsString = response.getEntity(String.class);
-		ServiceResolveReply[] serviceResolveReplies = new Gson().fromJson(responseAsString, ServiceResolveReply[].class);
-		if(serviceResolveReplies.length == 0) {
-			return null;
-		}
-		return serviceResolveReplies[0];
 	}
 
 	private void closeResponseNullSafe(ClientResponse response) {
