@@ -1,7 +1,5 @@
 package org.distributeme.core.routing.blacklisting;
 
-import org.configureme.ConfigurationManager;
-import org.configureme.annotations.Configure;
 import org.configureme.annotations.ConfigureMe;
 
 
