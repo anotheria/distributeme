@@ -3,13 +3,13 @@
     <parent>
         <groupId>net.anotheria</groupId>
         <artifactId>distributeme-parent</artifactId>
-        <version>2.3.3-SNAPSHOT</version>
+        <version>2.3.4-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.anotheria</groupId>
     <artifactId>distributeme-consul-registry-connector</artifactId>
-    <version>2.3.3-SNAPSHOT</version>
+    <version>2.3.4-SNAPSHOT</version>
     <name>DistributeMe Consul registry connector</name>
     <description>Connects the DistributeMe framework with the Consul</description>
 
@@ -43,7 +43,7 @@
         <dependency>
             <groupId>com.pszymczyk.consul</groupId>
             <artifactId>embedded-consul</artifactId>
-            <version>0.2.3</version>
+            <version>0.3.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
