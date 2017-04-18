@@ -42,11 +42,8 @@ public abstract class FailoverAndReturn extends AbstractRouter implements Failin
 	/** {@inheritDoc} */
 	@Override
 	public String getServiceIdForCall(ClientSideCallContext callContext) {
-		
-		if (failoverTimestamp!=0 && callContext.isFirstCall() && (System.currentTimeMillis()-failoverTimestamp>getFailbackTimeout())){
-			failoverTimestamp = 0;
-			failedOverServiceId = null;
-		}
+
+		resetFailOverAfterTimeFailbackPeriod(callContext);
 
 		if (!callContext.isFirstCall() && failedOverServiceId==null){
 			failedOverServiceId = callContext.getServiceId();
@@ -55,6 +52,13 @@ public abstract class FailoverAndReturn extends AbstractRouter implements Failin
 
 		String ret =  failedOverServiceId == null ? callContext.getServiceId() : failedOverServiceId;
 		return ret;
+	}
+
+	private void resetFailOverAfterTimeFailbackPeriod(ClientSideCallContext callContext) {
+		if (failoverTimestamp!=0 && callContext.isFirstCall() && (System.currentTimeMillis()-failoverTimestamp>getFailbackTimeout())){
+			failoverTimestamp = 0;
+			failedOverServiceId = null;
+		}
 	}
 
 	/**
