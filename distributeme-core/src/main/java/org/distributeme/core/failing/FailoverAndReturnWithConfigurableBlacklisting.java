@@ -2,6 +2,7 @@ package org.distributeme.core.failing;
 
 import org.configureme.ConfigurationManager;
 import org.distributeme.core.ClientSideCallContext;
+import org.distributeme.core.exception.ServiceUnavailableException;
 import org.distributeme.core.routing.ConfigurableRouter;
 import org.distributeme.core.routing.Constants;
 import org.distributeme.core.routing.GenericRouterConfiguration;
@@ -38,10 +39,6 @@ public class FailoverAndReturnWithConfigurableBlacklisting extends FailoverAndRe
         }
     }
 
-    public void setConfiguration(GenericRouterConfiguration configuration) {
-        this.configuration = configuration;
-    }
-
     @Override
     public void routerConfigurationInitialChange(GenericRouterConfiguration configuration) {
         //not needed
@@ -61,14 +58,44 @@ public class FailoverAndReturnWithConfigurableBlacklisting extends FailoverAndRe
     public FailDecision callFailed(ClientSideCallContext context) {
         blacklistingStrategy.notifyCallFailed(context);
 
-        if(blacklistingStrategy.isBlacklisted(context.getServiceId())) {
-            FailDecision ret = FailDecision.retryOnce();
-            ret.setTargetService(context.getServiceId()+getSuffix());
-            return ret;
+        if (nextNodeIsBlacklisted(context) && !isOverrideBlacklistIfAllBlacklisted()){
+            throw new ServiceUnavailableException(context.getServiceId() + " and " + createServiceIdForNextServiceCall(context) + " are Blacklisted!");
         }
-        FailDecision retry = FailDecision.retry();
-        retry.setTargetService(context.getServiceId());
-        return retry;
+        return retryOneceOnService(createServiceIdForNextServiceCall(context));
+    }
+
+    private boolean isOverrideBlacklistIfAllBlacklisted() {
+        return getConfiguration().isOverrideBlacklistIfAllBlacklisted();
+    }
+
+    private boolean nextNodeIsBlacklisted(ClientSideCallContext context) {
+        return blacklistingStrategy.isBlacklisted(createServiceIdForNextServiceCall(context));
+    }
+
+    private String createServiceIdForNextServiceCall(ClientSideCallContext context) {
+        if (context.getServiceId().contains(getSuffix())){
+            return context.getServiceId().replace(getSuffix(),"");
+        }
+        return context.getServiceId() + getSuffix();
+    }
+
+    private FailDecision retryOneceOnService(String targetService) {
+        FailDecision ret = FailDecision.retryOnce();
+        ret.setTargetService(targetService);
+        return ret;
+    }
+
+    @Override
+    public String getServiceIdForCall(ClientSideCallContext callContext) {
+        if (blacklistingStrategy.isBlacklisted(callContext.getServiceId())){
+            return createServiceIdForNextServiceCall(callContext);
+        }
+        return callContext.getServiceId();
+    }
+
+    @Override
+    protected String getSuffix() {
+        return "_failover";
     }
 
     private void updateRouterConfiguration(GenericRouterConfiguration configuration) {
@@ -83,13 +110,19 @@ public class FailoverAndReturnWithConfigurableBlacklisting extends FailoverAndRe
         blacklistingStrategy.setConfiguration(getConfiguration());
     }
 
-    public GenericRouterConfiguration getConfiguration() {
+    GenericRouterConfiguration getConfiguration() {
         return configuration;
     }
 
-    public BlacklistingStrategy getBlacklistingStrategy() {
+    BlacklistingStrategy getBlacklistingStrategy() {
         return blacklistingStrategy;
     }
 
+    void setBlacklistingStrategy(BlacklistingStrategy blacklistingStrategy) {
+        this.blacklistingStrategy = blacklistingStrategy;
+    }
 
+    void setConfiguration(GenericRouterConfiguration configuration) {
+        this.configuration = configuration;
+    }
 }
