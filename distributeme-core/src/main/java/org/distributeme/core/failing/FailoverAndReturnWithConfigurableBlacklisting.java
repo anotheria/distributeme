@@ -57,8 +57,10 @@ public class FailoverAndReturnWithConfigurableBlacklisting extends FailoverAndRe
     @Override
     public FailDecision callFailed(ClientSideCallContext context) {
         blacklistingStrategy.notifyCallFailed(context);
+        getRoutingStats(context.getServiceId()).addFailedCall();
 
         if (nextNodeIsBlacklisted(context) && !isOverrideBlacklistIfAllBlacklisted()){
+            getRoutingStats(context.getServiceId()).addFailedCall();
             throw new ServiceUnavailableException(context.getServiceId() + " and " + createServiceIdForNextServiceCall(context) + " are Blacklisted!");
         }
         return retryOneceOnService(createServiceIdForNextServiceCall(context));
@@ -73,13 +75,16 @@ public class FailoverAndReturnWithConfigurableBlacklisting extends FailoverAndRe
     }
 
     private String createServiceIdForNextServiceCall(ClientSideCallContext context) {
+        String targetService = context.getServiceId() + getSuffix();
         if (context.getServiceId().contains(getSuffix())){
-            return context.getServiceId().replace(getSuffix(),"");
+            targetService = context.getServiceId().replace(getSuffix(),"");
         }
-        return context.getServiceId() + getSuffix();
+        getRoutingStats(targetService).addRequestRoutedTo();
+        return targetService;
     }
 
     private FailDecision retryOneceOnService(String targetService) {
+        getRoutingStats(targetService).addRequestRoutedTo();
         FailDecision ret = FailDecision.retryOnce();
         ret.setTargetService(targetService);
         return ret;
@@ -88,8 +93,10 @@ public class FailoverAndReturnWithConfigurableBlacklisting extends FailoverAndRe
     @Override
     public String getServiceIdForCall(ClientSideCallContext callContext) {
         if (blacklistingStrategy.isBlacklisted(callContext.getServiceId())){
+            getRoutingStats(callContext.getServiceId()).addBlacklisted();
             return createServiceIdForNextServiceCall(callContext);
         }
+        getRoutingStats(callContext.getServiceId()).addRequestRoutedTo();
         return callContext.getServiceId();
     }
 
