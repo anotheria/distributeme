@@ -1,37 +1,41 @@
 package org.distributeme.consulintegration;
 
+import com.google.gson.Gson;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import org.distributeme.core.CustomTagProvider;
+import org.distributeme.core.Location;
+import org.distributeme.core.RegistryConnector;
+import org.distributeme.core.RegistryLocation;
+import org.distributeme.core.ServiceDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.Gson;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import org.distributeme.core.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import static org.distributeme.consulintegration.ServiceNameTranslator.toConsul;
 
 
 /**
- * <p>Connector to use consul service registry with distributeme framework.</p>
+ * Connector to use consul service registry with distributeme framework.
  *
- * <p>Consul support is configurable via distributeme.json
- * To activate consul instead of distributeme default registry:</p>
+ * Consul support is configurable via distributeme.json
+ * To activate consul instead of distributeme default registry:
  *  "registryConnectorClazz": "org.distributeme.consulintegration.ConsulRegistryConnector"
  *
- * <p>To configure the location of consul:</p>
- * 	"registryContainerPort": 8500<br />
- *  "registryContainerHost": "localhost"<br />
- *  "registryContainerProtocol" : "http"<br />
+ * To configure the location of consul:
+ * 	"registryContainerPort": 8500
+ *  "registryContainerHost": "localhost"
+ *  "registryContainerProtocol" : "http"
  *
- * <p>To configure java system properties as optional tags for consul (comma separated list):</p>
+ * To configure java system properties as optional tags for consul (comma separated list):
  *  "systemPropertiesToTags": "com.sun.management.jmxremote.port,java.vm.version,configureme.defaultEnvironment,java.version",
  *
- * <p>Created by rboehling on 2/28/17.</p>
+ * Created by rboehling on 2/28/17.
  */
 public class ConsulRegistryConnector implements RegistryConnector {
 

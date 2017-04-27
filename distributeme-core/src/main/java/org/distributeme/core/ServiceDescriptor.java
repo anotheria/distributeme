@@ -8,7 +8,7 @@ import java.util.Calendar;
 /**
  * This class represents a resolvable address of a service.
  * A server address is build up like following:
- * <protocol>://<serviceid>.<instanceid>@<host>:<port>
+ * &lt;protocol&gt;://&lt;serviceid&gt;.&lt;instanceid&gt;@&lt;host&gt;:&lt;port&gt;
  *
  * @author lrosenberg
  * @version $Id: $Id

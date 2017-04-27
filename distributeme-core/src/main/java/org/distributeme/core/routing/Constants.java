@@ -8,11 +8,10 @@ package org.distributeme.core.routing;
  * @version $Id: $Id
  */
 public class Constants {
-	/** Constant <code>ROUTING_LOGGER_NAME="DistributeMeRouting"</code> */
 	public static final String ROUTING_LOGGER_NAME = "DistributeMeRouting";
 
 	/**
-	 * This attribute defines the call count in the current call. If the call count is > 1, this means, that this call is a failover call.
+	 * This attribute defines the call count in the current call. If the call count is &gt; 1, this means, that this call is a failover call.
 	 */
 	public static final String ATT_CALL_COUNT = "routing.callCount";
 
