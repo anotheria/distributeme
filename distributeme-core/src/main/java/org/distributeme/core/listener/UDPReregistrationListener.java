@@ -1,6 +1,5 @@
 package org.distributeme.core.listener;
 
-import org.distributeme.core.DistributemeRegistryConnector;
 import org.distributeme.core.RMIRegistryUtil;
 import org.distributeme.core.RegistryUtil;
 import org.distributeme.core.ServiceDescriptor;

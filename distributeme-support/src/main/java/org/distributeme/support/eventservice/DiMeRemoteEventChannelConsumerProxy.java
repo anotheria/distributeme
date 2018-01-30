@@ -1,6 +1,10 @@
 package org.distributeme.support.eventservice;
 
-import net.anotheria.anoprise.eventservice.*;
+import net.anotheria.anoprise.eventservice.Event;
+import net.anotheria.anoprise.eventservice.EventServiceConsumer;
+import net.anotheria.anoprise.eventservice.EventTransportShell;
+import net.anotheria.anoprise.eventservice.RemoteEventChannelConsumerProxy;
+import net.anotheria.anoprise.eventservice.RemoteEventServiceConsumer;
 import net.anotheria.net.util.ByteArraySerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class DiMeRemoteEventChannelConsumerProxy implements RemoteEventChannelConsumerProxy{
+public class DiMeRemoteEventChannelConsumerProxy implements RemoteEventChannelConsumerProxy {
 	
 	/**
 	 * Logger.

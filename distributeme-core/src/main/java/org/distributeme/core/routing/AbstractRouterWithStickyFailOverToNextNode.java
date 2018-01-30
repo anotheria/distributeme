@@ -1,8 +1,5 @@
 package org.distributeme.core.routing;
 
-import java.util.HashSet;
-import java.util.Random;
-
 import net.anotheria.util.StringUtils;
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.exception.DistributemeRuntimeException;
@@ -11,27 +8,24 @@ import org.distributeme.core.failing.FailingStrategy;
 import org.distributeme.core.routing.blacklisting.BlacklistingStrategy;
 import org.distributeme.core.routing.blacklisting.DefaultBlacklistingStrategy;
 
+import java.util.HashSet;
+import java.util.Random;
+
 
 /**
  * Abstract implementation of {@link org.distributeme.core.routing.Router} which supports {@link org.distributeme.core.failing.FailingStrategy}.
- * <p/>
  * By methods overriding/implementing router can be configured to support :
  * - Mod or RoundRobin strategy (override properly getStrategy() method  - <p>NOTE : should not return null</p>);
  * - different amounts of service instances, can be configured via annotation ar simply changed by getServerAmount() method override;
  * - support or not support call failing (failingSupported() should return true fro support, false otherwise ).
- * <p/>
  * In case when Mod routing strategy selected for some router, register all MOD - routed methods directly in router-constructor  using next calls:
  * - addModRoutedMethod (name, position) - which will add mod support for method with selected [name], and incoming argument with selected [position] will be used
  * as modable value;
  * - addModRoutedMethod(name) - will add mod support for method with selected [name], and parameter with 0 position will be used as modable (common case).
- * <p/>
  * IMPORTANT : If MOD routing can't be performed for some call (method does not have any incoming params, or incoming params does not matches for modable calculations, or simply we does not need to
  * route some method by MOD ) - RoundRobin will be performed  instead!. For this - just don't call addModRoutedMethod for method which should not be routed by MOD.
- * <p/>
- * <p/>
- * <p/>
- * <p/>
- * By implementing getModableValue(<?>) method - You can simply extract some long from incoming parameter, for further calculations.
+
+ * By implementing getModableValue(&lt;?&gt;) method - You can simply extract some long from incoming parameter, for further calculations.
  *
  * @author h3llka,dvayanu
  * @version $Id: $Id

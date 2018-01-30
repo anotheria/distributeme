@@ -4,10 +4,10 @@ import org.distributeme.core.ClientSideCallContext;
 /**
  * This interface defines a call router, which influences how calls are distributed to different servers in the same system.
  *
- * @see https://confluence.opensource.anotheria.net/display/DISTRIBUTEME/Routing+and+Failing+Strategies
- * @see https://confluence.opensource.anotheria.net/display/DISTRIBUTEME/Routing
- * @see https://confluence.opensource.anotheria.net/display/DISTRIBUTEME/Routing+and+Failing+Strategies
- * @see https://confluence.opensource.anotheria.net/display/DISTRIBUTEME/Routing
+ * see https://confluence.opensource.anotheria.net/display/DISTRIBUTEME/Routing+and+Failing+Strategies
+ * see https://confluence.opensource.anotheria.net/display/DISTRIBUTEME/Routing
+ * see https://confluence.opensource.anotheria.net/display/DISTRIBUTEME/Routing+and+Failing+Strategies
+ * see https://confluence.opensource.anotheria.net/display/DISTRIBUTEME/Routing
  * @author lrosenberg
  * @version $Id: $Id
  */

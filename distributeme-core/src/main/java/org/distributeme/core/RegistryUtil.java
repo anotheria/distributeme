@@ -1,13 +1,5 @@
 package org.distributeme.core;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.anotheria.util.StringUtils;
 import org.configureme.ConfigurationManager;
@@ -20,6 +12,14 @@ import org.distributeme.core.util.BaseRegistryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Utilities for communication with the registry over http protocol.
  *
@@ -28,6 +28,9 @@ import org.slf4j.LoggerFactory;
  */
 public class RegistryUtil extends BaseRegistryUtil{
 
+	/**
+	 * Connector for a concrete registry implementation.
+	 */
 	private static RegistryConnector registryConnector = new DistributemeRegistryConnector();
 
 	/**

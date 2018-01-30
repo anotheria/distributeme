@@ -19,7 +19,7 @@ public interface ModedService extends Service{
 	 * This parameter is used to demonstrate the moding behaviour.
 	 * @param parameter 
 	 * @return
-	 * @throws EchoServiceException
+	 * @throws ModedServiceException
 	 */
 	long modEcho(long parameter) throws ModedServiceException;
 	

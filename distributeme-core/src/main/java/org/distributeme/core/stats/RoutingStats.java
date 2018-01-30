@@ -6,12 +6,16 @@ import net.anotheria.moskito.core.stats.StatValue;
 import net.anotheria.moskito.core.stats.TimeUnit;
 import net.anotheria.moskito.core.stats.impl.StatValueFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static net.anotheria.moskito.core.decorators.DecoratorRegistryFactory.getDecoratorRegistry;
 
 /**
- * TODO comment this class
+ * Stats for Routing behaviour of the router.
  *
  * @author lrosenberg
  * @since 21.09.15 00:26
@@ -19,13 +23,26 @@ import static net.anotheria.moskito.core.decorators.DecoratorRegistryFactory.get
  */
 public class RoutingStats extends AbstractStats implements RoutingStatsCollector {
 
-
-
 	public static enum StatDef {
+		/**
+		 * How many requests has been directed to this router.
+		 */
 		RequestRoutedTo("RRT"),
+		/**
+		 * How many calls has failed.
+		 */
 		FailedCall("FC"),
+		/**
+		 * How many fail decisions have been returned.
+		 */
 		FailDecision("FD"),
+		/**
+		 * How many retry decisions have been returned.
+		 */
 		RetryDecision("RD"),
+		/**
+		 * How many instances have been blacklisted.
+		 */
 		Blacklisted("BL"),
 		;
 
@@ -61,10 +78,25 @@ public class RoutingStats extends AbstractStats implements RoutingStatsCollector
 		getDecoratorRegistry().addDecorator(RoutingStats.class, new RoutingStatsDecorator());
 	}
 
+	/**
+	 * How many requests has been directed to this router.
+	 */
 	private StatValue requestRoutedTo;
+	/**
+	 * Number of calls for fail/retry decision.
+	 */
 	private StatValue failedCall;
+	/**
+	 * Number of fail decisions.
+	 */
 	private StatValue failDecision;
+	/**
+	 * Number of retry decisions.
+	 */
 	private StatValue retryDecision;
+	/**
+	 * Number of blacklisted instances.
+	 */
 	private StatValue blackListed;
 
 	private HashMap<String, StatValue> name2value = new HashMap<String, StatValue>();

@@ -136,6 +136,9 @@ public abstract class AbstractCallContext {
 		return getMethodName()+"("+getParameters()+") --> "+getServiceId();
 	}
 
+	/**
+	 * CurrentCallContext - ThreadLocal copy of the context.
+	 */
 	private static ThreadLocal<AbstractCallContext> currentCallContext = new ThreadLocal<AbstractCallContext>();
 
 	/**

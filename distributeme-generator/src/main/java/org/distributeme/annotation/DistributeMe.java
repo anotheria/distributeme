@@ -65,7 +65,7 @@ public @interface DistributeMe {
 	boolean asynchSupport() default false;
 	
 	/**
-	 * Customizes the asynch call timeout -> timeout after which synch called to asynch interface are cancelled. If none is specified the default is taken. 
+	 * Customizes the asynch call timeout -&gt; timeout after which synch called to asynch interface are cancelled. If none is specified the default is taken.
 	 * @return
 	 */
 	long asynchCallTimeout() default -1;

@@ -1,6 +1,10 @@
 package org.distributeme.core;
 
-import net.anotheria.anoprise.metafactory.*;
+import net.anotheria.anoprise.metafactory.Extension;
+import net.anotheria.anoprise.metafactory.MetaFactory;
+import net.anotheria.anoprise.metafactory.MetaFactoryException;
+import net.anotheria.anoprise.metafactory.Service;
+import net.anotheria.anoprise.metafactory.ServiceFactory;
 import net.anotheria.moskito.core.dynamic.ProxyUtils;
 import org.distributeme.core.conventions.SharedNamingUtils;
 import org.slf4j.Logger;
