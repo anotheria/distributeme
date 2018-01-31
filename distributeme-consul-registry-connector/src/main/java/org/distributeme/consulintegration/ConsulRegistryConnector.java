@@ -109,7 +109,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 		try {
 			WebResource webResource = Client.create().resource(getRegistryUrl() + "/v1/agent/service/deregister/" + toConsul(service.getServiceId()));
 
-			response = webResource.accept("application/json").get(ClientResponse.class);
+			response = webResource.accept("application/json").put(ClientResponse.class);
 			if (response.getStatus() != 200) {
 				logger.error("Registry returns status: " + response.getStatus());
 				return false;

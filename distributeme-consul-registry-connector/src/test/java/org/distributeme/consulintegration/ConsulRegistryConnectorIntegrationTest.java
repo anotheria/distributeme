@@ -4,20 +4,17 @@ import java.util.Arrays;
 
 import com.pszymczyk.consul.ConsulProcess;
 import com.pszymczyk.consul.ConsulStarterBuilder;
-import com.pszymczyk.consul.junit.ConsulResource;
-import org.distributeme.core.Location;
 import org.distributeme.core.RegistryLocation;
-import org.distributeme.core.RegistryUtil;
 import org.distributeme.core.ServiceDescriptor;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -36,7 +33,7 @@ public class ConsulRegistryConnectorIntegrationTest {
 	}
 
 	@After
-	public void cleanup() throws Exception {
+	public void cleanup() {
 		consul.close();
 	}
 
@@ -69,5 +66,32 @@ public class ConsulRegistryConnectorIntegrationTest {
 
 		assertThat(resolvedDescriptor, is(nullValue()));
 	}
+
+	@Test
+	public void unbindsService() {
+		ServiceDescriptor serviceDescriptor = new ServiceDescriptor(ServiceDescriptor.Protocol.RMI, SERVICE_ID, INSTANCE_ID,"aHost", 9559, 1L);
+
+		connector.setCustomTagProviderClassList(Arrays.asList("org.distributeme.consulintegration.DistributeMeCustomTagTestClassA" ,
+				"org.distributeme.consulintegration.DistributeMeCustomTagTestClassB"));
+		boolean bind = connector.bind(serviceDescriptor);
+
+		assertTrue("Service should have been bind", bind);
+
+		ServiceDescriptor serviceDescriptorToResolve = new ServiceDescriptor(ServiceDescriptor.Protocol.RMI, SERVICE_ID);
+		ServiceDescriptor resolvedDescriptor = connector.resolve(serviceDescriptorToResolve, RegistryLocation.create());
+
+		assertThat(resolvedDescriptor, is(notNullValue()));
+		assertThat(resolvedDescriptor.getInstanceId(), is(serviceDescriptor.getInstanceId()));
+
+		boolean unbind = connector.unbind(serviceDescriptor);
+
+		assertTrue("Service should have been unbind", unbind);
+
+		serviceDescriptorToResolve = new ServiceDescriptor(ServiceDescriptor.Protocol.RMI, SERVICE_ID);
+		resolvedDescriptor = connector.resolve(serviceDescriptorToResolve, RegistryLocation.create());
+
+		assertThat(resolvedDescriptor, is(nullValue()));
+	}
+
 
 }
