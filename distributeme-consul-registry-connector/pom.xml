@@ -3,13 +3,13 @@
     <parent>
         <groupId>net.anotheria</groupId>
         <artifactId>distributeme-parent</artifactId>
-        <version>2.3.5-SNAPSHOT</version>
+        <version>2.3.5</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.anotheria</groupId>
     <artifactId>distributeme-consul-registry-connector</artifactId>
-    <version>2.3.5-SNAPSHOT</version>
+    <version>2.3.5</version>
     <name>DistributeMe Consul registry connector</name>
     <description>Connects the DistributeMe framework with the Consul</description>
 
