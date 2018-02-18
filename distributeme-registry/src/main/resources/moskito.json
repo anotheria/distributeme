@@ -1,0 +1,519 @@
+{
+  "applicationName": "DistributeMe",
+  "@thresholdsAlertsConfig": {
+    "notificationProviders": [],
+    "@alertHistoryConfig": {
+      "maxNumberOfItems": 200,
+      "toleratedNumberOfItems": 220
+    },
+    "dispatcherThreadPoolSize": 1
+  },
+  "@thresholdsConfig": {},
+  "@gaugesConfig": {
+    "@gauges": [
+      //this is an example config.
+      {
+        "name": "Constant",
+        "@minValue": {
+          "constant": 0
+        },
+        "@currentValue": {
+          "constant": 70
+        },
+        "@maxValue": {
+          "constant": 100
+        },
+        "@zones": [
+          {
+            "color": "green",
+            "left": 0,
+            "right": 0.25
+          },
+          {
+            "color": "yellow",
+            "left": 0.25,
+            "right": 0.5
+          },
+          {
+            "color": "orange",
+            "left": 0.5,
+            "right": 0.75
+          },
+          {
+            "color": "red",
+            "left": 0.75,
+            "right": 1
+          }
+        ]
+      },
+      {
+        "name": "Sessions",
+        "@minValue": {
+          "constant": 0
+        },
+        "@currentValue": {
+          "producerName": "SessionCount",
+          "statName": "Sessions",
+          "valueName": "cur",
+          "intervalName": "default"
+        },
+        "@maxValue": {
+          "producerName": "SessionCount",
+          "statName": "Sessions",
+          "valueName": "max",
+          "intervalName": "default"
+        }
+      },
+      {
+        "name": "Memory",
+        "caption": "Used memory",
+        "@minValue": {
+          "constant": 0
+        },
+        "@currentValue": {
+          "producerName": "Heap memory",
+          "statName": "Heap memory",
+          "valueName": "Used Mb",
+          "intervalName": "default"
+        },
+        "@maxValue": {
+          "producerName": "JavaRuntimeMax",
+          "statName": "JavaRuntimeMax",
+          "valueName": "Current Mb",
+          "intervalName": "default"
+        }
+      },
+      {
+        "name": "Blocked",
+        "caption": "Blocked Threads",
+        "@minValue": {
+          "constant": 0
+        },
+        "@currentValue": {
+          "producerName": "ThreadStates",
+          "statName": "BLOCKED",
+          "valueName": "Current",
+          "intervalName": "1m"
+        },
+        "@maxValue": {
+          "producerName": "ThreadCount",
+          "statName": "ThreadCount",
+          "valueName": "current",
+          "intervalName": "default"
+        }
+      },
+      {
+        "name": "Running",
+        "caption": "Running Threads",
+        "@minValue": {
+          "constant": 0
+        },
+        "@currentValue": {
+          "producerName": "ThreadStates",
+          "statName": "RUNNABLE",
+          "valueName": "Current",
+          "intervalName": "1m"
+        },
+        "@maxValue": {
+          "producerName": "ThreadCount",
+          "statName": "ThreadCount",
+          "valueName": "current",
+          "intervalName": "default"
+        }
+      },
+      {
+        "name": "SysLoad",
+        "caption": "System CPU Load",
+        "@minValue": {
+          "constant": 0
+        },
+        "@currentValue": {
+          "producerName": "OS",
+          "statName": "OS",
+          "valueName": "systemcpuload",
+          "intervalName": "default"
+        },
+        "@maxValue": {
+          "constant": 100
+        },
+        "@zones": [
+          {
+            "color": "green",
+            "left": 0,
+            "right": 0.5
+          },
+          {
+            "color": "yellow",
+            "left": 0.5,
+            "right": 0.75
+          },
+          {
+            "color": "orange",
+            "left": 0.75,
+            "right": 0.9
+          },
+          {
+            "color": "red",
+            "left": 0.9,
+            "right": 1
+          }
+        ]
+      },
+      {
+        "name": "ProcLoad",
+        "caption": "Process CPU Load",
+        "@minValue": {
+          "constant": 0
+        },
+        "@currentValue": {
+          "producerName": "OS",
+          "statName": "OS",
+          "valueName": "processcpuload",
+          "intervalName": "default"
+        },
+        "@maxValue": {
+          "constant": 100
+        },
+        "@zones": [
+          {
+            "color": "green",
+            "left": 0,
+            "right": 0.5
+          },
+          {
+            "color": "yellow",
+            "left": 0.5,
+            "right": 0.75
+          },
+          {
+            "color": "orange",
+            "left": 0.75,
+            "right": 0.9
+          },
+          {
+            "color": "red",
+            "left": 0.9,
+            "right": 1
+          }
+        ]
+      }
+    ],
+    "@defaultZones": [
+      {
+        "color": "orange",
+        "left": 0.85,
+        "right": 0.9
+      },
+      {
+        "color": "red",
+        "left": 0.9,
+        "right": 1
+      }
+    ]
+  },
+  "@dashboardsConfig": {
+    "@dashboards": [
+      {
+        "name": "Registry",
+        "refresh": 60,
+        "@charts": [
+          {
+            "caption": "Resolve 5m",
+            "accumulators": [
+              "ServiceRegistry.resolve.5m"
+            ]
+          },
+          {
+            "caption": "Bind/Unbind 5m",
+            "accumulators": [
+              "ServiceRegistry.bind.5m",
+              "ServiceRegistry.unbind.5m"
+            ]
+          },
+          {
+            "caption": "Resolve 1m",
+            "accumulators": [
+              "ServiceRegistry.resolve.1m"
+            ]
+          },
+          {
+            "caption": "Bind/Unbind 1m",
+            "accumulators": [
+              "ServiceRegistry.bind.1m",
+              "ServiceRegistry.unbind.1m"
+            ]
+          }
+        ],
+        "producers": [
+          "ServiceRegistry",
+          "Operation.Resolve",
+          "Operation.Bind",
+          "Operation.Unbind"
+        ],
+        "widgets": [
+          "thresholds",
+          "gauges",
+          "charts",
+          "producers"
+        ]
+      },
+      {
+        "name": "System",
+        "refresh": 60,
+        "@charts": [
+          {
+            "caption": "Memory",
+            "accumulators": [
+              "Mem OldGenFree MB 1m",
+              "Mem OldGenUsed MB 1m"
+            ]
+          },
+          {
+            "caption": "Threads",
+            "accumulators": [
+              "ThreadCount",
+              "ThreadStateBlocked-1m",
+              "ThreadStateRunnable-1m",
+              "ThreadStateTimedWaiting-1m",
+              "ThreadStateWaiting-1m"
+            ]
+          },
+          {
+            "accumulators": [
+              "URL REQ 1m"
+            ]
+          },
+          {
+            "accumulators": [
+              "URL Time 1m"
+            ]
+          },
+          {
+            "accumulators": [
+              "URL AVG 1m"
+            ]
+          },
+          {
+            "accumulators": [
+              "SessionCount Cur Absolute"
+            ]
+          },
+          {
+            "accumulators": [
+              "CPU Time 1m"
+            ]
+          },
+          {
+            "caption": "Load",
+            "accumulators": [
+              "System CPU Load 1m",
+              "Process CPU Load 1m"
+            ]
+          },
+          {
+            "caption": "Errors",
+            "accumulators": ["Errors.Cumulated.Initial","Errors.Cumulated.Total"]
+          }
+        ],
+        "@thresholds": [
+          "SystemCPULoad",
+          "ProcessCPULoad",
+          "ThreadCount",
+          "OldGenFree",
+          "PermGenFree"
+        ],
+        "@gauges": [
+          "Blocked",
+          "Memory",
+          "Running",
+          "SysLoad"
+        ]
+      }
+
+    ]
+  },
+  "@accumulatorsConfig": {
+    "accumulationAmount": 200,
+    "accumulatorSets": [
+    ],
+    "@accumulators":[
+      {
+        "name": "System CPU Load 1m",
+        "producerName": "OS",
+        "statName": "OS",
+        "valueName": "systemcpuload",
+        "intervalName": "default"
+      },
+      {
+        "name": "Process CPU Load 1m",
+        "producerName": "OS",
+        "statName": "OS",
+        "valueName": "processcpuload",
+        "intervalName": "default"
+      },
+      {
+        "name": "ThreadCount",
+        "producerName": "ThreadCount",
+        "statName": "ThreadCount",
+        "valueName": "current",
+        "intervalName": "default"
+      },
+      {
+        "name": "ThreadStateRunnable-1m",
+        "producerName": "ThreadStates",
+        "statName": "RUNNABLE",
+        "valueName": "current",
+        "intervalName": "1m"
+      },
+      {
+        "name": "ThreadStateWaiting-1m",
+        "producerName": "ThreadStates",
+        "statName": "TIMED_WAITING",
+        "valueName": "current",
+        "intervalName": "1m"
+      },
+      {
+        "name": "ThreadStateTimedWaiting-1m",
+        "producerName": "ThreadStates",
+        "statName": "WAITING",
+        "valueName": "current",
+        "intervalName": "1m"
+      },
+      {
+        "name": "ThreadStateBlocked-1m",
+        "producerName": "ThreadStates",
+        "statName": "BLOCKED",
+        "valueName": "current",
+        "intervalName": "1m"
+      },
+      {
+        "name": "ThreadStateRunnable-5m",
+        "producerName": "ThreadStates",
+        "statName": "RUNNABLE",
+        "valueName": "current",
+        "intervalName": "5m"
+      },
+      {
+        "name": "ThreadStateWaiting-5m",
+        "producerName": "ThreadStates",
+        "statName": "TIMED_WAITING",
+        "valueName": "current",
+        "intervalName": "5m"
+      },
+      {
+        "name": "ThreadStateTimedWaiting-5m",
+        "producerName": "ThreadStates",
+        "statName": "WAITING",
+        "valueName": "current",
+        "intervalName": "5m"
+      },
+      {
+        "name": "ThreadStateBlocked-5m",
+        "producerName": "ThreadStates",
+        "statName": "BLOCKED",
+        "valueName": "current",
+        "intervalName": "5m"
+      },
+      {
+        "name": "ServiceRegistry.unbind.5m",
+        "producerName": "ServiceRegistry",
+        "statName": "unbind",
+        "valueName": "Req",
+        "intervalName": "5m"
+      },
+      {
+        "name": "ServiceRegistry.bind.5m",
+        "producerName": "ServiceRegistry",
+        "statName": "bind",
+        "valueName": "Req",
+        "intervalName": "5m"
+      },
+      {
+        "name": "ServiceRegistry.resolve.5m",
+        "producerName": "ServiceRegistry",
+        "statName": "resolve",
+        "valueName": "Req",
+        "intervalName": "5m"
+      },
+      {
+        "name": "ServiceRegistry.unbind.1m",
+        "producerName": "ServiceRegistry",
+        "statName": "unbind",
+        "valueName": "Req",
+        "intervalName": "1m"
+      },
+      {
+        "name": "ServiceRegistry.bind.1m",
+        "producerName": "ServiceRegistry",
+        "statName": "bind",
+        "valueName": "Req",
+        "intervalName": "1m"
+      },
+      {
+        "name": "ServiceRegistry.resolve.1m",
+        "producerName": "ServiceRegistry",
+        "statName": "resolve",
+        "valueName": "Req",
+        "intervalName": "1m"
+      }
+
+    ]
+  },
+  "@pluginsConfig": {},
+  "@mbeanProducersConfig": {
+    "registerAutomatically": false,
+    "updateAutomatically": true,
+    "delayBeforeFirstUpdate": 15000
+  },
+  "@builtinProducersConfig": {
+    "javaMemoryProducers": true,
+    "javaMemoryPoolProducers": true,
+    "javaThreadingProducers": true,
+    "osProducer": true,
+    "runtimeProducer": true,
+    "mbeanProducers": true,
+    "gcProducer": true,
+    "errorProducer": true
+  },
+  "@tomcatRequestProcessorProducerConfig": {
+    "ajp": true,
+    "http": true
+  },
+  "@tracingConfig": {
+    "tracingEnabled": true,
+    "loggingEnabled": false,
+    "inspectEnabled": true,
+    "maxTraces": 100,
+    "shrinkingStrategy": "KEEPLONGEST"
+  },
+  "@journeyConfig": {
+    "parameterLengthLimit": 100,
+    "toStringCollections": true,
+    "toStringMaps": true
+  },
+  "@errorHandlingConfig": {
+    "autoChartErrors": true,
+    "autoChartErrorsInterval": "1m",
+    "logErrors": false,
+    "@catchers": [],
+    "catchersMemoryErrorLimit": 50,
+    "countRethrows": false
+  },
+  "@filterConfig": {
+    "caseExtractors": [
+      "net.anotheria.moskito.web.filters.caseextractor.RequestURICaseExtractor",
+      "net.anotheria.moskito.web.filters.caseextractor.RefererCaseExtractor",
+      "net.anotheria.moskito.web.filters.caseextractor.MethodCaseExtractor",
+      "net.anotheria.moskito.web.filters.caseextractor.UserAgentCaseExtractor",
+      "net.anotheria.moskito.web.filters.caseextractor.DomainCaseExtractor"
+    ]
+  },
+  "@taggingConfig": {
+    "autotagSessionId": true,
+    "autotagIp": true,
+    "autotagUserAgent": true,
+    "autotagReferer": true,
+    "@customTags": [],
+    "tagHistorySize": 10
+  }
+}
