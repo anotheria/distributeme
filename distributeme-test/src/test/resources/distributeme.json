@@ -1,6 +1,6 @@
 {
-	"registryContainerPort": 8500,
-	"registryContainerHost": "psdeoffws0077.parship.internal",
+	"registryContainerPort": 9229,
+	"registryContainerHost": "localhost",
 	"registryContainerProtocol" : "http",
 	
 	//if true the server will log all exceptions including expected exception (defined by the interface), otherwise expected exceptions will be ignored
@@ -8,8 +8,8 @@
 	//if true the client (stub) will log all caught exceptions (remote exception and runtime exceptions)
 	"logClientSideExceptions": false,
 	//Could not be changed at runtime, because that makes no sense
-	"registryConnectorClazz": "org.distributeme.consulintegration.ConsulRegistryConnector",
-	"systemPropertiesToTags": "com.sun.management.jmxremote.port,java.vm.version,configureme.defaultEnvironment,java.version",
+	//"registryConnectorClazz": "org.distributeme.consulintegration.ConsulRegistryConnector",
+	//"systemPropertiesToTags": "com.sun.management.jmxremote.port,java.vm.version,configureme.defaultEnvironment,java.version",
 	
 	//registrationIpMapping: "192.168.200.5:10.0.0.0",
 	
@@ -17,7 +17,7 @@
     "listener.2": "org.distributeme.core.listener.UDPReregistrationListener",
 	"interceptor.1": "org.distributeme.core.interceptor.availabilitytesting.ServiceUnavailableByPropertyInterceptor",
 	"interceptor.2": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByPropertyInterceptor",
-	"interceptor.3": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByConfigurationInterceptor",
+//	"interceptor.3": "org.distributeme.core.interceptor.availabilitytesting.ServerSideSlowDownByConfigurationInterceptor",
 //	"interceptor.4": "org.distributeme.test.roundrobinwithfotonext.interceptor.ClientSideMarkLongRequestAsFailedInterceptor",
     //"interceptor.4": "org.distributeme.test.list.ListInterceptor",
 //    "interceptor.20": "org.distributeme.test.roundrobinwithfotonext.interceptor.ClientSideMarkLongRequestAsFailedInterceptor",
