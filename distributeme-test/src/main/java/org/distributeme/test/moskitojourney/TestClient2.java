@@ -41,9 +41,11 @@ public class TestClient2 {
 		System.out.println("Journey: "+myJourney);
 		System.out.println("  calls: "+myJourney.getTracedCalls());
 		
+		/*
 		for (CurrentlyTracedCall call : myJourney.getTracedCalls()){
+		 
 			System.out.println(call.toDetails());
-		}
+		}*/
 
 	}
 	
