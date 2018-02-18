@@ -12,6 +12,13 @@
   <name>distributeme-registry</name>
   <packaging>war</packaging>
 
+  <properties>
+	  <aspectj-version>1.8.8</aspectj-version>
+	  <aspectj-maven-plugin.version>1.8</aspectj-maven-plugin.version>
+	  <aspectj-maven-plugin.complianceLevel>1.7</aspectj-maven-plugin.complianceLevel>
+
+  </properties>
+
   <dependencies>
 	<dependency>
 		<groupId>net.anotheria</groupId>
@@ -36,6 +43,14 @@
 		<groupId>net.anotheria</groupId>
 		<artifactId>moskito-web</artifactId>
 	</dependency>
+	  <dependency>
+		  <groupId>net.anotheria</groupId>
+		  <artifactId>moskito-aop</artifactId>
+	  </dependency>
+	  <dependency>
+		  <groupId>net.anotheria</groupId>
+		  <artifactId>moskito-core</artifactId>
+	  </dependency>
 	<dependency>
 		<groupId>net.anotheria</groupId>
 		<artifactId>moskito-webui</artifactId>
@@ -69,7 +84,41 @@
   </dependencies>
 <build>
   <plugins>
-
+	  <plugin>
+		  <groupId>org.codehaus.mojo</groupId>
+		  <artifactId>aspectj-maven-plugin</artifactId>
+		  <version>${aspectj-maven-plugin.version}</version>
+		  <dependencies>
+			  <dependency>
+				  <groupId>org.aspectj</groupId>
+				  <artifactId>aspectjrt</artifactId>
+				  <version>${aspectj-version}</version>
+			  </dependency>
+			  <dependency>
+				  <groupId>org.aspectj</groupId>
+				  <artifactId>aspectjtools</artifactId>
+				  <version>${aspectj-version}</version>
+			  </dependency>
+		  </dependencies>
+		  <configuration>
+			  <aspectLibraries>
+				  <aspectLibrary>
+					  <groupId>net.anotheria</groupId>
+					  <artifactId>moskito-aop</artifactId>
+				  </aspectLibrary>
+			  </aspectLibraries>
+			  <complianceLevel>${aspectj-maven-plugin.complianceLevel}</complianceLevel>
+			  <source>${source-version}</source>
+			  <target>${target-version}</target>
+		  </configuration>
+		  <executions>
+			  <execution>
+				  <goals>
+					  <goal>compile</goal>
+				  </goals>
+			  </execution>
+		  </executions>
+	  </plugin>
       <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>

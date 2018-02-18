@@ -1,5 +1,6 @@
 package org.distributeme.registry.esregistry;
 
+import net.anotheria.moskito.aop.annotation.Monitor;
 import org.distributeme.core.ServiceDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author lrosenberg
  *
  */
+@Monitor(producerId = "EventServiceRegistry", category = "registry", subsystem = "distributeme")
 public class EventServiceRegistryImpl implements EventServiceRegistry{
 
 	/**

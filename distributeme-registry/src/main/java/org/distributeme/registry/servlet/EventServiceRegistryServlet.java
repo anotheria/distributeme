@@ -1,5 +1,6 @@
 package org.distributeme.registry.servlet;
 
+import net.anotheria.moskito.aop.annotation.Monitor;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.core.conventions.WebOperations;
 import org.distributeme.core.util.EventServiceRegistryUtil;
@@ -22,6 +23,7 @@ import java.util.List;
  * @author lrosenberg
  *
  */
+@Monitor(producerId = "EventServiceRegistryServlet", category = "servlet", subsystem = "distributeme")
 public class EventServiceRegistryServlet extends BaseRegistryServlet{
 	/**
 	 * SerialUID.

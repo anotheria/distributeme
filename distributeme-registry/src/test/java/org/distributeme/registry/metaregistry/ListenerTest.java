@@ -13,7 +13,8 @@ import static org.junit.Assert.assertEquals;
 
 public class ListenerTest {
 	
-	@Before public void reset(){
+	@Before
+	public void reset(){
 		resetRegistry();
 	}
 	
@@ -44,14 +45,15 @@ public class ListenerTest {
 	}
 	
 	@Test public void testUnbind(){
-		ServiceDescriptor sd = new ServiceDescriptor(Protocol.RMI, "foo");
+		ServiceDescriptor sd = new ServiceDescriptor(Protocol.RMI, "foo", "instanceId", "host", 9000);
+
 		MetaRegistry registry = MetaRegistryImpl.getInstance();
 		TestListener listener = new TestListener();
 		
 		for (int i=0; i<10; i++){
 			registry.unbind(sd);
 		}
-		
+
 		assertEquals(0, listener.binds.size());
 		assertEquals(0, listener.unbinds.size());
 		
@@ -60,7 +62,7 @@ public class ListenerTest {
 		for (int i=0; i<10; i++){
 			registry.unbind(sd);
 		}
-		
+
 		assertEquals(0, listener.binds.size());
 		assertEquals(0, listener.unbinds.size());
 
@@ -70,7 +72,7 @@ public class ListenerTest {
 			registry.bind(sd);
 			registry.unbind(sd);
 		}
-		
+
 		assertEquals(10, listener.binds.size());
 		assertEquals(10, listener.unbinds.size());
 }

@@ -1,5 +1,6 @@
 package org.distributeme.registry.servlet;
 
+import net.anotheria.moskito.aop.annotation.Monitor;
 import org.distributeme.core.RegistryUtil;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.registry.metaregistry.Cluster;
@@ -22,6 +23,7 @@ import java.util.List;
  * @author lrosenberg.
  */
 @SuppressWarnings("serial")
+@Monitor (producerId = "MetaRegistryServlet", category = "servlet", subsystem = "distributeme")
 public class MetaRegistryServlet extends BaseRegistryServlet{
 	/**
 	 * Supported operations.
