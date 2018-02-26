@@ -64,6 +64,11 @@
           <groupId>net.anotheria</groupId>
           <artifactId>moskito-notification-providers</artifactId>
       </dependency>
+	  <dependency>
+		  <groupId>org.moskito</groupId>
+		  <artifactId>moskito-control-agent-http-endpoint</artifactId>
+		  <version>${moskito-control-agent-version}</version>
+	  </dependency>
 
 	<dependency>
 		<groupId>net.anotheria</groupId>
