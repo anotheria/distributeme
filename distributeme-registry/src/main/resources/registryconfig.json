@@ -1,24 +1,27 @@
 {
-	registryParentLookup: false,
-	registryParentHost: "",
-	registryParentPort: 1234,
+	"registryParentLookup": false,
+	"registryParentHost": "",
+	"registryParentPort": 1234,
 
-	registryPortMin: 9250,
-	registryPortMax: 9400,
+	"registryPortMin": 9250,
+	"registryPortMax": 9400,
 	
-	clusterInstances: "",
+	"clusterInstances": "",
 	//time between live pings in milliseconds.
-	clusterCheckPeriod: 5000,
-	dev: {
-		example: {
-			registryParentLookup: true,
-			registryParentHost: "anotherregistryhost.something.somethingelse",
-			registryParentPort: 9229,			
+	"clusterCheckPeriod": 5000,
+
+  
+
+	"dev": {
+		"example": {
+			"registryParentLookup": true,
+			"registryParentHost": "anotherregistryhost.something.somethingelse",
+			"registryParentPort": 9229
 		},
-		leon : {
+		"leon" : {
 			//declares a cluster of three instances.
-			clusterInstances: "localhost:9229,localhost:9230,localhost:9231",
-			registryParentHost: "test",
-		},
-	},
+			"clusterInstances": "localhost:9229,localhost:9230,localhost:9231",
+			"registryParentHost": "test"
+		}
+	}
 }
