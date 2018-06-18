@@ -1,0 +1,6 @@
+{
+	"intervalDurationInSeconds": 10,
+	"requiredNumberOfIntervalsWithErrors": 1,
+	"errorsPerIntervalThreshold": 1,
+	"blacklistTime":20
+}

@@ -7,50 +7,50 @@ public enum BlacklistDecision {
 
 	IS_BLACKLISTED {
 		@Override
-		boolean statusChanged() {
+		public boolean statusChanged() {
 			return false;
 		}
 
 		@Override
-		boolean isBlacklisted() {
+		public boolean isBlacklisted() {
 			return true;
 		}
 	},
 	GOT_BLACKLISTED {
 		@Override
-		boolean statusChanged() {
+		public boolean statusChanged() {
 			return true;
 		}
 
 		@Override
-		boolean isBlacklisted() {
+		public boolean isBlacklisted() {
 			return true;
 		}
 	},
 	NOT_BLACKLISTED {
 		@Override
-		boolean statusChanged() {
+		public boolean statusChanged() {
 			return false;
 		}
 
 		@Override
-		boolean isBlacklisted() {
+		public boolean isBlacklisted() {
 			return false;
 		}
 	},
 	UNBLACKLISTED {
 		@Override
-		boolean statusChanged() {
+		public boolean statusChanged() {
 			return true;
 		}
 
 		@Override
-		boolean isBlacklisted() {
+		public boolean isBlacklisted() {
 			return false;
 		}
 	};
 
-	abstract boolean statusChanged();
+	abstract public boolean statusChanged();
 
-	abstract boolean isBlacklisted();
+	abstract public boolean isBlacklisted();
 }
