@@ -10,6 +10,9 @@
 	//time between live pings in milliseconds.
 	"clusterCheckPeriod": 5000,
 
+    "monitorRequiredServiceAmount": true,
+    "requiredServiceAmount": 1,
+
   
 
 	"dev": {

@@ -244,6 +244,7 @@
             ]
           }
         ],
+        "thresholds": ["RegistryCompleteness"],
         "producers": [
           "ServiceRegistry",
           "Operation.Resolve",

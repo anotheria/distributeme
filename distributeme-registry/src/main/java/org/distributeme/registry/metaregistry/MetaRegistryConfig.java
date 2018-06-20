@@ -44,6 +44,12 @@ public final class MetaRegistryConfig implements Location {
 
 	private int registryPortMax;
 
+	private boolean monitorRequiredServiceAmount = false;
+
+	private int requiredServiceAmount = 0;
+
+
+
 	/**
 	 * Returns true if parent registry lookup is enabled.
 	 * @return
@@ -127,5 +133,21 @@ public final class MetaRegistryConfig implements Location {
 	@Override
 	public String getContext() {
 		return registryParentContext;
+	}
+
+	public boolean isMonitorRequiredServiceAmount() {
+		return monitorRequiredServiceAmount;
+	}
+
+	public void setMonitorRequiredServiceAmount(boolean monitorRequiredServiceAmount) {
+		this.monitorRequiredServiceAmount = monitorRequiredServiceAmount;
+	}
+
+	public int getRequiredServiceAmount() {
+		return requiredServiceAmount;
+	}
+
+	public void setRequiredServiceAmount(int requiredServiceAmount) {
+		this.requiredServiceAmount = requiredServiceAmount;
 	}
 }

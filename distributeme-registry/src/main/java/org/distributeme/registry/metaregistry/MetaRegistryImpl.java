@@ -35,7 +35,7 @@ public final class MetaRegistryImpl implements MetaRegistry{
 	private static Logger log = LoggerFactory.getLogger(MetaRegistryImpl.class);
 
 	private BindUnbindResolveCounter counter = new BindUnbindResolveCounter();
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -46,6 +46,8 @@ public final class MetaRegistryImpl implements MetaRegistry{
 	public static MetaRegistry getInstance() {
 		return MetaRegistryImplHolder.registry;
 	}
+
+	private RegistryCompletenessProducer registryCompletenessProducer;
 
 	@Override
 	public boolean bind(ServiceDescriptor service) {
@@ -58,6 +60,7 @@ public final class MetaRegistryImpl implements MetaRegistry{
 				log.warn("Exception in listener on unbind, cught.", any);
 			}
 		}
+		registryCompletenessProducer.setServiceCount(bindings.size());
 		return true;
 	}
 
@@ -86,17 +89,20 @@ public final class MetaRegistryImpl implements MetaRegistry{
 				log.warn("Exception in listener on unbind, cught.", any);
 			}
 		}
+		registryCompletenessProducer.setServiceCount(bindings.size());
 		return true;
 	}
 	
 	@Override
 	public void remoteUnbind(ServiceDescriptor service) {
 		bindings.remove(service.getGlobalServiceId());
+		registryCompletenessProducer.setServiceCount(bindings.size());
 	}
 
 	@Override
 	public void remoteBind(ServiceDescriptor service) {
 		bindings.put(service.getGlobalServiceId(), service);
+		registryCompletenessProducer.setServiceCount(bindings.size());
 	}
 
 	@Override public List<ServiceDescriptor> list(){
@@ -124,7 +130,8 @@ public final class MetaRegistryImpl implements MetaRegistry{
 	
 	void reset(){
 		bindings = new ConcurrentHashMap<String, ServiceDescriptor>();
-		listeners = new CopyOnWriteArrayList<MetaRegistryListener>();		
+		listeners = new CopyOnWriteArrayList<MetaRegistryListener>();
+		registryCompletenessProducer = new RegistryCompletenessProducer();
 	}
 	 
 
