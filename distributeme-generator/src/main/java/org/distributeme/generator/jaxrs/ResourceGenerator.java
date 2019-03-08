@@ -1,15 +1,12 @@
 package org.distributeme.generator.jaxrs;
 
 import net.anotheria.moskito.core.dynamic.MoskitoInvokationProxy;
-import net.anotheria.moskito.core.logging.DefaultStatsLogger;
-import net.anotheria.moskito.core.logging.IntervalStatsLogger;
-import net.anotheria.moskito.core.logging.SL4JLogOutput;
+import net.anotheria.moskito.core.logging.LoggerUtil;
 import net.anotheria.moskito.core.predefined.ServiceStatsCallHandler;
 import net.anotheria.moskito.core.predefined.ServiceStatsFactory;
 import net.anotheria.moskito.core.producers.IStatsProducer;
 import net.anotheria.moskito.core.registry.IProducerRegistryAPI;
 import net.anotheria.moskito.core.registry.ProducerRegistryAPIFactory;
-import net.anotheria.moskito.core.stats.DefaultIntervals;
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.core.Defaults;
 import org.distributeme.core.ServerSideCallContext;
@@ -95,15 +92,12 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		writeImport(ServiceLocator.class);
 		if (ann.moskitoSupport()){
 			writeImport(MoskitoInvokationProxy.class);
-			writeImport(DefaultStatsLogger.class);
-			writeImport(IntervalStatsLogger.class);
-			writeImport(SL4JLogOutput.class);
-			writeImport(DefaultIntervals.class);
 			writeImport(ServiceStatsCallHandler.class);
 			writeImport(ServiceStatsFactory.class);
 			writeImport(IProducerRegistryAPI.class);
 			writeImport(ProducerRegistryAPIFactory.class);
 			writeImport(IStatsProducer.class);
+			writeImport(LoggerUtil.class);
 		}
 		writeImport(MediaType.class);
 		writeImport(Path.class);
@@ -173,11 +167,7 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 		
 			writeStatement("implementation = ("+type.getQualifiedName()+") proxy.createProxy()");
 			writeString("// add moskito logger");
-			writeStatement("new DefaultStatsLogger(proxy.getProducer(), new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.default\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.FIVE_MINUTES, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.5m\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.FIFTEEN_MINUTES, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.15m\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.ONE_HOUR, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.1h\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.ONE_DAY, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.custom.1d\")))");
+			writeStatement("LoggerUtil.createSLF4JDefaultAndIntervalStatsLogger(proxy.getProducer())");
 			writeString("//end moskito logger");
 			
 			//add moskito BI loggers.
@@ -186,12 +176,8 @@ public class ResourceGenerator extends AbstractGenerator implements Generator{
 			writeStatement("List<IStatsProducer> stats = api.getAllProducersBySubsystem(\"builtin\")");
 			
 			writeString("for (IStatsProducer producer : stats){");
-				increaseIdent(); 
-				writeStatement("new DefaultStatsLogger(producer, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.default\")))");
-				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.FIVE_MINUTES, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.5m\")))");
-				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.FIFTEEN_MINUTES, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.15m\")))");
-				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.ONE_HOUR, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.1h\")))");
-				writeStatement("new IntervalStatsLogger(producer, DefaultIntervals.ONE_DAY, new SL4JLogOutput(LoggerFactory.getLogger(\"moskito.bi.1d\")))");
+				increaseIdent();
+				writeStatement("LoggerUtil.createSLF4JDefaultAndIntervalStatsLogger(producer)");
 			closeBlock();
 			//END BUILTIN PRODUCERS LOGGING
 			

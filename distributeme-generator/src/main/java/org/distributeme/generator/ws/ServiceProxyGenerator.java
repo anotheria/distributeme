@@ -8,7 +8,6 @@ import net.anotheria.moskito.core.logging.IntervalStatsLogger;
 import net.anotheria.moskito.core.logging.Log4JOutput;
 import net.anotheria.moskito.core.predefined.ServiceStatsCallHandler;
 import net.anotheria.moskito.core.predefined.ServiceStatsFactory;
-import net.anotheria.moskito.core.stats.DefaultIntervals;
 import org.distributeme.annotation.WebServiceMe;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +58,6 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 			writeImport(DefaultStatsLogger.class);
 			writeImport(IntervalStatsLogger.class);
 			writeImport(Log4JOutput.class);
-			writeImport(DefaultIntervals.class);
 			writeImport(ServiceStatsCallHandler.class);
 			writeImport(ServiceStatsFactory.class);
 			writeImport(MetaFactory.class);
@@ -94,11 +92,7 @@ public class ServiceProxyGenerator extends WSStructureGenerator implements WebSe
 			emptyline();
 			writeStatement("implementation = (" + type.getQualifiedName() + ") proxy.createProxy()");
 			emptyline();
-			writeStatement("new DefaultStatsLogger(proxy.getProducer(), new Log4JOutput(Logger.getLogger(\"MoskitoDefault\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.FIVE_MINUTES, new Log4JOutput(Logger.getLogger(\"Moskito5m\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.FIFTEEN_MINUTES, new Log4JOutput(Logger.getLogger(\"Moskito15m\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.ONE_HOUR, new Log4JOutput(Logger.getLogger(\"Moskito1h\")))");
-			writeStatement("new IntervalStatsLogger(proxy.getProducer(), DefaultIntervals.ONE_DAY, new Log4JOutput(Logger.getLogger(\"Moskito1d\")))");
+			writeStatement("LoggerUtil.createSLF4JDefaultAndIntervalStatsLogger(proxy.getProducer())");
 		}
 		closeBlock();
 		emptyline();
