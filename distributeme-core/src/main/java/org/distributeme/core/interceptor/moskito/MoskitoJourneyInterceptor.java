@@ -47,7 +47,7 @@ public class MoskitoJourneyInterceptor implements ClientSideRequestInterceptor, 
 		if (flag!=null && flag){
 			CurrentlyTracedCall currentTrace =  new CurrentlyTracedCall("SERVER_SIDE");
 			RunningTraceContainer.setCurrentlyTracedCall(currentTrace);
-			currentTrace.startStep("--- NETWORK IN ---", MoskitoJourneyInterceptorStatsProducer.SKELETON);
+			currentTrace.startStep("--- NETWORK IN ---", MoskitoJourneyInterceptorStatsProducer.SKELETON, "incomingCall");
 			iContext.getLocalStore().put(ICONTEXT_ATTRIBUTE_STARTTIME, System.nanoTime());
 		}
 
@@ -89,7 +89,7 @@ public class MoskitoJourneyInterceptor implements ClientSideRequestInterceptor, 
 			return InterceptorResponse.CONTINUE;
 		}
 		CurrentlyTracedCall currentTrace = (CurrentlyTracedCall)aTracedCall;
-		currentTrace.startStep("--- NETWORK OUT ---", MoskitoJourneyInterceptorStatsProducer.NETWORK);
+		currentTrace.startStep("--- NETWORK OUT ---", MoskitoJourneyInterceptorStatsProducer.NETWORK, "outgoingCall");
 		iContext.getLocalStore().put(ICONTEXT_ATTRIBUTE_STARTTIME, System.nanoTime());
 		context.getTransportableCallContext().put(CONTEXT_ATTRIBUTE_TRACE_FLAG, Boolean.TRUE);
 		return InterceptorResponse.CONTINUE;
