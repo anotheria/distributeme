@@ -59,4 +59,15 @@ public class RemoteConsumerWrapper implements RemoteEventServiceConsumer{
 	public ServiceDescriptor getHomeReference(){
 		return myHomeReference;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof RemoteConsumerWrapper))
+			return false;
+		RemoteConsumerWrapper anotherObj = (RemoteConsumerWrapper)obj;
+		if (myHomeReference == null)
+			return anotherObj.myHomeReference == null;
+		return myHomeReference.equals(anotherObj.myHomeReference);
+
+	}
 }
