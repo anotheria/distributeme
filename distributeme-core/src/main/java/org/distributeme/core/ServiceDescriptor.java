@@ -293,6 +293,23 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 				BasicComparable.compareString(instanceId, ((ServiceDescriptor)o).instanceId)==0 
 				: false;
 	}
+
+	/**
+	 * This method is similar to equals but it ignores instance id.
+	 * The idea is here, that two ServiceDescriptors with same service id, port and host will
+	 * point to same endpoint.
+	 * In some cases we want to prevent double messages to such an endpoint (i.e. event service).
+	 * @param anotherDescriptor another service descriptor.
+	 * @return
+	 */
+	public boolean equalsByEndpoint(ServiceDescriptor anotherDescriptor){
+		return
+			protocol == anotherDescriptor.protocol &&
+					port == anotherDescriptor.port &&
+					BasicComparable.compareString(host, anotherDescriptor.host)==0 &&
+					BasicComparable.compareString(serviceId, anotherDescriptor.serviceId)==0
+			;
+	}
 	
 	/**
 	 * <p>Getter for the field <code>host</code>.</p>

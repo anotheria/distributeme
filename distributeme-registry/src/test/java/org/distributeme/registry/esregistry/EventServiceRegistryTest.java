@@ -80,8 +80,9 @@ public class EventServiceRegistryTest {
 		assertEquals(0, registry.getChannel("B").getConsumers().size());
 		assertEquals(0, registry.getChannel("C").getConsumers().size());
 }
-	
+
+	private static int dummyPortNumber = 9250;
 	private ServiceDescriptor createDummyDescriptor(){
-		return new ServiceDescriptor(Protocol.RMI, EventServiceRegistryTest.class.getName(), IdCodeGenerator.generateCode(5), "localhost", 9250);
+		return new ServiceDescriptor(Protocol.RMI, EventServiceRegistryTest.class.getName(), IdCodeGenerator.generateCode(5), "localhost", dummyPortNumber++);
 	}
 }

@@ -23,6 +23,7 @@ public class ChannelDescriptor {
 	 * Registered consumers for the channel.
 	 */
 	private List<ServiceDescriptor> consumers;
+
 	/**
 	 * Creates anew channel description.
 	 * @param aName
@@ -45,7 +46,15 @@ public class ChannelDescriptor {
 	 * @param descriptor
 	 */
 	public void addConsumer(ServiceDescriptor descriptor){
-		consumers.add(descriptor);
+		//only allow one add at a time to prevent adding two equivalent descriptors.
+		synchronized (consumers) {
+			//skip if same descriptor already present.
+			for (ServiceDescriptor d : consumers){
+				if (d.equalsByEndpoint(descriptor))
+					return;
+			}
+			consumers.add(descriptor);
+		}
 	}
 	/**
 	 * Removes a consumer from the channel.
