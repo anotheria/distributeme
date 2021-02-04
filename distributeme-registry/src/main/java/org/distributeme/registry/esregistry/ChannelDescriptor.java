@@ -50,8 +50,11 @@ public class ChannelDescriptor {
 		synchronized (consumers) {
 			//skip if same descriptor already present.
 			for (ServiceDescriptor d : consumers){
-				if (d.equalsByEndpoint(descriptor))
-					return;
+				if (d.equalsByEndpoint(descriptor)) {
+					//instead of not adding new descriptor we remove old descriptor. The reasoning is
+					//that we want to keep the most current instanceid and timestamp.
+					consumers.remove(d);
+				}
 			}
 			consumers.add(descriptor);
 		}
