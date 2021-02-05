@@ -2,6 +2,7 @@ package org.distributeme.support.eventservice;
 
 import net.anotheria.anoprise.eventservice.EventTransportShell;
 import net.anotheria.anoprise.eventservice.RemoteEventServiceConsumer;
+import org.distributeme.core.Defaults;
 import org.distributeme.core.ServiceDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +11,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class RemoteConsumerWrapper implements RemoteEventServiceConsumer{
 	
-	public static final int ERROR_LIMIT = 5;
-
 	private static Logger LOG = LoggerFactory.getLogger(RemoteConsumerWrapper.class);
 	
 	private String channelName;
@@ -44,8 +43,8 @@ public class RemoteConsumerWrapper implements RemoteEventServiceConsumer{
 	
 	private void handleError(){
 		errorCount.incrementAndGet();
-		LOG.warn("Couldn't deliver to "+myHomeReference+" error "+errorCount.get()+" of "+ERROR_LIMIT);
-		if (errorCount.get()>ERROR_LIMIT){
+		LOG.warn("Couldn't deliver to "+myHomeReference+" error "+errorCount.get()+" of "+Defaults.getRemoteConsumerWrapperErrorLimit());
+		if (errorCount.get()> Defaults.getRemoteConsumerWrapperErrorLimit()){
 			LOG.warn(myHomeReference+" is obviously offline, removing");
 			support.notifyBrokenConsumer(this);
 			bridgeToHome = null; //prevent myself from sending further events.
@@ -67,7 +66,7 @@ public class RemoteConsumerWrapper implements RemoteEventServiceConsumer{
 		RemoteConsumerWrapper anotherObj = (RemoteConsumerWrapper)obj;
 		if (myHomeReference == null)
 			return anotherObj.myHomeReference == null;
-		return myHomeReference.equals(anotherObj.myHomeReference);
+		return myHomeReference.equalsByEndpoint(anotherObj.myHomeReference);
 
 	}
 }

@@ -62,6 +62,15 @@ public class Defaults {
 	public static final int getAsynchExecutorPoolSize(){
 		return config.getAsynchExecutorPoolSize();
 	}
+
+	/**
+	 * How many errors a RemoteConsumerWrapper can encounter before rendering itself inactive and cuting of this consumer.
+	 * DEFAULT = 5.
+ 	 * @return
+	 */
+	public static final int getRemoteConsumerWrapperErrorLimit(){
+		return config.getRemoteConsumerWrapperErrorLimit();
+	}
 	
 	/**
 	 * Inner configuration holder class.
@@ -88,6 +97,12 @@ public class Defaults {
 		 * Default number of thread in the asynch executor, which are used in asynch stubs.
 		 */
 		private int asynchExecutorPoolSize = 50;
+
+		/**
+		 * How many errors a RemoteConsumerWrapper can encounter before rendering itself inactive and cuting of this consumer.
+		 * DEFAULT = 5.
+		 */
+		private int remoteConsumerWrapperErrorLimit = 5;
 
 		public String getDefaultFailingStrategyClassName() {
 			return defaultFailingStrategyClassName;
@@ -122,5 +137,13 @@ public class Defaults {
 		public void setAsynchExecutorPoolSize(int asynchExecutorPoolSize) {
 			this.asynchExecutorPoolSize = asynchExecutorPoolSize;
 		}
+		public int getRemoteConsumerWrapperErrorLimit() {
+			return remoteConsumerWrapperErrorLimit;
+		}
+
+		public void setRemoteConsumerWrapperErrorLimit(int remoteConsumerWrapperErrorLimit) {
+			this.remoteConsumerWrapperErrorLimit = remoteConsumerWrapperErrorLimit;
+		}
+
 	}
 }
