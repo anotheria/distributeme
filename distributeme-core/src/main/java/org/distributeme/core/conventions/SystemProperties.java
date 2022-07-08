@@ -42,7 +42,12 @@ public enum SystemProperties {
 	/**
 	 * Port to which the services should be bound.
 	 */
-	SERVICE_BINDING_PORT("serviceBindingPort", "0");
+	SERVICE_BINDING_PORT("serviceBindingPort", "0"),
+	/**
+	 * Hostname or ip which is used to register at the central registry. Useful when running
+	 * on a multi-home host or in a docker container.
+	 */
+	REGISTRATION_HOSTNAME("registrationHostName", null);
 	
 	/**
 	 * Name of the property.

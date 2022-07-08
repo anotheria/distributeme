@@ -8,6 +8,7 @@ import org.configureme.annotations.ConfigureMe;
 import org.configureme.annotations.Set;
 import org.configureme.annotations.SetAll;
 import org.distributeme.core.ServiceDescriptor.Protocol;
+import org.distributeme.core.conventions.SystemProperties;
 import org.distributeme.core.util.BaseRegistryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -219,8 +220,19 @@ public class RegistryUtil extends BaseRegistryUtil{
 	public static ServiceDescriptor createLocalServiceDescription(Protocol protocol, String serviceId, String instanceId, int port){
 		return new ServiceDescriptor(protocol, serviceId, instanceId, getHostName(), port);
 	}
-	
+
+	/**
+	 * Returns the host name.
+	 * 1. If the REGISTRATION_HOSTNAME is set, use it.
+	 * 2. Retrieve localhost.
+	 * 3. If ip mapping corresponds to the address of the localhost, use it.
+	 * @return
+	 */
 	private static String getHostName(){
+
+		String registrationHostName = SystemProperties.REGISTRATION_HOSTNAME.get();
+		if (registrationHostName!=null)
+			return registrationHostName;
 		try{
 			InetAddress localhost = InetAddress.getLocalHost();
 			String host = localhost.getHostAddress();
