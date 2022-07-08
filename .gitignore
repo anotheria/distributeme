@@ -11,3 +11,4 @@ bin/
 tmp/
 skip
 distributeme-registry/logs/
+**/logs
