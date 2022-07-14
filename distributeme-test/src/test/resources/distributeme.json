@@ -3,7 +3,7 @@
 	"registryContainerHost": "localhost",
 	"registryContainerProtocol" : "http",
 	
-	//if true the server will log all exceptions including expected exception (defined by the interface), otherwise expected exceptions will be ignored
+	/* if true the server will log all exceptions including expected exception (defined by the interface), otherwise expected exceptions will be ignored */
 	"logServerSideExceptions": false,
 	//if true the client (stub) will log all caught exceptions (remote exception and runtime exceptions)
 	"logClientSideExceptions": false,
