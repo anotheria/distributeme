@@ -3,13 +3,13 @@
     <parent>
         <groupId>net.anotheria</groupId>
         <artifactId>distributeme-parent</artifactId>
-        <version>2.3.9</version>
+        <version>2.3.10-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.anotheria</groupId>
     <artifactId>distributeme-support</artifactId>
-    <version>2.3.9</version>
+    <version>2.3.10-SNAPSHOT</version>
     <name>DistributeMe runtime support services</name>
     <description>distributeme support utilities needed by generated classes</description>
 
