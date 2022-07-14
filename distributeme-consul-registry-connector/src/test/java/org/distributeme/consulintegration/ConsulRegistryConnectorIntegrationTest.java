@@ -8,6 +8,7 @@ import org.distributeme.core.RegistryLocation;
 import org.distributeme.core.ServiceDescriptor;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -20,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by rboehling on 2/28/17.
  */
+@Ignore
 public class ConsulRegistryConnectorIntegrationTest {
 
 	private static final String SERVICE_ID = "org_distributeme_test_blacklisting_BlacklistingTestService_0";
