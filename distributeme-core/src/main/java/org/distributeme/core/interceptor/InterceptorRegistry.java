@@ -1,5 +1,6 @@
 package org.distributeme.core.interceptor;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import net.anotheria.util.BasicComparable;
 import net.anotheria.util.sorter.DummySortType;
 import net.anotheria.util.sorter.IComparable;
@@ -128,6 +129,7 @@ public final class InterceptorRegistry {
 	 *
 	 */
 	@ConfigureMe(name="distributeme")
+	@SuppressFBWarnings(value = {"EI_EXPOSE_REP2", "EI_EXPOSE_REP"}, justification = "This is the way ConfigureMe works, it provides beans for access")
 	public static class Config{
 		/**
 		 * Old style interceptor config.
