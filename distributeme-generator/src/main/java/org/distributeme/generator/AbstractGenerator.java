@@ -289,11 +289,11 @@ public class AbstractGenerator {
 	 * @param type a {@link javax.lang.model.element.TypeElement} object.
 	 */
 	protected void writeAnalyzerComments(TypeElement type){
-		writeString("//CHECKSTYLE:OFF");
+		writeString("//BEGIN GENERATED CODE");
 	}
 
 	protected void writeAnalyzerCommentsEnd(TypeElement type){
-		writeString("//CHECKSTYLE:ON");
+		writeString("//END GENERATED CODE");
 	}
 
 	/**
