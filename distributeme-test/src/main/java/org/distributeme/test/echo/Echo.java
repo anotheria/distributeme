@@ -2,6 +2,9 @@ package org.distributeme.test.echo;
 
 import java.io.Serializable;
 
+/**
+ * Echo object for transmission between client and service in echo service examples.
+ */
 public class Echo implements Serializable {
 	private static final long serialVersionUID = 5314033233351550848L;
 

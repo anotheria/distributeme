@@ -3,6 +3,9 @@ package org.distributeme.test.echo;
 import java.io.Serializable;
 import java.util.HashMap;
 
+/**
+ * Implementation of the EchoService.
+ */
 public class EchoServiceImpl implements EchoService{
 
 	@Override
