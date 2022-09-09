@@ -292,6 +292,10 @@ public class AbstractGenerator {
 		writeString("//CHECKSTYLE:OFF");
 	}
 
+	protected void writeAnalyzerCommentsEnd(TypeElement type){
+		writeString("//CHECKSTYLE:ON");
+	}
+
 	/**
 	 * <p>quote.</p>
 	 *

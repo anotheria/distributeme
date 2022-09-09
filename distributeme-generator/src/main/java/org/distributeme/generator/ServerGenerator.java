@@ -508,7 +508,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		}
 			
 		closeBlock();
-		
+		writeAnalyzerCommentsEnd(type);
 		
 		writer.flush();
 		writer.close();
