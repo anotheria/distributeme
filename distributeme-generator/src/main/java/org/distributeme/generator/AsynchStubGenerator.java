@@ -113,7 +113,7 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 				logWriterClazzName = ""+logWriterClazzValue.getValue();
 			}
 			
-			logWriter = (LogWriter)(Class.forName(logWriterClazzName).newInstance());
+			logWriter = (LogWriter)(Class.forName(logWriterClazzName).getDeclaredConstructor().newInstance());
 			//System.out.println("@@@ created log writer "+logWriter);
 		}catch(Exception e){
 			log.warn("Still have this stupid exception...", e);

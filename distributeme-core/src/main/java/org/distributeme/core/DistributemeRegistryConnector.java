@@ -12,7 +12,7 @@ import static org.distributeme.core.util.BaseRegistryUtil.getUrlContent;
 
 
 /**
- * Created by rboehling on 2/28/17.
+ * RegistryConnector using built-in http based registry.
  */
 public class DistributemeRegistryConnector implements RegistryConnector {
 

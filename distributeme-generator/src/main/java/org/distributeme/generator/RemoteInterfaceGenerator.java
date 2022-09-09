@@ -75,7 +75,8 @@ public class RemoteInterfaceGenerator extends AbstractGenerator implements Gener
 		}
 		
 		closeBlock();
-		
+		writeAnalyzerCommentsEnd(type);
+
 		writer.flush();
 		writer.close();
 	}
