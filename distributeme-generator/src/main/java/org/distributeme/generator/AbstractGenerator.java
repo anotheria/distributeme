@@ -292,6 +292,10 @@ public class AbstractGenerator {
 		writeString("//BEGIN GENERATED CODE");
 	}
 
+	protected void writeAnalyzeIgnoreAnnotation(TypeElement type){
+		writeString("@SuppressWarnings(\"PMD\")");
+	}
+
 	protected void writeAnalyzerCommentsEnd(TypeElement type){
 		writeString("//END GENERATED CODE");
 	}

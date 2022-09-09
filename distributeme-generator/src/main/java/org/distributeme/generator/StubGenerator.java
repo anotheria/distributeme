@@ -109,7 +109,8 @@ public class StubGenerator extends AbstractStubGenerator implements Generator{
 		writeImport(InterceptionPhase.class);
 		writeImport(FailedByInterceptorException.class);
 		emptyline();
-		
+
+		writeAnalyzeIgnoreAnnotation(type);
 		writeString("public class "+getStubName(type)+" implements "+type.getQualifiedName()+"{");
 		increaseIdent();
 		emptyline();
