@@ -93,7 +93,8 @@ public class AsynchStubGenerator extends AbstractStubGenerator implements Genera
 		writeImport(Executors.class);
 		writeImport(AtomicLong.class);
 		emptyline();
-		
+
+		writeAnalyzeIgnoreAnnotation(type);
 		writeString("public class "+getAsynchStubName(type)+" implements "+getAsynchInterfaceName(type)+"{");
 		increaseIdent();
 		emptyline();
