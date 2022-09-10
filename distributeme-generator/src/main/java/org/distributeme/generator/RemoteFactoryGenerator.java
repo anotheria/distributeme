@@ -46,7 +46,8 @@ public class RemoteFactoryGenerator extends AbstractGenerator implements Generat
 			writeImport(ProxyUtils.class);
 		}
 		emptyline();
-		
+
+		writeAnalyzeIgnoreAnnotation(type);
 		writeString("public class "+getFactoryName(type)+" implements ServiceFactory<"+type.getQualifiedName()+">{");
 		increaseIdent();
 		emptyline();

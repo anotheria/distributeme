@@ -132,6 +132,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			}
 		}
 
+		writeAnalyzeIgnoreAnnotation(type);
 		writeString("public class "+getServerName(type)+"{");
 		increaseIdent();
 		emptyline();
