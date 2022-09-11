@@ -45,6 +45,9 @@ public class AbstractGenerator {
 	 */
 	private PrintWriter writer;
 
+	/**
+	 * Processing environment for the annotations. Added as support for new annotation processing.
+	 */
 	private final ProcessingEnvironment environment;
 
 	/**
@@ -58,7 +61,7 @@ public class AbstractGenerator {
 	private static AtomicInteger routerOrders = new AtomicInteger();
 
 	/**
-	 * <p>Constructor for AbstractGenerator.</p>
+	 * Constructor for AbstractGenerator.
 	 *
 	 * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
 	 */
@@ -68,7 +71,7 @@ public class AbstractGenerator {
 
 
 	/**
-	 * <p>Setter for the field <code>writer</code>.</p>
+	 * Setter for the field writer.
 	 *
 	 * @param aWriter a {@link java.io.Writer} object.
 	 */
@@ -78,7 +81,7 @@ public class AbstractGenerator {
 	}
 	
 	/**
-	 * <p>Getter for the field <code>writer</code>.</p>
+	 * Getter for the field writer.
 	 *
 	 * @return a {@link java.io.Writer} object.
 	 */
@@ -97,7 +100,7 @@ public class AbstractGenerator {
 	}
 
 	/**
-	 * <p>getAsynchInterfaceName.</p>
+	 * getAsynchInterfaceName.
 	 *
 	 * @param type a {@link javax.lang.model.element.TypeElement} object.
 	 * @return a {@link java.lang.String} object.
@@ -695,8 +698,8 @@ public class AbstractGenerator {
 	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getResourceSkeletonMethodDeclaration(ExecutableElement method){
-		StringBuilder Element = new StringBuilder();
-		Element.append(getInterfaceMethodDeclaration(method, false));
+		StringBuilder element = new StringBuilder();
+		element.append(getInterfaceMethodDeclaration(method, false));
 		if (method.getThrownTypes().size()>0){
 			StringBuilder exceptions = new StringBuilder();
 			for (TypeMirror type : method.getThrownTypes()){
@@ -704,10 +707,10 @@ public class AbstractGenerator {
 					exceptions.append(", ");
 				exceptions.append(type.toString());
 			}
-			Element.append(" throws ").append(exceptions);
+			element.append(" throws ").append(exceptions);
 		}
 
-		return Element.toString();
+		return element.toString();
 	}
 
 	/**
@@ -717,8 +720,8 @@ public class AbstractGenerator {
 	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getSkeletonMethodDeclaration(ExecutableElement method){
-		StringBuilder Element = new StringBuilder();
-		Element.append(getInterfaceMethodDeclaration(method, true));
+		StringBuilder element = new StringBuilder();
+		element.append(getInterfaceMethodDeclaration(method, true));
 		if (method.getThrownTypes().size()>0){
 			StringBuilder exceptions = new StringBuilder();
 			for (TypeMirror type : method.getThrownTypes()){
@@ -726,10 +729,10 @@ public class AbstractGenerator {
 					exceptions.append(", ");
 				exceptions.append(type.toString());
 			}
-			Element.append(" throws ").append(exceptions);
+			element.append(" throws ").append(exceptions);
 		}
 		
-		return Element.toString();
+		return element.toString();
 	}
 	
 	/**
