@@ -24,6 +24,9 @@ public abstract class AbstractRouter implements Router{
 
 	private OnDemandStatsProducer<RoutingStats> producer;
 
+	/**
+	 * ServiceId. Provided by the config (or customization).
+	 */
 	private String serviceId;
 
 	/** {@inheritDoc} */
@@ -77,7 +80,7 @@ public abstract class AbstractRouter implements Router{
 		return new RoutingStatsWrapper(serviceId, caseStats, defaultStats);
 	}
 
-	private String serviceId2Name(String serviceId){
+	private static String serviceId2Name(String serviceId){
 		int lastIndexOfUnderscore = serviceId.lastIndexOf('_');
 		if (lastIndexOfUnderscore == -1)
 			return serviceId;
@@ -87,7 +90,7 @@ public abstract class AbstractRouter implements Router{
 		return serviceId.substring(lastIndexOfUnderscore);
 	}
 
-	private String serviceId2ProducerId(String serviceId){
+	private static String serviceId2ProducerId(String serviceId){
 		String tokens[] = StringUtils.tokenize(serviceId, '_');
 		StringBuilder ret = new StringBuilder();
 		for (int i =0; i<tokens.length-1; i++){
