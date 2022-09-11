@@ -98,10 +98,8 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		writeImport(MarkerFactory.class);
 		writeImport(UnicastRemoteObject.class);
 		writeImport(Permission.class);
-		writeImport(LocateRegistry.class);
 		writeImport(Registry.class);
 		writeImport(RegistryUtil.class);
-		writeImport(RegistryLocation.class);
 		writeImport(ExportException.class);
 		writeImport(ServiceDescriptor.class);
 		writeImport(LocalServiceDescriptorStore.class);
