@@ -4,8 +4,9 @@ import net.anotheria.moskito.core.counter.CounterStats;
 import net.anotheria.moskito.core.counter.CounterStatsFactory;
 import net.anotheria.moskito.core.producers.IStatsProducer;
 import net.anotheria.moskito.core.registry.ProducerRegistryFactory;
-import net.anotheria.moskito.core.stats.TimeUnit;
-import net.anotheria.moskito.core.threshold.*;
+import net.anotheria.moskito.core.threshold.CustomThresholdProvider;
+import net.anotheria.moskito.core.threshold.CustomThresholdStatus;
+import net.anotheria.moskito.core.threshold.ThresholdStatus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,12 +22,27 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class RegistryCompletenessProducer implements CustomThresholdProvider, IStatsProducer<CounterStats> {
 
+	/**
+	 * Instance of distributeme registry config.
+	 */
 	private MetaRegistryConfig config;
+	/**
+	 * Counter for producers.
+	 */
 	private AtomicInteger currentProducerCount = new AtomicInteger();
+	/**
+	 * My stats object.
+	 */
 	private CounterStats stats ;
+	/**
+	 * Stats list.
+	 */
 	private List<CounterStats> statsList = new ArrayList<>(1);
 
-	private static String THRESHOLDS_NAMES[] = {"RegistryCompleteness"};
+	/**
+	 * Names of thresholds.
+	 */
+	private static final String THRESHOLDS_NAMES[] = {"RegistryCompleteness"};
 
 	RegistryCompletenessProducer(){
 		config = MetaRegistryConfig.create();
