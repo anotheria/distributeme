@@ -100,7 +100,6 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		writeImport(Permission.class);
 		writeImport(Registry.class);
 		writeImport(RegistryUtil.class);
-		writeImport(ExportException.class);
 		writeImport(ServiceDescriptor.class);
 		writeImport(LocalServiceDescriptorStore.class);
 		writeImport("org.distributeme.core.ServiceDescriptor.Protocol");
