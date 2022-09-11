@@ -26,18 +26,36 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class DiMeRemoteEventChannelRMISupport implements RemoteEventChannelSupportFactory, EventServiceListener {
-	
+
+	/**
+	 * Service descriptor of my instance.
+	 */
 	private static ServiceDescriptor descriptor = null;
-	
+
+	/**
+	 * Instance id of this instance, unique for the runtime.
+	 */
 	private static final String INSTANCE_ID = IdCodeGenerator.generateCode(10);
-	
+
+	/**
+	 * Bridges to remote services.
+	 */
 	private static final ConcurrentHashMap<ServiceDescriptor, EventServiceRMIBridgeService> bridges = new ConcurrentHashMap<ServiceDescriptor, EventServiceRMIBridgeService>();
 
+	/**
+	 * Event service instance.
+	 */
 	private static EventService es ;
-	
+
+	/**
+	 * Executor for non-blocking processing of register operations.
+	 */
 	private ExecutorService executorService = Executors.newFixedThreadPool(5);
-	
-	private static Logger LOG = LoggerFactory.getLogger(DiMeRemoteEventChannelRMISupport.class);
+
+	/**
+	 * Logger.
+	 */
+	private static final Logger LOG = LoggerFactory.getLogger(DiMeRemoteEventChannelRMISupport.class);
 	
 	DiMeRemoteEventChannelRMISupport(){
 		
