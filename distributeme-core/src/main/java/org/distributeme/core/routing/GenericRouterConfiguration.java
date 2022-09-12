@@ -134,6 +134,7 @@ public class GenericRouterConfiguration {
 	}
 
 	@AfterInitialConfiguration
+	@SuppressWarnings("checkstyle:IllegalCatchCheck")
 	public void afterInitialConfiguration() {
 		for(RouterConfigurationObserver observer: routerConfigurationObservers) {
 			try {
@@ -145,6 +146,7 @@ public class GenericRouterConfiguration {
 	}
 
 	@AfterReConfiguration
+	@SuppressWarnings("checkstyle:IllegalCatchCheck")
 	public void afterReConfiguration() {
 		for(RouterConfigurationObserver observer: routerConfigurationObservers) {
 			try {
@@ -156,6 +158,7 @@ public class GenericRouterConfiguration {
 	}
 
 	@AfterConfiguration
+	@SuppressWarnings("checkstyle:IllegalCatchCheck")
 	public void afterConfiguration() {
 		for(RouterConfigurationObserver observer: routerConfigurationObservers) {
 			try {
