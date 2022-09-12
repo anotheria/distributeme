@@ -14,15 +14,15 @@ public class ChannelDescriptor {
 	/**
 	 * Name of the channel.
 	 */
-	private String name;
+	private final String name;
 	/**
 	 * Registered suppliers for the channel.
 	 */
-	private List<ServiceDescriptor> suppliers;
+	private final List<ServiceDescriptor> suppliers;
 	/**
 	 * Registered consumers for the channel.
 	 */
-	private List<ServiceDescriptor> consumers;
+	private final List<ServiceDescriptor> consumers;
 
 	/**
 	 * Creates anew channel description.
@@ -43,7 +43,7 @@ public class ChannelDescriptor {
 	
 	/**
 	 * Adds a consumer to the channel.
-	 * @param descriptor
+	 * @param descriptor descriptor to add.
 	 */
 	public void addConsumer(ServiceDescriptor descriptor){
 		//only allow one add at a time to prevent adding two equivalent descriptors.
@@ -61,8 +61,8 @@ public class ChannelDescriptor {
 	}
 	/**
 	 * Removes a consumer from the channel.
-	 * @param descriptor
-	 * @return
+	 * @param descriptor descriptor to add.
+	 * @return true if the descriptor was really removed or false if there was no such descriptor registered.
 	 */
 	public boolean removeConsumer(ServiceDescriptor descriptor){
 		return consumers.remove(descriptor);
@@ -70,8 +70,8 @@ public class ChannelDescriptor {
 	
 	/**
 	 * Removes a supplier from the channel.
-	 * @param descriptor
-	 * @return
+	 * @param descriptor descriptor to add.
+	 * @return true if the descriptor was really removed or false if there was no such descriptor registered.
 	 */
 	public boolean removeSupplier(ServiceDescriptor descriptor){
 		return suppliers.remove(descriptor);

@@ -11,26 +11,26 @@ import java.util.List;
 public interface EventServiceRegistry {
 	/**
 	 * Return the names of all registered channels.
-	 * @return
+	 * @return list of channel names.
 	 */
 	List<String> getChannelNames();
 	/**
 	 * Returns all registered channels.
-	 * @return
+	 * @return list of all channels.
 	 */
 	List<ChannelDescriptor> getChannels();
 	/**
 	 * Registers a new supplier on a channel. Returns the list of all registered consumers on the same channel.
 	 * @param channelName name of the channel.
-	 * @param descriptor
-	 * @return
+	 * @param descriptor supplier descriptor.
+	 * @return list of consumers for this supplier to interact with.
 	 */
 	List<ServiceDescriptor> addSupplier(String channelName, ServiceDescriptor descriptor);
 	/**
 	 * Registers a new consumer on a channel. Returns the list of all registered suppliers on the same channel.
 	 * @param channelName name of the channel.
-	 * @param descriptor the new consumers descriptor.
-	 * @return
+	 * @param descriptor the new consumer's descriptor.
+	 * @return list of suppliers for this consumer to interact with.
 	 */
 	List<ServiceDescriptor> addConsumer(String channelName, ServiceDescriptor descriptor);
 	/**
