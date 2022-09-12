@@ -11,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Main annotation of the distributeme package that indicates that a service has to be distributed.
+ * Main annotation of the DistributeMe package that indicates that a service has to be distributed.
  *
  * @author lrosenberg
  * @version $Id: $Id
@@ -39,7 +39,7 @@ public @interface DistributeMe {
 	Class factoryClazz() default DummyFactory.class;
 
 	/**
-	 * If true the event service is enabled and started, false otherwise.
+	 * If true the event service is enabled and started, false otherwise. Default true.
 	 * @return
 	 */
 	boolean enableEventService() default true;
@@ -50,6 +50,10 @@ public @interface DistributeMe {
      */
     Protocol[] protocols() default {Protocol.RMI};
 
+	/**
+	 * Log writer class to provide custom log-writer.
+	 * @return
+	 */
 	Class logWriterClazz() default SysErrorLogWriter.class;
 	
 	/**
