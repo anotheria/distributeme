@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 abstract class AbstractRouterWithFailover extends AbstractRouter implements ConfigurableRouter, FailingStrategy {
 
 	/**
-	 * Under line constant.
+	 * Underline constant.
 	 */
 	public static final String UNDER_LINE = "_";
 

@@ -1,20 +1,17 @@
 package org.distributeme.core.exception;
 
 /**
- * Base class for distributeme runtime exceptions.
+ * Base class for DistributeMe runtime exceptions.
  *
  * @author lrosenberg
  * @version $Id: $Id
  */
 public class DistributemeRuntimeException extends RuntimeException{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * <p>Constructor for DistributemeRuntimeException.</p>
+	 * Constructor for DistributemeRuntimeException.
 	 *
 	 * @param message a {@link java.lang.String} object.
 	 */
@@ -23,7 +20,7 @@ public class DistributemeRuntimeException extends RuntimeException{
 	}
 	
 	/**
-	 * <p>Constructor for DistributemeRuntimeException.</p>
+	 * Constructor for DistributemeRuntimeException.
 	 *
 	 * @param message a {@link java.lang.String} object.
 	 * @param cause a {@link java.lang.Throwable} object.

@@ -4,7 +4,7 @@ import org.distributeme.core.ClientSideCallContext;
 
 
 /**
- * This is an example implementation of a Router which actually do not route anything but simply prints out each call. Its usefull
+ * This is an example implementation of a Router which actually do not route anything but simply prints out each call. It is useful
  * for debugging and demonstration purposes.
  *
  * @author lrosenberg.
