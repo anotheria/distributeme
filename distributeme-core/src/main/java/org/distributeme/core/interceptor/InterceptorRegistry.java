@@ -47,7 +47,7 @@ public final class InterceptorRegistry {
 	 *
 	 * @return a {@link org.distributeme.core.interceptor.InterceptorRegistry} object.
 	 */
-	public static final InterceptorRegistry getInstance(){ return instance; }
+	public static InterceptorRegistry getInstance(){ return instance; }
 	
 	static{
 		instance = new InterceptorRegistry();

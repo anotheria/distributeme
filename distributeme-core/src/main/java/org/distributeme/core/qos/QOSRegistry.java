@@ -64,7 +64,7 @@ public final class QOSRegistry {
 	 *
 	 * @return a {@link org.distributeme.core.qos.QOSRegistry} object.
 	 */
-	public static final QOSRegistry getInstance(){
+	public static QOSRegistry getInstance(){
 		return instance;
 	}
 

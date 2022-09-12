@@ -96,7 +96,7 @@ public class DistributemeRegistryConnector implements RegistryConnector {
 	@Override
 	public ServiceDescriptor resolve(ServiceDescriptor toResolve, Location loc){
 		String url = createRegistryOperationUrl(loc, "resolve", DistributemeRegistryConnector.PARAM_ID+"="+ BaseRegistryUtil.encode(toResolve.getLookupString()));
-		byte data[] = BaseRegistryUtil.getUrlContent(url);
+		byte[] data = BaseRegistryUtil.getUrlContent(url);
 		if (data == null )
 			return null;
 		String reply = new String(data, Charset.defaultCharset());

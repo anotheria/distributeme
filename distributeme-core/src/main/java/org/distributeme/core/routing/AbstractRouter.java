@@ -20,8 +20,14 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractRouter implements Router{
 
-	private static Logger log = LoggerFactory.getLogger(AbstractRouter.class);
+	/**
+	 * Logger.
+	 */
+	private static final Logger log = LoggerFactory.getLogger(AbstractRouter.class);
 
+	/**
+	 * Stats producer.
+	 */
 	private OnDemandStatsProducer<RoutingStats> producer;
 
 	/**
@@ -91,7 +97,7 @@ public abstract class AbstractRouter implements Router{
 	}
 
 	private static String serviceId2ProducerId(String serviceId){
-		String tokens[] = StringUtils.tokenize(serviceId, '_');
+		String[] tokens = StringUtils.tokenize(serviceId, '_');
 		StringBuilder ret = new StringBuilder();
 		for (int i =0; i<tokens.length-1; i++){
 			if (tokens[i].length()==0)
