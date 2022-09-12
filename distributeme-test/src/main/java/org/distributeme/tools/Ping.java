@@ -6,7 +6,7 @@ import org.distributeme.support.lifecycle.generated.LifecycleSupportServiceConst
 import org.distributeme.support.lifecycle.generated.RemoteLifecycleSupportServiceStub;
 
 /**
- * TODO comment this class
+ * This utility just pings all services.
  *
  * @author lrosenberg
  * @since 02.12.14 00:43

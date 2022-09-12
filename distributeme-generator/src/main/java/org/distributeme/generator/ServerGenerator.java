@@ -14,7 +14,6 @@ import org.distributeme.annotation.RouteMe;
 import org.distributeme.annotation.ServerListener;
 import org.distributeme.annotation.SupportService;
 import org.distributeme.core.RMIRegistryUtil;
-import org.distributeme.core.RegistryLocation;
 import org.distributeme.core.RegistryUtil;
 import org.distributeme.core.ServerShutdownHook;
 import org.distributeme.core.ServiceDescriptor;
@@ -42,9 +41,7 @@ import javax.tools.JavaFileObject;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.ExportException;
 import java.rmi.server.UnicastRemoteObject;
 import java.security.Permission;
 import java.util.ArrayList;
@@ -367,8 +364,10 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			closeBlock("local registry bind.");
 			emptyline();
 
+			//we don't need this anymore apparently.
+			//AnnotationMirror annotationMirrorRoute = findMirror(type, Route.class);
+
 			//ROUTING AWARE-NESS.
-			AnnotationMirror annotationMirrorRoute = findMirror(type, Route.class);
 			if (annotationMirror!=null){
 				AnnotationValue routerParameter = findMethodValue(annotationMirror, "routerParameter");
 				AnnotationValue configurationName = findMethodValue(annotationMirror, "configurationName");
