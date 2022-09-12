@@ -5,10 +5,19 @@ import net.anotheria.util.IdCodeGenerator;
 
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * Implementation of round-robing service for demonstration purposes.
+ */
 public class RoundRobinServiceImpl implements RoundRobinService{
 
+	/**
+	 * Counts requests in this instance.
+	 */
 	private AtomicLong requestCounter = new AtomicLong(0);
 
+	/**
+	 * A random id for life-long identification of this instance.
+	 */
 	private final String randomId = IdCodeGenerator.generateCode(10);
 	
 	@Override

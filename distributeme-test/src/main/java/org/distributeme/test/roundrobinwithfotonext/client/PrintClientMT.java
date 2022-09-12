@@ -7,7 +7,10 @@ import org.distributeme.test.roundrobinwithfotonext.RoundRobinService;
 
 import java.util.concurrent.CountDownLatch;
 
-
+/**
+ * This is a test class that shows routing in a multi-threading scenario.
+ */
+@SuppressWarnings("PMD")
 public class PrintClientMT extends Client{
 
 	static int  errors = 0 ; static int replies = 0;

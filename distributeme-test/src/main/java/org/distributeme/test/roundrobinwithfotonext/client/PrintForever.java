@@ -5,6 +5,9 @@ import org.distributeme.core.ServiceLocator;
 import org.distributeme.test.roundrobinwithfotonext.RoundRobinService;
 
 
+/**
+ * This will just print something out forever.
+ */
 public class PrintForever extends Client{
 	public static void main(String a[]) throws Exception{
 

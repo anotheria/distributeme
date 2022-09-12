@@ -7,7 +7,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 /**
- * TODO comment this class
+ * Utility to broadcast to all instances.
  *
  * @author lrosenberg
  * @since 22.02.15 18:11
