@@ -546,7 +546,7 @@ public class AbstractGenerator {
 	 * @param commentline a {@link java.lang.String} object.
 	 */
 	protected void writeCommentLine(String commentline){
-		String tokens[] = StringUtils.tokenize(commentline, '\n');
+		String[] tokens = StringUtils.tokenize(commentline, '\n');
 		if (tokens.length!=1)
 			writeComment(commentline);
 		else
@@ -559,7 +559,7 @@ public class AbstractGenerator {
 	 * @param commentline a {@link java.lang.String} object.
 	 */
 	protected void writeComment(String commentline){
-	    String tokens[] = StringUtils.tokenize(commentline, '\n');
+	    String[] tokens = StringUtils.tokenize(commentline, '\n');
 	    
 	    writeString("/**");
 	    for (int i=0; i<tokens.length; i++){
@@ -944,24 +944,20 @@ public class AbstractGenerator {
 	}
 	
 	/**
-	 * Returns the mirror Element for a Element.
+	 * Returns the mirror element for an element.
 	 *
 	 * @param type a {@link javax.lang.model.element.Element} object.
 	 * @param ann a {@link java.lang.Class} object.
 	 * @return a {@link javax.lang.model.element.AnnotationMirror} object.
 	 */
 	protected AnnotationMirror findMirror(Element type, Class<? extends Annotation> ann){
-		//System.out.println("-%- findMirror "+type+" ann "+ann);
-		List<? extends AnnotationMirror> mirros = type.getAnnotationMirrors();
-		for (AnnotationMirror m : mirros){
-			Element Element = m.getAnnotationType().asElement();
-			//System.out.println("--- checking "+Element.getSimpleName()+" compare with "+ann+" --> "+Element.getSimpleName().equals(ann.getSimpleName()));
-			if (Element.getSimpleName().toString().equals(ann.getSimpleName())){
-				//System.out.println("returns "+m);
+		List<? extends AnnotationMirror> mirrors = type.getAnnotationMirrors();
+		for (AnnotationMirror m : mirrors){
+			Element element = m.getAnnotationType().asElement();
+			if (element.getSimpleName().toString().equals(ann.getSimpleName())){
 				return m;
 			}
 		}
-		//System.out.println("returns "+null);
 		return null;
 	}
 	
