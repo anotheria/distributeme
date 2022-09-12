@@ -1,5 +1,9 @@
 package org.distributeme.test.fail;
 
+/**
+ * Implementation of failable service example. Since all the failing behaviour is managed by annotations, the impl is
+ * pretty much empty.
+ */
 public class FailableServiceImpl implements FailableService{
 
 	@Override

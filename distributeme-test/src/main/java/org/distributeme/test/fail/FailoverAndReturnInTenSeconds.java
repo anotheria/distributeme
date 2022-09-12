@@ -2,6 +2,9 @@ package org.distributeme.test.fail;
 
 import org.distributeme.core.ServiceLocator;
 
+/**
+ * Tests failover and return in 10 seconds strategy.
+ */
 public class FailoverAndReturnInTenSeconds {
 	public static void main(String[] args) {
 		FailableService service = ServiceLocator.getRemote(FailableService.class);

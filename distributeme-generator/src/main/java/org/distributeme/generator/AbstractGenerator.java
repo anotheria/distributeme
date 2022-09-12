@@ -1237,7 +1237,7 @@ public class AbstractGenerator {
 	/**
 	 * Returns the name of the failing strategy variable for a method.
 	 *
-	 * @param Element a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @param element a {@link javax.lang.model.element.ExecutableElement} object.
 	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getFailingStrategyVariableName(ExecutableElement element){
@@ -1248,7 +1248,7 @@ public class AbstractGenerator {
 	/**
 	 * Returns the name for concurrency control strategy variable
 	 *
-	 * @param Element a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @param element a {@link javax.lang.model.element.ExecutableElement} object.
 	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getCCStrategyVariableName(ExecutableElement element){
@@ -1284,7 +1284,7 @@ public class AbstractGenerator {
 	}
 	
 	/**
-	 * <p>writeRouterCreationMethod.</p>
+	 * writeRouterCreationMethod.
 	 *
 	 * @param serviceIdCall a {@link java.lang.String} object.
 	 * @param tra a {@link org.distributeme.generator.AbstractGenerator.TranslatedRouterAnnotation} object.
@@ -1303,7 +1303,7 @@ public class AbstractGenerator {
 	}
 
 	/**
-	 * <p>interceptionPhaseToMethod.</p>
+	 * InterceptionPhaseToMethod.
 	 *
 	 * @param phase a {@link org.distributeme.core.interceptor.InterceptionPhase} object.
 	 * @return a {@link java.lang.String} object.
@@ -1334,7 +1334,7 @@ public class AbstractGenerator {
 	}
 
 	/**
-	 * <p>getMethodRouterName.</p>
+	 * getMethodRouterName.
 	 *
 	 * @param Element a {@link javax.lang.model.element.ExecutableElement} object.
 	 * @return a {@link java.lang.String} object.

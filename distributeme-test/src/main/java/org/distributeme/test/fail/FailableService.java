@@ -7,30 +7,55 @@ import org.distributeme.annotation.Route;
 import org.distributeme.core.failing.*;
 import org.distributeme.core.failing.FailoverAndReturnInTenSeconds;
 
+/**
+ * This interface shows different types of failing strategies supported by distribute me.
+ */
 @DistributeMe
 @FailBy(strategyClass=FailCall.class)
 public interface FailableService extends Service{
 
-	@FailBy(strategyClass=FailCall.class)
+	/**
+	 * This strategy will do nothing if the method fails, it will simply fail.
+	 */
+	@FailBy(strategyClass= FailCall.class)
 	void failableMethod();
-	
-	@FailBy(strategyClass=RetryCall.class)
+
+	/**
+	 * The call will be retried indefinitely.
+	 */
+	@FailBy(strategyClass= RetryCall.class)
 	void retryMethod();
-	
-	@FailBy(strategyClass=RetryCallOnce.class)
+
+	/**
+	 * The call will be retried exactly once. This is very useful if the service is not asked often and is restarted in background.
+	 */
+	@FailBy(strategyClass= RetryCallOnce.class)
 	void retryOnceMethod();
-	
+
+	/**
+	 * A method without custom strategy, this will use the class wide strategy.
+	 */
 	void defaultMethod();
 
 	@FailBy(strategyClass=FailCall.class)
 	long failableEcho(long value);
-	
-	@FailBy(strategyClass=WaitOneSecondAndRetry.class)
+
+	/**
+	 * This method will wait one second before retry.
+	 * @param value
+	 * @return
+	 */
+	@FailBy(strategyClass= WaitOneSecondAndRetry.class)
 	long retryEcho(long value);
 	
 	@FailBy(strategyClass=RetryCallOnce.class)
 	long retryOnceEcho(long value);
-	
+
+	/**
+	 * Will failover to backup instance if failed.
+	 * @param value
+	 * @return
+	 */
 	@FailBy(strategyClass=Failover.class)
 	long failoverEcho(long value);
 
