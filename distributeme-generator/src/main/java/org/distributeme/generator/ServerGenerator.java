@@ -120,11 +120,13 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		DistributeMe annotation = type.getAnnotation(DistributeMe.class);
 		boolean supportService = type.getAnnotation(SupportService.class)!=null;
 		String [] SUPPORT_SERVICES = annotation.agentsSupport() ? SUPPORT_SERVICES_WITH_AGENTS : SUPPORT_SERVICES_ONLY;
+		/*
+		*** Removed imports for PMD.
 		if (!supportService){
 			for (String sService : SUPPORT_SERVICES){
 				writeImport(sService);
 			}
-		}
+		}*/
 
 		writeAnalyzeIgnoreAnnotation(type);
 		writeString("public class "+getServerName(type)+"{");
