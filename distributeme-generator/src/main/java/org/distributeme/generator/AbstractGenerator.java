@@ -1223,9 +1223,9 @@ public class AbstractGenerator {
 		return ret;
 	}
 
-	private StringBuilder getParameterizedVariableName(ExecutableElement Element){
+	private StringBuilder getParameterizedVariableName(ExecutableElement element){
 		StringBuilder ret = new StringBuilder();
-		for (VariableElement pd : Element.getParameters()){
+		for (VariableElement pd : element.getParameters()){
 			ret.append('_');
 			ret.append(stripStrategyVariableName(pd.asType().toString()));
 			//ret.append(pd.getType().getClass().getSimpleName());
@@ -1240,9 +1240,9 @@ public class AbstractGenerator {
 	 * @param Element a {@link javax.lang.model.element.ExecutableElement} object.
 	 * @return a {@link java.lang.String} object.
 	 */
-	protected String getFailingStrategyVariableName(ExecutableElement Element){
-		StringBuilder ret = new StringBuilder(Element.getSimpleName()).append("FailingStrategy");
-		ret.append(getParameterizedVariableName(Element));
+	protected String getFailingStrategyVariableName(ExecutableElement element){
+		StringBuilder ret = new StringBuilder(element.getSimpleName()).append("FailingStrategy");
+		ret.append(getParameterizedVariableName(element));
 		return ret.toString();
 	}
 	/**
@@ -1251,9 +1251,9 @@ public class AbstractGenerator {
 	 * @param Element a {@link javax.lang.model.element.ExecutableElement} object.
 	 * @return a {@link java.lang.String} object.
 	 */
-	protected String getCCStrategyVariableName(ExecutableElement Element){
-		StringBuilder ret = new StringBuilder(Element.getSimpleName()).append("CCStrategy");
-		ret.append(getParameterizedVariableName(Element));
+	protected String getCCStrategyVariableName(ExecutableElement element){
+		StringBuilder ret = new StringBuilder(element.getSimpleName()).append("CCStrategy");
+		ret.append(getParameterizedVariableName(element));
 		return ret.toString();
 	}
 	
@@ -1339,8 +1339,8 @@ public class AbstractGenerator {
 	 * @param Element a {@link javax.lang.model.element.ExecutableElement} object.
 	 * @return a {@link java.lang.String} object.
 	 */
-	protected String getMethodRouterName(ExecutableElement Element){
-		return Element.getSimpleName()+"Router";
+	protected String getMethodRouterName(ExecutableElement element){
+		return element.getSimpleName()+"Router";
 	}
 
 	

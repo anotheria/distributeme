@@ -41,8 +41,13 @@ import org.slf4j.LoggerFactory;
  * @author rboehling
  */
 public class ErrorsPerIntervalWithBlacklistTimeStrategy implements BlacklistingStrategy {
-
+	/**
+	 * Logger.
+	 */
 	private Logger logger = LoggerFactory.getLogger(ErrorsPerIntervalWithBlacklistTimeStrategy.class);
+	/**
+	 * Constant for one second in millis.
+	 */
 	private static final long ONE_SECOND = TimeUnit.SECONDS.toMillis(1);
 	/**
 	 * Map with blacklisting decider for each service instance
@@ -52,8 +57,17 @@ public class ErrorsPerIntervalWithBlacklistTimeStrategy implements BlacklistingS
 	 * timeProvider abstracts System.currentTimeMillis() to enable unit testing
 	 */
 	private TimeProvider timeProvider = new SystemTimeProvider();
+	/**
+	 * Executor service for scheduled tasks.
+	 */
 	private ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+	/**
+	 * My configuration object.
+	 */
 	private ErrorsPerIntervalWithBlacklistingTimeConfig config = new ErrorsPerIntervalWithBlacklistingTimeConfig();
+	/**
+	 * A flag that the configuration has been successfully read. Some features are disabled as long there is no configuration.
+	 */
 	private AtomicBoolean validConfiguration = new AtomicBoolean(false);
 
 	public ErrorsPerIntervalWithBlacklistTimeStrategy() {
