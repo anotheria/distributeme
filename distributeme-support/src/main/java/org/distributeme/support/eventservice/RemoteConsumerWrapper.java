@@ -9,16 +9,29 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * A local wrapper for a remove event service cnsumer.
+ */
 public class RemoteConsumerWrapper implements RemoteEventServiceConsumer{
-	
+	/**
+	 * Logger.
+	 */
 	private static Logger LOG = LoggerFactory.getLogger(RemoteConsumerWrapper.class);
-	
+	/**
+	 * The name of the channel this wrapper is attached to.
+	 */
 	private String channelName;
 	private DiMeRemoteEventChannelRMISupport support;
-	
+
+	/**
+	 * The home instance this event consumer talks too.
+	 */
 	private ServiceDescriptor myHomeReference;
 	private EventServiceRMIBridgeService bridgeToHome;
-	
+
+	/**
+	 * Error counter.
+	 */
 	private AtomicInteger errorCount = new AtomicInteger(0);
  	
 	public RemoteConsumerWrapper(DiMeRemoteEventChannelRMISupport aSupport, String aChannelName, ServiceDescriptor aHomeReference, EventServiceRMIBridgeService aBridgeToHome) {
