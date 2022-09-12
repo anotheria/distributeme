@@ -81,7 +81,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	 */
 	public static String ping(Location location){
 		String url = createRegistryOperationUrl(location, "ping", "");
-		byte data[] = getUrlContent(url, true);
+		byte[] data = getUrlContent(url, true);
 		if (data == null )
 			return null;
 		String reply = new String(data, Charset.defaultCharset());
@@ -172,7 +172,7 @@ public class RegistryUtil extends BaseRegistryUtil{
 	@SuppressFBWarnings("DM_DEFAULT_ENCODING")
 	public static String getXMLServiceList(Location loc){
 		String url = getRegistryBaseUrl(loc)+"list";
-		byte data[] = getUrlContent(url);
+		byte[] data = getUrlContent(url);
 		if (data == null )
 			return null;
 		String reply = new String(data);
@@ -260,10 +260,20 @@ public class RegistryUtil extends BaseRegistryUtil{
 		 */
 		private volatile List<String> customTagProviderClassList = new ArrayList<>();
 
+		/**
+		 * Clazz that is used to create registry connector. You can use it to provide your own registry and your own connector.
+		 */
 		@Configure
 		private String registryConnectorClazz = DistributemeRegistryConnector.class.getName();
+		/**
+		 * System properties to tags, for consul.
+		 */
 		@Configure
 		private String systemPropertiesToTags;
+
+		/**
+		 * Tabable system properties parsed from config.
+		 */
 		private Map<String, String> tagableSystemProperties = new HashMap<>();
 
 		@Set("customTagProviderClasses")
