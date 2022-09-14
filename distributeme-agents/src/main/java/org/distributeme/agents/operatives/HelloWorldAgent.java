@@ -30,9 +30,7 @@ public class HelloWorldAgent implements Agent{
 	public static void main(String[] args) throws Exception{
 		System.out.println("Creating agent");
 		String target = "rmi://org_distributeme_test_echo_EchoService.lfxyotkpcy@192.168.200.101:9250@20110817012752";
-		if (args.length!=1){
-			//return later
-		}else{
+		if (args.length==1){
 			target = args[0];
 		}
 		
