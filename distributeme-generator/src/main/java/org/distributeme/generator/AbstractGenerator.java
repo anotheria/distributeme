@@ -1336,7 +1336,7 @@ public class AbstractGenerator {
 	/**
 	 * getMethodRouterName.
 	 *
-	 * @param Element a {@link javax.lang.model.element.ExecutableElement} object.
+	 * @param element a {@link javax.lang.model.element.ExecutableElement} object.
 	 * @return a {@link java.lang.String} object.
 	 */
 	protected String getMethodRouterName(ExecutableElement element){
