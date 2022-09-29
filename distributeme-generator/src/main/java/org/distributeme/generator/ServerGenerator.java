@@ -134,6 +134,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		emptyline();
 		writeStatement("private static Logger log");
 		writeStatement("private static Marker FATAL = MarkerFactory.getMarker(\"FATAL\")");
+		writeStatement("private static long serverStartTime = System.currentTimeMillis()"); //nanoTime is more precise but for our purposes millis are enough.
 		emptyline();
 
 		
@@ -439,8 +440,8 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeString("}else{");
 			writeIncreasedStatement("System.out.println("+quote("skipping registration for ")+"+serviceId"+")");
 			writeString("}");
-			
-			writeStatement("System.out.println("+quote("Server ")+"+serviceId+"+quote(" is up and ready.")+")");
+
+			writeStatement("System.out.println("+quote("Server ")+"+serviceId+"+quote(" is up and ready (in \"+(System.currentTimeMillis()-serverStartTime)+\" ms).")+")");
 		}
 
 		if(combinedServer){
@@ -460,7 +461,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 				closeBlock("central registry bind");
 				writeStatement("Runtime.getRuntime().addShutdownHook(new ServerShutdownHook("+descriptorVariableName+"))");
 				emptyline();
-				writeStatement("System.out.println("+quote("Server ")+"+"+descriptorVariableName+".getServiceId()+"+quote(" is up and ready.")+")");
+				writeStatement("System.out.println("+quote("Server ")+"+"+descriptorVariableName+".getServiceId()+"+quote(" is up and ready (in \"+(System.currentTimeMillis()-serverStartTime)+\" ms).")+")");
 			}
 		}
 
