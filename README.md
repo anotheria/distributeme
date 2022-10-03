@@ -1,4 +1,4 @@
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.anotheria/configureme/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.anotheria/distributeme)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.anotheria/distributeme/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.anotheria/distributeme)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 DistributeMe
