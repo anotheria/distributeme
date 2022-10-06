@@ -85,7 +85,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		
 		//meta servers rely on other skeletons and just starts them.
 		boolean combinedServer = type.getAnnotation(CombinedService.class)!=null;
-		
+
 		writePackage(type);
 		writeAnalyzerComments(type);
 		emptyline();
@@ -115,6 +115,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		writeImport(SystemProperties.class);
 		writeImport(List.class);
 		writeImport(RoutingAware.class);
+		writeImport("java.util.concurrent.CountDownLatch");
 		emptyline();
 		
 		DistributeMe annotation = type.getAnnotation(DistributeMe.class);
@@ -129,6 +130,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 		}*/
 
 		writeAnalyzeIgnoreAnnotation(type);
+
 		writeString("public class "+getServerName(type)+"{");
 		increaseIdent();
 		emptyline();
@@ -494,17 +496,54 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 
 			writeString("public static void createCombinedServicesAndRegisterLocally(int customRegistryPort) throws Exception{");
 			increaseIdent();
+			writeString("  CountDownLatch countDownLatch = new CountDownLatch("+getCombinedServicesNames(type).size()+");");
 			List<String> targetServicesNames = getCombinedServicesNames(type);
-			for (String service : targetServicesNames){
-				writeStatement(getFullyQualifiedServerName(service)+".init()");
-				writeStatement(getFullyQualifiedServerName(service)+".createServiceAndRegisterLocally(customRegistryPort)");
+			for (int i = 0; i < targetServicesNames.size();i++){
+				writeString("ParallelTask p"+i+" = new ParallelTask(customRegistryPort,"+i+",countDownLatch);");
+				writeString("new Thread(p"+i+").start();");
 			}
+			writeString(" countDownLatch.await();");
+			writeString("System.out.println(\"All servers are up and running.\");");
 //			for (String s : SUPPORT_SERVICES){
 //				writeStatement(s+".init()");
 //				writeStatement(s+".createServiceAndRegisterLocally()");
 //			}
 			closeBlock("createCombinedServicesAndRegisterLocally");
 			emptyline();
+
+			writeString("public static class ParallelTask implements Runnable {");
+			increaseIdent();
+			writeString("private int customRegistryPort;");
+			writeString("private int combinedServiceNum;");
+			writeString("private CountDownLatch cDLatch;");
+			writeString("ParallelTask(int customRegistryPort, int combinedServiceNum, CountDownLatch cDLatch )");
+			writeString("{");
+			increaseIdent();
+			writeString("this.customRegistryPort = customRegistryPort;");
+			writeString("this.combinedServiceNum = combinedServiceNum;");
+			writeString("this.cDLatch = cDLatch;");
+			decreaseIdent();
+			writeString("}");
+			writeString("@Override");
+			writeString("public void run()");
+			writeString("{");
+			increaseIdent();
+			writeString("try{");
+			for(int i =0; i<getCombinedServicesNames(type).size();i++){
+				writeString("if(combinedServiceNum=="+i+"){");
+				writeStatement(getFullyQualifiedServerName(getCombinedServicesNames(type).get(i))+".init()");
+				writeStatement(getFullyQualifiedServerName(getCombinedServicesNames(type).get(i))+".createServiceAndRegisterLocally(customRegistryPort)");
+				writeString("}");
+			}
+			writeString(" cDLatch.countDown();");
+			writeString("}catch(Exception e){");
+			writeString("System.out.println(e.getMessage());");
+			writeString("}");
+			writeString("}");
+			writeString("}");
+
+
+
 		}
 			
 		closeBlock();
