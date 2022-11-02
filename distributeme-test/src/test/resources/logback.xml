@@ -33,7 +33,10 @@
         <appender-ref ref="RoutingAppender" />
     </logger>
 
-    <logger name="org.distributeme" level="WARN" additivity="false">
+    <logger name="org.distributeme" level="INFO" additivity="false">
+		<appender-ref ref="ConsoleAppender" />
+	</logger>
+    <logger name="net.anotheria.moskito" level="INFO" additivity="false">
 		<appender-ref ref="ConsoleAppender" />
 	</logger>
 

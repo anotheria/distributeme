@@ -26,11 +26,11 @@
 	"test": {
 		"interceptors": {
 //			"interceptor.1": "org.distributeme.test.interception.interceptor.LogOutBeforeCallInterceptor", 
-			"interceptor.2": "org.distributeme.test.interception.interceptor.InterceptSumInterceptor", 
-			"interceptor.3": "org.distributeme.test.interception.interceptor.ModifyReturnValueInterceptor",
-			"interceptor.4": "org.distributeme.test.interception.interceptor.InterceptInClientInterceptor",
-			"interceptor.5": "org.distributeme.test.interception.interceptor.InspectParameterExample",
-			"interceptor.6": "org.distributeme.test.interception.interceptor.PiggybackingInterceptor",
+//			"interceptor.2": "org.distributeme.test.interception.interceptor.InterceptSumInterceptor", 
+//			"interceptor.3": "org.distributeme.test.interception.interceptor.ModifyReturnValueInterceptor",
+//			"interceptor.4": "org.distributeme.test.interception.interceptor.InterceptInClientInterceptor",
+//			"interceptor.5": "org.distributeme.test.interception.interceptor.InspectParameterExample",
+//			"interceptor.6": "org.distributeme.test.interception.interceptor.PiggybackingInterceptor",
 			"interceptor.10": "org.distributeme.core.interceptor.moskito.MoskitoJourneyInterceptor",
 //			"interceptor.50": "org.distributeme.test.interception.interceptor.LogOutAfterCallInterceptor",
 		},

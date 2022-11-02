@@ -36,7 +36,7 @@ public class TestClient2 {
 		System.out.println(local.cMethod("3"));
 		
 		TracedCall last = RunningTraceContainer.endTrace();
-		myJourney.addUseCase((CurrentlyTracedCall)last);
+		myJourney.addCall((CurrentlyTracedCall)last);
 
 		System.out.println("Journey: "+myJourney);
 		System.out.println("  calls: "+myJourney.getTracedCalls());
