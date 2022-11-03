@@ -2,7 +2,6 @@ package org.distributeme.registry.ui.action;
 
 import net.anotheria.maf.action.ActionCommand;
 import net.anotheria.maf.action.ActionMapping;
-import net.anotheria.maf.bean.FormBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +12,7 @@ import java.util.List;
 public class ESRegistryListAction extends BaseESRegistryAction{
 
 	@Override
-	public ActionCommand execute(ActionMapping mapping, FormBean formBean,
+	public ActionCommand execute(ActionMapping mapping,
 			HttpServletRequest req, HttpServletResponse res) throws Exception {
 		
 		List<String> channelNames = getRegistry().getChannelNames();

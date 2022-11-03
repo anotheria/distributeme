@@ -3,7 +3,6 @@ package org.distributeme.registry.ui.action;
 import net.anotheria.maf.action.Action;
 import net.anotheria.maf.action.ActionCommand;
 import net.anotheria.maf.action.ActionMapping;
-import net.anotheria.maf.bean.FormBean;
 import org.distributeme.registry.metaregistry.MetaRegistryConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +26,7 @@ public class RegistryForceRegisterAction extends BaseRegistryAction implements A
 	private MetaRegistryConfig registryConfig = MetaRegistryConfig.create();
 
 	@Override
-	public ActionCommand execute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public ActionCommand execute(ActionMapping mapping, HttpServletRequest req, HttpServletResponse res) throws Exception {
 
 		int minPort = registryConfig.getRegistryPortMin();
 		int maxPort = registryConfig.getRegistryPortMax();

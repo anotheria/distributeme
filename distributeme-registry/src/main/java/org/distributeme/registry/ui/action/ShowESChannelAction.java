@@ -2,7 +2,6 @@ package org.distributeme.registry.ui.action;
 
 import net.anotheria.maf.action.ActionCommand;
 import net.anotheria.maf.action.ActionMapping;
-import net.anotheria.maf.bean.FormBean;
 import org.distributeme.registry.esregistry.ChannelDescriptor;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 public class ShowESChannelAction extends ESRegistryListAction{
 
 	@Override
-	public ActionCommand execute(ActionMapping mapping, FormBean formBean,
+	public ActionCommand execute(ActionMapping mapping,
 			HttpServletRequest req, HttpServletResponse res) throws Exception {
 
-		super.execute(mapping, formBean, req, res);
+		super.execute(mapping, req, res);
 		
 		String channelname = req.getParameter("channelname");
 		req.setAttribute("selectedname", channelname);

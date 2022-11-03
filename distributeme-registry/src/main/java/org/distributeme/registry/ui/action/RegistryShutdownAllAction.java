@@ -3,7 +3,6 @@ package org.distributeme.registry.ui.action;
 import net.anotheria.maf.action.Action;
 import net.anotheria.maf.action.ActionCommand;
 import net.anotheria.maf.action.ActionMapping;
-import net.anotheria.maf.bean.FormBean;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.support.lifecycle.LifecycleSupportService;
 import org.distributeme.support.lifecycle.generated.LifecycleSupportServiceConstants;
@@ -20,7 +19,7 @@ import java.util.List;
 public class RegistryShutdownAllAction extends BaseRegistryAction implements Action {
 
 	@Override
-	public ActionCommand execute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public ActionCommand execute(ActionMapping mapping, HttpServletRequest req, HttpServletResponse res) throws Exception {
 		
 		List<ServiceDescriptor> descriptors = getRegistry().list();
 		for (ServiceDescriptor toShutDown : descriptors){

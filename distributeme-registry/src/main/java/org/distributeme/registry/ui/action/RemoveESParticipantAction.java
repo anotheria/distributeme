@@ -2,7 +2,6 @@ package org.distributeme.registry.ui.action;
 
 import net.anotheria.maf.action.ActionCommand;
 import net.anotheria.maf.action.ActionMapping;
-import net.anotheria.maf.bean.FormBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 abstract class RemoveESParticipantAction extends BaseESRegistryAction{
 	@Override
-	public ActionCommand execute(ActionMapping mapping, FormBean formBean,
+	public ActionCommand execute(ActionMapping mapping,
 			HttpServletRequest req, HttpServletResponse res) throws Exception {
 		
 		String channelname = req.getParameter("channel");

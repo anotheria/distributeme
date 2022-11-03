@@ -2,7 +2,6 @@ package org.distributeme.registry.ui.action;
 
 import net.anotheria.maf.action.ActionCommand;
 import net.anotheria.maf.action.ActionMapping;
-import net.anotheria.maf.bean.FormBean;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.registry.ui.bean.ServiceDescriptorFormBean;
 import org.distributeme.registry.ui.bean.ServiceDescriptorFormBeanSortType;
@@ -24,7 +23,7 @@ public class RegistryListAction extends BaseRegistryAction {
 	private static final String BINDINGS_ATTRIBUTE_NAME = "bindings";
 
 	@Override
-	public ActionCommand execute(ActionMapping mapping, FormBean formBean, HttpServletRequest req, HttpServletResponse res) throws Exception {
+	public ActionCommand execute(ActionMapping mapping, HttpServletRequest req, HttpServletResponse res) throws Exception {
 
 		List<ServiceDescriptor> descriptors = getRegistry().list();
 		List<ServiceDescriptorFormBean> bindings = new ArrayList<ServiceDescriptorFormBean>(descriptors.size());
