@@ -47,7 +47,7 @@ public class MoskitoJourneyInterceptor implements ClientSideRequestInterceptor, 
 		if (flag!=null && flag){
 			CurrentlyTracedCall currentTrace =  new CurrentlyTracedCall("SERVER_SIDE");
 			RunningTraceContainer.setCurrentlyTracedCall(currentTrace);
-			currentTrace.startStep("--- NETWORK IN ---", MoskitoJourneyInterceptorStatsProducer.SKELETON, "incomingCall");
+			currentTrace.startStep("- DistributeMe call-in", MoskitoJourneyInterceptorStatsProducer.SKELETON, "incomingCall");
 			iContext.getLocalStore().put(ICONTEXT_ATTRIBUTE_STARTTIME, System.nanoTime());
 		}
 
@@ -89,7 +89,7 @@ public class MoskitoJourneyInterceptor implements ClientSideRequestInterceptor, 
 			return InterceptorResponse.CONTINUE;
 		}
 		CurrentlyTracedCall currentTrace = (CurrentlyTracedCall)aTracedCall;
-		currentTrace.startStep("--- NETWORK OUT ---", MoskitoJourneyInterceptorStatsProducer.NETWORK, "outgoingCall");
+		currentTrace.startStep("- DistributeMe call-out (RC: " +context.getCallCount()+")", MoskitoJourneyInterceptorStatsProducer.NETWORK, "outgoingCall");
 		iContext.getLocalStore().put(ICONTEXT_ATTRIBUTE_STARTTIME, System.nanoTime());
 		context.getTransportableCallContext().put(CONTEXT_ATTRIBUTE_TRACE_FLAG, Boolean.TRUE);
 		return InterceptorResponse.CONTINUE;
@@ -104,6 +104,13 @@ public class MoskitoJourneyInterceptor implements ClientSideRequestInterceptor, 
 		TracedCall aTracedCall = RunningTraceContainer.getCurrentlyTracedCall();
 		if (!aTracedCall.callTraced()){
 			return InterceptorResponse.CONTINUE;
+		}
+
+		if (iContext.getException()!=null){
+			//exception occured, we don't need to do anything.
+			CurrentlyTracedCall currentTrace = (CurrentlyTracedCall)aTracedCall;
+			currentTrace.startStep("- DistributeMe Error: "+iContext.getException().getMessage(), MoskitoJourneyInterceptorStatsProducer.NETWORK, "error");
+			currentTrace.endStep();
 		}
 
 		CurrentlyTracedCall currentTrace =  (CurrentlyTracedCall)aTracedCall;
