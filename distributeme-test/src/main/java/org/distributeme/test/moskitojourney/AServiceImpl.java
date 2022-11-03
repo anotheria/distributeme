@@ -20,7 +20,7 @@ public class AServiceImpl implements AService{
 		try{
 			return "a of ("+bService.bMethod(param)+")";
 		}catch(BServiceException e){
-			throw new AServiceException("BService failed:", e);
+			return "a of (b failed)";
 		}
 	}
 

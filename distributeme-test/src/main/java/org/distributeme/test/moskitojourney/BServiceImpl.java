@@ -1,6 +1,7 @@
 package org.distributeme.test.moskitojourney;
 
 import org.distributeme.core.ServiceLocator;
+import org.distributeme.core.exception.DistributemeRuntimeException;
 
 public class BServiceImpl implements BService{
 
@@ -11,7 +12,9 @@ public class BServiceImpl implements BService{
 		try{
 			return "b of ("+cService.cMethod(param)+")";
 		}catch(CServiceException e){
-			throw new BServiceException("CService failed:", e);
+			return "b of (c failed)";
+		}catch(Exception e){
+			return "b of (c failed)";
 		}
 	}
 

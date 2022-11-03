@@ -46,7 +46,7 @@
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-maf</artifactId>
-                <version>2.3.0</version>
+                <version>3.0.0</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>

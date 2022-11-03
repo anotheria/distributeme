@@ -22,7 +22,11 @@ public class TestClient {
 		Journey myJourney = manager.createJourney("dimetestjourney");
 		RunningTraceContainer.startTracedCall("TestClient.main");
 		AService aService = ServiceLocator.getRemote(AService.class);
-		System.out.println(aService.aMethod("hello from client"));
+		try {
+			System.out.println(aService.aMethod("hello from client"));
+		}catch(Exception e){
+			System.out.println("ERROR");
+		}
 		//System.out.println(aService.aMethod("hello 2 from client"));
 
 		
