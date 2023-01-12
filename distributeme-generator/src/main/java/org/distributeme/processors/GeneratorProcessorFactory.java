@@ -1,12 +1,8 @@
 package org.distributeme.processors;
 
 import org.distributeme.annotation.DistributeMe;
-import org.distributeme.annotation.WebServiceMe;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.generator.GeneratorUtil;
-import org.distributeme.generator.ws.ConfigurationGenerator;
-import org.distributeme.generator.ws.ServiceProxyGenerator;
-import org.distributeme.generator.ws.WebServiceMeGenerator;
 
 import javax.annotation.processing.Completion;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -17,10 +13,8 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -35,8 +29,7 @@ public class GeneratorProcessorFactory implements Processor {
      * Constant list for supported annotations.
      */
     private static final Set<String> supportedAnnotations = new HashSet<String>(Arrays.asList(
-            "org.distributeme.annotation.DistributeMe",
-            "org.distributeme.annotation.WebServiceMe"
+            "org.distributeme.annotation.DistributeMe"
     ));
     /**
      * Constant list for supported options.
@@ -45,15 +38,10 @@ public class GeneratorProcessorFactory implements Processor {
 
     private ProcessingEnvironment environment;
 
-    private List<WebServiceMeGenerator> wsGenerators;
-
     /** {@inheritDoc} */
     @Override
     public void init(ProcessingEnvironment processingEnv) {
         this.environment = processingEnv;
-        wsGenerators = new ArrayList<WebServiceMeGenerator>();
-        wsGenerators.add(new ServiceProxyGenerator(environment));
-        wsGenerators.add(new ConfigurationGenerator(environment));
     }
 
     /** {@inheritDoc} */
@@ -75,12 +63,6 @@ public class GeneratorProcessorFactory implements Processor {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    }
-                }
-                WebServiceMe wsAnnotation = type.getAnnotation(WebServiceMe.class);
-                if (wsAnnotation != null) {
-                    for (WebServiceMeGenerator generator : wsGenerators) {
-                        generator.generate(type);
                     }
                 }
             }
