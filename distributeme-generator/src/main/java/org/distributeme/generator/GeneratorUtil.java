@@ -2,7 +2,6 @@ package org.distributeme.generator;
 
 import net.anotheria.util.StringUtils;
 import org.distributeme.annotation.CombinedService;
-import org.distributeme.generator.jaxrs.ResourceGenerator;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -35,30 +34,6 @@ public class GeneratorUtil {
             ServerGenerator.class,
             ServerScriptGenerator.class
     };
-
-    private static Class<? extends Generator>[] JAXRS_GENERATORS = new Class[]{
-            ResourceGenerator.class,
-            StubGenerator.class,
-            ConstantsGenerator.class
-    };
-
-    /**
-     * <p>generateJAXRS.</p>
-     *
-     * @param type a {@link javax.lang.model.element.TypeElement} object.
-     * @param environment a {@link javax.annotation.processing.ProcessingEnvironment} object.
-     */
-    public static void generateJAXRS(TypeElement type, ProcessingEnvironment environment) {
-        System.out.println("DistributeMe JAXRS generation started for type: " + type);
-        Map<String, String> generatorOptions = getGeneratorOptions(environment);
-        System.out.println("Found " + generatorOptions.size() + " Options:");
-        for (String option : generatorOptions.keySet())
-            System.out.println(option + " : " + generatorOptions.get(option));
-
-        generate(type, environment, generatorOptions, JAXRS_GENERATORS);
-
-        System.out.println("DistributeMe generation finished.");
-    }
 
     private static void generate(TypeElement type, ProcessingEnvironment environment, Map<String, String> generatorOptions, Class<? extends Generator>[] generatorClasses) {
         Filer filer = environment.getFiler();

@@ -76,14 +76,6 @@ public class GeneratorProcessorFactory implements Processor {
                             e.printStackTrace();
                         }
                     }
-
-                    if (Arrays.asList(annotation.protocols()).contains(ServiceDescriptor.Protocol.JAXRS)) {
-                        try {
-                            GeneratorUtil.generateJAXRS(type, environment);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
                 }
                 WebServiceMe wsAnnotation = type.getAnnotation(WebServiceMe.class);
                 if (wsAnnotation != null) {
