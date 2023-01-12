@@ -15,10 +15,10 @@
     <description>parent for all distributeme projects</description>
 
     <properties>
-        <moskito-version>3.0.0</moskito-version>
+        <moskito-version>3.2.0</moskito-version>
 		<moskito-control-agent-version>1.2.2</moskito-control-agent-version>
-        <source-version>1.7</source-version>
-        <target-version>1.7</target-version>
+        <source-version>1.8</source-version>
+        <target-version>1.8</target-version>
     </properties>
 
     <dependencyManagement>
@@ -51,7 +51,7 @@
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>configureme</artifactId>
-                <version>2.4.0</version>
+                <version>2.5.0</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
@@ -91,21 +91,6 @@
             </dependency>
 
             <!-- REST API -->
-            <dependency>
-                <groupId>javax.ws.rs</groupId>
-                <artifactId>jsr311-api</artifactId>
-                <version>1.1.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-core-asl</artifactId>
-                <version>1.9.2</version>
-            </dependency>
-            <dependency>
-                <groupId>org.codehaus.jackson</groupId>
-                <artifactId>jackson-mapper-asl</artifactId>
-                <version>1.9.2</version>
-            </dependency>
 			<dependency>
 				<groupId>commons-lang</groupId>
 				<artifactId>commons-lang</artifactId>

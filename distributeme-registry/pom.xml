@@ -15,7 +15,7 @@
   <properties>
 	  <aspectj-version>1.8.8</aspectj-version>
 	  <aspectj-maven-plugin.version>1.8</aspectj-maven-plugin.version>
-	  <aspectj-maven-plugin.complianceLevel>1.7</aspectj-maven-plugin.complianceLevel>
+	  <aspectj-maven-plugin.complianceLevel>1.8</aspectj-maven-plugin.complianceLevel>
 
   </properties>
 

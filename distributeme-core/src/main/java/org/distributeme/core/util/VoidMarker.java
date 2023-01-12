@@ -1,7 +1,5 @@
 package org.distributeme.core.util;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-
 import java.io.Serializable;
 /**
  * This class is used to place void values into the return lists.
@@ -9,7 +7,6 @@ import java.io.Serializable;
  * @author lrosenberg
  * @version $Id: $Id
  */
-@JsonSerialize
 public class VoidMarker implements Serializable{
 
 	/**
