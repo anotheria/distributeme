@@ -9,6 +9,7 @@ import net.anotheria.anoprise.eventservice.ProxyType;
 import net.anotheria.anoprise.eventservice.RemoteEventChannelConsumerProxy;
 import net.anotheria.anoprise.eventservice.RemoteEventChannelSupplierProxy;
 import net.anotheria.anoprise.eventservice.RemoteEventChannelSupportFactory;
+import net.anotheria.anoprise.eventservice.RemoteEventServiceConsumer;
 import net.anotheria.util.IdCodeGenerator;
 import org.distributeme.core.RMIRegistryUtil;
 import org.distributeme.core.RegistryUtil;
@@ -237,8 +238,16 @@ public class DiMeRemoteEventChannelRMISupport implements RemoteEventChannelSuppo
 	void registerRemoteConsumer(String channelName, ServiceDescriptor myReference){
 		EventChannel channel = es.obtainEventChannel(channelName, ProxyType.REMOTE_CONSUMER_PROXY);
 		LOG.debug("REGISTER REMOTE CONSUMER @ channel "+channel+", consumer: "+myReference);
-		RemoteConsumerWrapper wrapper = new RemoteConsumerWrapper(this, channelName, myReference, getBridge(myReference));
-		((DiMeRemoteEventChannelConsumerProxy)channel).addRemoteConsumer(wrapper);
+        RemoteConsumerWrapper wrapper = new RemoteConsumerWrapper(this, channelName, myReference, getBridge(myReference));
+        DiMeRemoteEventChannelConsumerProxy remoteEventChannelConsumerProxy = (DiMeRemoteEventChannelConsumerProxy) channel;
+        for (RemoteEventServiceConsumer c : remoteEventChannelConsumerProxy.getConsumers()) {
+            RemoteConsumerWrapper w = (RemoteConsumerWrapper) c;
+            if (w.getHomeReference() != null && w.getHomeReference().equalsByEndpoint(wrapper.getHomeReference())) {
+                remoteEventChannelConsumerProxy.removeRemoteConsumer(w);
+                LOG.debug("FOUND AND REMOVED OLD CONSUMER in channel " + channel + ", consumer: " + w.getHomeReference());
+            }
+        }
+        remoteEventChannelConsumerProxy.addRemoteConsumer(wrapper);
 		LOG.debug("REGISTER REMOTE CONSUMER @ channel "+channel+", consumer: "+myReference+" DONE!");
 	}
 	
@@ -268,4 +277,3 @@ public class DiMeRemoteEventChannelRMISupport implements RemoteEventChannelSuppo
 	}
 
 }
- 

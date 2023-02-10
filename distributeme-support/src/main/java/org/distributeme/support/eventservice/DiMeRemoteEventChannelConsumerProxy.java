@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DiMeRemoteEventChannelConsumerProxy implements RemoteEventChannelConsumerProxy {
@@ -36,6 +37,10 @@ public class DiMeRemoteEventChannelConsumerProxy implements RemoteEventChannelCo
 	public void addRemoteConsumer(RemoteEventServiceConsumer consumer) {
 		consumers.add(consumer);
 	}
+
+    public List<RemoteEventServiceConsumer> getConsumers() {
+        return consumers;
+    }
 
 	@Override
 	public void removeRemoteConsumer(RemoteEventServiceConsumer consumer) {
