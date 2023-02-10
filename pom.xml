@@ -15,7 +15,7 @@
     <description>parent for all distributeme projects</description>
 
     <properties>
-        <moskito-version>3.2.0</moskito-version>
+        <moskito-version>3.2.2</moskito-version>
 		<moskito-control-agent-version>1.2.2</moskito-control-agent-version>
         <source-version>1.8</source-version>
         <target-version>1.8</target-version>
