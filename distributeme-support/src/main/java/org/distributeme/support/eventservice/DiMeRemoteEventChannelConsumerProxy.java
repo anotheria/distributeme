@@ -37,6 +37,10 @@ public class DiMeRemoteEventChannelConsumerProxy implements RemoteEventChannelCo
 		consumers.add(consumer);
 	}
 
+    public CopyOnWriteArrayList<RemoteEventServiceConsumer> getConsumers() {
+        return consumers;
+    }
+
 	@Override
 	public void removeRemoteConsumer(RemoteEventServiceConsumer consumer) {
 		consumers.remove(consumer);
