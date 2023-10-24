@@ -23,7 +23,7 @@ Those are the core features of DistributeMe:
 
 DistributeMe is free and distributed under the MIT license.
 
-[More information](wiki)
+[More information](https://github.com/anotheria/distributeme/wiki)
 
 
 
