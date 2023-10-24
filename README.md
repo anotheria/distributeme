@@ -4,7 +4,7 @@
 DistributeMe
 ============
 
-What is DistributeMe
+What is DistributeMe?
 
 DistributeMe is a framework for **automatic distribution of java code**. DistributeMe operates directly on your java code, 
 the annotated interface is processed by the DistributeMe apt preprocessor, which generates distribution related code.
@@ -22,7 +22,8 @@ Those are the core features of DistributeMe:
 * DistributeMe consists of code generator which generates distribution code, that becomes part of your distribution package, the Registry which is a name / address resolving utility, and runtime utils used by the generated code.
 
 DistributeMe is free and distributed under the MIT license.
-Please watch the underlying video for the explanation of the working principles.(Video will be addded)
+
+[More information](wiki)
 
 
 
