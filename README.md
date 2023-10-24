@@ -25,5 +25,7 @@ DistributeMe is free and distributed under the MIT license.
 
 [More information](https://github.com/anotheria/distributeme/wiki)
 
+[ChangeLog](https://github.com/anotheria/distributeme/wiki/ChangeLog)
+
 
 
