@@ -33,6 +33,17 @@ transform: rotate(90deg);
     padding-inline-start: 40px;
 }
 
+.nested li {
+    display: grid;
+    grid-template-columns: 2fr 0.5fr 0.5fr auto;
+}
+
 .active {
     display: block;
+}
+
+.header-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }

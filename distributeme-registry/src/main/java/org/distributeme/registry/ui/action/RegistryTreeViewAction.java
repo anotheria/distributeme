@@ -25,26 +25,47 @@ public class RegistryTreeViewAction extends BaseRegistryTreeViewAction {
      * Attribute name for nodes.
      */
     private static final String NODES_ATTRIBUTE_NAME = "nodes";
+    private static final String NODE_PARENT_INSTANCEID = "instanceid";
+    private static final String NODE_PARENT_HOST = "host";
 
     @Override
     public ActionCommand execute(ActionMapping mapping, HttpServletRequest req, HttpServletResponse res) throws Exception {
+        String nodeParent = req.getParameter("nodeParent");
 
         List<ServiceDescriptor> descriptors = getRegistry().list();
         Map<String, List<NodeServiceData>> nodeMap = new HashMap<>(descriptors.size());
         List<ServiceDescriptorFormNode> nodes = new ArrayList<>();
 
-        for (ServiceDescriptor descriptor : descriptors){
-            String nodeTitle = descriptor.getInstanceId() + " " + descriptor.getHost() + "/" + descriptor.getPort();
+        if(nodeParent.equals(NODE_PARENT_INSTANCEID)){
+            for (ServiceDescriptor descriptor : descriptors){
+                String nodeTitle = descriptor.getInstanceId() + " " + descriptor.getHost() + "/" + descriptor.getPort();
 
-            if(nodeMap.containsKey(nodeTitle)){
-                List<NodeServiceData> servicesData = nodeMap.get(nodeTitle);
-                servicesData.add(new NodeServiceData(descriptor.getServiceId(), descriptor.getRegistrationString()));
-            } else {
-                List<NodeServiceData> servicesData = new ArrayList<>();
-                servicesData.add(new NodeServiceData(descriptor.getServiceId(), descriptor.getRegistrationString()));
-                nodeMap.put(nodeTitle, servicesData);
+                if(nodeMap.containsKey(nodeTitle)){
+                    List<NodeServiceData> servicesData = nodeMap.get(nodeTitle);
+                    servicesData.add(new NodeServiceData(descriptor.getServiceId(), descriptor.getRegistrationString()));
+                } else {
+                    List<NodeServiceData> servicesData = new ArrayList<>();
+                    servicesData.add(new NodeServiceData(descriptor.getServiceId(), descriptor.getRegistrationString()));
+                    nodeMap.put(nodeTitle, servicesData);
+                }
+            }
+        } else if(nodeParent.equals(NODE_PARENT_HOST)){
+            for (ServiceDescriptor descriptor : descriptors){
+                String nodeTitle = descriptor.getHost();
+
+                if(nodeMap.containsKey(nodeTitle)){
+                    List<NodeServiceData> servicesData = nodeMap.get(nodeTitle);
+                    servicesData.add(new NodeServiceData(descriptor.getServiceId(), descriptor.getRegistrationString(),
+                            descriptor.getInstanceId(), descriptor.getPort()));
+                } else {
+                    List<NodeServiceData> servicesData = new ArrayList<>();
+                    servicesData.add(new NodeServiceData(descriptor.getServiceId(), descriptor.getRegistrationString(),
+                            descriptor.getInstanceId(), descriptor.getPort()));
+                    nodeMap.put(nodeTitle, servicesData);
+                }
             }
         }
+
 
         for (String key: nodeMap.keySet()) {
             ServiceDescriptorFormNode node = new ServiceDescriptorFormNode(key, nodeMap.get(key));
@@ -67,6 +88,7 @@ public class RegistryTreeViewAction extends BaseRegistryTreeViewAction {
 
         req.setAttribute(NODES_ATTRIBUTE_NAME, nodes);
         req.setAttribute("numberOfNodes", nodes.size());
+        req.setAttribute("nodeParent", nodeParent);
 
         return mapping.success();
     }

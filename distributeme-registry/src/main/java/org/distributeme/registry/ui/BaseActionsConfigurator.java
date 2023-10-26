@@ -37,7 +37,7 @@ public class BaseActionsConfigurator implements ActionMappingsConfigurator {
 		log.debug("Configuring actions mappings...");
 
 		mappings.addMapping("registry", RegistryListAction.class, new CommandForward("success", "/org/distributeme/registry/ui/jsp/RegistryListView.jsp"));
-		mappings.addMapping("registryByInstanceId", RegistryTreeViewAction.class, new CommandForward("success", "/org/distributeme/registry/ui/jsp/RegistryTreeView.jsp"));
+		mappings.addMapping("registryTreeView", RegistryTreeViewAction.class, new CommandForward("success", "/org/distributeme/registry/ui/jsp/RegistryTreeView.jsp"));
 		mappings.addMapping("unbind", RegistryUnbindAction.class, new CommandRedirect("redirect", "registry?"));
 		
 		mappings.addMapping("ping", RegistryPingAction.class, new CommandRedirect("redirect", "registry?"));

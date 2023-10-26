@@ -19,11 +19,11 @@ public abstract class BaseRegistryTreeViewAction extends BaseAction implements A
 
     @Override
     protected String getMenuSection() {
-        return "registryByInstanceId";
+        return "registryTreeView";
     }
 
     @Override protected String getTitle(){
-        return "registryByInstanceId";
+        return "registryTreeView";
     }
 
 }
