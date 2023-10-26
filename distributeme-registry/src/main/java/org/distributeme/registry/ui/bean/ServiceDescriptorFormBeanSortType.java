@@ -30,6 +30,10 @@ public class ServiceDescriptorFormBeanSortType extends SortType{
 	 * By full/complete service id.
 	 */
 	public static final int SORT_BY_GLOBALSERVICEID = 6;
+	/**
+	 * By node title in a tree view
+	 */
+	public static final int SORT_BY_TITLE = 7;
 
 	/**
 	 * The default sort type if no sort type is specified.

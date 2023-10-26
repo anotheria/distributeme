@@ -26,7 +26,7 @@ public class RegistryListAction extends BaseRegistryAction {
 	public ActionCommand execute(ActionMapping mapping, HttpServletRequest req, HttpServletResponse res) throws Exception {
 
 		List<ServiceDescriptor> descriptors = getRegistry().list();
-		List<ServiceDescriptorFormBean> bindings = new ArrayList<ServiceDescriptorFormBean>(descriptors.size());
+		List<ServiceDescriptorFormBean> bindings = new ArrayList<>(descriptors.size());
 
 		for (ServiceDescriptor descriptor : descriptors){
 			ServiceDescriptorFormBean bean = map(descriptor);
