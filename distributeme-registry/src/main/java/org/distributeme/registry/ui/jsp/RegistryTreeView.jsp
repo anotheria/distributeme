@@ -13,11 +13,12 @@
 <div class="content">
     <jsp:include page="Messages.jsp" flush="true"/>
     <div class="header-box">
-        <h1>Registered nodes (${numberOfNodes}).</h1>
         <ano:iF test="${nodeParent eq 'instanceid'}">
+            <h1>Registered host nodes (${numberOfNodes}).</h1>
             <a href="registryTreeView?nodeParent=host">Tree view by host</a>
         </ano:iF>
         <ano:iF test="${nodeParent eq 'host'}">
+            <h1>Registered instanceId nodes (${numberOfNodes}).</h1>
             <a href="registryTreeView?nodeParent=instanceid">Tree view by instanceId</a>
         </ano:iF>
     </div>
@@ -28,11 +29,11 @@
                 <ano:iF test="${nodeParent eq 'instanceid'}">
                     <ano:iterate id="node" name="nodes">
                         <ano:iF test="${node.nodeDataList.size() == 1}"><li> <span class="caret-down caret">${node.title}</span>
-                            <div>${node.nodeDataList.get(1).getServiceId()}</div>
+                            <div>${node.nodeDataList.get(0).getServiceId()}</div>
                             <div>
-                                <a class="unbind" title="unbind" href="unbind?id=${node.nodeDataList.get(1).getRegistrationString()}" onclick="return confirm('Are you sure you want to unbind ${node.nodeDataList.get(1).getServiceId()}?')"></a>
-                                <a class="ping" title="ping" href="ping?id=${node.nodeDataList.get(1).getRegistrationString()}"></a>
-                                <a class="shutdown" title="shutdown" href="shutdown?id=${node.nodeDataList.get(1).getRegistrationString()}" onclick="return confirm('Are you sure you want to shut down ${node.nodeDataList.get(1).getServiceId()}?')"></a>
+                                <a class="unbind" title="unbind" href="unbind?id=${node.nodeDataList.get(0).getRegistrationString()}" onclick="return confirm('Are you sure you want to unbind ${node.nodeDataList.get(0).getServiceId()}?')"></a>
+                                <a class="ping" title="ping" href="ping?id=${node.nodeDataList.get(0).getRegistrationString()}"></a>
+                                <a class="shutdown" title="shutdown" href="shutdown?id=${node.nodeDataList.get(0).getRegistrationString()}" onclick="return confirm('Are you sure you want to shut down ${node.nodeDataList.get(0).getServiceId()}?')"></a>
                             </div>
                             </li>
                         </ano:iF>
@@ -56,13 +57,13 @@
                 <ano:iF test="${nodeParent eq 'host'}">
                     <ano:iterate id="node" name="nodes">
                         <ano:iF test="${node.nodeDataList.size() == 1}"><li> <span class="caret-down caret">${node.title}</span>
-                            <div>${node.nodeDataList.get(1).getServiceId()}</div>
-                            <div>${node.nodeDataList.get(1).getInstanceId()}</div>
-                            <div>${node.nodeDataList.get(1).getPort()}</div>
+                            <div>${node.nodeDataList.get(0).getServiceId()}</div>
+                            <div>${node.nodeDataList.get(0).getInstanceId()}</div>
+                            <div>${node.nodeDataList.get(0).getPort()}</div>
                             <div>
-                                <a class="unbind" title="unbind" href="unbind?id=${node.nodeDataList.get(1).getRegistrationString()}" onclick="return confirm('Are you sure you want to unbind ${node.nodeDataList.get(1).getServiceId()}?')"></a>
-                                <a class="ping" title="ping" href="ping?id=${node.nodeDataList.get(1).getRegistrationString()}"></a>
-                                <a class="shutdown" title="shutdown" href="shutdown?id=${node.nodeDataList.get(1).getRegistrationString()}" onclick="return confirm('Are you sure you want to shut down ${node.nodeDataList.get(1).getServiceId()}?')"></a>
+                                <a class="unbind" title="unbind" href="unbind?id=${node.nodeDataList.get(0).getRegistrationString()}" onclick="return confirm('Are you sure you want to unbind ${node.nodeDataList.get(0).getServiceId()}?')"></a>
+                                <a class="ping" title="ping" href="ping?id=${node.nodeDataList.get(0).getRegistrationString()}"></a>
+                                <a class="shutdown" title="shutdown" href="shutdown?id=${node.nodeDataList.get(0).getRegistrationString()}" onclick="return confirm('Are you sure you want to shut down ${node.nodeDataList.get(0).getServiceId()}?')"></a>
                             </div>
                         </li>
                         </ano:iF>
