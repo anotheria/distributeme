@@ -47,3 +47,13 @@ transform: rotate(90deg);
     justify-content: space-between;
     align-items: center;
 }
+
+.tree-view-host {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+}
+
+.tree-view-instanceId {
+    display: grid;
+    grid-template-columns: 0.5fr 1fr 1fr;
+}

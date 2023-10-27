@@ -14,11 +14,11 @@
     <jsp:include page="Messages.jsp" flush="true"/>
     <div class="header-box">
         <ano:iF test="${nodeParent eq 'instanceid'}">
-            <h1>Registered host nodes (${numberOfNodes}).</h1>
+            <h1>Registered instanceId nodes (${numberOfNodes}).</h1>
             <a href="registryTreeView?nodeParent=host">Tree view by host</a>
         </ano:iF>
         <ano:iF test="${nodeParent eq 'host'}">
-            <h1>Registered instanceId nodes (${numberOfNodes}).</h1>
+            <h1>Registered host nodes (${numberOfNodes}).</h1>
             <a href="registryTreeView?nodeParent=instanceid">Tree view by instanceId</a>
         </ano:iF>
     </div>
@@ -28,7 +28,7 @@
             <ul id="myUL">
                 <ano:iF test="${nodeParent eq 'instanceid'}">
                     <ano:iterate id="node" name="nodes">
-                        <ano:iF test="${node.nodeDataList.size() == 1}"><li> <span class="caret-down caret">${node.title}</span>
+                        <ano:iF test="${node.nodeDataList.size() == 1}"><li class="tree-view-instanceId"> <span>${node.title}</span>
                             <div>${node.nodeDataList.get(0).getServiceId()}</div>
                             <div>
                                 <a class="unbind" title="unbind" href="unbind?id=${node.nodeDataList.get(0).getRegistrationString()}" onclick="return confirm('Are you sure you want to unbind ${node.nodeDataList.get(0).getServiceId()}?')"></a>
@@ -56,7 +56,7 @@
 
                 <ano:iF test="${nodeParent eq 'host'}">
                     <ano:iterate id="node" name="nodes">
-                        <ano:iF test="${node.nodeDataList.size() == 1}"><li> <span class="caret-down caret">${node.title}</span>
+                        <ano:iF test="${node.nodeDataList.size() == 1}"><li class="tree-view-host"> <span>${node.title}</span>
                             <div>${node.nodeDataList.get(0).getServiceId()}</div>
                             <div>${node.nodeDataList.get(0).getInstanceId()}</div>
                             <div>${node.nodeDataList.get(0).getPort()}</div>
