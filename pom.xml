@@ -15,10 +15,10 @@
     <description>parent for all distributeme projects</description>
 
     <properties>
-        <moskito-version>3.2.3</moskito-version>
+        <moskito-version>4.0.0-SNAPSHOT</moskito-version>
 		<moskito-control-agent-version>1.2.2</moskito-control-agent-version>
-        <source-version>1.8</source-version>
-        <target-version>1.8</target-version>
+        <source-version>11</source-version>
+        <target-version>11</target-version>
     </properties>
 
     <dependencyManagement>
@@ -26,32 +26,32 @@
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-util</artifactId>
-                <version>2.1.8</version>
+                <version>2.2.2-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-net</artifactId>
-                <version>2.1.1</version>
+                <version>2.1.2-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-prise</artifactId>
-                <version>2.2.1</version>
+                <version>2.2.3-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-tags</artifactId>
-                <version>2.1.1</version>
+                <version>3.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-maf</artifactId>
-                <version>3.0.0</version>
+                <version>4.0.0-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>configureme</artifactId>
-                <version>2.5.1</version>
+                <version>2.6.1-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
@@ -99,7 +99,7 @@
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>2.3.0</version>
+                <version>5.6.0</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -151,7 +151,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.11.0</version>
                 <configuration>
                     <source>${source-version}</source>
                     <target>${target-version}</target>
