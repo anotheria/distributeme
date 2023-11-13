@@ -3,13 +3,13 @@
     <parent>
         <groupId>net.anotheria</groupId>
         <artifactId>distributeme-parent</artifactId>
-        <version>2.5.2-SNAPSHOT</version>
+        <version>4.0.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.anotheria</groupId>
     <artifactId>distributeme-consul-registry-connector</artifactId>
-    <version>2.5.2-SNAPSHOT</version>
+    <version>4.0.0-SNAPSHOT</version>
     <name>DistributeMe Consul registry connector</name>
     <description>Connects the DistributeMe framework with the Consul</description>
 
@@ -36,14 +36,14 @@
             <artifactId>ano-net</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.sun.jersey</groupId>
+            <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-client</artifactId>
-            <version>1.19.1</version>
+            <version>3.1.3</version>
         </dependency>
         <dependency>
             <groupId>com.pszymczyk.consul</groupId>
             <artifactId>embedded-consul</artifactId>
-            <version>1.0.1</version>
+            <version>2.2.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
