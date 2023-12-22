@@ -15,7 +15,7 @@
     <description>parent for all distributeme projects</description>
 
     <properties>
-        <moskito-version>4.0.0-SNAPSHOT</moskito-version>
+        <moskito-version>3.2.8</moskito-version>
 		<moskito-control-agent-version>1.2.2</moskito-control-agent-version>
         <source-version>11</source-version>
         <target-version>11</target-version>
@@ -36,17 +36,17 @@
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-prise</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.0.0</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-tags</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.0.0</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-maf</artifactId>
-                <version>4.0.0-SNAPSHOT</version>
+                <version>4.0.0</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
