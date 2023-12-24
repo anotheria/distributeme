@@ -3,13 +3,13 @@
     <parent>
         <groupId>net.anotheria</groupId>
         <artifactId>distributeme-parent</artifactId>
-        <version>4.0.0</version>
+        <version>4.0.1-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.anotheria</groupId>
     <artifactId>distributeme-agents</artifactId>
-    <version>4.0.0</version>
+    <version>4.0.1-SNAPSHOT</version>
     <name>DistributeMe mobile agents</name>
     <description>Support for mobile agents in DistributeMe.</description>
 
