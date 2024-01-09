@@ -1,6 +1,10 @@
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/net.anotheria/distributeme-parent/badge.svg)](https://maven-badges.herokuapp.com/maven-central/net.anotheria/distributeme-parent)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
+![DistributeMe](https://github.com/anotheria/distributeme/assets/2864497/f0ed65f8-fc6c-4fcb-9ee5-e4d3e60aac0e)
+
+
+
 DistributeMe
 ============
 
