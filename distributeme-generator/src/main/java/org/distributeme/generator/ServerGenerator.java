@@ -144,6 +144,15 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeString("public static void main(String a[]) throws Exception{");
 			increaseIdent();
 
+			writeCommentLine("//for jvm version >17 we do not work with security manager, as its been deprecated");
+			writeStatement("String jvmVersion = System.getProperty(\"java.version\")");
+			writeStatement("boolean doSetSecurityManager = false");
+			writeStatement("int jvmVersionNumber = Integer.parseInt(jvmVersion.substring(0, jvmVersion.indexOf('.')))");
+			writeStatement("doSetSecurityManager = jvmVersionNumber < 17");
+
+
+			writeString("if (doSetSecurityManager){");
+			increaseIdent();
 			writeString("if (System.getSecurityManager()==null)");
 			increaseIdent();
 			writeCommentLine("We allow all operations.");
@@ -151,6 +160,8 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeIncreasedString("public void checkPermission(Permission perm) { }");
 			writeStatement("})");
 			decreaseIdent();
+			closeBlock("if doSetSecurityManager");
+			emptyline();
 
 			writeString("try {");
 			increaseIdent();
