@@ -16,6 +16,7 @@ import org.distributeme.registry.ui.action.RemoveESConsumerAction;
 import org.distributeme.registry.ui.action.RemoveESSupplierAction;
 import org.distributeme.registry.ui.action.ShowClusterAction;
 import org.distributeme.registry.ui.action.ShowESChannelAction;
+import org.distributeme.registry.ui.action.RegistryTreeViewAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +37,7 @@ public class BaseActionsConfigurator implements ActionMappingsConfigurator {
 		log.debug("Configuring actions mappings...");
 
 		mappings.addMapping("registry", RegistryListAction.class, new CommandForward("success", "/org/distributeme/registry/ui/jsp/RegistryListView.jsp"));
+		mappings.addMapping("registryTreeView", RegistryTreeViewAction.class, new CommandForward("success", "/org/distributeme/registry/ui/jsp/RegistryTreeView.jsp"));
 		mappings.addMapping("unbind", RegistryUnbindAction.class, new CommandRedirect("redirect", "registry?"));
 		
 		mappings.addMapping("ping", RegistryPingAction.class, new CommandRedirect("redirect", "registry?"));

@@ -24,15 +24,15 @@
 --%>	
 	<div class="box">
 		<%--<h2>Some text tab 1</h2> --%>
-		<table cellpadding="0" cellspacing="0" border="0" width="100%">
+		<table class="sortable" cellpadding="0" cellspacing="0" border="0" width="100%">
 			<thead>
 			<tr>
 				<th>Service ID</th>
 				<th>Host</th>
 				<th>Port</th>
-				<th>Protocol</th>
+				<th class="sorttable_nosort">Protocol</th>
 				<th>Instance ID</th>
-				<th>Global service ID</th>
+				<th class="sorttable_nosort">Global service ID</th>
 				<th>&nbsp;</th>
 				<th>&nbsp;</th>
 				<th>&nbsp;</th>
@@ -63,4 +63,5 @@
 	<a href="http://anotheria.net"><img src="../images/powered.png" alt=""/></a>
 </div>
 </body>
+<script type="text/javascript" src="../js/sorttable.js"></script>
 </html>
