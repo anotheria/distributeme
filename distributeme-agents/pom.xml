@@ -3,13 +3,13 @@
     <parent>
         <groupId>net.anotheria</groupId>
         <artifactId>distributeme-parent</artifactId>
-        <version>2.5.4-SNAPSHOT</version>
+        <version>4.0.3-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.anotheria</groupId>
     <artifactId>distributeme-agents</artifactId>
-    <version>2.5.4-SNAPSHOT</version>
+    <version>4.0.3-SNAPSHOT</version>
     <name>DistributeMe mobile agents</name>
     <description>Support for mobile agents in DistributeMe.</description>
 
@@ -18,7 +18,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.11.0</version>
                 <configuration>
                     <source>${source-version}</source>
                     <target>${target-version}</target>

@@ -1,14 +1,12 @@
 package org.distributeme.consulintegration;
 
 import com.google.gson.Gson;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import org.distributeme.core.CustomTagProvider;
-import org.distributeme.core.Location;
-import org.distributeme.core.RegistryConnector;
-import org.distributeme.core.RegistryLocation;
-import org.distributeme.core.ServiceDescriptor;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.distributeme.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,16 +50,14 @@ public class ConsulRegistryConnector implements RegistryConnector {
 
 	@Override
 	public boolean bind(ServiceDescriptor service) {
-		ClientResponse response = null;
+		Response response = null;
 		try {
 			List<String> customTagList = createCustomTagsFromProvidedClassList();
 			String requestAsJsonString = new Gson().toJson(new ConsulServiceDescription(service, tagableSystemProperties, customTagList));
 
-			WebResource webResource = Client.create()
-											.resource(getRegistryUrl() + "/v1/agent/service/register");
+			WebTarget webResource = ClientBuilder.newClient().target(getRegistryUrl() + "/v1/agent/service/register");
 
-			response = webResource.accept("application/json")
-								  .put(ClientResponse.class, requestAsJsonString);
+			response = webResource.request(MediaType.APPLICATION_JSON).put(Entity.entity(requestAsJsonString, MediaType.APPLICATION_JSON));
 			if (response.getStatus() != 200) {
 				logger.error("Registry returns status: " + response.getStatus());
 				return false;
@@ -105,11 +101,10 @@ public class ConsulRegistryConnector implements RegistryConnector {
 
 	@Override
 	public boolean unbind(ServiceDescriptor service) {
-		ClientResponse response = null;
+		Response response = null;
 		try {
-			WebResource webResource = Client.create().resource(getRegistryUrl() + "/v1/agent/service/deregister/" + toConsul(service.getServiceId()));
-
-			response = webResource.accept("application/json").put(ClientResponse.class);
+			WebTarget webTarget = ClientBuilder.newClient().target(getRegistryUrl() + "/v1/agent/service/deregister/" + toConsul(service.getServiceId()));
+			response = webTarget.request(MediaType.APPLICATION_JSON).put(Entity.json(""));
 			if (response.getStatus() != 200) {
 				logger.error("Registry returns status: " + response.getStatus());
 				return false;
@@ -125,11 +120,11 @@ public class ConsulRegistryConnector implements RegistryConnector {
 
 	@Override
 	public ServiceDescriptor resolve(ServiceDescriptor toResolve, Location loc) {
-		ClientResponse response = null;
+		Response response = null;
 		try {
-			WebResource webResource = Client.create().resource(getRegistryUrl() + "/v1/catalog/service/" + toConsul(toResolve.getServiceId()));
+			WebTarget webTarget = ClientBuilder.newClient().target(getRegistryUrl() + "/v1/catalog/service/" + toConsul(toResolve.getServiceId()));
 
-			response = webResource.accept("application/json").get(ClientResponse.class);
+			response = webTarget.request(MediaType.APPLICATION_JSON).get(Response.class);
 			if (response.getStatus() != 200) {
 				logger.error("Failed : HTTP error code : " + response.getStatus());
 			}
@@ -162,7 +157,7 @@ public class ConsulRegistryConnector implements RegistryConnector {
 		return false;
 	}
 
-	private void closeResponseNullSafe(ClientResponse response) {
+	private void closeResponseNullSafe(Response response) {
 		if(response != null) {
 			response.close();
 		}

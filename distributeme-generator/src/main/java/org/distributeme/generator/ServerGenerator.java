@@ -144,13 +144,9 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			writeString("public static void main(String a[]) throws Exception{");
 			increaseIdent();
 
-			writeString("if (System.getSecurityManager()==null)");
-			increaseIdent();
-			writeCommentLine("We allow all operations.");
-			writeString("System.setSecurityManager(new SecurityManager(){");
-			writeIncreasedString("public void checkPermission(Permission perm) { }");
-			writeStatement("})");
-			decreaseIdent();
+			writeCommentLine("the security manager decision and setting is now done by server side utils");
+			writeStatement("org.distributeme.core.util.ServerSideUtils.setSecurityManagerIfRequired()");
+			emptyline();
 
 			writeString("try {");
 			increaseIdent();

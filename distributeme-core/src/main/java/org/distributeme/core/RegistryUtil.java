@@ -12,7 +12,12 @@ import org.distributeme.core.conventions.SystemProperties;
 import org.distributeme.core.util.BaseRegistryUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
+import java.io.StringReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
@@ -20,6 +25,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
 
 /**
  * Utilities for communication with the registry over http protocol.
@@ -361,5 +369,39 @@ public class RegistryUtil extends BaseRegistryUtil{
 	public static final String describeRegistry(){
 		return registryConnector.describeRegistry();
 	}
-	
+
+	private static List<ServiceDescriptor> parseXML(String xml) throws Exception{
+		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		Document doc = builder.parse(new InputSource(new StringReader(xml)));
+		NodeList services = doc.getElementsByTagName("service");
+		List<ServiceDescriptor> ret = new ArrayList<ServiceDescriptor>();
+
+
+		//<service serviceId="net_anotheria_baldur_business_messaging_MessagingService" host="10.156.0.11" port ="9301" protocol ="rmi" instanceId ="cgswyzonwh" globalId ="rmi://net_anotheria_baldur_business_messaging_MessagingService" registrationString ="rmi://net_anotheria_baldur_business_messaging_MessagingService.cgswyzonwh@10.156.0.11:9301@20240318071205"/>
+		for (int i =0; i<services.getLength(); i++){
+			Element service = (Element)services.item(i);
+			String id = service.getAttribute("serviceId");
+			String instanceId = service.getAttribute("instanceId");
+			String protocol = service.getAttribute("protocol");
+			String host = service.getAttribute("host");
+			int port = Integer.parseInt(service.getAttribute("port"));
+			Protocol p = Protocol.valueOf(protocol.toUpperCase());
+			ServiceDescriptor desc = new ServiceDescriptor(
+					p, id, instanceId, host, port);
+			ret.add(desc);
+		}
+
+		return ret;
+
+	}
+
+	public static List<ServiceDescriptor> getServicesRegisteredInRegistry(Location location){
+		String xml = getXMLServiceList(location);
+		try{
+			return parseXML(xml);
+		}catch(Exception e){
+			throw new RuntimeException("Can't parse xml from registry at "+location, e);
+		}
+	}
+
 }

@@ -3,6 +3,7 @@ package org.distributeme.core.util;
 import org.distributeme.core.AbstractCallContext;
 import org.distributeme.core.routing.Constants;
 
+import java.security.Permission;
 import java.util.Map;
 
 /**
@@ -58,5 +59,29 @@ public class ServerSideUtils {
 	private static final boolean _isBlacklisted(Map transportableCallContext){
 		Boolean blacklistedFlag = (Boolean)transportableCallContext.get(Constants.ATT_BLACKLISTED);
 		return blacklistedFlag != null && blacklistedFlag;
+	}
+
+	public static void setSecurityManagerIfRequired(){
+		if (shouldSecurityManagerBeSet()){
+			if (System.getSecurityManager()==null)
+				// We allow all operations.
+				System.setSecurityManager(new SecurityManager(){
+					public void checkPermission(Permission perm) { }
+				});
+		}
+	}
+
+	/* TEST VISIBILITY */ static boolean shouldSecurityManagerBeSet(String jvmVersionString){
+		if (jvmVersionString == null)
+			return false;
+		if (jvmVersionString.contains(".")){
+			return Integer.parseInt(jvmVersionString.substring(0, jvmVersionString.indexOf('.')))<17;
+		}
+		return false;
+
+	}
+
+	private static final boolean shouldSecurityManagerBeSet(){
+		return shouldSecurityManagerBeSet(System.getProperty("java.version"));
 	}
 }

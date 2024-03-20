@@ -6,11 +6,11 @@
 		"flip":{
 			"slowDownTimeInMillis": 1000,
 			"flip70":{
-				"flipChanceInPercent": 70,
+				"flipChanceInPercent": 70
 			},
 			"flip10":{
-				"flipChanceInPercent": 10,
-			},
-		},
+				"flipChanceInPercent": 10
+			}
+		}
 	}
 }

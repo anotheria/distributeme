@@ -3,8 +3,8 @@ package org.distributeme.registry.servlet;
 import org.distributeme.registry.metaregistry.Cluster;
 import org.distributeme.registry.metaregistry.ClusterChecker;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
 
 /**
  * ServletContextListener which is used to start up the cluster properly.
