@@ -58,7 +58,7 @@
         <!-- needed for byte array serializer -->
         <dependency>
             <groupId>net.anotheria</groupId>
-            <artifactId>ano-net</artifactId>
+            <artifactId>ano-util</artifactId>
         </dependency>
     </dependencies>
 </project>
