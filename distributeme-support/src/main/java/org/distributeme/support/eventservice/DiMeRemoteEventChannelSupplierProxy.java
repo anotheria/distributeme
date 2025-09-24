@@ -4,7 +4,7 @@ import net.anotheria.anoprise.eventservice.Event;
 import net.anotheria.anoprise.eventservice.EventChannelConsumerProxy;
 import net.anotheria.anoprise.eventservice.EventServiceConsumer;
 import net.anotheria.anoprise.eventservice.RemoteEventChannelSupplierProxy;
-import net.anotheria.net.util.ByteArraySerializer;
+import net.anotheria.util.ByteArraySerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
