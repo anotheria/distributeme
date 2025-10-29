@@ -335,7 +335,7 @@ public class ServerGenerator extends AbstractGenerator implements Generator{
 			closeBlock("if (regNameProviderClass!=null)");
 			
 			emptyline();
-			writeStatement("log.info("+quote("Getting local registry")+")");
+			writeStatement("log.debug("+quote("Getting local registry")+")");
 			writeStatement("Registry registry = null");
 			openTry();
 			writeStatement("registry = RMIRegistryUtil.findOrCreateRegistry(customRegistryPort)");
