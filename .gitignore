@@ -12,3 +12,4 @@ tmp/
 skip
 distributeme-registry/logs/
 **/logs
+.claude/*
