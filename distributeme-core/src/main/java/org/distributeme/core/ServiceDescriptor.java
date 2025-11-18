@@ -306,8 +306,19 @@ public class ServiceDescriptor implements Serializable, Cloneable{
 					BasicComparable.compareString(serviceId, anotherDescriptor.serviceId)==0
 			;
 	}
-	
-	/**
+
+    public int hashCodeByEndpoint() {
+        int result = 17;
+        result = 31 * result + (protocol != null ? protocol.hashCode() : 0);
+        result = 31 * result + port;
+        result = 31 * result + (host != null ? host.hashCode() : 0);
+        result = 31 * result + (serviceId != null ? serviceId.hashCode() : 0);
+        return result;
+    }
+
+
+
+    /**
 	 * <p>Getter for the field <code>host</code>.</p>
 	 *
 	 * @return a {@link java.lang.String} object.
