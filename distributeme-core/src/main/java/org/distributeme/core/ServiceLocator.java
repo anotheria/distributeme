@@ -36,13 +36,13 @@ public class ServiceLocator {
 		}catch(MetaFactoryException e){
 			//NOPMD
 		}
-		//try to lookup an instance by name
+		//try to look up an instance by name
 		String className = SharedNamingUtils.getAsynchFactoryFullClassName(pattern);
 		try{
 			@SuppressWarnings("unchecked")Class<ServiceFactory<T>> factoryClazz = (Class<ServiceFactory<T>>)Class.forName(className);
 			MetaFactory.addFactoryClass(pattern, Extension.ASYNCH, factoryClazz);
 		}catch(ClassNotFoundException ignored){
-			ignored.printStackTrace();
+			log.debug(className + " not found");
 		}
 		try{
 			return MetaFactory.get(pattern, Extension.ASYNCH);
@@ -70,7 +70,7 @@ public class ServiceLocator {
 			@SuppressWarnings("unchecked")Class<ServiceFactory<T>> factoryClazz = (Class<ServiceFactory<T>>)Class.forName(className);
 			MetaFactory.addFactoryClass(pattern, Extension.REMOTE, factoryClazz);
 		}catch(ClassNotFoundException ignored){
-			ignored.printStackTrace();
+			log.debug(className + " not found");
 		}
 		try{
 			return MetaFactory.get(pattern, Extension.REMOTE);
