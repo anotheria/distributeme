@@ -83,11 +83,9 @@ public class RemoteConsumerWrapper implements RemoteEventServiceConsumer{
 
 	}
 
+    // In RemoteConsumerWrapper.java
     @Override
     public int hashCode(){
-        if (myHomeReference == null)
-            return super.hashCode();
-        return myHomeReference.hashCode();
+        return myHomeReference != null ? myHomeReference.hashCodeByEndpoint() : 0;
     }
-
 }
