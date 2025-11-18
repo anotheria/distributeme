@@ -13,3 +13,4 @@ skip
 distributeme-registry/logs/
 **/logs
 .claude/*
+distributeme-test/start2.sh
