@@ -58,9 +58,10 @@ public @interface DistributeMe {
 	
 	/**
 	 * If true the support for agent transportation is included into the service. You will need distributeme-agents packet for it to work.
+     * Default is false since agents are risky (execution of new code by design) and beta.
 	 * @return
 	 */
-	boolean agentsSupport() default true;
+	boolean agentsSupport() default false;
 	
 	/**
 	 * If true enables generation of asynchronous call support. Default false. Note, the default value is subject of changes in next releases, better specify desired behaviour explicitely. 
