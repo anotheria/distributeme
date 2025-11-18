@@ -12,8 +12,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AgentPackageUtility {
+
+    private static Logger log = LoggerFactory.getLogger(AgentPackageUtility.class);
+
 	public static AgentPackage pack(Agent agent){
 		AgentPackage ret = new AgentPackage();
 	
@@ -73,16 +78,13 @@ public class AgentPackageUtility {
 		}
 		
 		protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException{
-//			System.out.println("-- loadClass "+name);
 			Class fromCache = cache.get(name);
 			if (fromCache!=null){
-//				System.out.println("--> from cache! ");
 				return fromCache;
 			}
 			if (classDefs.get(name)==null){
 				return super.loadClass(name, resolve);
 			}
-//			System.out.println(" -- defining "+name);
 			byte[] data = classDefs.get(name);
 			Class c = defineClass(name, data, 0, data.length);
 			cache.put(name, c);
@@ -118,7 +120,7 @@ public class AgentPackageUtility {
 				protected Class<?> resolveClass(ObjectStreamClass desc)
 						throws IOException, ClassNotFoundException {
 					
-					System.out.println("Resolve class "+desc.getName()+" with loader "+loader);
+					log.debug("Resolve class "+desc.getName()+" with loader "+loader);
 					return loader.loadClass(desc.getName(), false);
 
 				}
