@@ -10,6 +10,7 @@ import org.distributeme.core.routing.blacklisting.DefaultBlacklistingStrategy;
 
 import java.util.HashSet;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -49,7 +50,7 @@ public abstract class AbstractRouterWithStickyFailOverToNextNode extends Abstrac
 	/**
 	 * Random for selection of next instance.
 	 */
-	private Random random = new Random(System.nanoTime());
+	private Random random = ThreadLocalRandom.current();
 
 	private BlacklistingStrategy blacklistingStrategy = new DefaultBlacklistingStrategy();
 
