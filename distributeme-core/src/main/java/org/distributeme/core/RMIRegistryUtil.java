@@ -61,7 +61,7 @@ public class RMIRegistryUtil {
 		}
 		
 		synchronized (reference) {
-			log.info("Creating local registry");
+			log.debug("Creating local registry");
 			Registry registry;
 
 			if (port >0 || SystemProperties.LOCAL_RMI_REGISTRY_PORT.isSet()){
@@ -70,9 +70,9 @@ public class RMIRegistryUtil {
 					if (port <= 0) {
 						port = SystemProperties.LOCAL_RMI_REGISTRY_PORT.getAsInt();
 					}
-					log.info("Tying to bind to "+port);
+					log.debug("Tying to bind to "+port);
 					registry = LocateRegistry.createRegistry(port);
-					log.info("Started local registry at port "+port);
+					log.info("Started local RMIRegistry at port "+port+", this is the port you need to use for remote connections.");
 					reference.set(registry);
 					rmiRegistryPort = port;
 					return registry;
