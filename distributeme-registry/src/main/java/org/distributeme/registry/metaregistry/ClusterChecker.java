@@ -26,7 +26,7 @@ public class ClusterChecker extends  TimerTask{
 		for (ClusterEntry entry : entries){
 			log.debug("checking "+entry);
 			if (entry.isMe()){
-				log.debug("Skiped my reference "+entry);
+				log.debug("Skipped my reference "+entry);
 				continue;
 			}
 			try{
@@ -46,8 +46,7 @@ public class ClusterChecker extends  TimerTask{
 					}
 				}
 			}catch(Exception e){
-				System.out.println("aborted due to "+e);
-				e.printStackTrace();
+				log.error("aborted due to "+e.getMessage(),e);
 			}
 		}
 	}

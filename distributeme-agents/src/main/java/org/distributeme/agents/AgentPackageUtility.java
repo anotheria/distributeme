@@ -62,7 +62,7 @@ public class AgentPackageUtility {
 			Agent agent = deserializeAgent(pack.getSerializedData(), loader);
 			return agent;
 		}catch (Exception e){
-			e.printStackTrace();
+			log.error("can't unpack agent "+pack, e);
 		}
 		
 		return null;

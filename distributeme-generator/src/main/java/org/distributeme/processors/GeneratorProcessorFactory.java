@@ -3,6 +3,8 @@ package org.distributeme.processors;
 import org.distributeme.annotation.DistributeMe;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.generator.GeneratorUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.processing.Completion;
 import javax.annotation.processing.ProcessingEnvironment;
@@ -24,6 +26,8 @@ import java.util.Set;
  * @version $Id: $Id
  */
 public class GeneratorProcessorFactory implements Processor {
+
+    private static Logger log = LoggerFactory.getLogger(GeneratorProcessorFactory.class);
 
     /**
      * Constant list for supported annotations.
@@ -58,10 +62,9 @@ public class GeneratorProcessorFactory implements Processor {
 
                     if (Arrays.asList(annotation.protocols()).contains(ServiceDescriptor.Protocol.RMI)) {
                         try {
-                            //System.err.println("Generation for RMI disabled! "+type.getSimpleName().toString());
                             GeneratorUtil.generateRMI(type, environment);
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            log.error("can't run rmi-based generator", e);
                         }
                     }
                 }
