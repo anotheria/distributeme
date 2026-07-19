@@ -2,9 +2,9 @@ package org.distributeme.registry.esregistry;
 
 import net.anotheria.util.IdCodeGenerator;
 import org.distributeme.core.ServiceDescriptor;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * This test is used to confirm that duplicate registration of consumers is prevented.

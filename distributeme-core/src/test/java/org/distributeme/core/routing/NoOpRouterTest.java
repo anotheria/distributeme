@@ -2,12 +2,12 @@ package org.distributeme.core.routing;
 
 import net.anotheria.util.IdCodeGenerator;
 import org.distributeme.core.ClientSideCallContext;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class NoOpRouterTest {
 	@SuppressWarnings({"rawtypes"})

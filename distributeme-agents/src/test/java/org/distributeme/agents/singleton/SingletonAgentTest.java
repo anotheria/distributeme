@@ -3,10 +3,10 @@ package org.distributeme.agents.singleton;
 import org.distributeme.agents.Agent;
 import org.distributeme.agents.AgentPackage;
 import org.distributeme.agents.AgentPackageUtility;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SingletonAgentTest {
 	@Test public void testSingletonNormal() throws Exception{
@@ -22,7 +22,7 @@ public class SingletonAgentTest {
 		assertTrue(agent.getClass().hashCode() == agent2.getClass().hashCode());
 	}
 	
-	@Ignore @Test public void testSingletonAttack() throws Exception{
+	@Disabled @Test public void testSingletonAttack() throws Exception{
 		System.out.println("ATTACK");
 		Singleton.reset(); //ensure tests are not influencing each other
 		

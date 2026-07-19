@@ -3,7 +3,7 @@
     <parent>
         <groupId>net.anotheria</groupId>
         <artifactId>parent</artifactId>
-        <version>4.2</version>
+        <version>4.5</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -15,10 +15,11 @@
     <description>parent for all distributeme projects</description>
 
     <properties>
-        <moskito-version>4.0.0</moskito-version>
-		<moskito-control-agent-version>3.1.1</moskito-control-agent-version>
-        <source-version>11</source-version>
-        <target-version>11</target-version>
+        <moskito-version>5.0.0</moskito-version>
+		<moskito-control-agent-version>4.1.0</moskito-control-agent-version>
+        <source-version>17</source-version>
+        <target-version>17</target-version>
+        <hamcrest-version>2.2</hamcrest-version>
     </properties>
 
     <dependencyManagement>
@@ -26,27 +27,27 @@
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-util</artifactId>
-                <version>4.0.1</version>
+                <version>4.0.7</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-prise</artifactId>
-                <version>4.0.0</version>
+                <version>4.1.0</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-tags</artifactId>
-                <version>4.0.0</version>
+                <version>4.0.1</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>ano-maf</artifactId>
-                <version>4.0.0</version>
+                <version>4.1.0</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
                 <artifactId>configureme</artifactId>
-                <version>4.0.0</version>
+                <version>4.1.0</version>
             </dependency>
             <dependency>
                 <groupId>net.anotheria</groupId>
@@ -97,6 +98,12 @@
                 <version>5.6.0</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest</artifactId>
+                <version>${hamcrest-version}</version>
+                <scope>test</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -112,20 +119,6 @@
      </dependency>
 	</dependencies>
 
-    <!--
-	<dependency>
-  		<groupId>net.anotheria</groupId>
-  		<artifactId>ano-util</artifactId>
-	</dependency>
-	<dependency>
-  		<groupId>net.anotheria</groupId>
-  		<artifactId>ano-net</artifactId>
-	</dependency>
-	<dependency>
-		<groupId>net.anotheria</groupId>
-		<artifactId>moskito-core</artifactId>
-	</dependency>
-  </dependencies> -->
     <modules>
         <module>distributeme-core</module>
         <module>distributeme-generator</module>

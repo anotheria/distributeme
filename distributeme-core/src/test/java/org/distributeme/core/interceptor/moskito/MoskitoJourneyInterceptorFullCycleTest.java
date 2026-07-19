@@ -7,19 +7,19 @@ import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.ServerSideCallContext;
 import org.distributeme.core.interceptor.InterceptionContext;
 import org.distributeme.core.interceptor.InterceptorResponse;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * This test emulates both client and server side handling of the MoskitoJourneyInterceptor.
  * @author lrosenberg
  *
  */
-@Ignore
+@Disabled
 public class MoskitoJourneyInterceptorFullCycleTest{
 
 	//this test relied on moskito toDetails (getCurrentlyTracedCall()).toDetails() method, that has been removed (replaced with toString in test).
@@ -55,8 +55,8 @@ public class MoskitoJourneyInterceptorFullCycleTest{
 				interceptor.beforeServantCall(sctx, ictx);
 				
 				//now we should have started a trace 
-				assertNotSame("There should be a running trace" , NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall());
-				assertTrue("There should be a trace running" , RunningTraceContainer.isTraceRunning());
+				assertNotSame(NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall(), "There should be a running trace");
+				assertTrue(RunningTraceContainer.isTraceRunning(), "There should be a trace running");
 				
 				//assume service actually performs some work
 				((CurrentlyTracedCall)RunningTraceContainer.getCurrentlyTracedCall()).startStep("SERVERSIDE");
@@ -68,8 +68,8 @@ public class MoskitoJourneyInterceptorFullCycleTest{
 				
 				//distributeme will call this.
 				interceptor.afterServantCall(sctx, ictx);
-				assertEquals("There should be no trace" , NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall());
-				assertFalse("There should be no trace running" , RunningTraceContainer.isTraceRunning());
+				assertEquals(NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall(), "There should be no trace");
+				assertFalse(RunningTraceContainer.isTraceRunning(), "There should be no trace running");
 		
 				assertNotNull(sctx.getTransportableCallContext().get(interceptor.testGetCONTEXT_ATTRIBUTE_STEPBACKFROMSERVERName()));
 				//copy call back

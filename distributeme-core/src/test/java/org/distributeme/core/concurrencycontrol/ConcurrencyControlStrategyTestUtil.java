@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ConcurrencyControlStrategyTestUtil {
 
@@ -68,7 +68,7 @@ public class ConcurrencyControlStrategyTestUtil {
 //		System.out.println("TEST LAP 2 is started");
 		testFinish.await();
 //		System.out.println("TEST is totally finished");
-		assertEquals("Expected error should correspond with real error (expected, real)=("+expectError+", "+result.get()+")", expectError, result.get());
+		assertEquals(expectError, result.get(), "Expected error should correspond with real error (expected, real)=("+expectError+", "+result.get()+")");
 	}
 	
 	static void testServerSide(final ConcurrencyControlStrategy strategy, boolean expectError, int numberOfThreads) throws InterruptedException{
@@ -127,7 +127,7 @@ public class ConcurrencyControlStrategyTestUtil {
 //		System.out.println("---TEST LAP 2 is started");
 		testFinish.await();
 //		System.out.println("---TEST is totally finished");
-		assertEquals("Expected error should correspond with real error (expected, real)=("+expectError+", "+result.get()+")", expectError, result.get());
+		assertEquals(expectError, result.get(), "Expected error should correspond with real error (expected, real)=("+expectError+", "+result.get()+")");
 	}
 	
 

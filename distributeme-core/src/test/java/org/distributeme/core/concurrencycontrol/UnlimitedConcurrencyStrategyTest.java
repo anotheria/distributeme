@@ -1,6 +1,6 @@
 package org.distributeme.core.concurrencycontrol;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unlimited ConcurrencyControlStrategy should never produce an error, therefore we always expect it to run (parameter false in all calls to utility).

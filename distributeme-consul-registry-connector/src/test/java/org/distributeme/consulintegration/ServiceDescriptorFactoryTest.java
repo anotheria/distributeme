@@ -2,10 +2,10 @@ package org.distributeme.consulintegration;
 
 import jakarta.ws.rs.core.Response;
 import org.distributeme.core.ServiceDescriptor;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

@@ -6,12 +6,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.routing.GenericRouterConfiguration;
 import org.distributeme.core.util.TestTimeProvider;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -32,10 +32,10 @@ public class ErrorsPerIntervalWithBlacklistTimeStrategyTest {
 	private Logger logger = mock(Logger.class);
 	private ErrorsPerIntervalWithBlacklistTimeStrategy strategy = new ErrorsPerIntervalWithBlacklistTimeStrategy(dummyScheduledExecutorService, timeProvider, logger);
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		timeProvider.setCurrentMillis(0);
-		assertFalse("ServiceId should not be blacklisted before failure call", strategy.isBlacklisted(SERVICE_ID_0));
+		assertFalse(strategy.isBlacklisted(SERVICE_ID_0), "ServiceId should not be blacklisted before failure call");
 	}
 
 	@Test
@@ -288,11 +288,11 @@ public class ErrorsPerIntervalWithBlacklistTimeStrategyTest {
 	}
 
 	private void thenServiceIsBlacklisted(String serviceID) {
-		assertTrue(serviceID + "  should be blacklisted", strategy.isBlacklisted(serviceID));
+		assertTrue(strategy.isBlacklisted(serviceID), serviceID + "  should be blacklisted");
 	}
 
 	private void thenServiceIsNotBlacklisted(String serviceID) {
-		assertFalse(serviceID + " should not be blacklisted", strategy.isBlacklisted(serviceID));
+		assertFalse(strategy.isBlacklisted(serviceID), serviceID + " should not be blacklisted");
 	}
 
 	private void whenJumpInTimePlusSeconds(int seconds) {

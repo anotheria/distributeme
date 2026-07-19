@@ -1,10 +1,10 @@
 package org.distributeme.core.routing;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.failing.FailDecision;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,10 +36,10 @@ public class AbstractRouterWithFailOversToNextNodeTest {
 
 		ClientSideCallContext callContext = new ClientSideCallContext("Service_default", METHOD1, Arrays.asList("11"));
 
-		Assert.assertEquals("Illegal behaviour is RR-FailOver off router", callContext.getServiceId(), rrfOff.getServiceIdForCall(callContext));
-		Assert.assertEquals("Illegal behaviour is RR-FailOver on router", callContext.getServiceId(), rrFon.getServiceIdForCall(callContext));
-		Assert.assertEquals("Illegal behaviour is MOD-FailOver off router", callContext.getServiceId(), modfOff.getServiceIdForCall(callContext));
-		Assert.assertEquals("Illegal behaviour is MOD-FailOver on router", callContext.getServiceId(), modFon.getServiceIdForCall(callContext));
+		Assertions.assertEquals(callContext.getServiceId(), rrfOff.getServiceIdForCall(callContext), "Illegal behaviour is RR-FailOver off router");
+		Assertions.assertEquals(callContext.getServiceId(), rrFon.getServiceIdForCall(callContext), "Illegal behaviour is RR-FailOver on router");
+		Assertions.assertEquals(callContext.getServiceId(), modfOff.getServiceIdForCall(callContext), "Illegal behaviour is MOD-FailOver off router");
+		Assertions.assertEquals(callContext.getServiceId(), modFon.getServiceIdForCall(callContext), "Illegal behaviour is MOD-FailOver on router");
 
 	}
 
@@ -59,15 +59,15 @@ public class AbstractRouterWithFailOversToNextNodeTest {
 
 		ClientSideCallContext callContext = new ClientSideCallContext("Service_default", METHOD1, Arrays.asList("11"));
 
-		Assert.assertEquals("rrFoff - failing  bahaviour failed!", FailDecision.fail().getReaction(), rrfOff.callFailed(callContext).getReaction());
-		Assert.assertEquals("rrFon - failing  bahaviour failed!", FailDecision.fail().getReaction(), rrFon.callFailed(callContext).getReaction());
-		Assert.assertEquals("modfOff - failing  bahaviour failed!", FailDecision.fail().getReaction(), modfOff.callFailed(callContext).getReaction());
-		Assert.assertEquals("modFon - failing  bahaviour failed!", FailDecision.fail().getReaction(), modFon.callFailed(callContext).getReaction());
+		Assertions.assertEquals(FailDecision.fail().getReaction(), rrfOff.callFailed(callContext).getReaction(), "rrFoff - failing  bahaviour failed!");
+		Assertions.assertEquals(FailDecision.fail().getReaction(), rrFon.callFailed(callContext).getReaction(), "rrFon - failing  bahaviour failed!");
+		Assertions.assertEquals(FailDecision.fail().getReaction(), modfOff.callFailed(callContext).getReaction(), "modfOff - failing  bahaviour failed!");
+		Assertions.assertEquals(FailDecision.fail().getReaction(), modFon.callFailed(callContext).getReaction(), "modFon - failing  bahaviour failed!");
 
 	}
 
 	//this test doesn't work with the new logic.
-	@Test @Ignore
+	@Test @Disabled
 	public void testFailingWith3Nodes() {
 		RoundRobinFailOverOn rrFon = new RoundRobinFailOverOn();
 		RoundRobinFailOverOFF rrfOff = new RoundRobinFailOverOFF();
@@ -84,29 +84,29 @@ public class AbstractRouterWithFailOversToNextNodeTest {
 		ClientSideCallContext callContext = new ClientSideCallContext("Service_0", METHOD1, Arrays.asList("11"));
 		callContext.setCallCount(0);
 
-		Assert.assertEquals("rrFoff - failing  bahaviour failed! FAILING disabled at all!", FailDecision.fail().getReaction(), rrfOff.callFailed(callContext).getReaction());
-		Assert.assertEquals("modfOff - failing  bahaviour failed! Failing disabled at all", FailDecision.fail().getReaction(), modfOff.callFailed(callContext).getReaction());
+		Assertions.assertEquals(FailDecision.fail().getReaction(), rrfOff.callFailed(callContext).getReaction(), "rrFoff - failing  bahaviour failed! FAILING disabled at all!");
+		Assertions.assertEquals(FailDecision.fail().getReaction(), modfOff.callFailed(callContext).getReaction(), "modfOff - failing  bahaviour failed! Failing disabled at all");
 
 
-		Assert.assertEquals("rrFon - failing  bahaviour failed!", FailDecision.retry().getReaction(), rrFon.callFailed(callContext).getReaction());
-		Assert.assertEquals("modFon - failing  bahaviour failed!", FailDecision.retry().getReaction(), modFon.callFailed(callContext).getReaction());
+		Assertions.assertEquals(FailDecision.retry().getReaction(), rrFon.callFailed(callContext).getReaction(), "rrFon - failing  bahaviour failed!");
+		Assertions.assertEquals(FailDecision.retry().getReaction(), modFon.callFailed(callContext).getReaction(), "modFon - failing  bahaviour failed!");
 
 
 		callContext.setCallCount(1);
-		Assert.assertEquals("rrFoff - failing  bahaviour failed! FAILING disabled at all!", FailDecision.fail().getReaction(), rrfOff.callFailed(callContext).getReaction());
-		Assert.assertEquals("modfOff - failing  bahaviour failed! Failing disabled at all", FailDecision.fail().getReaction(), modfOff.callFailed(callContext).getReaction());
+		Assertions.assertEquals(FailDecision.fail().getReaction(), rrfOff.callFailed(callContext).getReaction(), "rrFoff - failing  bahaviour failed! FAILING disabled at all!");
+		Assertions.assertEquals(FailDecision.fail().getReaction(), modfOff.callFailed(callContext).getReaction(), "modfOff - failing  bahaviour failed! Failing disabled at all");
 
 
-		Assert.assertEquals("rrFon - failing  bahaviour failed!", FailDecision.retry().getReaction(), rrFon.callFailed(callContext).getReaction());
-		Assert.assertEquals("rrFON should return Service_1", "Service_1", rrFon.getServiceIdForCall(callContext));
+		Assertions.assertEquals(FailDecision.retry().getReaction(), rrFon.callFailed(callContext).getReaction(), "rrFon - failing  bahaviour failed!");
+		Assertions.assertEquals("Service_1", rrFon.getServiceIdForCall(callContext), "rrFON should return Service_1");
 
-		Assert.assertEquals("modFon - failing  bahaviour failed!", FailDecision.retry().getReaction(), modFon.callFailed(callContext).getReaction());
-		Assert.assertEquals("rrFON should return Service_1", "Service_1", modFon.getServiceIdForCall(callContext));
+		Assertions.assertEquals(FailDecision.retry().getReaction(), modFon.callFailed(callContext).getReaction(), "modFon - failing  bahaviour failed!");
+		Assertions.assertEquals("Service_1", modFon.getServiceIdForCall(callContext), "rrFON should return Service_1");
 
 		//increase fail counter!
 		callContext.setCallCount(2);
-		Assert.assertEquals("rrFon - failing  bahaviour failed!", FailDecision.fail().getReaction(), rrFon.callFailed(callContext).getReaction());
-		Assert.assertEquals("modFon - failing  bahaviour failed!", FailDecision.fail().getReaction(), modFon.callFailed(callContext).getReaction());
+		Assertions.assertEquals(FailDecision.fail().getReaction(), rrFon.callFailed(callContext).getReaction(), "rrFon - failing  bahaviour failed!");
+		Assertions.assertEquals(FailDecision.fail().getReaction(), modFon.callFailed(callContext).getReaction(), "modFon - failing  bahaviour failed!");
 	}
 
 
@@ -124,11 +124,11 @@ public class AbstractRouterWithFailOversToNextNodeTest {
 
 			String serviceId1 = modfOff.getServiceIdForCall(callContext);
 			String serviceId2 = modFon.getServiceIdForCall(callContext);
-			Assert.assertTrue("Should be in range from 0 to 2", getNodeId(serviceId1) >= 0 && getNodeId(serviceId1) <= 2);
-			Assert.assertTrue("Should be in range from 0 to 2", getNodeId(serviceId2) >= 0 && getNodeId(serviceId2) <= 2);
+			Assertions.assertTrue(getNodeId(serviceId1) >= 0 && getNodeId(serviceId1) <= 2, "Should be in range from 0 to 2");
+			Assertions.assertTrue(getNodeId(serviceId2) >= 0 && getNodeId(serviceId2) <= 2, "Should be in range from 0 to 2");
 			int mod = i % 3;
-			Assert.assertEquals("Should be equal - to calculated mod! - ", "Service_" + mod, serviceId1);
-			Assert.assertEquals("Should be equal - to calculated mod!", "Service_" + mod, serviceId2);
+			Assertions.assertEquals("Service_" + mod, serviceId1, "Should be equal - to calculated mod! - ");
+			Assertions.assertEquals("Service_" + mod, serviceId2, "Should be equal - to calculated mod!");
 
 		}
 
@@ -142,18 +142,18 @@ public class AbstractRouterWithFailOversToNextNodeTest {
 		for (int i = 0; i < 100; i++) {
 			String serviceId1 = modfOff.getServiceIdForCall(callContext);
 			String serviceId2 = modFon.getServiceIdForCall(callContext);
-			Assert.assertTrue("Should be in range from 0 to 2", getNodeId(serviceId1) >= 0 && getNodeId(serviceId1) <= 2);
-			Assert.assertTrue("Should be in range from 0 to 2", getNodeId(serviceId2) >= 0 && getNodeId(serviceId2) <= 2);
+			Assertions.assertTrue(getNodeId(serviceId1) >= 0 && getNodeId(serviceId1) <= 2, "Should be in range from 0 to 2");
+			Assertions.assertTrue(getNodeId(serviceId2) >= 0 && getNodeId(serviceId2) <= 2, "Should be in range from 0 to 2");
 
 			if (prevNodeId1 != -1) {
 				int current = getNodeId(serviceId1);
-				Assert.assertEquals("Should be same number - prevNode1=[" + prevNodeId1 + "], step : " + i + "", prevNodeId1 == 2 ? 0 : prevNodeId1 + 1, current);
+				Assertions.assertEquals(prevNodeId1 == 2 ? 0 : prevNodeId1 + 1, current, "Should be same number - prevNode1=[" + prevNodeId1 + "], step : " + i + "");
 			}
 			prevNodeId1 = getNodeId(serviceId1);
 
 			if (prevNodeId2 != -1) {
 				int current = getNodeId(serviceId1);
-				Assert.assertEquals("Should be same number - prevNode2=[" + prevNodeId2 + "], step :" + i + "", prevNodeId2 == 2 ? 0 : prevNodeId2 + 1, current);
+				Assertions.assertEquals(prevNodeId2 == 2 ? 0 : prevNodeId2 + 1, current, "Should be same number - prevNode2=[" + prevNodeId2 + "], step :" + i + "");
 			}
 			prevNodeId2 = getNodeId(serviceId2);
 
@@ -176,18 +176,18 @@ public class AbstractRouterWithFailOversToNextNodeTest {
 		for (int i = 0; i < 100; i++) {
 			String serviceId1 = rrFon.getServiceIdForCall(callContext);
 			String serviceId2 = rrfOff.getServiceIdForCall(callContext);
-			Assert.assertTrue("Should be in range from 0 to 2", getNodeId(serviceId1) >= 0 && getNodeId(serviceId1) <= 2);
-			Assert.assertTrue("Should be in range from 0 to 2", getNodeId(serviceId2) >= 0 && getNodeId(serviceId2) <= 2);
+			Assertions.assertTrue(getNodeId(serviceId1) >= 0 && getNodeId(serviceId1) <= 2, "Should be in range from 0 to 2");
+			Assertions.assertTrue(getNodeId(serviceId2) >= 0 && getNodeId(serviceId2) <= 2, "Should be in range from 0 to 2");
 
 			if (prevNodeId1 != -1) {
 				int current = getNodeId(serviceId1);
-				Assert.assertEquals("Should be same number - prevNode1=[" + prevNodeId1 + "], step : " + i + "", prevNodeId1 == 2 ? 0 : prevNodeId1 + 1, current);
+				Assertions.assertEquals(prevNodeId1 == 2 ? 0 : prevNodeId1 + 1, current, "Should be same number - prevNode1=[" + prevNodeId1 + "], step : " + i + "");
 			}
 			prevNodeId1 = getNodeId(serviceId1);
 
 			if (prevNodeId2 != -1) {
 				int current = getNodeId(serviceId1);
-				Assert.assertEquals("Should be same number - prevNode2=[" + prevNodeId2 + "], step :" + i + "", prevNodeId2 == 2 ? 0 : prevNodeId2 + 1, current);
+				Assertions.assertEquals(prevNodeId2 == 2 ? 0 : prevNodeId2 + 1, current, "Should be same number - prevNode2=[" + prevNodeId2 + "], step :" + i + "");
 			}
 			prevNodeId2 = getNodeId(serviceId2);
 
@@ -207,7 +207,7 @@ public class AbstractRouterWithFailOversToNextNodeTest {
 		try {
 			return Integer.parseInt(serviceId.substring(lastUnderscore + 1));
 		} catch (NumberFormatException e) {
-			Assert.fail("Unexpected error occurred " + e.getMessage());
+			Assertions.fail("Unexpected error occurred " + e.getMessage());
 		}
 		return 0;
 	}
@@ -218,25 +218,25 @@ public class AbstractRouterWithFailOversToNextNodeTest {
 		RoundRobinFailOverOFF testRR = new RoundRobinFailOverOFF();
 		try {
 			testRR.customize("-100");
-			Assert.fail("Not positive value passe to customise!!!");
+			Assertions.fail("Not positive value passe to customise!!!");
 		} catch (Error e) {
-			Assert.assertTrue(e instanceof AssertionError);
+			Assertions.assertTrue(e instanceof AssertionError);
 		}
 
 		ModRouterWithDisabledFailing testMM = new ModRouterWithDisabledFailing();
 		testMM.customize("2");
 		try {
 			testMM.getServiceIdForCall(new ClientSideCallContext("SS", METHOD1, null));
-			Assert.fail("Illegal argument! Can't  mod route - without Incoming parameters for MOD counting");
+			Assertions.fail("Illegal argument! Can't  mod route - without Incoming parameters for MOD counting");
 		} catch (Error e) {
-			Assert.assertTrue(e instanceof AssertionError);
+			Assertions.assertTrue(e instanceof AssertionError);
 		}
 
 		try {
 			testMM.getServiceIdForCall(new ClientSideCallContext("SS", METHOD1, new ArrayList<Object>()));
-			Assert.fail("Illegal argument! Modabe parameters are BLANK!");
+			Assertions.fail("Illegal argument! Modabe parameters are BLANK!");
 		} catch (Error e) {
-			Assert.assertTrue(e instanceof AssertionError);
+			Assertions.assertTrue(e instanceof AssertionError);
 		}
 	}
 

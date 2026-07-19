@@ -1,10 +1,10 @@
 package org.distributeme.core;
 
 import org.distributeme.core.ServiceDescriptor.Protocol;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class ServiceDescriptorTest {
 	@Test public void testForNullValues(){
@@ -53,9 +53,9 @@ public class ServiceDescriptorTest {
 		
 		ServiceDescriptor d2 = ServiceDescriptor.fromRegistrationString(regString);
 		
-		assertEquals("toString must be equal", d1.toString(), d2.toString());
-		assertEquals("equals must be equal", d1, d2);
-		assertEquals("hashCode must be equal", d1.hashCode(), d2.hashCode());
+		assertEquals(d1.toString(), d2.toString(), "toString must be equal");
+		assertEquals(d1, d2, "equals must be equal");
+		assertEquals(d1.hashCode(), d2.hashCode(), "hashCode must be equal");
 		
 	}
 	

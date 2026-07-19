@@ -2,23 +2,23 @@ package org.distributeme.registry.metaregistry;
 
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.core.ServiceDescriptor.Protocol;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ListenerTest {
 	
-	@Before
+	@BeforeEach
 	public void reset(){
 		resetRegistry();
 	}
 	
-	@AfterClass public static void resetRegistry(){
+	@AfterAll public static void resetRegistry(){
 		((MetaRegistryImpl)MetaRegistryImpl.getInstance()).reset();
 	}
 	

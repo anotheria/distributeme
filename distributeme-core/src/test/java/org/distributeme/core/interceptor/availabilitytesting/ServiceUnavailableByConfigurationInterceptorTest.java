@@ -4,11 +4,11 @@ import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.exception.ServiceUnavailableException;
 import org.distributeme.core.interceptor.ClientSideRequestInterceptor;
 import org.distributeme.core.interceptor.InterceptionContext;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class ServiceUnavailableByConfigurationInterceptorTest {
 	@Test public void testPositive(){

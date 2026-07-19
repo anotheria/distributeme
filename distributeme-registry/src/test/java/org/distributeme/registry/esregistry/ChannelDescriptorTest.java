@@ -3,9 +3,9 @@ package org.distributeme.registry.esregistry;
 import net.anotheria.util.IdCodeGenerator;
 import org.distributeme.core.ServiceDescriptor;
 import org.distributeme.core.ServiceDescriptor.Protocol;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ChannelDescriptorTest {
 	@Test public void testEqualsAndHashCode(){

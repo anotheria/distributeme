@@ -1,11 +1,11 @@
 package org.distributeme.agents;
 
 import net.anotheria.util.IdCodeGenerator;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PackAndUnpackTest {
 	@Test public void testPlainAgent(){
@@ -26,8 +26,8 @@ public class PackAndUnpackTest {
 		Agent agent2 = AgentPackageUtility.unpack(pack);
 		System.out.println("Unpacked agent2: "+agent2);
 		assertEquals(agent.getCode(), ((TestAgent)agent2).getCode());
-		assertFalse("Same class ", agent.getId()==((TestAgent)agent2).getId());
-		assertFalse("Same class ", agent.getSubId()==((TestAgent)agent2).getSubId());
+		assertFalse(agent.getId()==((TestAgent)agent2).getId(), "Same class ");
+		assertFalse(agent.getSubId()==((TestAgent)agent2).getSubId(), "Same class ");
 		
 		System.out.println("==================");
 	}
@@ -51,31 +51,31 @@ public class PackAndUnpackTest {
 		Agent agent2 = AgentPackageUtility.unpack(pack);
 		System.out.println("Unpacked agent2: "+agent2);
 		assertEquals(agent.getCode(), ((TestAgent)agent2).getCode());
-		assertFalse("Same class ", agent.getId()==((TestAgent)agent2).getId());
-		assertFalse("Same sub class ", agent.getSubId()==((TestAgent)agent2).getSubId());
+		assertFalse(agent.getId()==((TestAgent)agent2).getId(), "Same class ");
+		assertFalse(agent.getSubId()==((TestAgent)agent2).getSubId(), "Same sub class ");
 	}
 	
 	@Test public void testScanClasses(){
 		PlainAgent agent1 = new PlainAgent();
 		List<Class<?>> list1 = AgentPackageUtility.scanForCustomClasses(agent1);
-		assertNotNull("The class list shouldn't be null", list1);
-		assertTrue("The class list shouldn't be empty", list1.size()>0);
+		assertNotNull(list1, "The class list shouldn't be null");
+		assertTrue(list1.size()>0, "The class list shouldn't be empty");
 		assertEquals(agent1.getClass(), list1.get(0));
 		//System.out.println(list1);
 
 	
 		ComplexAgent agent2 = new ComplexAgent();
 		List<Class<?>> list2 = AgentPackageUtility.scanForCustomClasses(agent2);
-		assertNotNull("The class list shouldn't be null", list2);
-		assertTrue("The class list shouldn't be empty", list2.size()>0);
+		assertNotNull(list2, "The class list shouldn't be null");
+		assertTrue(list2.size()>0, "The class list shouldn't be empty");
 		assertEquals(agent2.getClass(), list2.get(0));
 		assertEquals(ComplexAgentComponent.class, list2.get(1));
 		//System.out.println(list2);
 		
 		ClassScanAgent agent3 = new ClassScanAgent();
 		List<Class<?>> list3 = AgentPackageUtility.scanForCustomClasses(agent3);
-		assertNotNull("The class list shouldn't be null", list3);
-		assertTrue("The class list shouldn't be empty", list3.size()>0);
+		assertNotNull(list3, "The class list shouldn't be null");
+		assertTrue(list3.size()>0, "The class list shouldn't be empty");
 		assertEquals(agent3.getClass(), list3.get(0));
 		assertEquals(ClassScanAgentComponent.class, list3.get(1));
 		assertEquals(PlainAgent.class, list3.get(2));

@@ -1,15 +1,15 @@
 package org.distributeme.core;
 
 import org.distributeme.core.ServiceDescriptor.Protocol;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.ExportException;
 
 public class RegistryUtilConnectTest {
-	@Test @Ignore
+	@Test @Disabled
 	public void testConnect() throws RemoteException{
 		int start = 9229; int end = 9235;
 		int port = start;

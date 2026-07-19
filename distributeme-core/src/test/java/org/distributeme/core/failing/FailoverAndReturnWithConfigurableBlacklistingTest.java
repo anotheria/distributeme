@@ -8,15 +8,16 @@ import org.distributeme.core.routing.GenericRouterConfiguration;
 import org.distributeme.core.routing.blacklisting.BlacklistingStrategy;
 import org.distributeme.core.routing.blacklisting.ErrorsPerIntervalBlacklistingStrategy;
 import org.distributeme.core.routing.blacklisting.NoOpBlacklistingStrategy;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -36,7 +37,7 @@ public class FailoverAndReturnWithConfigurableBlacklistingTest {
     private FailoverAndReturnWithConfigurableBlacklisting router = new FailoverAndReturnWithConfigurableBlacklisting();
     private final ClientSideCallContext clientSideCallContext = new ClientSideCallContext("ServiceId", "context", null);
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         ProducerRegistryFactory.getProducerRegistryInstance().cleanup();
         router.setConfiguration(configuration);
@@ -58,9 +59,10 @@ public class FailoverAndReturnWithConfigurableBlacklistingTest {
         assertThat(configuration.getBlacklistTime(), is(20000l));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void setConfigurationNameShouldThrowExceptionIfConfigurationFileDoesNotExist() throws Exception {
-        router.setConfigurationName(serviceId, "NoExistingFileName");
+        assertThrows(IllegalStateException.class, () ->
+                router.setConfigurationName(serviceId, "NoExistingFileName"));
     }
 
     @Test
@@ -151,13 +153,13 @@ public class FailoverAndReturnWithConfigurableBlacklistingTest {
         assertThat(result.getTargetService(), is(failoverServiceId));
     }
 
-    @Test(expected = ServiceUnavailableException.class)
+    @Test
     public void ifBothServicesAreBlackListedAnExceptionShouldBeThrown(){
         router.setBlacklistingStrategy(blacklistingStrategyMock);
         when(blacklistingStrategyMock.isBlacklisted(clientSideCallContext.getServiceId())).thenReturn(true);
         when(blacklistingStrategyMock.isBlacklisted(clientSideCallContext.getServiceId() + FAILOVER_SUFFIX)).thenReturn(true);
 
-        router.callFailed(clientSideCallContext);
+        assertThrows(ServiceUnavailableException.class, () -> router.callFailed(clientSideCallContext));
     }
 
     @Test
@@ -173,14 +175,14 @@ public class FailoverAndReturnWithConfigurableBlacklistingTest {
         assertThat(result.getTargetService(), is("ServiceId" ));
     }
 
-    @Test(expected = ServiceUnavailableException.class)
+    @Test
     public void ifCallFailedGetsFailsWithFailOverInstanceAndTheNormalInstanceIsBlacklistedAnExceptionShouldBeThrown(){
         clientSideCallContext.setServiceId(failoverServiceId);
         router.setBlacklistingStrategy(blacklistingStrategyMock);
         when(blacklistingStrategyMock.isBlacklisted(failoverServiceId)).thenReturn(true);
         when(blacklistingStrategyMock.isBlacklisted(serviceId)).thenReturn(true);
 
-        router.callFailed(clientSideCallContext);
+        assertThrows(ServiceUnavailableException.class, () -> router.callFailed(clientSideCallContext));
     }
 
 

@@ -1,6 +1,6 @@
 package org.distributeme.core.concurrencycontrol;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ConstantBasedConcurrencyControlStrategyTest {
 	@Test public void testUnderLimitClientSide() throws InterruptedException{

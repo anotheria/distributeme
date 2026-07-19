@@ -4,16 +4,16 @@ import org.distributeme.core.ClientSideCallContext;
 import org.distributeme.core.routing.blacklisting.DefaultBlacklistingStrategy;
 import org.distributeme.core.routing.blacklisting.NoOpBlacklistingStrategy;
 import org.distributeme.core.stats.RoutingStatsCollector;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 /**
@@ -26,19 +26,19 @@ public class AbstractRouterWithStickyFailOverToNextNodeTest {
 	@Test
 	public void useBlacklistingStrategyFromConfiguration() {
 		routerWithStickyFailOverToNextNode.setConfigurationName("myService", "blacklisting-routing-test-regular");
-		assertTrue("Router not of specified clazz", routerWithStickyFailOverToNextNode.getBlacklistingStrategy() instanceof NoOpBlacklistingStrategy);
+		assertTrue(routerWithStickyFailOverToNextNode.getBlacklistingStrategy() instanceof NoOpBlacklistingStrategy, "Router not of specified clazz");
 	}
 
 	@Test
 	public void useDefaultBlacklistingStrategyIfConfigurationFalty() {
 		routerWithStickyFailOverToNextNode.setConfigurationName("myService", "blacklisting-routing-test-faulty");
-		assertTrue("Router not of specified clazz", routerWithStickyFailOverToNextNode.getBlacklistingStrategy() instanceof DefaultBlacklistingStrategy);
+		assertTrue(routerWithStickyFailOverToNextNode.getBlacklistingStrategy() instanceof DefaultBlacklistingStrategy, "Router not of specified clazz");
 	}
 
 	@Test
 	public void useDefaultBlacklistingStrategyIfConfigurationStrategyIsEmpty() {
 		routerWithStickyFailOverToNextNode.setConfigurationName("myService", "blacklisting-routing-test-empty");
-		assertTrue("Router not of specified clazz", routerWithStickyFailOverToNextNode.getBlacklistingStrategy() instanceof DefaultBlacklistingStrategy);
+		assertTrue(routerWithStickyFailOverToNextNode.getBlacklistingStrategy() instanceof DefaultBlacklistingStrategy, "Router not of specified clazz");
 	}
 
 	@Test
@@ -148,7 +148,7 @@ public class AbstractRouterWithStickyFailOverToNextNodeTest {
 		assertThat(routingStatsService0.getBlacklisted(), is(0));
 	}
 
-	@Test @Ignore
+	@Test @Disabled
 	public void getServiceIdForCall_CalculatesTheRoutingStatsCorrect_WithThreeServiceAndRequestGoesToBlacklistedService() throws Exception {
 		routerWithStickyFailOverToNextNode.setConfigurationName("myService", "blacklisting-routing-test-three-services");
 

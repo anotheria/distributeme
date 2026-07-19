@@ -1,9 +1,9 @@
 package org.distributeme.core.routing;
 
 import org.distributeme.core.ClientSideCallContext;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RoundRobinRouterTest {
 	@Test public void testForFive(){

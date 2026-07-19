@@ -5,14 +5,14 @@ import net.anotheria.moskito.core.calltrace.NoTracedCall;
 import net.anotheria.moskito.core.calltrace.RunningTraceContainer;
 import org.distributeme.core.ServerSideCallContext;
 import org.distributeme.core.interceptor.InterceptionContext;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@Ignore
+@Disabled
 public class MoskitoJourneyInterceptorTest {
 
 	//this test relied on moskito toDetails (getCurrentlyTracedCall()).toDetails() method, that has been removed (replaced with toString in test).
@@ -25,11 +25,11 @@ public class MoskitoJourneyInterceptorTest {
 		InterceptionContext ictx = new InterceptionContext();
 		
 		interceptor.beforeServantCall(ctx, ictx);
-		assertEquals("There should be no trace" , NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall());
-		assertFalse("There should be no trace running" , RunningTraceContainer.isTraceRunning());
+		assertEquals(NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall(), "There should be no trace");
+		assertFalse(RunningTraceContainer.isTraceRunning(), "There should be no trace running");
 		interceptor.afterServantCall(ctx, ictx);
-		assertEquals("There should be no trace" , NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall());
-		assertFalse("There should be no trace running" , RunningTraceContainer.isTraceRunning());
+		assertEquals(NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall(), "There should be no trace");
+		assertFalse(RunningTraceContainer.isTraceRunning(), "There should be no trace running");
 	}
 	
 	@Test public void testServantSide(){
@@ -41,8 +41,8 @@ public class MoskitoJourneyInterceptorTest {
 		interceptor.beforeServantCall(ctx, ictx);
 		
 		//now we should have started a trace 
-		assertNotSame("There should be a running trace" , NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall());
-		assertTrue("There should be a trace running" , RunningTraceContainer.isTraceRunning());
+		assertNotSame(NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall(), "There should be a running trace");
+		assertTrue(RunningTraceContainer.isTraceRunning(), "There should be a trace running");
 		
 		//assume service actually performs some work
 		((CurrentlyTracedCall)RunningTraceContainer.getCurrentlyTracedCall()).startStep("TEST");
@@ -54,8 +54,8 @@ public class MoskitoJourneyInterceptorTest {
 		
 		//distributeme will call this.
 		interceptor.afterServantCall(ctx, ictx);
-		assertEquals("There should be no trace" , NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall());
-		assertFalse("There should be no trace running" , RunningTraceContainer.isTraceRunning());
+		assertEquals(NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall(), "There should be no trace");
+		assertFalse(RunningTraceContainer.isTraceRunning(), "There should be no trace running");
 
 		assertNotNull(ctx.getTransportableCallContext().get(interceptor.testGetCONTEXT_ATTRIBUTE_STEPBACKFROMSERVERName()));
 		
@@ -66,11 +66,11 @@ public class MoskitoJourneyInterceptorTest {
 		InterceptionContext ictx = new InterceptionContext();
 		
 		interceptor.beforeServantCall(ctx, ictx);
-		assertEquals("There should be no trace" , NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall());
-		assertFalse("There should be no trace running" , RunningTraceContainer.isTraceRunning());
+		assertEquals(NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall(), "There should be no trace");
+		assertFalse(RunningTraceContainer.isTraceRunning(), "There should be no trace running");
 		interceptor.afterServantCall(ctx, ictx);
-		assertEquals("There should be no trace" , NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall());
-		assertFalse("There should be no trace running" , RunningTraceContainer.isTraceRunning());
+		assertEquals(NoTracedCall.INSTANCE, RunningTraceContainer.getCurrentlyTracedCall(), "There should be no trace");
+		assertFalse(RunningTraceContainer.isTraceRunning(), "There should be no trace running");
 	}
 	
 }
